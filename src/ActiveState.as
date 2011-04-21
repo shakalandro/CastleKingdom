@@ -29,7 +29,7 @@ package
 		 */		
 		public function ActiveState(tutorial:Boolean, menusActive:Boolean)
 		{
-			super();
+			super(tutorial, menusActive);
 		}
 		
 		/**
