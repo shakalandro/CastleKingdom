@@ -30,7 +30,7 @@ package org.flixel
 		static public var LIBRARY_MINOR_VERSION:uint = 35;
 
 		/**
-		 * Internal tracker for game object (so we can pause & unpause)
+		 * Internal tracker for game object (so we can pause &amp; unpause)
 		 */
 		static protected var _game:FlxGame;
 		/**
