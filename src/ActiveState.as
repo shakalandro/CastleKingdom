@@ -14,10 +14,6 @@ package
 		 */		
 		private var _castle:Castle;
 		
-		/**
-		 * The tilemap of game pieces. 
-		 */		
-		private var _map:FlxTilemap;
 		
 		/** 
 		 * An active state is a helper super class for interactive game states such as DefendState and UpgradeState. 
@@ -63,13 +59,6 @@ package
 		}
 		
 		/**
-		 * The tilemap of game pieces. 
-		 */		
-		public function get map():FlxTilemap {
-			return _map;
-		}
-		
-		/**
 		 * This should respond by drawing the given enabled menu on screen. Best called using the constants ActiveState.ATTACK_MENU, etc.
 		 * 
 		 * @param menu Which menu to draw.
@@ -86,10 +75,9 @@ package
 		 * @param place Where to add the tile
 		 * @return Whether placing the tower was successful. This could fail if the given place is not open.
 		 * 
-		 */			
+		 */				
 		public function addDefenseUnit(tower:DefenseUnit, place:FlxPoint):Boolean {
 			return false;
 		}
-
 	}
 }
