@@ -10,7 +10,7 @@ package
 	 * Strings to objects. 
 	 * 
 	 * @author Kimmy Win
-	 * 
+	 * Kim is a pretty pretty princess
 	 */
 	public class Assets
 	{
