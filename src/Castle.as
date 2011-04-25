@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 /** Team AWESOME, 4/19/2011
  * 
  * Castle class
@@ -20,13 +19,13 @@
 
 package
 {
-	import org.flixel.FlxSprite;
+	import org.flixel.*;
 	
 	public class Castle extends FlxSprite
 	{
 		
-		public static const ARMY:int = "1"; 
-		public static const TOWER:int = "2"; 
+		public static const ARMY:String = "army"; 
+		public static const TOWER:String = "tower"; 
 		
 		private var _upgrades:Array;  // should be:  {Castle level, Barracks level, foundry level, Smith level?}
 		private var _gold:int;	
@@ -37,7 +36,6 @@ package
 		private var _towerCap:int;
 		private var _towers:Array;
 		
-		private var _isLeased:Boolean;
 		private var _leasedInNumber:int;
 		private var _leasedOutNumber:int;
 		
@@ -51,49 +49,39 @@ package
 			super(X, Y, SimpleGraphic);
 		}
 		
-
-		/** Looks up all the upgrades that have been 
-		 * purchased and configures them on screen
-		 */
-		override public function create(username:String):void {
-			// Call utility function to get list of upgrades, if has leased values, 
+		//Adds the given upgrade to the castle
+		public function setUpgrade(upgradeid:int):void {
 			
-			// Display image
 		}
 		
-		//Adds the given upgrade to the castle
-		public function setUpgrade(upgradeid:int):void
-		
 		// Returns the player's unit capacity as a function of the purchased upgrades and acheivements
-		public function unitCapacity():int {
-			return unitCap;
+		public function get unitCapacity():int {
+			return _unitCap;
 		}
 		
 		// Returns how many army units the player has to use
-		public function armyUnitsAvailabe():int {
-			return unitCap - unitSum(_army);
+		public function get armyUnitsAvailabe():int {
+			return _unitCap - unitCostSum(_army);
 		}
 		
 		// Returns how many tower units the player has to use
-		public function towerUnitsAvailabe():int {
-			return unitCap - unitCostSum(_army);
+		public function get towerUnitsAvailabe():int {
+			return _unitCap - unitCostSum(_army);
 		}
 		
 		// Returns an array of what towerIDs are available for use 
 		// based on upgrades and achivements. This array shoud be sorted first
 		public function availableTowers():Array {
-			
-			
-		
+			return null;
 		}
 		
 		// Returns whether the player is leasing units from anyone
-		public function isLeasing():Boolean {
+		public function get isLeasing():Boolean {
 			return _leasedInNumber > 0;
 		}
 		
 		// Returns whether the player is leasing units from anyone
-		public function isLeased():Boolean {
+		public function get isLeased():Boolean {
 			return _leasedOutNumber > 0;
 		}
 		
@@ -105,7 +93,7 @@ package
 			
 		}
 		
-		public function leaseOut(var user:String, var number:int):void {
+		public function leaseOut(user:String, number:int):void {
 			
 			// call to util function
 			
@@ -113,35 +101,23 @@ package
 		
 		
 		
-		private function unitCostSum(var unitList:Array):int {
+		private function unitCostSum(unitList:Array):int {
 			var cost:int = 0;
-			for (var unit in unitList) {
-				cost += unit.getCost(); 
+			for each (var unit:Unit in unitList) {
+				cost += unit.cost; 
 			}
+			return cost;
 		}
 		
-		private function unitsUnlocked(var unitType:int):Array {
+		private function unitsUnlocked(unitType:int):Array {
 			// Iterates over upgrade list to add all unitIDs contained
 			var unitList:Array = new Array();
-			for (var upgradeLevel = 0; upgradeLevel <= _upgrades[unitType]; upgradeLevel++) {
-				for(var unitID in unlockables[unitType][upgradeLevel]) {
-					unitList.push(unitID);	
-				}
+			for (var upgradeLevel:int = 0; upgradeLevel <= _upgrades[unitType]; upgradeLevel++) {
+				//for(var unitID in unlockables[unitType][upgradeLevel]) {
+				//	unitList.push(unitID);	
+				//}
 			}
-		}
-		
-	}
-=======
-package
-{
-	import org.flixel.FlxSprite;
-	
-	public class Castle extends FlxSprite
-	{
-		public function Castle(X:Number=0, Y:Number=0, SimpleGraphic:Class=null)
-		{
-			super(X, Y, SimpleGraphic);
+			return null;
 		}
 	}
->>>>>>> branch 'refs/heads/master' of git+ssh://git@github.com/shakalandro/CastleKingdom.git
 }

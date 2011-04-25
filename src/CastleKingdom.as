@@ -21,7 +21,7 @@ package
 		
 		public function CastleKingdom()
 		{
-			super(828, 414, null, 1);
+			super(828, 414, ActiveState, 1);
 		}
 	}
 }

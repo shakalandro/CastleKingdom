@@ -1,5 +1,7 @@
 package
 {
+	import org.flixel.FlxGroup;
+	import org.flixel.FlxObject;
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxTilemap;
 	
@@ -14,6 +16,9 @@ package
 		 */		
 		private var _castle:Castle;
 		
+		private var _towers:FlxGroup;
+		
+		private var _units:FlxGroup;
 		
 		/** 
 		 * An active state is a helper super class for interactive game states such as DefendState and UpgradeState. 
@@ -23,9 +28,11 @@ package
 		 * @param menusActive Whether the menu buttons are active
 		 * 
 		 */		
-		public function ActiveState(tutorial:Boolean, menusActive:Boolean)
+		public function ActiveState(tutorial:Boolean = false, menusActive:Boolean = false, map:FlxTilemap = null)
 		{
-			super(tutorial, menusActive);
+			super(tutorial, menusActive, map);
+			_towers = new FlxGroup();
+			_units = new FlxGroup();
 		}
 		
 		/**
@@ -34,7 +41,7 @@ package
 		 * 
 		 */		
 		override public function create():void {
-			
+			super.create();
 		}
 		
 		/**
@@ -48,14 +55,34 @@ package
 		 * 
 		 */		
 		override public function collide():void {
-			
+			super.collide();
 		}
 		
 		/**
-		 * The singleton castle object 
+		 * 
+		 * @return The singleton castle object
+		 * 
 		 */		
 		public function get castle():Castle {
 			return _castle;
+		}
+		
+		/**
+		 * 
+		 * @return The FlxGroup of units.
+		 * 
+		 */		
+		public function get units():FlxGroup {
+			return _units;
+		}
+		
+		/**
+		 * 
+		 * @return The FlxGroup of towers.
+		 * 
+		 */		
+		public function get towers():FlxGroup {
+			return _towers;
 		}
 		
 		/**
@@ -78,6 +105,30 @@ package
 		 */				
 		public function addDefenseUnit(tower:DefenseUnit, place:FlxPoint):Boolean {
 			return false;
+		}
+		
+		public function addUnit(unit:FlxObject, x:int, y:int):void {
+			_units.add(unit);
+			if (FlxG.height < y && FlxG.width < x) {
+				var indices:FlxPoint = cartesianToIndex(new FlxPoint(x, y));
+				var tileType:int = map.getTile(indices.x, indices.y);
+				if (placeable(tileType, x, y)) {
+					_units.add(unit);
+				}
+			}
+		}
+		
+		private static function placeable(tileType:int, x:int, y:int):Boolean {
+			if (tileType >= map.collideIndex) {
+				return false;
+			}
+			for (var obj:FlxObject in map.members) {
+				var indices:FlxPoint = cartesianToIndex(new FlxPoint(obj.x, obj.y));
+				if (indices.x == x && indices.y == y) {
+					return false;
+				}
+			}
+			return true;
 		}
 	}
 }

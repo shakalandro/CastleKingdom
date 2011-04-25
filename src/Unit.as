@@ -4,10 +4,8 @@
  **/
 
 package
-{
-	import flash.geom.Point;
-	
-	import org.flixel.FlxSprite;
+{	
+	import org.flixel.*;
 
 	
 	public class Unit extends FlxSprite
@@ -17,9 +15,9 @@ package
 		// Associated getters/setters should also be in place
 		
 		//Basic info
-		private static var _unitID:int;
-		private static var _cost:int;
-		private static var _goldCost:int;
+		private var _unitID:int;
+		private var _cost:int;
+		private var _goldCost:int;
 		private var _units:int;  // ?? idk what this is
 		private var _img:Class;
 		
@@ -37,21 +35,22 @@ package
 		
 		private var _validTargets:Array;  // stores all enemies that come into range
 		
-		private var _unitTimer:Timer;
+		//private var _unitTimer:Timer;
 		private var _canAttack:Boolean;
 		
 		
 		// Constructs a DefenseUnit at (x, y) with the given towerID, looking
 		// up what its stats are based on its tower ID
-		public Unit(x:Number, y:Number, unitID:int) {
+		public function Unit(x:Number, y:Number, unitID:int) {
 			super (x,y,null);
-			if(this.x < /*CastleX*/ FlxG.width/2) {
-				this.velocity.x = Castle.GAME_SPEED * speed;
+			if (this.x < Util.castle.x) {
+				velocity.x = FlxG.timeScale * _speed;
 			} else {
-				this.velocity.x = Castle.GAME_SPEED * -speed;
+				velocity.x = FlxG.timeScale * - _speed;
 			}
 			// look up unit info, set fields
 			// {cost, goldCost, maxHealth,speed,range,damage,rate)
+			/*
 			var unitStats:Array = unitStatLookup(unitID);
 				
 			_cost = unitStats[0];
@@ -62,15 +61,15 @@ package
 			_damage = unitStats[5];
 			_rate = unitStats[6];
 			
-			// Set dfault fields
-			_health = _maxHealth;
-			_img = GLOBALLOOKUP[SKIN][unitID];
+			// Set default fields
+			health = _maxHealth;
+			//_img = GLOBALLOOKUP[SKIN][unitID];
 			_canAttack = false;
-			
+			/*
 			_unitTimer = new Timer(1000, 1); // 1 second
 			_unitTimer.addEventListener(TimerEvent.TIMER, doDamage);
 			_unitTimer.start();
-			
+			*/
 		}
 		
 		
@@ -81,18 +80,20 @@ package
 		 * */
 		override public function update():void {
 			
-			checkRangedCollision();
+			//checkRangedCollision();
 			if(_canAttack) {				//first check if this unit's timer has expired
 				if(executeAttack()) {		// Tries to attack if possible, fails if no units in range
 					_canAttack = false;
-					_unitTimer.start();
+					//_unitTimer.start();
 				}
 			}
 			super.update();
 		}
 		
+		
 		/** Calls hitRanged(contact, velocity) for any units in range of the current item
 		 * */
+		/*
 		private function checkRangedCollision():void {
 			for (var otherUnit:Unit in getUnitsInRange()) {
 				if(otherUnit == null) {
@@ -101,10 +102,11 @@ package
 				this.hitRanged(otherUnit);
 			}
 		}
-		
+		*/
 		/** Returns a null terminated array of all units within the range of this, sorted by proximity.
 		 * What do arrays store by default? Out of bounds?
 		 * */
+		/*
 		private function getUnitsInRange():Array {
 			var unitsInRange:Array = new Array();
 			var foundTarget:Boolean = false;
@@ -121,9 +123,9 @@ package
 			}
 			return unitsInRange.sort(compareDistance);
 		}
-		
+		*/
 		private function doDamage():void {
-			timer.stop();
+			//timer.stop();
 			_canAttack = true;
 		}
 		
@@ -139,6 +141,7 @@ package
 		 * Feature or bug? Checking vertices only means edge-edge min distances will be ignored
 		 * this will only happen if the units are semi-overlapping and offset from each other (share no vertexes at same level)
 		 * */
+		/*
 		private function unitDistance(otherUnit:Unit):Number {
 			var thisPoints:Array = new Array(4);
 			thisPoints[0] = new Point(this.x,this.y);
@@ -158,65 +161,58 @@ package
 			}
 			return lowCost;
 		}
+		*/
 		
 		/** Getters and setters
 		 * There should be getters and setters for each of the above fields except _img
 		 * */
 		
-		public function getMaxHealth():int {
-			return _maxHealth();
+		public function get maxHealth():int {
+			return _maxHealth;
 		}
 		
-		public function getHealth():int {
-			return _health();	
-		}
-		
-		public function getCost():int {
+		public function get cost():int {
 			return _cost;
 		}
 	
-		public function getGoldCost():int {
+		public function get goldCost():int {
 			return _goldCost;
 		}
-		public function getSpeed():int {
+		public function get speed():int {
 			return _speed;
 		}
-		public function getRange():int {
+		public function get range():int {
 			return _range;
 		}
-		public function getDamage():int {
-			return _damage();
+		public function get damage():int {
+			return _damage;
 		}
-		public function getRate():int {
-			return _rate();
-		}
-		
-		public function setMaxHealth(val value:int):void {
-			_maxHealth += value;
+		public function get rate():int {
+			return _rate;
 		}
 		
-		public function setHealth(val value:int):void {
-			_health += value;
+		public function set maxHealth(value:int):void {
+			_maxHealth = value;
 		}
 		
-		public function setCost(val value:int):void {
-			_cost += value;
+		public function set cost(value:int):void {
+			_cost = value;
 		}
 		
-		public function setGoldCost(val value:int):void {
-			_goldCost += value;
+		public function set goldCost(value:int):void {
+			_goldCost = value;
 		}
-		public function setSpeed(val value:int):void {
-			_speed += value;
+		public function set speed(value:int):void {
+			_speed = value;
 		}
-		public function setRange(val value:int):void {
-			_range += value;
+		public function set range(value:int):void {
+			_range = value;
 		}
-		public function setDamage(val value:int):void {
-			_damage+= value;
+		public function set damage(value:int):void {
+			_damage = value;
 		}
-		public function setRate(val value:int):void {
-			_rate += value;
+		public function set rate(value:int):void {
+			_rate = value;
 		}
 		
 		
@@ -224,7 +220,7 @@ package
 		 * Returns true and calls killUnit() if this reduces unit health to <= 0
 		 * else returns false
 		 * */
-		public function damage(var damageDealt:int):Boolean {
+		public function inflictDamage(damageDealt:int):Boolean {
 			this._health -= damageDealt;
 			if (this._health <= 0) {
 				this.killUnit();
@@ -249,7 +245,6 @@ package
 				
 			}
 		}
-		
 		
 		/** Responds appropriately to any collisions that may have taken place
 		 * Relies on hitRanged to set target to closest.
@@ -281,15 +276,16 @@ package
 		 * 
 		 */
 		public static function compare(unit1:Unit, unit2:Unit):int {
-			if( unit1.getCost() != unit2.getCost() ) {
-				return unit1.getCost() - unit2.getCost();
-			} else if (unit1.getMaxHealth() != unit2.getMaxHealth() ) {
-				return unit1.getMaxHealth() - unit2.getMaxHealth();
+			if( unit1.cost != unit2.cost ) {
+				return unit1.cost - unit2.cost;
+			} else if (unit1.maxHealth != unit2.maxHealth) {
+				return unit1.maxHealth - unit2.maxHealth;
 			} else {
-				return unit1.getDamage() != unit2.getDamage()
+				return unit1.damage - unit2.damage;
 			}
 		}
 		
+		/*
 		public function compareDistance(unit1:Unit, unit2:Unit):int {
 			var dThis:Number = this.unitDistance(unit1);
 			var dOth:Number = this.unitDistance(unit2);
@@ -301,5 +297,6 @@ package
 				return -1;
 			}
 		}
+		*/
 	}
 }

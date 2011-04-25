@@ -22,8 +22,8 @@ package
 		 * @param velocity
 		 * 
 		 */
-		 * */
-		public function hitRanged(contact:FlxObject, velocity:Number = null):void {
+		override public function hitRanged(contact:FlxObject, velocity:Number = null):void {
+			super.hitRanged(conatct, velocity);
 			if ( contact is EnemyUnit ) {
 				primaryTarget = betterTarget(primaryTarget, contact);	
 			}
