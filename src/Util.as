@@ -39,7 +39,7 @@ package
 		}
 		
 		public static function inBounds(x:Number, y:Number):Boolean {
-			
+			return 0 < y && y < FlxG.height && 0 < x && x < FlxG.width;
 		}
 	}
 }

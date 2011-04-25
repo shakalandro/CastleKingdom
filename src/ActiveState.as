@@ -154,9 +154,8 @@ package
 		 * 
 		 */		
 		private function placeable(x:int, y:int):Boolean {
-			if (0 < y || FlxG.height > y || 0 < x || FlxG.width > x) {
-				return false;	
-			}
+			if (!Util.inBounds(x, y)) return false;
+			
 			var indices:FlxPoint = Util.cartesianToIndexes(new FlxPoint(x, y));
 			var tileType:int = map.getTile(indices.x, indices.y);
 			if (tileType >= map.collideIndex) {
