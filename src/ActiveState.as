@@ -1,9 +1,6 @@
 package
 {
-	import org.flixel.FlxGroup;
-	import org.flixel.FlxObject;
-	import org.flixel.FlxPoint;
-	import org.flixel.FlxTilemap;
+	import org.flixel.*;
 	
 	public class ActiveState extends GameState
 	{	
@@ -16,8 +13,14 @@ package
 		 */		
 		private var _castle:Castle;
 		
+		/**
+		 * A group of DefenseUnits 
+		 */		
 		private var _towers:FlxGroup;
 		
+		/**
+		 * A group of EnemyUnits 
+		 */		
 		private var _units:FlxGroup;
 		
 		/** 
@@ -96,35 +99,72 @@ package
 		}
 		
 		/**
-		 * Adds the given unit to the tilemap if possible and handles any side effects that need to take place.
+		 * Adds the given DefenseUnit to the display list at the closest tile indices (rounded down) if possible. 
 		 *  
 		 * @param tower Which tower to add to the tilemap
 		 * @param place Where to add the tile
 		 * @return Whether placing the tower was successful. This could fail if the given place is not open.
 		 * 
 		 */				
-		public function addDefenseUnit(tower:DefenseUnit, place:FlxPoint):Boolean {
+		public function addDefenseUnit(tower:DefenseUnit, x:Number, y:Number):Boolean {
+			return addUnit(_towers, tower, x, y);
+		}
+		
+		/**
+		 * Adds the given EnemyUnit to the display list at the closest tile indices (rounded down) if possible.
+		 * 
+		 * @param unit The unit being added.
+		 * @param x A cartesian x coordinate
+		 * @param y A cartesian y coordinate
+		 * @return Whether the given unit was able to be placed.
+		 * 
+		 */	
+		public function addEnemyUnit(enemy:EnemyUnit, x:Number, y:Number):Boolean {				
+			return addUnit(_units, enemy, x, y);
+		}
+		
+		/**
+		 * Adds the given Unit to the given group at the closest tile indices (rounded down) if possible.
+		 * 
+		 * @param group The desired group to add to
+		 * @param unit A unit to add if possible
+		 * @param x A cartesian x coordinate
+		 * @param y A cartesian y coordinate
+		 * @return 
+		 * 
+		 */		
+		private function addUnit(group:FlxGroup, unit:Unit, x:Number, y:Number):Boolean {
+			if (placeable(x, y)) {
+				// Need to get rounded index numbers, add functionality to Util
+				var indices:FlxPoint = Util.cartesianToIndexes(new FlxPoint(x, y));
+				group.add(unit);
+				return true;
+			}
 			return false;
 		}
 		
-		public function addUnit(unit:FlxObject, x:int, y:int):void {
-			_units.add(unit);
-			if (FlxG.height < y && FlxG.width < x) {
-				var indices:FlxPoint = cartesianToIndex(new FlxPoint(x, y));
-				var tileType:int = map.getTile(indices.x, indices.y);
-				if (placeable(tileType, x, y)) {
-					_units.add(unit);
-				}
+		/**
+		 * This method determines whether the given (x, y) coordinate is a valid place to put a tower.
+		 * Checks whether the location is obstructed by a collidable tile (terrain) 
+		 * or the location is already taken by an existing tower.
+		 * 
+		 * @param x The cartesian x coordinate being considered
+		 * @param y The cartesian y coordinate being considered
+		 * @return Whether a tower could be placed at (x, y)
+		 * 
+		 */		
+		private function placeable(x:int, y:int):Boolean {
+			if (0 < y || FlxG.height > y || 0 < x || FlxG.width > x) {
+				return false;	
 			}
-		}
-		
-		private static function placeable(tileType:int, x:int, y:int):Boolean {
+			var indices:FlxPoint = Util.cartesianToIndexes(new FlxPoint(x, y));
+			var tileType:int = map.getTile(indices.x, indices.y);
 			if (tileType >= map.collideIndex) {
 				return false;
 			}
-			for (var obj:FlxObject in map.members) {
-				var indices:FlxPoint = cartesianToIndex(new FlxPoint(obj.x, obj.y));
-				if (indices.x == x && indices.y == y) {
+			for each (var obj:FlxObject in _towers.members) {
+				var objIndices:FlxPoint = Util.cartesianToIndexes(new FlxPoint(obj.x, obj.y));
+				if (objIndices.x == indices.x && objIndices.y == indices.y) {
 					return false;
 				}
 			}

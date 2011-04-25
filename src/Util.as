@@ -37,5 +37,9 @@ package
 				return null;
 			}
 		}
+		
+		public static function inBounds(x:Number, y:Number):Boolean {
+			
+		}
 	}
 }

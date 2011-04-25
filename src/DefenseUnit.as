@@ -1,5 +1,7 @@
 package
 {
+	import org.flixel.*;
+	
 	public class DefenseUnit extends Unit {
 		
 		private var primaryTarget:Unit = null;
@@ -22,10 +24,10 @@ package
 		 * @param velocity
 		 * 
 		 */
-		override public function hitRanged(contact:FlxObject, velocity:Number = null):void {
-			super.hitRanged(conatct, velocity);
+		override public function hitRanged(contact:FlxObject, velocity:Number):void {
+			super.hitRanged(contact, velocity);
 			if ( contact is EnemyUnit ) {
-				primaryTarget = betterTarget(primaryTarget, contact);	
+				//primaryTarget = betterTarget(primaryTarget, contact);	
 			}
 		}
 		
@@ -34,6 +36,7 @@ package
 		 * If unit has multiple shots, it selects any 3 units in range and attacks them
 		 * Defaults to false
 		 * */
+		/*
 		private function executeAttack():Boolean {
 			if( _shots > 1) {
 				var unitsInRange:Array = getUnitsInRange();
@@ -46,6 +49,7 @@ package
 				primaryTarget = findClosestTarget();	// reset to closest target
 			}
 		}
+		*/
 		
 		/** Returns better valid target:
 		 * Should pass in a current target as target1 so it remains primary target 
@@ -54,7 +58,8 @@ package
 		 * Returns whichever target is not null, is still alive (health > 0) and is closer
 		 * Returns null if neither target is non-null and alive. (neither is valid target)
 		 * */
-		public function betterTarget(target1:Unit, target2:Unit) {
+		/*
+		public function betterTarget(target1:Unit, target2:Unit):Unit {
 			if (	target1 != null && target1.getHealth() > 0 
 					&& distance(target1.getScreenXY(),this.getScreenXY()) <= 
 					distance(target2.getScreenXY(),this.getScreenXY()) ) {
@@ -65,10 +70,6 @@ package
 				return null;
 			}
 		}
-		
-		
-		
-		
-		
+		*/
 	}
 }

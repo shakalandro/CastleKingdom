@@ -48,11 +48,6 @@ package
 			_map.loadMap(new tileLayout(), tilesImg, CastleKingdom.TILE_SIZE);
 			add(_map);
 			
-			var dude:FlxSprite = new FlxSprite(0, 0);
-			dude.loadGraphic(guy, true, false, 64, 64, false);
-			dude.addAnimation("Norm", [0], 1, true);
-			add(dude);
-			
 			createHUD();
 		}
 		
@@ -74,7 +69,6 @@ package
 			//TODO: should use an image as the third parameter
 			var navBar:FlxSprite = new FlxSprite(0, 0);
 			navBar.fill(0xdd888888);
-			//navBar. = 800;
 			add(navBar);
 		}
 	}
