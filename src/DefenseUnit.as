@@ -4,7 +4,13 @@ package
 		
 		private var primaryTarget:Unit = null;
 		
-		
+		/**
+		 * 
+		 * @param x
+		 * @param y
+		 * @param towerID
+		 * 
+		 */		
 		public function DefenseUnit(x:Number, y:Number, towerID:int) {
 			super (x,y,towerID);
 			
@@ -12,6 +18,10 @@ package
 		
 		/** This function responds to this Unit coming within range of another FlxObject
 		 * 	Sets primary target to closest Enemy unit that calls this function
+		 * @param contact
+		 * @param velocity
+		 * 
+		 */
 		 * */
 		public function hitRanged(contact:FlxObject, velocity:Number = null):void {
 			if ( contact is EnemyUnit ) {
@@ -46,8 +56,8 @@ package
 		 * */
 		public function betterTarget(target1:Unit, target2:Unit) {
 			if (	target1 != null && target1.getHealth() > 0 
-				&& distance(target1.getScreenXY(),this.getScreenXY()) <= 
-				distance(target2.getScreenXY(),this.getScreenXY()) ) {
+					&& distance(target1.getScreenXY(),this.getScreenXY()) <= 
+					distance(target2.getScreenXY(),this.getScreenXY()) ) {
 				return target1;
 			} else if (target2 != null && target2.getHealth() > 0 ) {
 				return target2;

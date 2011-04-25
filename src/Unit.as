@@ -82,8 +82,8 @@ package
 		override public function update():void {
 			
 			checkRangedCollision();
-			if(_canAttack) {
-				if(executeAttack()) {
+			if(_canAttack) {				//first check if this unit's timer has expired
+				if(executeAttack()) {		// Tries to attack if possible, fails if no units in range
 					_canAttack = false;
 					_unitTimer.start();
 				}
@@ -94,19 +94,30 @@ package
 		/** Calls hitRanged(contact, velocity) for any units in range of the current item
 		 * */
 		private function checkRangedCollision():void {
-			for (var otherUnit:Unit in getUnitsInRange) {
+			for (var otherUnit:Unit in getUnitsInRange()) {
+				if(otherUnit == null) {
+					break;
+				}
 				this.hitRanged(otherUnit);
 			}
 		}
 		
-		/** Returns array of all units within the range of this, sorted by proximity.
+		/** Returns a null terminated array of all units within the range of this, sorted by proximity.
+		 * What do arrays store by default? Out of bounds?
 		 * */
 		private function getUnitsInRange():Array {
 			var unitsInRange:Array = new Array();
+			var foundTarget:Boolean = false;
 			for ( ALL_UNITS_ON_BOARD) {
 				if( this.unitDistance(otherUnit) < this._range ) {
 					unitsInRange.push(otherUnit);
+					foundTarget = true;
 				}
+			}
+			unitsInRange.push(null);
+			if(!foundTarget) {
+				unitsInRange[0] = null;
+				return unitsInRange;
 			}
 			return unitsInRange.sort(compareDistance);
 		}
@@ -128,7 +139,7 @@ package
 		 * Feature or bug? Checking vertices only means edge-edge min distances will be ignored
 		 * this will only happen if the units are semi-overlapping and offset from each other (share no vertexes at same level)
 		 * */
-		private function unitDistance(otherUnit):void {
+		private function unitDistance(otherUnit:Unit):Number {
 			var thisPoints:Array = new Array(4);
 			thisPoints[0] = new Point(this.x,this.y);
 			thisPoints[1] = new Point(this.x + this.width, this.y);
@@ -139,7 +150,7 @@ package
 			othPoints[1] = new Point(this.x + this.width, this.y);
 			othPoints[2] = new Point(this.x, this.y + this.height);
 			othPoints[3] = new Point(this.x + this.width, this.y + this.height);
-			var lowCost:int = distance(thisPoints[0], othPoints[0]);
+			var lowCost:Number = distance(thisPoints[0], othPoints[0]);
 			for(var p1:Point in thisPoints) {
 				for (var p2:Point in othPoints) {
 					lowCost = Math.min(lowCost, distance(p1,p2));
@@ -257,9 +268,18 @@ package
 		}
 		
 		
-		// Returns a typical compareTo int for unit1 and unit2
-		// DefenseUnits are sorted first by unit cost, then by health, attack power, range, 
-		// further ties are arbitrarily broken (returns 0)
+		
+		/** Returns a typical compareTo int for unit1 and unit2
+		 *  DefenseUnits are sorted first by unit cost, then by health, attack power, range, 
+		 *  further ties are arbitrarily broken (returns 0)
+		 * 
+		 * @param unit1 	First unit to compare
+		 * @param unit2		Second unit to compare
+		 * @return 			1 if First unit costs more, has more health, attack or range. 
+		 * 					0 if all stats are equal
+		 * 					-1 otherwise
+		 * 
+		 */
 		public static function compare(unit1:Unit, unit2:Unit):int {
 			if( unit1.getCost() != unit2.getCost() ) {
 				return unit1.getCost() - unit2.getCost();
@@ -271,7 +291,15 @@ package
 		}
 		
 		public function compareDistance(unit1:Unit, unit2:Unit):int {
-			return this.unitDistance(unit1) - this.unitDistance(unit2); 
+			var dThis:Number = this.unitDistance(unit1);
+			var dOth:Number = this.unitDistance(unit2);
+			if ( dThis > dOth ) {
+				return 1;
+			} else if ( dThis == dOth ) {
+				return 0;
+			} else {
+				return -1;
+			}
 		}
 	}
 }

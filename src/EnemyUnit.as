@@ -20,9 +20,10 @@ package
 		override public function update():void {
 			if (contact != null) {
 				if(contact.health <= 0) {
-					contact = null;
+					contact = getUnitsInRange()[0];
 				}
 			}
+			velocity = 
 			super.update();
 		}
 		
