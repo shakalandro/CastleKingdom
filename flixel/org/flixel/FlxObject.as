@@ -5,7 +5,7 @@ package org.flixel
 	/**
 	 * This is the base class for most of the display objects (<code>FlxSprite</code>, <code>FlxText</code>, etc).
 	 * It includes some basic attributes about game objects, including retro-style flickering,
-	 * basic state information, sizes, scrolling, and basic physics & motion.
+	 * basic state information, sizes, scrolling, and basic physics &amp; motion.
 	 */
 	public class FlxObject extends FlxRect
 	{
@@ -453,7 +453,7 @@ package org.flixel
 		 * Just calls <code>FlxU.collide(this,Object);</code>.  Will collide against itself
 		 * if Object==null.
 		 * 
-		 * @param	Object		The <FlxObject> you want to collide with.
+		 * @param	Object		The FlxObject you want to collide with.
 		 */
 		public function collide(Object:FlxObject=null):Boolean
 		{

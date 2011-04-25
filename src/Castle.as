@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /** Team AWESOME, 4/19/2011
  * 
  * Castle class
@@ -130,4 +131,17 @@ package
 		}
 		
 	}
+=======
+package
+{
+	import org.flixel.FlxSprite;
+	
+	public class Castle extends FlxSprite
+	{
+		public function Castle(X:Number=0, Y:Number=0, SimpleGraphic:Class=null)
+		{
+			super(X, Y, SimpleGraphic);
+		}
+	}
+>>>>>>> branch 'refs/heads/master' of git+ssh://git@github.com/shakalandro/CastleKingdom.git
 }
