@@ -30,13 +30,13 @@ package
 				//primaryTarget = betterTarget(primaryTarget, contact);	
 			}
 		}
-		
+		/*
 		/** Executes whatever attack the unit does
 		 *  Returns true if the unit has used its attack, false otherwise
 		 * If unit has multiple shots, it selects any 3 units in range and attacks them
 		 * Defaults to false
-		 * */
-		/*
+		 *
+		
 		private function executeAttack():Boolean {
 			if( _shots > 1) {
 				var unitsInRange:Array = getUnitsInRange();
@@ -55,7 +55,7 @@ package
 		 * Should pass in a current target as target1 so it remains primary target 
 		 * if distance is equal
 		 * 
-		 * Returns whichever target is not null, is still alive (health > 0) and is closer
+		 * Returns whichever target is not null, is still alive (health &gt; 0) and is closer
 		 * Returns null if neither target is non-null and alive. (neither is valid target)
 		 * */
 		/*

@@ -90,10 +90,9 @@ package
 			super.update();
 		}
 		
-		
-		/** Calls hitRanged(contact, velocity) for any units in range of the current item
-		 * */
 		/*
+		/** Calls hitRanged(contact, velocity) for any units in range of the current item
+		 * 
 		private function checkRangedCollision():void {
 			for (var otherUnit:Unit in getUnitsInRange()) {
 				if(otherUnit == null) {
@@ -103,10 +102,10 @@ package
 			}
 		}
 		*/
+		/*
 		/** Returns a null terminated array of all units within the range of this, sorted by proximity.
 		 * What do arrays store by default? Out of bounds?
-		 * */
-		/*
+		 * 
 		private function getUnitsInRange():Array {
 			var unitsInRange:Array = new Array();
 			var foundTarget:Boolean = false;
@@ -136,12 +135,11 @@ package
 		private function executeAttack():Boolean {
 			return false;
 		}
-		
+		/*
 		/** Returns the lowest cost from any corner of this unit to any corner of the other unit
 		 * Feature or bug? Checking vertices only means edge-edge min distances will be ignored
 		 * this will only happen if the units are semi-overlapping and offset from each other (share no vertexes at same level)
-		 * */
-		/*
+		 * 
 		private function unitDistance(otherUnit:Unit):Number {
 			var thisPoints:Array = new Array(4);
 			thisPoints[0] = new Point(this.x,this.y);
@@ -163,10 +161,9 @@ package
 		}
 		*/
 		
-		/** Getters and setters
-		 * There should be getters and setters for each of the above fields except _img
-		 * */
-		
+		/* 
+			Getters and setters. There should be getters and setters for each of the above fields except _img
+		*/
 		public function get maxHealth():int {
 			return _maxHealth;
 		}
@@ -217,7 +214,7 @@ package
 		
 		
 		/** Lowers unit's health by damageDealth
-		 * Returns true and calls killUnit() if this reduces unit health to <= 0
+		 * Returns true and calls killUnit() if this reduces unit health to &lt;= 0
 		 * else returns false
 		 * */
 		public function inflictDamage(damageDealt:int):Boolean {
@@ -231,7 +228,7 @@ package
 			
 		}
 		
-		/** Called when this unit's health is reduced to <= 0
+		/** Called when this unit's health is reduced to &lt;= 0
 		 * */
 		public function killUnit():void {
 			

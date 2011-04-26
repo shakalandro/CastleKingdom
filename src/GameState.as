@@ -3,17 +3,7 @@ package
 	import org.flixel.*;
 	
 	public class GameState extends FlxState
-	{
-		
-		[Embed(source = "../images/test_tile.png")]
-		private var tilesImg:Class;
-		
-		[Embed(source = "../images/swordsman.png")]
-		private var guy:Class;
-		
-		[Embed(source = "mapLayout.txt", mimeType = "application/octet-stream")]
-		private var tileLayout:Class;
-		
+	{	
 		/**
 		 * The tilemap of game pieces. 
 		 */		
@@ -45,7 +35,7 @@ package
 			_map = new FlxTilemap();
 			_map.drawIndex = 0;
 			_map.collideIndex = 1;
-			_map.loadMap(new tileLayout(), tilesImg, CastleKingdom.TILE_SIZE);
+			_map.loadMap(new Util.assets[Assets.TILE_LAYOUT], Util.assets[Assets.MAP_TILES], CastleKingdom.TILE_SIZE);
 			add(_map);
 			
 			createHUD();

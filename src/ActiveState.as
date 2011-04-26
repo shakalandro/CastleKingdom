@@ -36,6 +36,8 @@ package
 			super(tutorial, menusActive, map);
 			_towers = new FlxGroup();
 			_units = new FlxGroup();
+			_castle = new Castle();
+			Util.centerX(_castle);
 		}
 		
 		/**
@@ -45,6 +47,9 @@ package
 		 */		
 		override public function create():void {
 			super.create();
+			add(_towers);
+			add(_units);
+			add(_castle);
 		}
 		
 		/**
@@ -135,8 +140,9 @@ package
 		 */		
 		private function addUnit(group:FlxGroup, unit:Unit, x:Number, y:Number):Boolean {
 			if (placeable(x, y)) {
-				// Need to get rounded index numbers, add functionality to Util
-				var indices:FlxPoint = Util.cartesianToIndexes(new FlxPoint(x, y));
+				var coordinates:FlxPoint = Util.roundToNearestTile(new FlxPoint(x, y));
+				unit.x = coordinates.x;
+				unit.y = coordinates.y;
 				group.add(unit);
 				return true;
 			}
@@ -155,14 +161,13 @@ package
 		 */		
 		private function placeable(x:int, y:int):Boolean {
 			if (!Util.inBounds(x, y)) return false;
-			
-			var indices:FlxPoint = Util.cartesianToIndexes(new FlxPoint(x, y));
+			var indices:FlxPoint = Util.cartesianToIndices(new FlxPoint(x, y));
 			var tileType:int = map.getTile(indices.x, indices.y);
 			if (tileType >= map.collideIndex) {
 				return false;
 			}
 			for each (var obj:FlxObject in _towers.members) {
-				var objIndices:FlxPoint = Util.cartesianToIndexes(new FlxPoint(obj.x, obj.y));
+				var objIndices:FlxPoint = Util.cartesianToIndices(new FlxPoint(obj.x, obj.y));
 				if (objIndices.x == indices.x && objIndices.y == indices.y) {
 					return false;
 				}

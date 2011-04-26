@@ -18,6 +18,7 @@ package
 		public static const TILEMAP_WIDTH:int = 36;
 		public static const TILEMAP_HEIGHT:int = 18;
 		public static const TILE_SIZE:int = 23;
+		public static const SKIN:String = Assets.SKIN_NORMAL;
 		
 		public function CastleKingdom()
 		{
