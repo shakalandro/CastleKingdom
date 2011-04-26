@@ -2,7 +2,7 @@ package
 {
 	import org.flixel.*;
 	
-	[SWF(width="828", height="414", backgroundColor="#ffffff")]
+	[SWF(width="828", height="460", backgroundColor="#ffffff")]
 	//[Frame(factoryClass="Preloader")]
 	
 	/**
@@ -22,7 +22,7 @@ package
 		
 		public function CastleKingdom()
 		{
-			super(828, 414, ActiveState, 1);
+			super(828, 460, ActiveState, 1);
 		}
 	}
 }

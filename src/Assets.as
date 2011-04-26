@@ -12,7 +12,6 @@ package
 	 * Strings to objects. 
 	 * 
 	 * @author Kimmy Win, Roy McElmurry
-	 * Kim is a pretty pretty princess
 	 */
 	public class Assets
 	{
@@ -23,16 +22,32 @@ package
 		
 		// Embed all resources here
 		
+		// Images
+		
 		[Embed(source = "../images/test_tile.png")]
-		private var tilesImg_normal:Class;
+		private static var tilesImg_normal:Class;
 		public static const MAP_TILES:String = "tiles";
 		
 		[Embed(source = "../images/swordsman.png")]
-		private var swordsman_normal:Class;
+		private static var swordsman_normal:Class;
 		public static const SWORDSMAN:String = "swordsman";
 		
+		[Embed(source = "../images/hud_header.png")]
+		private static var hud_header:Class;
+		public static const HUD_HEADER:String = "hud_header";
+		
+		[Embed(source = "../images/menu_bg.png")]
+		private static var menu_bg:Class;
+		public static const MENU_BG:String = "menu_bg";
+		
+		[Embed(source = "../images/castle.png")]
+		private static var castle_img:Class;
+		public static const CASTLE:String = "castle";
+		
+		// Other resources
+		
 		[Embed(source = "mapLayout.txt", mimeType = "application/octet-stream")]
-		private var tileLayout_normal:Class;
+		private static var tileLayout_normal:Class;
 		public static const TILE_LAYOUT:String = "tileLayout";
 		
 		// End resource embed area
@@ -53,7 +68,9 @@ package
 			_normal[Assets.MAP_TILES] = tilesImg_normal;
 			_normal[Assets.SWORDSMAN] = swordsman_normal;
 			_normal[Assets.TILE_LAYOUT] = tileLayout_normal;
-			
+			_normal[Assets.HUD_HEADER] = hud_header;
+			_normal[Assets.MENU_BG] = menu_bg;
+			_normal[Assets.CASTLE] = castle_img;
 		}
 		
 		/**
