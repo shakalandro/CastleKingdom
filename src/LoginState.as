@@ -13,7 +13,10 @@ package
 		{
 			super();
 			Facebook.init(LoginState.FACEBOOK_APP_ID, function(success:Object, fail:Object):void {
-				FlxG.log("initalized" + success + ", " + fail);
+				FlxG.log("initalized: " + success + ", " + fail);
+				Facebook.login(function(success:Object, fail:Object):void {
+					FlxG.log("logged in: " + success + ", " + fail);
+				});
 			});
 		}
 	}
