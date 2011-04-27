@@ -3,6 +3,7 @@ package
 	import flash.utils.Dictionary;
 	
 	import org.flixel.*;
+	import org.flixel.data.FlxMouse;
 	
 	/**
 	 * This class contains all globally useful helper functions. Coordinate math, database read/write operations and more qualify for inclusion. 
@@ -22,6 +23,15 @@ package
 		 */		
 		public static function get assets():Dictionary {
 			return _assets.assets[CastleKingdom.SKIN];
+		}
+		
+		/**
+		 * 
+		 * @return The mouse object for this game.
+		 * 
+		 */		
+		public static function get mouse():FlxMouse {
+			return CastleKingdom.mouse;
 		}
 		
 		/**

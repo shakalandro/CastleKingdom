@@ -1,6 +1,7 @@
 package
 {
 	import org.flixel.*;
+	import org.flixel.data.FlxMouse;
 	
 	[SWF(width="828", height="460", backgroundColor="#ffffff")]
 	//[Frame(factoryClass="Preloader")]
@@ -20,9 +21,22 @@ package
 		public static const TILE_SIZE:int = 23;
 		public static const SKIN:String = Assets.SKIN_NORMAL;
 		
+		public static const _mouse:FlxMouse = new FlxMouse();
+		
 		public function CastleKingdom()
 		{
 			super(828, 460, ActiveState, 1);
+			//Mouse image
+			_mouse.load(null);
+		}
+		
+		/**
+		 * 
+		 * @return The mouse object for the game.
+		 * 
+		 */		
+		public static function get mouse():FlxMouse {
+			return _mouse;
 		}
 	}
 }
