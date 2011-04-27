@@ -1,21 +1,27 @@
 /** Team AWESOME, 4/20/2011
  * 
  * SuperType for a generic Unit type
+ * Stores Unit information, getters/setters to access it
+ * 
  **/
 
-package
+package 
 {	
+	import flash.geom.*;
+	
 	import org.flixel.*;
+	
 
 	
 	public class Unit extends FlxSprite
 	{
 		
+		
 		// Whatever fields exist for all units
 		// Associated getters/setters should also be in place
 		
 		//Basic info
-		private var _unitID:int;
+		protected var _unitID:int;
 		private var _cost:int;
 		private var _goldCost:int;
 		private var _units:int;  // ?? idk what this is
@@ -29,14 +35,14 @@ package
 		
 		// Attack
 		private var _range:int;
-		private var _damage:int;
-		private var _rate:Number;
+		private var _damageDone:int;
+		protected var _rate:Number;
 		private var _shots:int;
 		
 		private var _validTargets:Array;  // stores all enemies that come into range
 		
 		//private var _unitTimer:Timer;
-		private var _canAttack:Boolean;
+		private var _attackCounter:Number;
 		
 		
 		// Constructs a DefenseUnit at (x, y) with the given towerID, looking
@@ -64,11 +70,7 @@ package
 			// Set default fields
 			health = _maxHealth;
 			//_img = GLOBALLOOKUP[SKIN][unitID];
-			_canAttack = false;
-			/*
-			_unitTimer = new Timer(1000, 1); // 1 second
-			_unitTimer.addEventListener(TimerEvent.TIMER, doDamage);
-			_unitTimer.start();
+			_attackCounter = 100/_rate;
 			*/
 		}
 		
@@ -79,21 +81,18 @@ package
 		 * Moves the character as needed if possible
 		 * */
 		override public function update():void {
-			
-			//checkRangedCollision();
-			if(_canAttack) {				//first check if this unit's timer has expired
+			_attackCounter--;
+			if(_attackCounter <= 0) {				//first check if this unit's timer has expired
 				if(executeAttack()) {		// Tries to attack if possible, fails if no units in range
-					_canAttack = false;
-					//_unitTimer.start();
+					_attackCounter = 100/_rate;
 				}
 			}
 			super.update();
 		}
 		
-		
-		/** Calls hitRanged(contact, velocity) for any units in range of the current item
-		 * */
 		/*
+		/** Calls hitRanged(contact, velocity) for any units in range of the current item
+		 **
 		private function checkRangedCollision():void {
 			for (var otherUnit:Unit in getUnitsInRange()) {
 				if(otherUnit == null) {
@@ -103,10 +102,12 @@ package
 			}
 		}
 		*/
+		
+		/*
 		/** Returns a null terminated array of all units within the range of this, sorted by proximity.
 		 * What do arrays store by default? Out of bounds?
-		 * */
-		/*
+		 * 
+		
 		private function getUnitsInRange():Array {
 			var unitsInRange:Array = new Array();
 			var foundTarget:Boolean = false;
@@ -124,10 +125,6 @@ package
 			return unitsInRange.sort(compareDistance);
 		}
 		*/
-		private function doDamage():void {
-			//timer.stop();
-			_canAttack = true;
-		}
 		
 		/** Executes whatever attack the unit does
 		 *  Returns true if the unit has used its attack, false otherwise
@@ -140,28 +137,28 @@ package
 		/** Returns the lowest cost from any corner of this unit to any corner of the other unit
 		 * Feature or bug? Checking vertices only means edge-edge min distances will be ignored
 		 * this will only happen if the units are semi-overlapping and offset from each other (share no vertexes at same level)
-		 * */
-		/*
+		 * */	
 		private function unitDistance(otherUnit:Unit):Number {
-			var thisPoints:Array = new Array(4);
+			var thisPoints:Array = new Array();
 			thisPoints[0] = new Point(this.x,this.y);
 			thisPoints[1] = new Point(this.x + this.width, this.y);
 			thisPoints[2] = new Point(this.x, this.y + this.height);
 			thisPoints[3] = new Point(this.x + this.width, this.y + this.height);
-			
+	
+			var othPoints:Array = new Array();
 			othPoints[0] = new Point(this.x,this.y);
 			othPoints[1] = new Point(this.x + this.width, this.y);
 			othPoints[2] = new Point(this.x, this.y + this.height);
 			othPoints[3] = new Point(this.x + this.width, this.y + this.height);
-			var lowCost:Number = distance(thisPoints[0], othPoints[0]);
-			for(var p1:Point in thisPoints) {
-				for (var p2:Point in othPoints) {
-					lowCost = Math.min(lowCost, distance(p1,p2));
+			var lowCost:Number = Point.distance(thisPoints[0], othPoints[0]);
+			for (var i:int = 0; i < 4; i++) {
+				for(var j:int = 0; j< 4; i++) {
+					lowCost = Math.min(lowCost, Point.distance(thisPoints[i],othPoints[j]));
 				}
 			}
+	
 			return lowCost;
 		}
-		*/
 		
 		/** Getters and setters
 		 * There should be getters and setters for each of the above fields except _img
@@ -184,11 +181,14 @@ package
 		public function get range():int {
 			return _range;
 		}
-		public function get damage():int {
-			return _damage;
+		public function get damageDone():int {
+			return _damageDone;
 		}
 		public function get rate():int {
 			return _rate;
+		}
+		public function get shots():int {
+			return _shots;
 		}
 		
 		public function set maxHealth(value:int):void {
@@ -208,8 +208,8 @@ package
 		public function set range(value:int):void {
 			_range = value;
 		}
-		public function set damage(value:int):void {
-			_damage = value;
+		public function set damageDone(value:int):void {
+			_damageDone = value;
 		}
 		public function set rate(value:int):void {
 			_rate = value;
@@ -223,7 +223,7 @@ package
 		public function inflictDamage(damageDealt:int):Boolean {
 			this._health -= damageDealt;
 			if (this._health <= 0) {
-				this.killUnit();
+				this.kill();
 				return true;
 			} else {
 				return false;
@@ -233,7 +233,7 @@ package
 		
 		/** Called when this unit's health is reduced to <= 0
 		 * */
-		public function killUnit():void {
+		override public function destroy():void {
 			
 		}
 		
@@ -281,11 +281,18 @@ package
 			} else if (unit1.maxHealth != unit2.maxHealth) {
 				return unit1.maxHealth - unit2.maxHealth;
 			} else {
-				return unit1.damage - unit2.damage;
+				return unit1.damageDone - unit2.damageDone;
 			}
 		}
 		
-		/*
+		/** Compares the distance from two other units to the current Unit
+		 *
+		 * @param unit1 1st unit to compare
+		 * @param unit2 2nd unit to compare
+		 * @return 1 if unit1 is closer, 0 if they are equally distance, 
+		 * -1 if unit2 is closer
+		 * 
+		 */		
 		public function compareDistance(unit1:Unit, unit2:Unit):int {
 			var dThis:Number = this.unitDistance(unit1);
 			var dOth:Number = this.unitDistance(unit2);
@@ -297,6 +304,9 @@ package
 				return -1;
 			}
 		}
-		*/
+		
+		private function hi():void {
+			
+		}
 	}
 }

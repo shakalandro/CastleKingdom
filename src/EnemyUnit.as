@@ -1,3 +1,15 @@
+/** Team AWESOME, 4/21/11
+ *  EnemyUnit class
+ *  Defines unit behavior specific to enemy units
+ * 
+ * Todo: 
+ * 	Ensure ground units stay on top of land, fall/climb appropriately
+ *  Ensure Air units go down to touch city *or register loss after X change)
+ *  Ensure underground units follow correct pattern \__/ 
+ * 	Ensure game ends when unit comes in proximity to castle
+ * 
+ * */
+
 package
 {
 	import org.flixel.*;
@@ -9,9 +21,15 @@ package
 	public class EnemyUnit extends Unit
 	{
 		private var _target:Unit;
+		private var _type:String;
+		
+		public static const FLYING:String = "fly"; 
+		public static const LAND:String = "land"; 
+		public static const UNDERGROUND:String = "mole"; 
 		
 		public function EnemyUnit(x:Number, y:Number, towerID:int) {
 			super (x,y,towerID);
+			
 		}
 		
 		/** Moves the character as needed if possible
