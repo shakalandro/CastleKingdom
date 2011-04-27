@@ -24,7 +24,7 @@ package
 		
 		// Images
 		
-		[Embed(source = "../images/test_tile.png")]
+		[Embed(source = "../images/playfield_tiles.png")]
 		private static var tilesImg_normal:Class;
 		public static const MAP_TILES:String = "tiles";
 		
@@ -43,6 +43,10 @@ package
 		[Embed(source = "../images/castle.png")]
 		private static var castle_img:Class;
 		public static const CASTLE:String = "castle";
+		
+		[Embed(source = "../images/cursor.png")]
+		private static var cursor_img:Class;
+		public static const CURSOR:String = "cursor";
 		
 		// Other resources
 		
@@ -71,6 +75,7 @@ package
 			_normal[Assets.HUD_HEADER] = hud_header;
 			_normal[Assets.MENU_BG] = menu_bg;
 			_normal[Assets.CASTLE] = castle_img;
+			_normal[Assets.CURSOR] = cursor_img;
 		}
 		
 		/**

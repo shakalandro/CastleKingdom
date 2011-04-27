@@ -27,7 +27,7 @@ package
 		{
 			super(828, 460, ActiveState, 1);
 			//Mouse image
-			_mouse.load(null);
+			_mouse.load(Util.assets[Assets.CURSOR]);
 		}
 		
 		/**
