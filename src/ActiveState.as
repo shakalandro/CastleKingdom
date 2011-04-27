@@ -2,6 +2,12 @@ package
 {
 	import org.flixel.*;
 	
+	/**
+	 * Creates additional functionality for game states whether the player is actively involved. 
+	 * Handles things like menu interaction, ranged collision detection and adding units to the map. 
+	 * @author royman
+	 * 
+	 */	
 	public class ActiveState extends GameState
 	{	
 		public static const UPGRADE_MENU:String = "upgrade";
@@ -22,6 +28,8 @@ package
 		 * A group of EnemyUnits 
 		 */		
 		private var _units:FlxGroup;
+		
+		private var _openMenu:FlxSprite;
 		
 		/** 
 		 * An active state is a helper super class for interactive game states such as DefendState and UpgradeState. 
@@ -45,6 +53,12 @@ package
 		 */		
 		override public function create():void {
 			super.create();
+			add(_towers);
+			add(_units);
+			_castle = new Castle(0, 0, Util.assets[Assets.CASTLE]);
+			Util.centerX(_castle);
+			Util.placeOnGround(_castle, map);
+			add(_castle);
 		}
 		
 		/**
@@ -95,7 +109,11 @@ package
 		 * 
 		 */		 
 		public function showMenu(menu:String):void {
-			
+			if (_openMenu != null) _openMenu.kill();
+			_openMenu = new FlxSprite(400, 100, Util.assets[Assets.MENU_BG]);
+			var text:FlxText = new FlxText(400, 100, 150, menu);
+			add(_openMenu);
+			add(text);
 		}
 		
 		/**
@@ -135,8 +153,9 @@ package
 		 */		
 		private function addUnit(group:FlxGroup, unit:Unit, x:Number, y:Number):Boolean {
 			if (placeable(x, y)) {
-				// Need to get rounded index numbers, add functionality to Util
-				var indices:FlxPoint = Util.cartesianToIndexes(new FlxPoint(x, y));
+				var coordinates:FlxPoint = Util.roundToNearestTile(new FlxPoint(x, y));
+				unit.x = coordinates.x;
+				unit.y = coordinates.y;
 				group.add(unit);
 				return true;
 			}
@@ -155,19 +174,43 @@ package
 		 */		
 		private function placeable(x:int, y:int):Boolean {
 			if (!Util.inBounds(x, y)) return false;
-			
-			var indices:FlxPoint = Util.cartesianToIndexes(new FlxPoint(x, y));
+			var indices:FlxPoint = Util.cartesianToIndices(new FlxPoint(x, y));
 			var tileType:int = map.getTile(indices.x, indices.y);
 			if (tileType >= map.collideIndex) {
 				return false;
 			}
 			for each (var obj:FlxObject in _towers.members) {
-				var objIndices:FlxPoint = Util.cartesianToIndexes(new FlxPoint(obj.x, obj.y));
+				var objIndices:FlxPoint = Util.cartesianToIndices(new FlxPoint(obj.x, obj.y));
 				if (objIndices.x == indices.x && objIndices.y == indices.y) {
 					return false;
 				}
 			}
 			return true;
+		}
+		
+		override protected function createHUD():void {
+			super.createHUD();
+			var attack:FlxButton = new FlxButton(0, 0, function():void {
+				showMenu(ActiveState.ATTACK_MENU);
+			});
+			attack.width = 100;
+			attack.loadText(new FlxText(0, 0, 40, "attack"));
+			
+			var defend:FlxButton = new FlxButton(150, 0, function():void {
+				showMenu(ActiveState.DEFEND_MENU);
+			});
+			defend.loadText(new FlxText(0, 0, 40, "defend"));
+			defend.width = 100;
+			
+			var upgrade:FlxButton = new FlxButton(300, 0, function():void {
+				showMenu(ActiveState.UPGRADE_MENU);
+			});
+			upgrade.loadText(new FlxText(0, 0, 60, "upgrade"));
+			upgrade.width = 100;
+			
+			hud.add(attack);
+			hud.add(defend);
+			hud.add(upgrade);
 		}
 	}
 }

@@ -11,7 +11,7 @@
  * Display:			Shows a predetermined castle image based on upgrade levels to each item 
  * 
  * @field _upgrades:Array 	List of all upgrades user has bought, should be integers. 
- * @field _gold:int 		Balance of gold user has, must be >= 0
+ * @field _gold:int 		Balance of gold user has, must be &gt;= 0
  * @field _unitCap:int		Total army unit number supported
  * @field _towerCap:int 	Total tower unit number supported
  * @field

@@ -32,10 +32,10 @@ package
 			
 		}
 		
+		/*
 		/** Moves the character as needed if possible
 		 * 
-		 * */
-		/*
+		 *
 		override public function update():void {
 			if (contact != null) {
 				if(contact.health <= 0) {
@@ -46,10 +46,11 @@ package
 			super.update();
 		}
 		*/
+		/*
 		/** This function responds to this Unit coming within range of another FlxObject
 		 * Sets a single target, only changes it once the current target dies
-		 * */
-		/*
+		 * 
+		
 		override public function hitRanged(contact:FlxObject, velocity:Number):void {
 			if ( contact is DefenseUnit ) {
 				this.velocity = 0;
