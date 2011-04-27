@@ -1,5 +1,5 @@
 package
-{
+{	
 	import org.flixel.*;
 	import org.flixel.data.FlxMouse;
 	
@@ -14,29 +14,19 @@ package
 	 * 
 	 */	
 	public class CastleKingdom extends FlxGame
-	{		
+	{
+		public static const FACEBOOK_APP_ID:String = "197220693652461";
+		private static const FACEBOOK_SECRET_KEY:String = "592b9006282d5442f9d042b56fe04913";
 		
 		public static const TILEMAP_WIDTH:int = 36;
 		public static const TILEMAP_HEIGHT:int = 18;
 		public static const TILE_SIZE:int = 23;
 		public static const SKIN:String = Assets.SKIN_NORMAL;
-		
-		public static const _mouse:FlxMouse = new FlxMouse();
-		
+				
 		public function CastleKingdom()
 		{
-			super(828, 460, ActiveState, 1);
-			//Mouse image
-			_mouse.load(null);
-		}
-		
-		/**
-		 * 
-		 * @return The mouse object for the game.
-		 * 
-		 */		
-		public static function get mouse():FlxMouse {
-			return _mouse;
+			super(828, 460, LoginState, 1);
+			FlxG.mouse.show(Util.assets[Assets.CURSOR]);
 		}
 	}
 }

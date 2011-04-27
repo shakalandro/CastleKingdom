@@ -1,5 +1,7 @@
 package
 {
+	import com.facebook.graph.*;
+	
 	import flash.utils.Dictionary;
 	
 	import org.flixel.*;
@@ -11,9 +13,9 @@ package
 	 * 
 	 */	
 	public class Util extends FlxU
-	{
-		
+	{		
 		private static const _assets:Assets = new Assets();
+		private static var _facebookReady:Boolean;
 		
 		/**
 		 * Provides access to all assets according to the current skin setting
@@ -31,7 +33,16 @@ package
 		 * 
 		 */		
 		public static function get mouse():FlxMouse {
-			return CastleKingdom.mouse;
+			return FlxG.mouse;
+		}
+		
+		/**
+		 * 
+		 * @return Whether we have successfully logged in to Facebook and are ready to query the Graph api.
+		 * 
+		 */		
+		public static function get facebookReady():Boolean {
+			return _facebookReady;
 		}
 		
 		/**
@@ -272,6 +283,62 @@ package
 			var y:Number = Util.indicesToCartesian(indices).y - obj.height;
 			obj.y = y
 			return y;
+		}
+		
+		/**
+		 * Connects to Facebook if possible and tells the callback if it did so. The game must be run from within the
+		 * <a href='http://apps.facebook.com/castlekingdom/'>CastleKingdom facebook app page</a> in order to recieve the benefits of the Facebook
+		 * API. The user must also select allow on the pop-up that ensues. Ensure that your browser is not supressing this pop-up.
+		 * 
+		 * @param callback A callback function as a parameter, this function must have the following signature callback(ready:Boolean):void
+		 * 
+		 */		
+		public static function facebookConnect(callback:Function):void {
+			Facebook.init(CastleKingdom.FACEBOOK_APP_ID, function(success:Object, fail:Object):void {
+				if (!success) {
+					FlxG.log("could not init: " + fail);
+					Facebook.login(function(success:Object, fail:Object):void {
+						if (!success) {
+							FlxG.log("could not log in: " + fail);
+						} else {
+							_facebookReady = true;
+						}
+						callback(_facebookReady);
+					});
+				} else {
+					_facebookReady = true;
+					callback(_facebookReady);
+				}
+			});
+		}
+		
+		/**
+		 * facebookConnect must have been called before this method is called. Provides the callback with a 
+		 * list of friends which is a simple object with an id and name field. If justNames is true, then the 
+		 * array contains only the string names of each friend.
+		 * 
+		 * @param callback A callback function of the following form callback(friends:Array, fail:Object)
+		 * @param justNames Whether the array should contain just names or not
+		 * 
+		 */		
+		public static function facebookFriends(callback:Function, justNames:Boolean = false):void {
+			if (_facebookReady) {
+				Facebook.api("/me/friends", function(result:Object, fail:Object):void {
+					if (result) {
+						var friends:Array = result as Array;
+						if (justNames) {
+							for (var i:int = 0; i < friends.length; i++) {
+								friends[i] = friends[i].name;
+							}
+						}
+						callback(friends, fail);
+					} else {
+						callback(result, fail);
+					}
+				});
+			} else {
+				callback(null, null);
+			}
 		}
 	}
 }

@@ -227,7 +227,7 @@ package
 		
 		
 		/** Lowers unit's health by damageDealth
-		 * Returns true and calls killUnit() if this reduces unit health to <= 0
+		 * Returns true and calls killUnit() if this reduces unit health to &lt;= 0
 		 * else returns false
 		 * */
 		public function inflictDamage(damageDealt:int):Boolean {
@@ -241,7 +241,7 @@ package
 			
 		}
 		
-		/** Called when this unit's health is reduced to <= 0
+		/** Called when this unit's health is reduced to &lt;= 0
 		 * */
 		override public function destroy():void {
 			
