@@ -3,7 +3,7 @@ package
 	import org.flixel.*;
 	import org.flixel.data.FlxMouse;
 	
-	[SWF(width="828", height="460", backgroundColor="#ffffff")]
+	[SWF(width="759", height="460", backgroundColor="#ffffff")]
 	//[Frame(factoryClass="Preloader")]
 	
 	/**
@@ -18,14 +18,14 @@ package
 		public static const FACEBOOK_APP_ID:String = "197220693652461";
 		private static const FACEBOOK_SECRET_KEY:String = "592b9006282d5442f9d042b56fe04913";
 		
-		public static const TILEMAP_WIDTH:int = 36;
+		public static const TILEMAP_WIDTH:int = 33;
 		public static const TILEMAP_HEIGHT:int = 18;
 		public static const TILE_SIZE:int = 23;
 		public static const SKIN:String = Assets.SKIN_NORMAL;
 				
 		public function CastleKingdom()
 		{
-			super(828, 460, LoginState, 1);
+			super(759, 460, LoginState, 1);
 			FlxG.mouse.show(Util.assets[Assets.CURSOR]);
 		}
 	}
