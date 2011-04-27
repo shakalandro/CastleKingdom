@@ -31,7 +31,7 @@ package
 		 * 
 		 */		
 		public static function get mouse():FlxMouse {
-			return CastleKingdom.mouse;
+			return FlxG.mouse;
 		}
 		
 		/**
