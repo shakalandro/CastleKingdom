@@ -24,8 +24,8 @@ package
 	public class Castle extends FlxSprite
 	{
 		
-		public static const ARMY:String = "army"; 
-		public static const TOWER:String = "tower"; 
+		public static const ARMY:int = 0;  // stores index of barracks level in _upgrades
+		public static const TOWER:int = 1; // stores index of foundry level in _upgrades
 		
 		private var _upgrades:Array;  // should be:  {Castle level, Barracks level, foundry level, Smith level?}
 		private var _gold:int;	
@@ -60,13 +60,17 @@ package
 		}
 		
 		// Returns how many army units the player has to use
-		public function get armyUnitsAvailabe():int {
+		public function get armyUnitsAvailable():int {
 			return _unitCap - unitCostSum(_army);
 		}
 		
+		public function get towerCapacity():int {
+			return _towerCap;
+		}
+		
 		// Returns how many tower units the player has to use
-		public function get towerUnitsAvailabe():int {
-			return _unitCap - unitCostSum(_army);
+		public function get towerUnitsAvailable():int {
+			return _towerCap - unitCostSum(_towers);
 		}
 		
 		// Returns an array of what towerIDs are available for use 
@@ -109,10 +113,24 @@ package
 			return cost;
 		}
 		
-		private function unitsUnlocked(unitType:int):Array {
+		/**
+		 * 
+		 * @param unitType Either Castle.TOWER or Castle.ARMY to search for each type
+		 * @return 
+		 * 
+		 */		
+		public function unitsUnlocked(unitType:int, highest:Boolean = false):Array {
+			var typeLevel:int = _upgrades[unitType];
+			if (highest) {
+				if(unitType == Castle.ARMY) {
+					typeLevel = Math.max(typeLevel,_upgrades[Castle.TOWER]);
+				} else {
+					typeLevel = Math.max(typeLevel,_upgrades[Castle.ARMY]);
+				}
+			}
 			// Iterates over upgrade list to add all unitIDs contained
 			var unitList:Array = new Array();
-			for (var upgradeLevel:int = 0; upgradeLevel <= _upgrades[unitType]; upgradeLevel++) {
+			for (var upgradeLevel:int = 0; upgradeLevel <= typeLevel ; upgradeLevel++) {
 				//for(var unitID in unlockables[unitType][upgradeLevel]) {
 				//	unitList.push(unitID);	
 				//}

@@ -16,6 +16,11 @@ package
 	public class Unit extends FlxSprite
 	{
 		
+		public static const AIR:String = "fly"; 
+		public static const GROUND:String = "land"; 
+		public static const UNDERGROUND:String = "mole"; 
+		
+		
 		
 		// Whatever fields exist for all units
 		// Associated getters/setters should also be in place
@@ -43,6 +48,7 @@ package
 		
 		//private var _unitTimer:Timer;
 		private var _attackCounter:Number;
+		private var _type:String;
 		
 		
 		// Constructs a DefenseUnit at (x, y) with the given towerID, looking
@@ -197,6 +203,10 @@ package
 		
 		public function set cost(value:int):void {
 			_cost = value;
+		}
+		
+		public function get type():String {
+			return _type;
 		}
 		
 		public function set goldCost(value:int):void {
