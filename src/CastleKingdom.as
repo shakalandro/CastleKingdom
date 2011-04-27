@@ -2,6 +2,8 @@ package
 {
 	import com.facebook.graph.*;
 	
+	import flash.text.TextField;
+	
 	import org.flixel.*;
 	import org.flixel.data.FlxMouse;
 	
@@ -25,6 +27,7 @@ package
 		public static const TILE_SIZE:int = 23;
 		public static const SKIN:String = Assets.SKIN_NORMAL;
 		
+		private static var _log:TextField = new TextField();
 		
 		public function CastleKingdom()
 		{
@@ -33,8 +36,18 @@ package
 			
 			Facebook.init(CastleKingdom.FACEBOOK_APP_ID, function(success:Object, fail:Object):void {
 				trace("initialized: " + fail);
+				CastleKingdom.log("initialized" + success);
 			});
 			trace("done");
+			
+			_log.x = 0;
+			_log.y = FlxG.height - 20;
+			_log.width = FlxG.width;
+			this.addChild(_log);
+		}
+		
+		public static function log(s:String):void {
+			_log.text = s;
 		}
 	}
 }
