@@ -19,6 +19,7 @@ package
 		private static const _assets:Assets = new Assets();
 		private static var _facebookReady:Boolean;
 		private static var _facebookUserInfo:Object;
+		private static var _facebookFriends:Object;
 		
 		/**
 		 * Provides access to all assets according to the current skin setting
@@ -381,32 +382,39 @@ package
 		}
 		
 		/**
-		 * facebookConnect must have been called before this method is called. Provides the callback with a 
+		 * facebookConnect must have been called before this method is called, calls the callback with null if not. Provides the callback with a 
 		 * list of friends which is a simple object with an id and name field. If justNames is true, then the 
-		 * array contains only the string names of each friend.
+		 * array contains only the string names of each friend. If forceRefresh is false, will return a cached copy of the friends list.
 		 * 
-		 * @param callback A callback function of the following form callback(friends:Array, fail:Object)
+		 * @param callback A callback function of the following form callback(friends:Array)
 		 * @param justNames Whether the array should contain just names or not
 		 * 
 		 */		
-		public static function facebookFriends(callback:Function, justNames:Boolean = false):void {
-			if (_facebookReady) {
+		public static function facebookFriends(callback:Function, justNames:Boolean = false, forceRefresh:Boolean = false):void {
+			if (!_facebookReady) {
+				callback(null);	
+			} else if (_facebookFriends && !forceRefresh) {
+				callback(callback(facebookFriendsFormat(_facebookFriends, justNames)));	
+			} else {
 				Facebook.api("/me/friends", function(result:Object, fail:Object):void {
 					if (result) {
-						var friends:Array = result as Array;
-						if (justNames) {
-							for (var i:int = 0; i < friends.length; i++) {
-								friends[i] = friends[i].name;
-							}
-						}
-						callback(friends, fail);
+						_facebookFriends = result;
+						callback(facebookFriendsFormat(_facebookFriends, justNames));
 					} else {
 						callback(result, fail);
 					}
 				});
-			} else {
-				callback(null, null);
 			}
+		}
+		
+		private static function facebookFriendsFormat(info:Object, justNames:Boolean):Array {
+			var friends:Array = info as Array;
+			if (justNames) {
+				for (var i:int = 0; i < friends.length; i++) {
+					friends[i] = friends[i].name;
+				}
+			}
+			return friends;
 		}
 	}
 }
