@@ -3,7 +3,10 @@ package
 	import com.facebook.graph.*;
 	import com.facebook.graph.data.*;
 	
+	import flash.events.Event;
 	import flash.external.*;
+	import flash.net.URLLoader;
+	import flash.net.URLRequest;
 	import flash.utils.Dictionary;
 	
 	import org.flixel.*;
@@ -18,7 +21,9 @@ package
 	{		
 		private static const _assets:Assets = new Assets();
 		private static var _facebookReady:Boolean;
-		private static var _facebookUserInfo:Object;
+		private static var _facebookUserInfo:Dictionary = new Dictionary();
+		private static var _facebookFriends:Object;
+		private static var _facebookPics:Dictionary = new Dictionary();
 		
 		/**
 		 * Provides access to all assets according to the current skin setting
@@ -363,50 +368,112 @@ package
 		 * @param forceRefresh Whether to requery facebook for user info.
 		 * 
 		 */		
-		public static function facebookUserInfo(callback:Function, forceRefresh:Boolean = false):void {
+		public static function facebookUserInfo(callback:Function, forceRefresh:Boolean = false, uid:String = "me"):void {
 			if (!_facebookReady) {
 				callback(null);
 			} else if (_facebookUserInfo && !forceRefresh) {
-				callback(_facebookUserInfo);
+				callback(_facebookUserInfo[uid]);
 			} else {
-				Facebook.api("/me", function(results:Object, fail:Object):void {
+				Facebook.api("/" + uid, function(results:Object, fail:Object):void {
 					if (results) {
-						_facebookUserInfo = results;
+						_facebookUserInfo[uid] = results;
 						callback(results);
 					} else {
-						FlxG.log("Util.facebookUserInfo: failed " + fail);
+						FlxG.log("Util.facebookUserInfo: failed /" + uid + " " + fail);
 					}
 				});
 			}
 		}
 		
 		/**
-		 * facebookConnect must have been called before this method is called. Provides the callback with a 
+		 * facebookConnect must have been called before this method is called, calls the callback with null if not. Provides the callback with a 
 		 * list of friends which is a simple object with an id and name field. If justNames is true, then the 
-		 * array contains only the string names of each friend.
+		 * array contains only the string names of each friend. If forceRefresh is false, will return a cached copy of the friends list.
 		 * 
-		 * @param callback A callback function of the following form callback(friends:Array, fail:Object)
+		 * @param callback A callback function of the following form callback(friends:Array)
 		 * @param justNames Whether the array should contain just names or not
 		 * 
 		 */		
-		public static function facebookFriends(callback:Function, justNames:Boolean = false):void {
-			if (_facebookReady) {
+		public static function facebookFriends(callback:Function, justNames:Boolean = false, forceRefresh:Boolean = false):void {
+			function helper(info:Object, justNames:Boolean):Array {
+				var friends:Array = info as Array;
+				if (justNames) {
+					for (var i:int = 0; i < friends.length; i++) {
+						friends[i] = friends[i].name;
+					}
+				}
+				return friends;
+			}
+			if (!_facebookReady) {
+				callback(null);	
+			} else if (_facebookFriends && !forceRefresh) {
+				callback(callback(helper(_facebookFriends, justNames)));	
+			} else {
 				Facebook.api("/me/friends", function(result:Object, fail:Object):void {
 					if (result) {
-						var friends:Array = result as Array;
-						if (justNames) {
-							for (var i:int = 0; i < friends.length; i++) {
-								friends[i] = friends[i].name;
-							}
-						}
-						callback(friends, fail);
+						_facebookFriends = result;
+						callback(helper(_facebookFriends, justNames));
 					} else {
 						callback(result, fail);
 					}
 				});
+			}
+		}
+		
+		/**
+		 * Returns a Class object to the callback that contains the profile pic for the given user. 
+		 * Returns a cached version of the image unless otherwise specified. Returns null if facebookReady is false.
+		 * 
+		 * @param callback A callback with the following signature callback(img:Class):void
+		 * @param uid The facebook uid of the desired person
+		 * @param forceRefresh Whether to gather the picture from facebook again or use the cached version
+		 * 
+		 */		
+		public static function facebookPic(callback:Function, uid:String = "me", forceRefresh:Boolean = false):void {
+			function helper(info:Object):void {
+				var url:URLRequest = new URLRequest(info.icon);
+				var loader:URLLoader = new URLLoader(url);
+				loader.addEventListener(Event.COMPLETE, function(e:Event):void {
+					_facebookPics[uid] = new ExternalImage(e.target.content.bitmapData, e.target.url)
+					callback(_facebookPics[uid]);
+				});
+			}
+			if (!_facebookReady) {
+				callback(null);	
+			} else if (_facebookPics[uid] && !forceRefresh) {
+				callback(_facebookPics[uid]);
+			} else if (!_facebookUserInfo) {
+				Util.facebookUserInfo(helper, false, uid);
 			} else {
-				callback(null, null);
+				helper(_facebookUserInfo);
 			}
 		}
 	}
+}
+
+import flash.display.BitmapData;
+
+/**
+ * Helper class for loading images from the internet in a flixel loadGraphic compatible way. 
+ * @author royman
+ * 
+ */
+class ExternalImage {
+	
+	private static var data:BitmapData;
+	private static var url:String;
+		
+	public function ExternalImage(bitmapData:BitmapData, id:String):void {
+		data = bitmapData;
+		url    = id;
+	}
+		
+	public function toString():String {
+		return url;
+	}
+	
+	public function get bitmapData():BitmapData {
+		return data;
+	}
+	
 }

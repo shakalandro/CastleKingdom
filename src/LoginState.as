@@ -6,6 +6,7 @@ package
 	
 	public class LoginState extends GameState
 	{
+		private var _beginButton:FlxButton;
 		private var _loginButton:FlxButton;
 		private var _loginText:FlxText;
 		
@@ -16,14 +17,23 @@ package
 		
 		override public function create():void {
 			super.create();
-			_loginButton = new FlxButton(0, 0, login);
-			_loginText = new FlxText(0, 0, 100, "Log in to Facebook");
-			_loginButton.loadText(_loginText);
-			Util.center(_loginButton);
-			add(_loginButton);
+			
+			_beginButton = new FlxButton(0, 0, start);
+			_beginButton.loadText(new FlxText(0, 0, 100, "Begin"));
+			Util.center(_beginButton);
+			add(_beginButton);
+			
+			if (CastleKingdom.FACEBOOK_ON) {
+				_loginButton = new FlxButton(0, 0, login);
+				_loginText = new FlxText(0, 0, 100, "Log in to Facebook");
+				_loginButton.loadText(_loginText);
+				Util.center(_loginButton);
+				_loginButton.y += _beginButton.height * 2;
+				add(_loginButton);
+			}
 		}
 		
-		private function login():void {			
+		private function login():void {
 			Util.facebookConnect(function(ready:Boolean):void {
 				if (ready) {
 					Util.facebookFriends(function(result:Array, fail:Object):void {
@@ -47,6 +57,10 @@ package
 					FlxG.log("LoginState.login failed: " + ready);
 				}
 			});
+		}
+		
+		private function start():void {
+			FlxG.state = new ActiveState(false, true, this.map);
 		}
 	}
 }
