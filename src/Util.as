@@ -21,7 +21,7 @@ package
 	{		
 		private static const _assets:Assets = new Assets();
 		private static var _facebookReady:Boolean;
-		private static var _facebookUserInfo:Object;
+		private static var _facebookUserInfo:Dictionary = new Dictionary();
 		private static var _facebookFriends:Object;
 		private static var _facebookPics:Dictionary = new Dictionary();
 		
@@ -368,18 +368,18 @@ package
 		 * @param forceRefresh Whether to requery facebook for user info.
 		 * 
 		 */		
-		public static function facebookUserInfo(callback:Function, forceRefresh:Boolean = false):void {
+		public static function facebookUserInfo(callback:Function, forceRefresh:Boolean = false, uid:String = "me"):void {
 			if (!_facebookReady) {
 				callback(null);
 			} else if (_facebookUserInfo && !forceRefresh) {
-				callback(_facebookUserInfo);
+				callback(_facebookUserInfo[uid]);
 			} else {
-				Facebook.api("/me", function(results:Object, fail:Object):void {
+				Facebook.api("/" + uid, function(results:Object, fail:Object):void {
 					if (results) {
-						_facebookUserInfo = results;
+						_facebookUserInfo[uid] = results;
 						callback(results);
 					} else {
-						FlxG.log("Util.facebookUserInfo: failed " + fail);
+						FlxG.log("Util.facebookUserInfo: failed /" + uid + " " + fail);
 					}
 				});
 			}
@@ -420,12 +420,22 @@ package
 			}
 		}
 		
-		public static function facebookPic(callback:Function, uid:String, forceRefresh:Boolean):void {
+		/**
+		 * Returns a Class object to the callback that contains the profile pic for the given user. 
+		 * Returns a cached version of the image unless otherwise specified. Returns null if facebookReady is false.
+		 * 
+		 * @param callback A callback with the following signature callback(img:Class):void
+		 * @param uid The facebook uid of the desired person
+		 * @param forceRefresh Whether to gather the picture from facebook again or use the cached version
+		 * 
+		 */		
+		public static function facebookPic(callback:Function, uid:String = "me", forceRefresh:Boolean = false):void {
 			function helper(info:Object):void {
 				var url:URLRequest = new URLRequest(info.icon);
 				var loader:URLLoader = new URLLoader(url);
 				loader.addEventListener(Event.COMPLETE, function(e:Event):void {
-					callback(ExternalImage.setData(e.target.content.bitmapData, e.target.url));
+					_facebookPics[uid] = new ExternalImage(e.target.content.bitmapData, e.target.url)
+					callback(_facebookPics[uid]);
 				});
 			}
 			if (!_facebookReady) {
@@ -433,7 +443,7 @@ package
 			} else if (_facebookPics[uid] && !forceRefresh) {
 				callback(_facebookPics[uid]);
 			} else if (!_facebookUserInfo) {
-				Util.facebookUserInfo(helper);
+				Util.facebookUserInfo(helper, false, uid);
 			} else {
 				helper(_facebookUserInfo);
 			}
@@ -443,17 +453,22 @@ package
 
 import flash.display.BitmapData;
 
+/**
+ * Helper class for loading images from the internet in a flixel loadGraphic compatible way. 
+ * @author royman
+ * 
+ */
 class ExternalImage {
 	
 	private static var data:BitmapData;
 	private static var url:String;
 		
-	public static function setData(bitmapData:BitmapData, id:String):void {
+	public function ExternalImage(bitmapData:BitmapData, id:String):void {
 		data = bitmapData;
 		url    = id;
 	}
-	
-	public static function toString():String {
+		
+	public function toString():String {
 		return url;
 	}
 	
