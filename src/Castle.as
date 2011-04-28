@@ -24,6 +24,8 @@ package
 	public class Castle extends FlxSprite
 	{
 		
+		private var _gameOver:Boolean = false;
+		
 		public static const ARMY:int = 0;  // stores index of barracks level in _upgrades
 		public static const TOWER:int = 1; // stores index of foundry level in _upgrades
 		
@@ -47,6 +49,11 @@ package
 		{
 			//TODO: implement function
 			super(X, Y, SimpleGraphic);
+			//_upgrades = ;
+			_unitCap = 40;
+			_towerCap = 40;
+			this.fixed = true;
+			
 		}
 		
 		//Adds the given upgrade to the castle
@@ -120,12 +127,12 @@ package
 		 * 
 		 */		
 		public function unitsUnlocked(unitType:int, highest:Boolean = false):Array {
-			var typeLevel:int = _upgrades[unitType];
+			var typeLevel:int = 0; //_upgrades[unitType];
 			if (highest) {
 				if(unitType == Castle.ARMY) {
-					typeLevel = Math.max(typeLevel,_upgrades[Castle.TOWER]);
+			//		typeLevel = Math.max(typeLevel,_upgrades[Castle.TOWER]);
 				} else {
-					typeLevel = Math.max(typeLevel,_upgrades[Castle.ARMY]);
+			//		typeLevel = Math.max(typeLevel,_upgrades[Castle.ARMY]);
 				}
 			}
 			// Iterates over upgrade list to add all unitIDs contained
@@ -135,7 +142,37 @@ package
 				//	unitList.push(unitID);	
 				//}
 			}
-			return null;
+			unitList.push(10101); // Test soldier
+			return unitList;
 		}
+		
+		public function isGameOver():Boolean {
+			return _gameOver;
+		}
+		
+		
+		override public function hitRight(Contact:FlxObject, Velocity:Number):void {
+			if (Contact is EnemyUnit) {
+				_gameOver = true;
+			}	
+		}
+		
+		override public function hitLeft(Contact:FlxObject, Velocity:Number):void {
+			if (Contact is EnemyUnit) {
+				_gameOver = true;
+			}	
+		}
+		override public function hitTop(Contact:FlxObject, Velocity:Number):void {
+			if (Contact is EnemyUnit) {
+				_gameOver = true;
+			}	
+		}
+		
+		override public function hitBottom(Contact:FlxObject, Velocity:Number):void {
+			if (Contact is EnemyUnit) {
+				_gameOver = true;
+			}	
+		}
+	
 	}
 }

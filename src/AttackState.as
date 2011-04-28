@@ -26,20 +26,30 @@ package
 		public function AttackState(tutorial:Boolean=false, menusActive:Boolean=false, map:FlxTilemap=null)
 		{
 			super(tutorial, menusActive, map);
+			_activeAttack = false;
 		}
 		
 		override public function update():void {
+			// chekc if castle has been hit
+			if(this.castle.isGameOver()) {
+				// take portion of gold and give to attacker
+				for(var unit:Object in this.units) {
+					(unit as Unit).destroy();
+				}
+			} else if ( deathCheck(this.units)) {
+				
+			}
 			// Check if peeps are still alive
 			
 			// Do nothing if peeps are still alive
 			if(!_activeAttack) {
-				_activeAttack == true;
+				_activeAttack = true;
 				// Check for incoming wave
 				// if none, check for automated
 				
 				// else if is, lock menus and drop dudes
-				var leftSide:Array;
-				var rightSide:Array;
+				var leftSide:Array = new Array();
+				var rightSide:Array = new Array();
 				var type:String = getAttackType();
 				if (type == AttackState.REQUESTED){
 					generateArmy(leftSide, rightSide, 10, 10);
@@ -50,7 +60,25 @@ package
 				}
 				placeArmy(leftSide, rightSide);
 			}
+			super.collide();
+			super.update();
 			
+		}
+		
+		/**
+		 * Check if all units are dead 
+		 * @param units Group of units to check if all are dead or not
+		 * @return true if all units are dead, false otherwise
+		 * 
+		 */		
+		private function deathCheck(units:FlxGroup):Boolean {
+			for(var unit:Object in units) {
+				unit = unit as Unit;
+				if(unit.health > 0) {
+					return false;
+				}
+			}
+			return true;
 		}
 		
 		/** Generates a random army with strength within a certain range of the user's defensive capabilities
@@ -80,10 +108,11 @@ package
 					var unitNum:int = possibleUnits[rand];
 					var side:int = Math.round(Math.random()*2);
 					if (side == 0) {
-						leftSide.add(unitNum);
+						leftSide.push(unitNum);
 					} else {
-						rightSide.add(unitNum);
+						rightSide.push(unitNum);
 					}
+					remaining -= 2; // cost of unit
 				}
 			} while (remaining > 0 && maxIndex >=0 ) ;
 				
@@ -142,9 +171,8 @@ package
 		 * 
 		 */		
 		private function placeArmy( leftSide:Array, rightSide:Array):void {
-			
-			placeDudes(leftSide, Util.minX);
-			placeDudes(rightSide, Util.maxX);
+			placeDudes(leftSide, Util.minX+ 100);
+			placeDudes(rightSide, Util.maxX- 100);
 			
 		}
 		
@@ -155,17 +183,20 @@ package
 		 * 
 		 */		
 		private function placeDudes(dudes:Array, xVal:int):void {
+			trace("Called PlaceUnits with size: " + dudes.length + " active attack: " + _activeAttack);
 			for( var i:int = 0; i < dudes.length; i++) {
-				var dude:Unit;
+				var dude:Unit = new EnemyUnit(xVal-10*i, Util.minTileY, dudes[i]);;
 				if (dude.type == Unit.UNDERGROUND) {
-					dude = new Unit(xVal, Util.minTileY, dudes[i]);
+					// set dude on ground dude 
 				} else if (dude.type == Unit.AIR) {
-					dude = new Unit(xVal, Util.minTileY, dudes[i]);
+					// set dude on air dude = new Unit(xVal, Util.minTileY, dudes[i]);
 				} else {
-					dude = new Unit(xVal, Util.minTileY, dudes[i]);
+					//dude = new Unit(xVal, Util.minTileY, dudes[i]);
 					Util.placeOnGround(dude, this.map);
 				}
 				units.add(dude);
+				//trace("adding dude: " + dude.x + " " + dude.y);
+				this.add(dude);
 			}
 		}
 	}

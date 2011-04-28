@@ -62,22 +62,22 @@ package
 			}
 			// look up unit info, set fields
 			// {cost, goldCost, maxHealth,speed,range,damage,rate)
-			/*
-			var unitStats:Array = unitStatLookup(unitID);
+			
+			var unitStats:Array = [1,10,50,1,1,10,1] ;//unitStatLookup(unitID);
 				
 			_cost = unitStats[0];
 			_goldCost = unitStats[1];
 			_maxHealth = unitStats[2];
 			_speed = unitStats[3];
 			_range = unitStats[4];
-			_damage = unitStats[5];
+			_damageDone = unitStats[5];
 			_rate = unitStats[6];
 			
 			// Set default fields
 			health = _maxHealth;
 			//_img = GLOBALLOOKUP[SKIN][unitID];
 			_attackCounter = 100/_rate;
-			*/
+			
 		}
 		
 		
@@ -247,6 +247,15 @@ package
 			
 		}
 		
+		protected function rescale(scalar:Number):void {
+			//this.scale.x = scalar;
+			//this.scale.y = scalar;
+			this.color = 0xffffff;
+			//this.offset.x = -20;
+			//this.offset.y = -20;
+			this.width = this.width * scalar;
+			this.height = this.height * scalar;
+		}
 		
 		/** This function responds to this Unit coming within range of another FlxObject
 		 * */
