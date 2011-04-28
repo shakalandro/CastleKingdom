@@ -19,6 +19,8 @@ package
 		public static const AIR:String = "fly"; 
 		public static const GROUND:String = "land"; 
 		public static const UNDERGROUND:String = "mole"; 
+		public static const WALL:String = "wall";
+		public static const TOWER:String = "tower";
 		
 		
 		

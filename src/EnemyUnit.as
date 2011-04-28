@@ -21,20 +21,16 @@ package
 	public class EnemyUnit extends Unit
 	{
 		private var _target:Unit;
-		private var _type:String;
-		
-		public static const FLYING:String = "fly"; 
-		public static const LAND:String = "land"; 
-		public static const UNDERGROUND:String = "mole"; 
+		private var _type:String; 
 		
 		public function EnemyUnit(x:Number, y:Number, towerID:int) {
+			
 			super (x,y,towerID);
-			
-			
+			this._type = Unit.GROUND;
 			
 			this.speed = 10;
 			this.velocity.x = speed;
-			this.loadGraphic(Util.assets[Assets.SWORDSMAN],true,true,64,64,true);
+			this.loadGraphic(Util.assets[Assets.SWORDSMAN],true,true,23,23,true);
 			this.addAnimation("walk", [0,1,2,3],speed/2,true);
 			this.addAnimation("attack",[4,5,6,7],_rate*2,true);
 			this.play("walk");
@@ -65,7 +61,9 @@ package
 					contact = getUnitsInRange()[0];
 				}
 			}*/
-			
+			if (type == Unit.GROUND && this.y <= Util.castle.y ){
+				this.velocity.y = 0 ;
+			}
 			// Corrects facing/movement
 			if(this.x > Util.maxX/2) {
 				// goes left
@@ -95,16 +93,21 @@ package
 				if(this._target == null || this._target.health <= 0) {
 					this._target = contact as Unit;
 				}
-			}
-			this.play("attack");
+				this.play("attack");
+			} 
+			if ( contact is Castle ) {
+				// Either disappear, climb, or ?? 
+				this.play("attack");
+
+			} else {}
 		}
 		
 		
 		
 		override public function destroy():void {
 			this.color =  0x112233; 
-			this.velocity.x = 0;
-			play("die");
+		//	this.velocity.x = 0;
+		//	play("die");
 			
 		}
 		
