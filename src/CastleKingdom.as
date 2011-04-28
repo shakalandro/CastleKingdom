@@ -18,9 +18,9 @@ package
 	public class CastleKingdom extends FlxGame
 	{
 		public static const DEBUG:Boolean = true;
+		public static const FACEBOOK_ON:Boolean = true;
 		
 		public static const FACEBOOK_APP_ID:String = "197220693652461";
-		private static const FACEBOOK_SECRET_KEY:String = "592b9006282d5442f9d042b56fe04913";
 		
 		public static const TILEMAP_WIDTH:int = 32;
 		public static const TILEMAP_HEIGHT:int = 18;
