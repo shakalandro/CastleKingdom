@@ -3,7 +3,10 @@ package
 	import com.facebook.graph.*;
 	import com.facebook.graph.data.*;
 	
+	import flash.events.Event;
 	import flash.external.*;
+	import flash.net.URLLoader;
+	import flash.net.URLRequest;
 	import flash.utils.Dictionary;
 	
 	import org.flixel.*;
@@ -20,6 +23,7 @@ package
 		private static var _facebookReady:Boolean;
 		private static var _facebookUserInfo:Object;
 		private static var _facebookFriends:Object;
+		private static var _facebookPics:Dictionary = new Dictionary();
 		
 		/**
 		 * Provides access to all assets according to the current skin setting
@@ -391,15 +395,24 @@ package
 		 * 
 		 */		
 		public static function facebookFriends(callback:Function, justNames:Boolean = false, forceRefresh:Boolean = false):void {
+			function helper(info:Object, justNames:Boolean):Array {
+				var friends:Array = info as Array;
+				if (justNames) {
+					for (var i:int = 0; i < friends.length; i++) {
+						friends[i] = friends[i].name;
+					}
+				}
+				return friends;
+			}
 			if (!_facebookReady) {
 				callback(null);	
 			} else if (_facebookFriends && !forceRefresh) {
-				callback(callback(facebookFriendsFormat(_facebookFriends, justNames)));	
+				callback(callback(helper(_facebookFriends, justNames)));	
 			} else {
 				Facebook.api("/me/friends", function(result:Object, fail:Object):void {
 					if (result) {
 						_facebookFriends = result;
-						callback(facebookFriendsFormat(_facebookFriends, justNames));
+						callback(helper(_facebookFriends, justNames));
 					} else {
 						callback(result, fail);
 					}
@@ -407,14 +420,45 @@ package
 			}
 		}
 		
-		private static function facebookFriendsFormat(info:Object, justNames:Boolean):Array {
-			var friends:Array = info as Array;
-			if (justNames) {
-				for (var i:int = 0; i < friends.length; i++) {
-					friends[i] = friends[i].name;
-				}
+		public static function facebookPic(callback:Function, uid:String, forceRefresh:Boolean):void {
+			function helper(info:Object):void {
+				var url:URLRequest = new URLRequest(info.icon);
+				var loader:URLLoader = new URLLoader(url);
+				loader.addEventListener(Event.COMPLETE, function(e:Event):void {
+					callback(ExternalImage.setData(e.target.content.bitmapData, e.target.url));
+				});
 			}
-			return friends;
+			if (!_facebookReady) {
+				callback(null);	
+			} else if (_facebookPics[uid] && !forceRefresh) {
+				callback(_facebookPics[uid]);
+			} else if (!_facebookUserInfo) {
+				Util.facebookUserInfo(helper);
+			} else {
+				helper(_facebookUserInfo);
+			}
 		}
 	}
+}
+
+import flash.display.BitmapData;
+
+class ExternalImage {
+	
+	private static var data:BitmapData;
+	private static var url:String;
+		
+	public static function setData(bitmapData:BitmapData, id:String):void {
+		data = bitmapData;
+		url    = id;
+	}
+	
+	public static function toString():String {
+		return url;
+	}
+	
+	public function get bitmapData():BitmapData {
+		return data;
+	}
+	
 }
