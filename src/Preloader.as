@@ -6,7 +6,9 @@ package
 	{
 		public function Preloader()
 		{
+			className = "CastleKingdom";
 			super();
+			minDisplayTime = 3;
 		}
 	}
 }

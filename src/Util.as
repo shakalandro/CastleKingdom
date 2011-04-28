@@ -1,7 +1,9 @@
 package
 {
 	import com.facebook.graph.*;
+	import com.facebook.graph.data.*;
 	
+	import flash.external.*;
 	import flash.utils.Dictionary;
 	
 	import org.flixel.*;
@@ -16,6 +18,7 @@ package
 	{		
 		private static const _assets:Assets = new Assets();
 		private static var _facebookReady:Boolean;
+		private static var _facebookUserInfo:Object;
 		
 		/**
 		 * Provides access to all assets according to the current skin setting
@@ -287,7 +290,7 @@ package
 		
 		/**
 		 * Connects to Facebook if possible and tells the callback if it did so. The game must be run from within the
-		 * <a href='http://apps.facebook.com/castlekingdom/'>CastleKingdom facebook app page</a> in order to recieve the benefits of the Facebook
+		 * <a href='http://apps.facebook.com/castlekingdom/'>CastleKingdom facebook app page</a> or <a href="24.18.189.178/castlekingdom">my webserver</a> in order to recieve the benefits of the Facebook
 		 * API. The user must also select allow on the pop-up that ensues. Ensure that your browser is not supressing this pop-up.
 		 * 
 		 * @param callback A callback function as a parameter, this function must have the following signature callback(ready:Boolean):void
@@ -296,20 +299,85 @@ package
 		public static function facebookConnect(callback:Function):void {
 			Facebook.init(CastleKingdom.FACEBOOK_APP_ID, function(success:Object, fail:Object):void {
 				if (!success) {
-					FlxG.log("could not init: " + fail);
+					FlxG.log("Facebook.init failed: " + success + ", " + fail);
 					Facebook.login(function(success:Object, fail:Object):void {
 						if (!success) {
-							FlxG.log("could not log in: " + fail);
+							FlxG.log("Facebook.login failed: " + fail);
+							Util.facebookConnectListener(callback);
 						} else {
+							FlxG.log(success);
 							_facebookReady = true;
 						}
 						callback(_facebookReady);
 					});
 				} else {
+					FlxG.log("Facebook.init successful: logged in already");
 					_facebookReady = true;
 					callback(_facebookReady);
 				}
 			});
+		}
+		
+		/**
+		 * This function repeatedly checks the login status until login is successful at which point the callback is called. 
+		 * This method makes no effort to achieve login status, it just waits for it to happen. Do not call unless you are sure that successful login is imminent.
+		 * 
+		 * @param callback A callback function as a parameter, this function must have the following signature callback(ready:Boolean):void
+		 * 
+		 */		
+		private static function facebookConnectListener(callback:Function):void {
+			Facebook.getLoginStatus();
+			Facebook.addJSEventListener("auth.sessionChange", function(result:Object):void {
+				FlxG.log("called");
+				if (result.status == "connected") {
+					_facebookReady = true;
+					FlxG.log("Facebook.getLoginStatus successful: " + result);
+					callback(_facebookReady);
+					Facebook.removeJSEventListener("auth.sessionChange", this);
+				} else {
+					FlxG.log("Facebook.getLoginStatus failed: " + result.status);
+				}
+			});
+		}
+		
+		/**
+		 * Returns the FacebookSession object for this user. If Facebook was not initialized properly null is returned instead
+		 * 
+		 * @return The FacebookSession object for this user.
+		 * 
+		 */		
+		public static function facebookSession():FacebookSession {
+			if (_facebookReady) {
+				return Facebook.getSession();
+			} else {
+				FlxG.log("Util.facebookUserInfo: _facbookReady is false");
+				return null;
+			}
+		}
+		
+		/**
+		 * This function retrieves user info from facebook. It stores the results locally so that future calls are fast.
+		 * If the user is not logged in this returns null.
+		 * 
+		 * @param callback A function with the signature callback(info:Object):void
+		 * @param forceRefresh Whether to requery facebook for user info.
+		 * 
+		 */		
+		public static function facebookUserInfo(callback:Function, forceRefresh:Boolean = false):void {
+			if (!_facebookReady) {
+				callback(null);
+			} else if (_facebookUserInfo && !forceRefresh) {
+				callback(_facebookUserInfo);
+			} else {
+				Facebook.api("/me", function(results:Object, fail:Object):void {
+					if (results) {
+						_facebookUserInfo = results;
+						callback(results);
+					} else {
+						FlxG.log("Util.facebookUserInfo: failed " + fail);
+					}
+				});
+			}
 		}
 		
 		/**
