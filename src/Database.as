@@ -9,6 +9,34 @@ package
 	{
 		
 		/**
+		 * This is the main getter method that is called by all the public getter methods. This makes the
+		 * general passing of params to php for the sql query. It also makes an event listner that will
+		 * call the appropriate event method for the getter.
+		 *  
+		 * @param uid the uid to get the information for.
+		 * @param callback a function that takes one parameter, an object, that holds the information
+		 *        returned from the sql query.
+		 * @param url the url to connect to to pass variables to php.
+		 * @param eventFunction the event function to call that corresponds to the private helper function
+		 *        for the public getters.
+		 * 
+		 */		
+		private static function getMain(uid:int, callback:Function, url:String, eventFunction:Function):void
+		{
+			var variables:URLVariables = new URLVariables();
+			variables.uid = uid + "";
+			
+			var request:URLRequest = new URLRequest(url);
+			request.data = variables;
+			request.method = URLRequestMethod.POST;
+			
+			var loader:URLLoader = new URLLoader();
+			loader.dataFormat = URLLoaderDataFormat.TEXT;
+			loader.addEventListener(Event.COMPLETE, function(evt:Event):void {eventFunction(evt, callback);});
+			loader.load(request);
+		}
+		
+		/**
 		 * <p>
 		 * Passes an object that stores the information for a user with the given uid to the
 		 * call back function. The user information came from the database and the object is
@@ -29,17 +57,7 @@ package
 		 */		
 		public static function getUserInfo(uid:int, callback:Function):void
 		{
-			var variables:URLVariables = new URLVariables();
-			variables.uid = uid + "";
-			
-			var request:URLRequest = new URLRequest("http://24.18.189.178/CastleKingdom/database/getUserInfo.php");
-			request.data = variables;
-			request.method = URLRequestMethod.POST;
-			
-			var loader:URLLoader = new URLLoader();
-			loader.dataFormat = URLLoaderDataFormat.TEXT;
-			loader.addEventListener(Event.COMPLETE, function(evt:Event):void {getUserInfoHelper(evt, callback);});
-			loader.load(request);
+			getMain(uid, callback, "http://24.18.189.178/CastleKingdom/database/getUserInfo.php", getUserInfoHelper);
 		}
 		
 		/**
@@ -98,17 +116,7 @@ package
 		 */
 		public static function getUserCastle(uid:int, callback:Function):void
 		{
-			var variables:URLVariables = new URLVariables();
-			variables.uid = uid + "";
-			
-			var request:URLRequest = new URLRequest("http://24.18.189.178/CastleKingdom/database/getUserCastle.php");
-			request.data = variables;
-			request.method = URLRequestMethod.POST;
-			
-			var loader:URLLoader = new URLLoader();
-			loader.dataFormat = URLLoaderDataFormat.TEXT;
-			loader.addEventListener(Event.COMPLETE, function(evt:Event):void {getUserCastleHelper(evt, callback);});
-			loader.load(request);
+			getMain(uid, callback, "http://24.18.189.178/CastleKingdom/database/getUserCastle.php", getUserCastleHelper);
 		}
 		
 		/**
@@ -140,21 +148,7 @@ package
 		private static function getUserCastleHelper(evt:Event, callback:Function):void
 		{
 			var xmlData:XML = new XML(evt.target.data);
-			var user:XMLList = xmlData.user;
-			var castleParts:XMLList = xmlData.cpart;
-			if (user != null) {
-				var userCastle:Object = {};
-				userCastle["uid"] = xmlData.uid;
-				var i:int = 0;
-				for each(var cPart:XML in castleParts) {
-					userCastle["cpart" + i] = {cid:cPart.cid, xpos:cPart.xpos, ypos:cPart.ypos};
-					i++;
-				}
-				userCastle["size"] = i;
-				callback(userCastle);
-			} else {
-				callback(null);
-			}
+			getMainHelper(xmlData, xmlData.cpart, "cpart", callback);
 		}
 		
 		/**
@@ -178,17 +172,7 @@ package
 		 */
 		public static function getUserDef(uid:int, callback:Function):void
 		{
-			var variables:URLVariables = new URLVariables();
-			variables.uid = uid + "";
-			
-			var request:URLRequest = new URLRequest("http://24.18.189.178/CastleKingdom/database/getUserDef.php");
-			request.data = variables;
-			request.method = URLRequestMethod.POST;
-			
-			var loader:URLLoader = new URLLoader();
-			loader.dataFormat = URLLoaderDataFormat.TEXT;
-			loader.addEventListener(Event.COMPLETE, function(evt:Event):void {getUserDefHelper(evt, callback);});
-			loader.load(request);
+			getMain(uid, callback, "http://24.18.189.178/CastleKingdom/database/getUserDef.php", getUserDefHelper);
 		}
 		
 		/**
@@ -220,21 +204,7 @@ package
 		private static function getUserDefHelper(evt:Event, callback:Function):void
 		{
 			var xmlData:XML = new XML(evt.target.data);
-			var user:XMLList = xmlData.user;
-			var defParts:XMLList = xmlData.def;
-			if (user != null && defParts.length != 0) {
-				var userDef:Object = {};
-				userDef["uid"] = xmlData.uid;
-				var i:int = 0;
-				for each(var dPart:XML in defParts) {
-					userDef["def" + i] = {did:dPart.did, xpos:dPart.xpos, ypos:dPart.ypos};
-					i++;
-				}
-				userDef["size"] = i;
-				callback(userDef);
-			} else {
-				callback(null);
-			}
+			getMainHelper(xmlData, xmlData.def, "def", callback);
 		}
 		
 		/**
@@ -260,17 +230,7 @@ package
 		 */
 		public static function getUserLease(uid:int, callback:Function):void
 		{
-			var variables:URLVariables = new URLVariables();
-			variables.uid = uid + "";
-			
-			var request:URLRequest = new URLRequest("http://24.18.189.178/CastleKingdom/database/getUserLeases.php");
-			request.data = variables;
-			request.method = URLRequestMethod.POST;
-			
-			var loader:URLLoader = new URLLoader();
-			loader.dataFormat = URLLoaderDataFormat.TEXT;
-			loader.addEventListener(Event.COMPLETE, function(evt:Event):void {getUserLeaseHelper(evt, callback);});
-			loader.load(request);
+			getMain(uid, callback, "http://24.18.189.178/CastleKingdom/database/getUserLeases.php", getUserLeaseHelper);
 		}
 		
 		/**
@@ -301,21 +261,7 @@ package
 		private static function getUserLeaseHelper(evt:Event, callback:Function):void
 		{
 			var xmlData:XML = new XML(evt.target.data);
-			var user:XMLList = xmlData.user;
-			var leases:XMLList = xmlData.lease;
-			if (user != null && leases.length != 0) {
-				var userLeases:Object = {};
-				userLeases["uid"] = xmlData.uid;
-				var i:int = 0;
-				for each(var lease:XML in leases) {
-					userLeases["lease" + i] = {lid:lease.lid, numUnits:lease.numUnits};
-					i++;
-				}
-				userLeases["size"] = i;
-				callback(userLeases);
-			} else {
-				callback(null);
-			}
+			getMainHelper(xmlData, xmlData.lease, "lease", callback);
 		}
 		
 		/**
@@ -340,17 +286,7 @@ package
 		 */
 		public static function getUserAttacks(uid:int, callback:Function):void
 		{
-			var variables:URLVariables = new URLVariables();
-			variables.uid = uid + "";
-			
-			var request:URLRequest = new URLRequest("http://24.18.189.178/CastleKingdom/database/getUserAttacks.php");
-			request.data = variables;
-			request.method = URLRequestMethod.POST;
-			
-			var loader:URLLoader = new URLLoader();
-			loader.dataFormat = URLLoaderDataFormat.TEXT;
-			loader.addEventListener(Event.COMPLETE, function(evt:Event):void {getUserAttackHelper(evt, callback);});
-			loader.load(request);
+			getMain(uid, callback, "http://24.18.189.178/CastleKingdom/database/getUserAttacks.php", getUserAttackHelper);
 		}
 		
 		/**
@@ -379,21 +315,43 @@ package
 		private static function getUserAttackHelper(evt:Event, callback:Function):void
 		{
 			var xmlData:XML = new XML(evt.target.data);
+			getMainHelper(xmlData, xmlData.attack, "attack", callback);
+		}
+		
+		/**
+		 * The main private helper function that all the other private getter helper functions
+		 * call. This one process all the data and create the object that will be passed to the
+		 * callback function.
+		 *  
+		 * @param xmlData the xml data that is retrieved from the php request.
+		 * @param xmlList the list that corresponds to the xml (i.e. xmlData.attack)
+		 * @param type the type of the getter (i.e. def, attack, lease)
+		 * @param callback the callback function that takes a single parameter, an object, that
+		 *        has the information from the sql query.
+		 * 
+		 */		
+		private static function getMainHelper(xmlData:XML, xmlList:XMLList, type:String, callback:Function):void
+		{
 			var user:XMLList = xmlData.user;
-			var attacks:XMLList = xmlData.attack;
-			if (user != null && attacks.length != 0) {
-				var userAttacks:Object = {};
-				userAttacks["uid"] = xmlData.uid;
+			if (user != null && xmlList.length != 0) {
+				var obj:Object = {};
+				obj["uid"] = xmlData.uid;
 				var i:int = 0;
-				for each(var attack:XML in attacks) {
-					userAttacks["attack" + i] = attack.aid;
+				for each(var xml:XML in xmlList) {
+					if (type == "cpart")
+						obj[type + i] = {cid:xml.cid, xpos:xml.xpos, ypos:xml.ypos};
+					else if (type == "def")
+						obj[type + i] = {did:xml.did, xpos:xml.xpos, ypos:xml.ypos};
+					else if (type == "lease")
+						obj[type + i] = {lid:xml.lid, numUnits:xml.numUnits};
+					else if (type == "attack")
+						obj[type + i] = xml.aid;
 					i++;
 				}
-				userAttacks["size"] = i;
-				callback(userAttacks);
-			} else {
+				obj["size"] = i;
+				callback(obj);
+			} else
 				callback(null);
-			}
 		}
 	}
 }
