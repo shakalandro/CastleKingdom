@@ -47,7 +47,7 @@ package
 					_loginText.text = "Try again :(";
 					Util.log("LoginState.login failed: " + ready);
 				}
-			});
+			}, CastleKingdom.flashVars.accessToken);
 		}
 		
 		private function start():void {

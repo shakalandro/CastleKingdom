@@ -7,7 +7,7 @@ package
 	import org.flixel.data.FlxMouse;
 	
 	[SWF(width="736", height="460", backgroundColor="#ffffff")]
-	//[Frame(factoryClass="Preloader")]
+	[Frame(factoryClass="Preloader")]
 	
 	/**
 	 * This is the main CastleKingdom class.
