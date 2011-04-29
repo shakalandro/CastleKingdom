@@ -293,6 +293,21 @@ package
 			return y;
 		}
 		
+		
+		/**
+		 * Super duper logging function for ultimate haxxors only!!!
+		 * Logs to Flx.log
+		 * Logs to trace
+		 * 
+		 * Eventually will log to the data base that they are going to set up for us
+		 */
+		
+		public static function superLog(flxLogString:String):void {
+			FlxG.log(flxLogString);
+			trace(flxLogString);
+			// write to the logging data base
+		}
+		
 		/**
 		 * Connects to Facebook if possible and tells the callback if it did so. The game must be run from within the
 		 * <a href='http://apps.facebook.com/castlekingdom/'>CastleKingdom facebook app page</a> or <a href="24.18.189.178/castlekingdom">my webserver</a> in order to recieve the benefits of the Facebook
@@ -304,19 +319,19 @@ package
 		public static function facebookConnect(callback:Function):void {
 			Facebook.init(CastleKingdom.FACEBOOK_APP_ID, function(success:Object, fail:Object):void {
 				if (!success) {
-					FlxG.log("Facebook.init failed: " + success + ", " + fail);
+					superLog("Facebook.init failed: " + success + ", " + fail);
 					Facebook.login(function(success:Object, fail:Object):void {
 						if (!success) {
-							FlxG.log("Facebook.login failed: " + fail);
+							superLog("Facebook.login failed: " + fail);
 							Util.facebookConnectListener(callback);
 						} else {
-							FlxG.log(success);
+							superLog("" + success);
 							_facebookReady = true;
 						}
 						callback(_facebookReady);
 					});
 				} else {
-					FlxG.log("Facebook.init successful: logged in already");
+					superLog("Facebook.init successful: logged in already");
 					_facebookReady = true;
 					callback(_facebookReady);
 				}
@@ -333,14 +348,14 @@ package
 		private static function facebookConnectListener(callback:Function):void {
 			Facebook.getLoginStatus();
 			Facebook.addJSEventListener("auth.sessionChange", function(result:Object):void {
-				FlxG.log("called");
+				superLog("called");
 				if (result.status == "connected") {
 					_facebookReady = true;
-					FlxG.log("Facebook.getLoginStatus successful: " + result);
+					superLog("Facebook.getLoginStatus successful: " + result);
 					callback(_facebookReady);
 					Facebook.removeJSEventListener("auth.sessionChange", this);
 				} else {
-					FlxG.log("Facebook.getLoginStatus failed: " + result.status);
+					superLog("Facebook.getLoginStatus failed: " + result.status);
 				}
 			});
 		}
@@ -355,7 +370,7 @@ package
 			if (_facebookReady) {
 				return Facebook.getSession();
 			} else {
-				FlxG.log("Util.facebookUserInfo: _facbookReady is false");
+				superLog("Util.facebookUserInfo: _facbookReady is false");
 				return null;
 			}
 		}
@@ -379,7 +394,7 @@ package
 						_facebookUserInfo[uid] = results;
 						callback(results);
 					} else {
-						FlxG.log("Util.facebookUserInfo: failed /" + uid + " " + fail);
+						superLog("Util.facebookUserInfo: failed /" + uid + " " + fail);
 					}
 				});
 			}

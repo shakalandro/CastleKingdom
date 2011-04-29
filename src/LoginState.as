@@ -39,22 +39,22 @@ package
 					Util.facebookFriends(function(result:Array, fail:Object):void {
 						if (result) {
 							for (var i:int = 0; i < result.length; i++) {
-								FlxG.log(result[i].name);
+								superLog(result[i].name);
 							}
 						} else {
-							FlxG.log("failed to connect: " + fail);
+							superLog("failed to connect: " + fail);
 						}
 					});
 					Util.facebookUserInfo(function(info:Object):void {
 						if (info) {
 							_loginText.text = "Hi " + info.name + "!";
 						} else {
-							FlxG.log("Failed to get user info");
+							superLog("Failed to get user info");
 						}
 					});
 				} else {
 					_loginText.text = "Try again :(";
-					FlxG.log("LoginState.login failed: " + ready);
+					superLog("LoginState.login failed: " + ready);
 				}
 			});
 		}
