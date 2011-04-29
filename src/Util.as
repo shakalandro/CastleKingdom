@@ -289,10 +289,9 @@ package
 				tileType = map.getTile(indices.x, indices.y);
 			}
 			var y:Number = Util.indicesToCartesian(indices).y - obj.height;
-			obj.y = y
+			obj.y = y;
 			return y;
 		}
-		
 		
 		/**
 		 * Super duper logging function for ultimate haxxors only!!!
@@ -302,7 +301,7 @@ package
 		 * Eventually will log to the data base that they are going to set up for us
 		 */
 		
-		public static function superLog(flxLogString:String):void {
+		public static function log(flxLogString:String):void {
 			FlxG.log(flxLogString);
 			trace(flxLogString);
 			// write to the logging data base
@@ -316,26 +315,26 @@ package
 		 * @param callback A callback function as a parameter, this function must have the following signature callback(ready:Boolean):void
 		 * 
 		 */		
-		public static function facebookConnect(callback:Function):void {
+		public static function facebookConnect(callback:Function, accessToken:String = null):void {
 			Facebook.init(CastleKingdom.FACEBOOK_APP_ID, function(success:Object, fail:Object):void {
 				if (!success) {
-					superLog("Facebook.init failed: " + success + ", " + fail);
+					Util.log("Facebook.init failed: " + success + ", " + fail);
 					Facebook.login(function(success:Object, fail:Object):void {
 						if (!success) {
-							superLog("Facebook.login failed: " + fail);
+							Util.log("Facebook.login failed: " + fail);
 							Util.facebookConnectListener(callback);
 						} else {
-							superLog("" + success);
+							FlxG.log("" + success);
 							_facebookReady = true;
 						}
 						callback(_facebookReady);
 					});
 				} else {
-					superLog("Facebook.init successful: logged in already");
+					Util.log("Facebook.init successful: logged in already");
 					_facebookReady = true;
 					callback(_facebookReady);
 				}
-			});
+			}, null, accessToken);
 		}
 		
 		/**
@@ -346,18 +345,18 @@ package
 		 * 
 		 */		
 		private static function facebookConnectListener(callback:Function):void {
-			Facebook.getLoginStatus();
 			Facebook.addJSEventListener("auth.sessionChange", function(result:Object):void {
-				superLog("called");
+				FlxG.log("called");
 				if (result.status == "connected") {
 					_facebookReady = true;
-					superLog("Facebook.getLoginStatus successful: " + result);
+					FlxG.log("Facebook.getLoginStatus successful: " + result);
 					callback(_facebookReady);
 					Facebook.removeJSEventListener("auth.sessionChange", this);
 				} else {
-					superLog("Facebook.getLoginStatus failed: " + result.status);
+					FlxG.log("Facebook.getLoginStatus failed: " + result.status);
 				}
 			});
+			Facebook.getLoginStatus();
 		}
 		
 		/**
@@ -370,7 +369,7 @@ package
 			if (_facebookReady) {
 				return Facebook.getSession();
 			} else {
-				superLog("Util.facebookUserInfo: _facbookReady is false");
+				FlxG.log("Util.facebookUserInfo: _facbookReady is false");
 				return null;
 			}
 		}
@@ -385,8 +384,9 @@ package
 		 */		
 		public static function facebookUserInfo(callback:Function, forceRefresh:Boolean = false, uid:String = "me"):void {
 			if (!_facebookReady) {
+				FlxG.log("Util.facebookUserInfo: _facebookReady = false");
 				callback(null);
-			} else if (_facebookUserInfo && !forceRefresh) {
+			} else if (_facebookUserInfo[uid] && !forceRefresh) {
 				callback(_facebookUserInfo[uid]);
 			} else {
 				Facebook.api("/" + uid, function(results:Object, fail:Object):void {
@@ -394,7 +394,7 @@ package
 						_facebookUserInfo[uid] = results;
 						callback(results);
 					} else {
-						superLog("Util.facebookUserInfo: failed /" + uid + " " + fail);
+						FlxG.log("Util.facebookUserInfo: failed /" + uid + " " + fail);
 					}
 				});
 			}
@@ -422,14 +422,14 @@ package
 			if (!_facebookReady) {
 				callback(null);	
 			} else if (_facebookFriends && !forceRefresh) {
-				callback(callback(helper(_facebookFriends, justNames)));	
+				callback(helper(_facebookFriends, justNames));	
 			} else {
 				Facebook.api("/me/friends", function(result:Object, fail:Object):void {
 					if (result) {
 						_facebookFriends = result;
 						callback(helper(_facebookFriends, justNames));
 					} else {
-						callback(result, fail);
+						callback(result);
 					}
 				});
 			}
@@ -477,12 +477,12 @@ class ExternalImage {
 	
 	private static var data:BitmapData;
 	private static var url:String;
-		
+	
 	public function ExternalImage(bitmapData:BitmapData, id:String):void {
 		data = bitmapData;
 		url    = id;
 	}
-		
+	
 	public function toString():String {
 		return url;
 	}
