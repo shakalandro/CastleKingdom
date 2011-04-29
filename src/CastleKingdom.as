@@ -18,7 +18,7 @@ package
 	 */	
 	public class CastleKingdom extends FlxGame
 	{
-		public static const DEBUG:Boolean = true;
+		public static const DEBUG:Boolean = false;
 		public static const FACEBOOK_ON:Boolean = true;
 		
 		public static const FACEBOOK_APP_ID:String = "197220693652461";
@@ -27,23 +27,16 @@ package
 		public static const TILEMAP_HEIGHT:int = 18;
 		public static const TILE_SIZE:int = 23;
 		public static const SKIN:String = Assets.SKIN_NORMAL;
-		
-		private static var _flashVars:Object;
-				
+						
 		public function CastleKingdom()
 		{
 			super(736, 460, LoginState, 1);
 			FlxG.mouse.show(Util.assets[Assets.CURSOR]);
 			FlxG.debug = DEBUG;
-			_flashVars = getFlashVars();
-		}
-		
-		private function getFlashVars():Object {
-			return LoaderInfo(this.root.loaderInfo).parameters;
 		}
 		
 		public static function get flashVars():Object {
-			return _flashVars;
+			return Preloader.flashVars;
 		}
 		
 		// Disable automatic pausing

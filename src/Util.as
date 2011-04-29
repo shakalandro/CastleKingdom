@@ -301,7 +301,7 @@ package
 		 * Eventually will log to the data base that they are going to set up for us
 		 */
 		
-		public static function log(flxLogString:String):void {
+		public static function log(flxLogString:Object):void {
 			FlxG.log(flxLogString);
 			trace(flxLogString);
 			// write to the logging data base
