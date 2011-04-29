@@ -170,7 +170,7 @@ package
 		 * @param callback A callback with the following signature callback(img:Class):void
 		 * @param uid The facebook uid of the desired person
 		 * @param forceRefresh Whether to gather the picture from facebook again or use the cached version
-		 * @param The size of the image to gather. ['small' | 'medium' | 'large']
+		 * @param The size of the image to gather. ['small' | 'normal' | 'large']
 		 * 
 		 */		
 		public static function picture(callback:Function, uid:String = "me", forceRefresh:Boolean = false, size:String = "small"):void {
@@ -201,42 +201,4 @@ package
 			}
 		}
 	}
-}
-
-import flash.display.BitmapData;
-
-/**
- * Helper class for loading images from the internet in a flixel loadGraphic compatible way. 
- * @author royman
- * 
- */
-class ExternalImage {
-	
-	public static var data:BitmapData;
-	public static var url:String;
-	private var _data:BitmapData;
-	private var _url:String;
-	
-	public function ExternalImage():void {
-		_data = data.clone();
-		_url = url;
-	}
-	
-	public static function setData(newData:BitmapData, newUrl:String):void {
-		data = newData.clone();
-		url = newUrl;
-	}
-	
-	public static function toString():String {
-		return url;
-	}
-	
-	public function get url():String {
-		return _url;
-	}
-	
-	public function get bitmapData():BitmapData {
-		return _data;
-	}
-	
 }

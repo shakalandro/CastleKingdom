@@ -61,9 +61,9 @@ package
 			add(_castle);
 			if (CastleKingdom.FACEBOOK_ON) {
 				FaceBook.picture(function(pic:Class):void {
-					var sprite:FlxSprite = new FlxSprite(Util.maxX - 50, 0, pic);
-					add(sprite);
-				});
+					var sprite:FlxSprite = new FlxSprite(100, 100, pic);
+					add(Util.window(100, 100, sprite, "Yeah, my picture"));
+				}, "me", false, "large");
 			}
 		}
 		

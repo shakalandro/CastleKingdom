@@ -1,8 +1,10 @@
 package
 {
+	import flash.display.BitmapData;
+	import flash.utils.Dictionary;
+	
 	import org.flixel.*;
 	import org.flixel.data.FlxMouse;
-	import flash.utils.Dictionary;
 	
 	/**
 	 * This class contains all globally useful helper functions. Coordinate math, database read/write operations and more qualify for inclusion. 
@@ -272,6 +274,37 @@ package
 			return y;
 		}
 		
+		public static function window(x:Number, y:Number, contents:FlxObject, title:String = "", 
+					bgColor:uint = 0xffffffff, padding:Number = 10, closable:Boolean = true, width:Number = -1, height:Number = -1):FlxObject {
+			if (width == -1) {
+				width = contents.width + padding * 2;
+			}
+			if (height == -1) {
+				height = contents.height + padding * 4;
+			}
+			var window:FlxGroup = new FlxGroup();
+			window.x = x;
+			window.y = y;
+			ExternalImage.setData(new BitmapData(width, height, true, bgColor), title);
+			var box:FlxSprite = new FlxSprite(x, y, ExternalImage);
+			var text:FlxText = new FlxText(x + padding * 2, y, width - padding * 3, title);
+			window.add(box);
+			contents.x = x + padding;
+			contents.y = y + padding * 3;
+			window.add(contents);
+			if (closable) {
+				var close:FlxButton = new FlxButton(x, y, function():void {
+					window.kill();
+				});
+				close.width = 20;
+				var btnText:FlxText = new FlxText(0, 0, 10, "X");
+				close.loadText(btnText);
+				window.add(close);
+			}
+			window.add(text);
+			return window;
+		}
+		
 		/**
 		 * Super duper logging function for ultimate haxxors only!!!
 		 * Logs to Flx.log
@@ -305,8 +338,7 @@ package
 		 */		
 		public static function forEach(stuff:Array, f:Function):void {
 			for (var i:int = 0; i < stuff.length; i++) {
-				stuff[i].i = i;
-				new Closure(stuff[i]).eval(f);
+				new Closure(stuff[i]).eval(f, i);
 			}
 		}
 	}
@@ -324,8 +356,8 @@ class Closure {
 		_context = context;
 	}
 	
-	public function eval(f:Function): void {
-		f(_context);
+	public function eval(f:Function, index:Number): void {
+		f(_context, index);
 	}
 }
 		
