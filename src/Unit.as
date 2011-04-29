@@ -52,7 +52,6 @@ package
 		private var _attackCounter:Number;
 		private var _type:String;
 		
-		
 		// Constructs a DefenseUnit at (x, y) with the given towerID, looking
 		// up what its stats are based on its tower ID
 		public function Unit(x:Number, y:Number, unitID:int) {
