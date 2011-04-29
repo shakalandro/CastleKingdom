@@ -60,7 +60,7 @@ package
 			Util.placeOnGround(_castle, map);
 			add(_castle);
 			if (CastleKingdom.FACEBOOK_ON) {
-				Util.facebookPic(function(pic:Class):void {
+				FaceBook.picture(function(pic:Class):void {
 					var sprite:FlxSprite = new FlxSprite(Util.maxX - 50, 0, pic);
 					add(sprite);
 				});

@@ -34,9 +34,9 @@ package
 		}
 		
 		private function login():void {
-			Util.facebookConnect(function(ready:Boolean):void {
+			FaceBook.connect(function(ready:Boolean):void {
 				if (ready) {
-					Util.facebookUserInfo(function(info:Object):void {
+					FaceBook.userInfo(function(info:Object):void {
 						if (info) {
 							_loginText.text = "Hi " + info.name + "!";
 						} else {
