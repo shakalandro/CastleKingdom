@@ -24,7 +24,7 @@ package
 		
 		// Images
 		
-		[Embed(source = "../images/test_tile.png")]
+		[Embed(source = "../images/playfield_tiles.png")] 
 		private static var tilesImg_normal:Class;
 		public static const MAP_TILES:String = "tiles";
 		
