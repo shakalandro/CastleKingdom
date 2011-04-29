@@ -60,9 +60,7 @@ package
 			Util.placeOnGround(_castle, map);
 			add(_castle);
 			if (CastleKingdom.FACEBOOK_ON) {
-				FlxG.log("Trying to get img");
 				Util.facebookPic(function(pic:Class):void {
-					FlxG.log("img callback called");
 					var sprite:FlxSprite = new FlxSprite(Util.maxX - 50, 0, pic);
 					add(sprite);
 				});

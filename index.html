@@ -21,7 +21,7 @@
 			
 			function embedGame(token) {
 				swfobject.embedSWF("bin-debug/CastleKingdom.swf", "flashContent", "736", "460", "10.0", 
-						null, {accessToken: token}, null, {name:"flashContent"}); 
+						null, {accessToken: token}, {allownetworking: "all", allowscriptaccess: "sameDomain"}, {name:"flashContent"}); 
 			}
 		</script>
 	</head>

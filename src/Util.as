@@ -3,10 +3,11 @@ package
 	import com.facebook.graph.*;
 	import com.facebook.graph.data.*;
 	
-	import flash.events.Event;
+	import flash.display.*;
+	import flash.events.*;
 	import flash.external.*;
-	import flash.net.URLLoader;
-	import flash.net.URLRequest;
+	import flash.net.*;
+	import flash.system.*;
 	import flash.utils.Dictionary;
 	
 	import org.flixel.*;
@@ -301,9 +302,16 @@ package
 		 * Eventually will log to the data base that they are going to set up for us
 		 */
 		
-		public static function log(flxLogString:Object):void {
-			FlxG.log(flxLogString);
-			trace(flxLogString);
+		public static function log(...args:Array):void {
+			var s:String = "";
+			if (args.length != 0) {
+				s += args[0];
+			}
+			for (var i:int = 1; i < args.length; i++) {
+				s += ", " + args[i];
+			}
+			FlxG.log(s);
+			trace(s);
 			// write to the logging data base
 		}
 		
@@ -438,29 +446,57 @@ package
 		/**
 		 * Returns a Class object to the callback that contains the profile pic for the given user. 
 		 * Returns a cached version of the image unless otherwise specified. Returns null if facebookReady is false.
+		 * The Class object given to the callback must be instantiated by a FlxSprite 
+		 * before the next call to this function in order to operate properly. This means you cannot store the Class parameters.
 		 * 
 		 * @param callback A callback with the following signature callback(img:Class):void
 		 * @param uid The facebook uid of the desired person
 		 * @param forceRefresh Whether to gather the picture from facebook again or use the cached version
+		 * @param The size of the image to gather. ['small' | 'medium' | 'large']
 		 * 
 		 */		
-		public static function facebookPic(callback:Function, uid:String = "me", forceRefresh:Boolean = false):void {
-			function helper(info:Object):void {
-				var url:URLRequest = new URLRequest(info.icon);
-				var loader:URLLoader = new URLLoader(url);
-				loader.addEventListener(Event.COMPLETE, function(e:Event):void {
-					_facebookPics[uid] = new ExternalImage(e.target.content.bitmapData, e.target.url)
-					callback(_facebookPics[uid]);
+		public static function facebookPic(callback:Function, uid:String = "me", forceRefresh:Boolean = false, size:String = "small"):void {
+			function helper(info:String):void {
+				var url:URLRequest = new URLRequest(info);
+				var context:LoaderContext = new LoaderContext(true);
+				context.securityDomain = SecurityDomain.currentDomain;
+				var loader:Loader = new Loader();
+				loader.contentLoaderInfo.addEventListener(Event.COMPLETE, function(e:Event):void {
+					ExternalImage.setData(e.target.content.bitmapData, e.target.url);
+					_facebookPics[uid] = new ExternalImage();
+ 					callback(ExternalImage);
 				});
+				loader.load(url, context);
 			}
 			if (!_facebookReady) {
-				callback(null);	
+				Util.log("Util.facebookPic failed: facebookReady is false");
+				callback(null);
 			} else if (_facebookPics[uid] && !forceRefresh) {
-				callback(_facebookPics[uid]);
-			} else if (!_facebookUserInfo) {
-				Util.facebookUserInfo(helper, false, uid);
+				ExternalImage.setData(_facebookPics[uid].bitmapData, _facebookPics[uid].url);
+				callback(ExternalImage);
+			} else if (uid == "me"){
+				Util.facebookUserInfo(function(result:Object):void {
+					helper(Facebook.getImageUrl(result.id, size));
+				});
 			} else {
-				helper(_facebookUserInfo);
+				helper(Facebook.getImageUrl(uid, size));
+			}
+		}
+		
+		/**
+		 * A handy function for iterating over a array of objects while maintaining a closure.
+		 * Calls f with each of the objects in stuff as its parameter.
+		 * Allows us to make asynchronous calls while iterating over an array of objects.
+		 * Inserts an 'i' property into each of the objects given to f for use as a loop variable if needed.
+		 *  
+		 * @param stuff An array of Objects
+		 * @param f A function to apply to each Object in stuff. f should have the following signature f(thing:Object)
+		 * 
+		 */		
+		public static function forEach(stuff:Array, f:Function):void {
+			for (var i:int = 0; i < stuff.length; i++) {
+				stuff[i].i = i;
+				new Closure(stuff[i]).eval(f);
 			}
 		}
 	}
@@ -475,20 +511,48 @@ import flash.display.BitmapData;
  */
 class ExternalImage {
 	
-	private static var data:BitmapData;
-	private static var url:String;
+	public static var data:BitmapData;
+	public static var url:String;
+	private var _data:BitmapData;
+	private var _url:String;
 	
-	public function ExternalImage(bitmapData:BitmapData, id:String):void {
-		data = bitmapData;
-		url    = id;
+	public function ExternalImage():void {
+		_data = data.clone();
+		_url = url;
 	}
 	
-	public function toString():String {
+	public static function setData(newData:BitmapData, newUrl:String):void {
+		data = newData.clone();
+		url = newUrl;
+	}
+	
+	public static function toString():String {
 		return url;
 	}
 	
-	public function get bitmapData():BitmapData {
-		return data;
+	public function get url():String {
+		return _url;
 	}
 	
+	public function get bitmapData():BitmapData {
+		return _data;
+	}
+	
+}
+
+/**
+ * A helper class for fixing the closure issue when making asynchronous calls across a collection. 
+ * @author royman
+ * 
+ */
+class Closure {
+	private var _context: Object;
+	
+	public function Closure(context:Object) {
+		_context = context;
+	}
+	
+	public function eval(f:Function): void {
+		f(_context);
+	}
 }
