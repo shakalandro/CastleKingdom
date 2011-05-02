@@ -7,6 +7,14 @@ package
 	 * or there is a detected automated attack. 
 	 * 
 	 * It will either create a random attack or use a received set of targets
+	 * 
+	 * @todo : complete "endgame" scenarios
+	 * 				Figure out sum of gold dropped
+	 * 				Call API to update database (gold to winner)
+	 * 
+	 * 			Add in towers
+	 * 			Complete Util integration (all units, friend waves, etc)
+	 * 			
 	 *  
 	 * @author Justin
 	 * 
@@ -21,12 +29,18 @@ package
 		private var _activeAttack:Boolean;
 		private var _droppedGold:int;
 		
+		private var _placeOnLeft:Array;
+		private var _placeOnRight:Array;
+		
+		private var _unitDropCounter:int;
+		
 		
 		
 		public function AttackState(tutorial:Boolean=false, menusActive:Boolean=false, map:FlxTilemap=null)
 		{
 			super(tutorial, menusActive, map);
 			_activeAttack = false;
+			_unitDropCounter = 10;
 		}
 		
 		override public function update():void {
@@ -59,6 +73,13 @@ package
 					getFriendWave(leftSide, rightSide);
 				}
 				placeArmy(leftSide, rightSide);
+				
+			}
+			_unitDropCounter--;
+			if(_unitDropCounter <= 0) {
+				_unitDropCounter = 50;
+				placeDudes(_placeOnLeft, Util.minX);
+				placeDudes(_placeOnRight, Util.maxX);
 			}
 			super.collide();
 			super.update();
@@ -105,8 +126,8 @@ package
 				if (maxIndex >= 0 ) {
 					// random index in range of array, of valid cost elements. +2 adds preference for strong units
 					var randIndex:int = Math.min(maxIndex, Math.round(Math.random()*(maxIndex + 2))); 
-					var unitNum:int = possibleUnits[rand];
-					var side:int = Math.round(Math.random()*2);
+					var unitNum:int = possibleUnits[randIndex];
+					var side:int = Math.round(Math.random());
 					if (side == 0) {
 						leftSide.push(unitNum);
 					} else {
@@ -171,8 +192,10 @@ package
 		 * 
 		 */		
 		private function placeArmy( leftSide:Array, rightSide:Array):void {
-			placeDudes(leftSide, Util.minX+ 100);
-			placeDudes(rightSide, Util.maxX- 100);
+			_placeOnLeft = leftSide;
+			_placeOnRight = rightSide;
+			//placeDudes(leftSide, Util.minX+ 100);
+			//placeDudes(rightSide, Util.maxX- 100);
 			
 		}
 		
@@ -183,8 +206,12 @@ package
 		 * 
 		 */		
 		private function placeDudes(dudes:Array, xVal:int):void {
-			trace("Called PlaceUnits with size: " + dudes.length + " active attack: " + _activeAttack);
-			for( var i:int = 0; i < dudes.length; i++) {
+			//trace("Called PlaceUnits with size: " + dudes.length + " active attack: " + _activeAttack);
+			//for( var i:int = 0; i < dudes.length; i++) {
+			if (dudes == null || dudes.length <= 0 ){
+				return;
+			}
+			var i:int = 0;
 				var dude:Unit = new EnemyUnit(xVal-10*i, Util.minTileY, dudes[i]);;
 				if (dude.type == Unit.UNDERGROUND) {
 					// set dude on ground dude 
@@ -192,12 +219,13 @@ package
 					// set dude on air dude = new Unit(xVal, Util.minTileY, dudes[i]);
 				} else {
 					//dude = new Unit(xVal, Util.minTileY, dudes[i]);
-					Util.placeOnGround(dude, this.map);
+					Util.placeOnGround(dude, this.map, true);
 				}
 				units.add(dude);
 				//trace("adding dude: " + dude.x + " " + dude.y);
 				this.add(dude);
-			}
+	//		}
+			dudes.shift();
 		}
 	}
 }

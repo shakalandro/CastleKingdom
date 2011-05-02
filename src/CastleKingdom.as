@@ -29,7 +29,7 @@ package
 				
 		public function CastleKingdom()
 		{
-			super(736, 460, AttackState, 1);
+			super(736, 460, LoginState, 1);
 			FlxG.mouse.show(Util.assets[Assets.CURSOR]);
 			FlxG.debug = DEBUG;
 		}

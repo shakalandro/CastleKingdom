@@ -52,6 +52,8 @@ package
 		private var _attackCounter:Number;
 		private var _type:String;
 		
+		private var _healthyBar:HealthBar;
+		
 		
 		// Constructs a DefenseUnit at (x, y) with the given towerID, looking
 		// up what its stats are based on its tower ID
@@ -79,6 +81,10 @@ package
 			health = _maxHealth;
 			//_img = GLOBALLOOKUP[SKIN][unitID];
 			_attackCounter = 100/_rate;
+			_healthyBar = new HealthBar(0,0,this._maxHealth,this.width);
+			this.draw(_healthyBar);
+			
+			
 			
 		}
 		
@@ -89,6 +95,7 @@ package
 		 * Moves the character as needed if possible
 		 * */
 		override public function update():void {
+			this.draw(_healthyBar);
 			_attackCounter--;
 			if(_attackCounter <= 0) {				//first check if this unit's timer has expired
 				if(executeAttack()) {		// Tries to attack if possible, fails if no units in range

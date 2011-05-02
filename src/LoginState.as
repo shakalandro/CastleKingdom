@@ -60,7 +60,7 @@ package
 		}
 		
 		private function start():void {
-			FlxG.state = new ActiveState(false, true, this.map);
+			FlxG.state = new AttackState(false, true, this.map);
 		}
 	}
 }

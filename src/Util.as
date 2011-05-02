@@ -152,11 +152,12 @@ package
 		 * @return A FlxPoint containing tile indices.
 		 * 
 		 */		
-		public static function cartesianToIndices(cartesian:FlxPoint):FlxPoint {
-			if (!Util.inBounds(cartesian.x, cartesian.y)) {
+		public static function cartesianToIndices(cartesian:FlxPoint, ignoreBounds:Boolean = false):FlxPoint {
+			if (!Util.inBounds(cartesian.x, cartesian.y) && !ignoreBounds) {
 				trace("The given coordinates were out of bounds: " + cartesian);
 				return null;
 			}
+			
 			var xIndex:Number = (cartesian.x - Util.minX) / CastleKingdom.TILE_SIZE;
 			var yIndex:Number = (cartesian.y - Util.minY) / CastleKingdom.TILE_SIZE;
 			return new FlxPoint(xIndex, yIndex);
@@ -171,11 +172,12 @@ package
 		 * @return Cartesian coordinates cooresponding to the upper left corner of the specified tile.
 		 * 
 		 */		
-		public static function indicesToCartesian(indices:FlxPoint):FlxPoint {
-			if (!Util.inTileBounds(indices.x, indices.y)) {
-				trace("Given indices were out of bounds: " + indices);
+		public static function indicesToCartesian(indices:FlxPoint, ignoreBounds:Boolean = false):FlxPoint {
+			if (!Util.inTileBounds(indices.x, indices.y) && !ignoreBounds) {
+				trace("Given indices were out of bounds: " + indices + ", ignore = " + ignoreBounds);
 				return null;
 			}
+			
 			return new FlxPoint(indices.x * CastleKingdom.TILE_SIZE + Util.minX, indices.y * CastleKingdom.TILE_SIZE + Util.minY);
 		}
 		
@@ -280,15 +282,32 @@ package
 		 * @return The y coordinate of where the object was placed with respect to the stage.
 		 * 
 		 */		
-		public static function placeOnGround(obj:FlxObject, map:FlxTilemap):Number {
+		public static function placeOnGround(obj:FlxObject, map:FlxTilemap, ignoreCenter:Boolean = false):Number {
+			
+			
 			var x:Number = obj.x + obj.width / 2;
-			var indices:FlxPoint = cartesianToIndices(new FlxPoint(x, Util.minY));
+			
+			// Fixes unit drop problem
+			if(ignoreCenter) {
+				x -= obj.width / 2;
+				if( x > Util.maxX /2) {
+					x = Util.maxX - 10; // keeps on screen but places near edge
+				} else if ( x < Util.maxX / 2 ){
+					x = Util.minX - 22; // tries to start unit picture off edge of screen
+				} 
+			}
+				
+				
+				
+				
+			
+			var indices:FlxPoint = cartesianToIndices(new FlxPoint(x, Util.minY), true);
 			var tileType:int = map.getTile(indices.x, indices.y);
 			while (tileType < map.collideIndex && indices.y < map.heightInTiles) {
 				indices.y++;
 				tileType = map.getTile(indices.x, indices.y);
 			}
-			var y:Number = Util.indicesToCartesian(indices).y - obj.height;
+			var y:Number = Util.indicesToCartesian(indices, true).y - obj.height;
 			obj.y = y
 			return y;
 		}
