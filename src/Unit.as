@@ -11,7 +11,7 @@ package
 	
 	import org.flixel.*;
 	
-
+	
 	
 	public class Unit extends FlxSprite
 	{
@@ -54,7 +54,6 @@ package
 		
 		private var _healthyBar:HealthBar;
 		
-		
 		// Constructs a DefenseUnit at (x, y) with the given towerID, looking
 		// up what its stats are based on its tower ID
 		public function Unit(x:Number, y:Number, unitID:int) {
@@ -68,7 +67,7 @@ package
 			// {cost, goldCost, maxHealth,speed,range,damage,rate)
 			
 			var unitStats:Array = [1,10,50,1,1,10,1] ;//unitStatLookup(unitID);
-				
+			
 			_cost = unitStats[0];
 			_goldCost = unitStats[1];
 			_maxHealth = unitStats[2];
@@ -107,37 +106,37 @@ package
 		
 		/*
 		/** Calls hitRanged(contact, velocity) for any units in range of the current item
-		 **
+		**
 		private function checkRangedCollision():void {
-			for (var otherUnit:Unit in getUnitsInRange()) {
-				if(otherUnit == null) {
-					break;
-				}
-				this.hitRanged(otherUnit);
-			}
+		for (var otherUnit:Unit in getUnitsInRange()) {
+		if(otherUnit == null) {
+		break;
+		}
+		this.hitRanged(otherUnit);
+		}
 		}
 		*/
 		
 		/*
 		/** Returns a null terminated array of all units within the range of this, sorted by proximity.
-		 * What do arrays store by default? Out of bounds?
-		 * 
+		* What do arrays store by default? Out of bounds?
+		* 
 		
 		private function getUnitsInRange():Array {
-			var unitsInRange:Array = new Array();
-			var foundTarget:Boolean = false;
-			for ( ALL_UNITS_ON_BOARD) {
-				if( this.unitDistance(otherUnit) < this._range ) {
-					unitsInRange.push(otherUnit);
-					foundTarget = true;
-				}
-			}
-			unitsInRange.push(null);
-			if(!foundTarget) {
-				unitsInRange[0] = null;
-				return unitsInRange;
-			}
-			return unitsInRange.sort(compareDistance);
+		var unitsInRange:Array = new Array();
+		var foundTarget:Boolean = false;
+		for ( ALL_UNITS_ON_BOARD) {
+		if( this.unitDistance(otherUnit) < this._range ) {
+		unitsInRange.push(otherUnit);
+		foundTarget = true;
+		}
+		}
+		unitsInRange.push(null);
+		if(!foundTarget) {
+		unitsInRange[0] = null;
+		return unitsInRange;
+		}
+		return unitsInRange.sort(compareDistance);
 		}
 		*/
 		
@@ -159,7 +158,7 @@ package
 			thisPoints[1] = new Point(this.x + this.width, this.y);
 			thisPoints[2] = new Point(this.x, this.y + this.height);
 			thisPoints[3] = new Point(this.x + this.width, this.y + this.height);
-	
+			
 			var othPoints:Array = new Array();
 			othPoints[0] = new Point(this.x,this.y);
 			othPoints[1] = new Point(this.x + this.width, this.y);
@@ -171,7 +170,7 @@ package
 					lowCost = Math.min(lowCost, Point.distance(thisPoints[i],othPoints[j]));
 				}
 			}
-	
+			
 			return lowCost;
 		}
 		
@@ -186,7 +185,7 @@ package
 		public function get cost():int {
 			return _cost;
 		}
-	
+		
 		public function get goldCost():int {
 			return _goldCost;
 		}

@@ -1,12 +1,6 @@
 package
 {
-	import com.facebook.graph.*;
-	import com.facebook.graph.data.*;
-	
-	import flash.events.Event;
-	import flash.external.*;
-	import flash.net.URLLoader;
-	import flash.net.URLRequest;
+	import flash.display.BitmapData;
 	import flash.utils.Dictionary;
 	
 	import org.flixel.*;
@@ -20,10 +14,6 @@ package
 	public class Util extends FlxU
 	{		
 		private static const _assets:Assets = new Assets();
-		private static var _facebookReady:Boolean;
-		private static var _facebookUserInfo:Dictionary = new Dictionary();
-		private static var _facebookFriends:Object;
-		private static var _facebookPics:Dictionary = new Dictionary();
 		
 		/**
 		 * Provides access to all assets according to the current skin setting
@@ -42,15 +32,6 @@ package
 		 */		
 		public static function get mouse():FlxMouse {
 			return FlxG.mouse;
-		}
-		
-		/**
-		 * 
-		 * @return Whether we have successfully logged in to Facebook and are ready to query the Graph api.
-		 * 
-		 */		
-		public static function get facebookReady():Boolean {
-			return _facebookReady;
 		}
 		
 		/**
@@ -296,10 +277,10 @@ package
 					x = Util.minX - 22; // tries to start unit picture off edge of screen
 				} 
 			}
-				
-				
-				
-				
+			
+			
+			
+			
 			
 			var indices:FlxPoint = cartesianToIndices(new FlxPoint(x, Util.minY), true);
 			var tileType:int = map.getTile(indices.x, indices.y);
@@ -312,187 +293,90 @@ package
 			return y;
 		}
 		
-		/**
-		 * Connects to Facebook if possible and tells the callback if it did so. The game must be run from within the
-		 * <a href='http://apps.facebook.com/castlekingdom/'>CastleKingdom facebook app page</a> or <a href="24.18.189.178/castlekingdom">my webserver</a> in order to recieve the benefits of the Facebook
-		 * API. The user must also select allow on the pop-up that ensues. Ensure that your browser is not supressing this pop-up.
-		 * 
-		 * @param callback A callback function as a parameter, this function must have the following signature callback(ready:Boolean):void
-		 * 
-		 */		
-		public static function facebookConnect(callback:Function):void {
-			Facebook.init(CastleKingdom.FACEBOOK_APP_ID, function(success:Object, fail:Object):void {
-				if (!success) {
-					FlxG.log("Facebook.init failed: " + success + ", " + fail);
-					Facebook.login(function(success:Object, fail:Object):void {
-						if (!success) {
-							FlxG.log("Facebook.login failed: " + fail);
-							Util.facebookConnectListener(callback);
-						} else {
-							FlxG.log(success);
-							_facebookReady = true;
-						}
-						callback(_facebookReady);
-					});
-				} else {
-					FlxG.log("Facebook.init successful: logged in already");
-					_facebookReady = true;
-					callback(_facebookReady);
-				}
-			});
-		}
-		
-		/**
-		 * This function repeatedly checks the login status until login is successful at which point the callback is called. 
-		 * This method makes no effort to achieve login status, it just waits for it to happen. Do not call unless you are sure that successful login is imminent.
-		 * 
-		 * @param callback A callback function as a parameter, this function must have the following signature callback(ready:Boolean):void
-		 * 
-		 */		
-		private static function facebookConnectListener(callback:Function):void {
-			Facebook.getLoginStatus();
-			Facebook.addJSEventListener("auth.sessionChange", function(result:Object):void {
-				FlxG.log("called");
-				if (result.status == "connected") {
-					_facebookReady = true;
-					FlxG.log("Facebook.getLoginStatus successful: " + result);
-					callback(_facebookReady);
-					Facebook.removeJSEventListener("auth.sessionChange", this);
-				} else {
-					FlxG.log("Facebook.getLoginStatus failed: " + result.status);
-				}
-			});
-		}
-		
-		/**
-		 * Returns the FacebookSession object for this user. If Facebook was not initialized properly null is returned instead
-		 * 
-		 * @return The FacebookSession object for this user.
-		 * 
-		 */		
-		public static function facebookSession():FacebookSession {
-			if (_facebookReady) {
-				return Facebook.getSession();
-			} else {
-				FlxG.log("Util.facebookUserInfo: _facbookReady is false");
-				return null;
+		public static function window(x:Number, y:Number, contents:FlxObject, title:String = "", 
+									  bgColor:uint = 0xffffffff, padding:Number = 10, closable:Boolean = true, width:Number = -1, height:Number = -1):FlxObject {
+			if (width == -1) {
+				width = contents.width + padding * 2;
 			}
-		}
-		
-		/**
-		 * This function retrieves user info from facebook. It stores the results locally so that future calls are fast.
-		 * If the user is not logged in this returns null.
-		 * 
-		 * @param callback A function with the signature callback(info:Object):void
-		 * @param forceRefresh Whether to requery facebook for user info.
-		 * 
-		 */		
-		public static function facebookUserInfo(callback:Function, forceRefresh:Boolean = false, uid:String = "me"):void {
-			if (!_facebookReady) {
-				callback(null);
-			} else if (_facebookUserInfo && !forceRefresh) {
-				callback(_facebookUserInfo[uid]);
-			} else {
-				Facebook.api("/" + uid, function(results:Object, fail:Object):void {
-					if (results) {
-						_facebookUserInfo[uid] = results;
-						callback(results);
-					} else {
-						FlxG.log("Util.facebookUserInfo: failed /" + uid + " " + fail);
-					}
+			if (height == -1) {
+				height = contents.height + padding * 4;
+			}
+			var window:FlxGroup = new FlxGroup();
+			window.x = x;
+			window.y = y;
+			ExternalImage.setData(new BitmapData(width, height, true, bgColor), title);
+			var box:FlxSprite = new FlxSprite(x, y, ExternalImage);
+			var text:FlxText = new FlxText(x + padding * 2, y, width - padding * 3, title);
+			window.add(box);
+			contents.x = x + padding;
+			contents.y = y + padding * 3;
+			window.add(contents);
+			if (closable) {
+				var close:FlxButton = new FlxButton(x, y, function():void {
+					window.kill();
 				});
+				close.width = 20;
+				var btnText:FlxText = new FlxText(0, 0, 10, "X");
+				close.loadText(btnText);
+				window.add(close);
 			}
+			window.add(text);
+			return window;
 		}
 		
 		/**
-		 * facebookConnect must have been called before this method is called, calls the callback with null if not. Provides the callback with a 
-		 * list of friends which is a simple object with an id and name field. If justNames is true, then the 
-		 * array contains only the string names of each friend. If forceRefresh is false, will return a cached copy of the friends list.
+		 * Super duper logging function for ultimate haxxors only!!!
+		 * Logs to Flx.log
+		 * Logs to trace
 		 * 
-		 * @param callback A callback function of the following form callback(friends:Array)
-		 * @param justNames Whether the array should contain just names or not
-		 * 
-		 */		
-		public static function facebookFriends(callback:Function, justNames:Boolean = false, forceRefresh:Boolean = false):void {
-			function helper(info:Object, justNames:Boolean):Array {
-				var friends:Array = info as Array;
-				if (justNames) {
-					for (var i:int = 0; i < friends.length; i++) {
-						friends[i] = friends[i].name;
-					}
-				}
-				return friends;
+		 * Eventually will log to the data base that they are going to set up for us
+		 */
+		
+		public static function log(...args:Array):void {
+			var s:String = "";
+			if (args.length != 0) {
+				s += args[0];
 			}
-			if (!_facebookReady) {
-				callback(null);	
-			} else if (_facebookFriends && !forceRefresh) {
-				callback(callback(helper(_facebookFriends, justNames)));	
-			} else {
-				Facebook.api("/me/friends", function(result:Object, fail:Object):void {
-					if (result) {
-						_facebookFriends = result;
-						callback(helper(_facebookFriends, justNames));
-					} else {
-						callback(result, fail);
-					}
-				});
+			for (var i:int = 1; i < args.length; i++) {
+				s += ", " + args[i];
 			}
+			FlxG.log(s);
+			trace(s);
+			// write to the logging data base
 		}
 		
 		/**
-		 * Returns a Class object to the callback that contains the profile pic for the given user. 
-		 * Returns a cached version of the image unless otherwise specified. Returns null if facebookReady is false.
-		 * 
-		 * @param callback A callback with the following signature callback(img:Class):void
-		 * @param uid The facebook uid of the desired person
-		 * @param forceRefresh Whether to gather the picture from facebook again or use the cached version
+		 * A handy function for iterating over a array of objects while maintaining a closure.
+		 * Calls f with each of the objects in stuff as its parameter.
+		 * Allows us to make asynchronous calls while iterating over an array of objects.
+		 * Inserts an 'i' property into each of the objects given to f for use as a loop variable if needed.
+		 *  
+		 * @param stuff An array of Objects
+		 * @param f A function to apply to each Object in stuff. f should have the following signature f(thing:Object)
 		 * 
 		 */		
-		public static function facebookPic(callback:Function, uid:String = "me", forceRefresh:Boolean = false):void {
-			function helper(info:Object):void {
-				var url:URLRequest = new URLRequest(info.icon);
-				var loader:URLLoader = new URLLoader(url);
-				loader.addEventListener(Event.COMPLETE, function(e:Event):void {
-					_facebookPics[uid] = new ExternalImage(e.target.content.bitmapData, e.target.url)
-					callback(_facebookPics[uid]);
-				});
-			}
-			if (!_facebookReady) {
-				callback(null);	
-			} else if (_facebookPics[uid] && !forceRefresh) {
-				callback(_facebookPics[uid]);
-			} else if (!_facebookUserInfo) {
-				Util.facebookUserInfo(helper, false, uid);
-			} else {
-				helper(_facebookUserInfo);
+		public static function forEach(stuff:Array, f:Function):void {
+			for (var i:int = 0; i < stuff.length; i++) {
+				new Closure(stuff[i]).eval(f, i);
 			}
 		}
 	}
 }
 
-import flash.display.BitmapData;
-
 /**
- * Helper class for loading images from the internet in a flixel loadGraphic compatible way. 
+ * A helper class for fixing the closure issue when making asynchronous calls across a collection. 
  * @author royman
  * 
  */
-class ExternalImage {
+class Closure {
+	private var _context: Object;
 	
-	private static var data:BitmapData;
-	private static var url:String;
-		
-	public function ExternalImage(bitmapData:BitmapData, id:String):void {
-		data = bitmapData;
-		url    = id;
-	}
-		
-	public function toString():String {
-		return url;
+	public function Closure(context:Object) {
+		_context = context;
 	}
 	
-	public function get bitmapData():BitmapData {
-		return data;
+	public function eval(f:Function, index:Number): void {
+		f(_context, index);
 	}
-	
 }
+

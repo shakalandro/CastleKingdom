@@ -59,6 +59,12 @@ package
 			Util.centerX(_castle);
 			Util.placeOnGround(_castle, map);
 			add(_castle);
+			if (CastleKingdom.FACEBOOK_ON) {
+				FaceBook.picture(function(pic:Class):void {
+					var sprite:FlxSprite = new FlxSprite(100, 100, pic);
+					add(Util.window(100, 100, sprite, "Yeah, my picture"));
+				}, "me", false, "large");
+			}
 		}
 		
 		/**

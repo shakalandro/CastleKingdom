@@ -1,0 +1,123 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><!-- saved from url=(0014)about:internet --><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><link rel="stylesheet" href="style.css" type="text/css" media="screen"><link rel="stylesheet" href="print.css" type="text/css" media="print"><link rel="stylesheet" href="override.css" type="text/css"><meta name="keywords" content="Database,globalClassifier.Database,addDefenseUnit,addEnemyUnit,availableTowers,betterTarget,cartesianToIndices,center,centerX,centerY,collide,compare,compareDistance,connect,contains,create,create,create,createHUD,createHUD,destroy,destroy,forEach,friends,front,getUserAttacks,getUserCastle,getUserDef,getUserInfo,getUserLease,hitBottom,hitBottom,hitLeft,hitLeft,hitRanged,hitRanged,hitRanged,hitRight,hitRight,hitTop,hitTop,inBounds,inTileBounds,indicesToCartesian,inflictDamage,isGameOver,leaseOut,log,onFocusLost,picture,placeOnGround,pop,push,rescale,roundToNearestTile,session,setUpgrade,showMenu,unitsUnlocked,unlease,update,update,update,update,userInfo"><title>Database</title></head><body><script language="javascript" type="text/javascript" src="asdoc.js"></script><script language="javascript" type="text/javascript" src="help.js"></script><script language="javascript" type="text/javascript" src="cookies.js"></script><script language="javascript" type="text/javascript"><!--
+				asdocTitle = 'Database - API Documentation';
+				var baseRef = '';
+				window.onload = configPage;
+			--></script>
+<script type="text/javascript">
+			scrollToNameAnchor();
+		</script><table class="titleTable" cellpadding="0" cellspacing="0" id="titleTable" style="display:none"><tr><td class="titleTableTitle" align="left">API Documentation</td><td class="titleTableTopNav" align="right"><a href="package-summary.html" onclick="loadClassListFrame('all-classes.html')">All Packages</a>&nbsp;|&nbsp;<a href="class-summary.html" onclick="loadClassListFrame('all-classes.html')">All Classes</a>&nbsp;|&nbsp;<a href="all-index-A.html" onclick="loadClassListFrame('index-list.html')">Index</a>&nbsp;|&nbsp;<a id="framesLink1" href="index.html?Database.html&amp;">Frames</a><a id="noFramesLink1" style="display:none" href="" onclick="parent.location=document.location"> No Frames </a></td><td class="titleTableLogo" align="right" rowspan="3"><img src="images/logo.jpg" class="logoImage" alt=" Adobe Logo " title=" Adobe Logo "></td></tr><tr class="titleTableRow2"><td class="titleTableSubTitle" id="subTitle" align="left">Database</td><td class="titleTableSubNav" id="subNav" align="right"><a href="#methodSummary">Methods</a></td></tr><tr class="titleTableRow3"><td colspan="3">&nbsp;</td></tr></table><script language="javascript" type="text/javascript" xml:space="preserve">
+				<!--
+				
+					if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Database"); titleBar_setSubNav(false,false,false,false,false,false,false,false,true,false,false	,false,false,false,false,false);}	
+				-->
+			</script><div xmlns:fn="http://www.w3.org/2005/xpath-functions" class="MainContent"><table class="classHeaderTable" cellpadding="0" cellspacing="0"><tr><td class="classHeaderTableLabel">Package</td><td><a href="package-detail.html" onclick="javascript:loadClassListFrame('class-list.html')">Top Level</a></td></tr><tr><td class="classHeaderTableLabel">Class</td><td class="classSignature">public  class  Database</td></tr><tr><td class="classHeaderTableLabel">Inheritance</td><td class="inheritanceList">Database  <img src="images/inherit-arrow.gif" title="Inheritance" alt="Inheritance" class="inheritArrow"> Object</td></tr></table><p></p><p></p><p></p><br/><hr></div><a name="methodSummary"></a><div class="summarySection"><div class="summaryTableTitle">Public Methods </div><table cellspacing="0" cellpadding="3" class="summaryTable " id="summaryTableMethod"><tr><th>&nbsp;</th><th colspan="2">Method</th><th class="summaryTableOwnerCol">Defined By</th></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#getUserAttacks()" class="signatureLink">getUserAttacks</a>(uid:int, callback:Function):void</div><div class="summaryTableDescription">[static] 
+		 
+		 Passes an object that stores the information for a user's attacks with the given uid to the
+		 call back function.</div></td><td class="summaryTableOwnerCol">Database</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#getUserCastle()" class="signatureLink">getUserCastle</a>(uid:int, callback:Function):void</div><div class="summaryTableDescription">[static] 
+		 
+		 Passes an object that stores the information for a user's castle with the given uid to the
+		 call back function.</div></td><td class="summaryTableOwnerCol">Database</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#getUserDef()" class="signatureLink">getUserDef</a>(uid:int, callback:Function):void</div><div class="summaryTableDescription">[static] 
+		 
+		 Passes an object that stores the information for a user's defense with the given uid to the
+		 call back function.</div></td><td class="summaryTableOwnerCol">Database</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#getUserInfo()" class="signatureLink">getUserInfo</a>(uid:int, callback:Function):void</div><div class="summaryTableDescription">[static] 
+		 
+		 Passes an object that stores the information for a user with the given uid to the
+		 call back function.</div></td><td class="summaryTableOwnerCol">Database</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#getUserLease()" class="signatureLink">getUserLease</a>(uid:int, callback:Function):void</div><div class="summaryTableDescription">[static] 
+		 
+		 Passes an object that stores the information for a user's leases with the given uid to the
+		 call back function.</div></td><td class="summaryTableOwnerCol">Database</td></tr></table></div><script language="javascript" type="text/javascript"><!--
+										showHideInherited();
+										--></script><div class="MainContent"><a name="methodDetail"></a><div class="detailSectionHeader">Method Detail</div><a name="getUserAttacks()"></a><a name="getUserAttacks(int,Function)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">getUserAttacks</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td></tr></table><div class="detailBody"><code> public static function getUserAttacks(uid:int, callback:Function):void</code><p></p><p></p><p>
+		 <p>
+		 Passes an object that stores the information for a user's attacks with the given uid to the
+		 call back function. The user's attack information came from the database and the object is
+		 of the following form:
+		 </p>
+		 <p>
+		 		userLease = {uid:userId, attack0:aid, ..., attackN:aid}
+		 </p>
+		 <p>
+		 The aid refers to the person that uid is attacking.
+		 If the uid does not match any user in the database, then the object passed to the
+		 callback function is null.
+		 </p>
+		 
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">uid</span>:int</code> &mdash; must be a valid uid for some user in the database
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">callback</span>:Function</code> &mdash; a callback function that takes a single parameter, an Object, that
+		                 represents the user's attacks.
+		 
+		 </td></tr></table></p></div><a name="getUserCastle()"></a><a name="getUserCastle(int,Function)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">getUserCastle</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public static function getUserCastle(uid:int, callback:Function):void</code><p></p><p></p><p>
+		 <p>
+		 Passes an object that stores the information for a user's castle with the given uid to the
+		 call back function. The user's castle information came from the database and the object is
+		 of the following form:
+		 </p>
+		 <p>
+		 		userCastle = {uid:userId, cpart0:{cid:cId, xpos:xPos, ypos:yPos}, ..., cpartN:{cid:cId, xpos:xPos, ypos:yPos}}
+		 </p>
+		 <p>
+		 If the uid does not match any user in the database, then the object passed to the
+		 callback function is null.
+		 </p>
+		 
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">uid</span>:int</code> &mdash; must be a valid uid for some user in the database
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">callback</span>:Function</code> &mdash; a callback function that takes a single parameter, an Object, that
+		                 represents the userCastle.
+		 
+		 </td></tr></table></p></div><a name="getUserDef()"></a><a name="getUserDef(int,Function)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">getUserDef</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public static function getUserDef(uid:int, callback:Function):void</code><p></p><p></p><p>
+		 <p>
+		 Passes an object that stores the information for a user's defense with the given uid to the
+		 call back function. The user's defence information came from the database and the object is
+		 of the following form:
+		 </p>
+		 <p>
+		 		userDef = {uid:userId, def0:{did:cId, xpos:xPos, ypos:yPos}, ..., defN:{did:cId, xpos:xPos, ypos:yPos}}
+		 </p>
+		 <p>
+		 If the uid does not match any user in the database, then the object passed to the
+		 callback function is null.
+		 </p>
+		 
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">uid</span>:int</code> &mdash; must be a valid uid for some user in the database
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">callback</span>:Function</code> &mdash; a callback function that takes a single parameter, an Object, that
+		                 represents the user's defence.
+		 
+		 </td></tr></table></p></div><a name="getUserInfo()"></a><a name="getUserInfo(int,Function)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">getUserInfo</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public static function getUserInfo(uid:int, callback:Function):void</code><p></p><p></p><p>
+		 <p>
+		 Passes an object that stores the information for a user with the given uid to the
+		 call back function. The user information came from the database and the object is
+		 of the following form:
+		 </p>
+		 <p>
+		 		userInfo = {uid:userId, gold:userGold, units:userUnits}
+		 </p>
+		 <p>
+		 If the uid does not match any user in the database, then the object passed to the
+		 callback function is null.
+		 </p>
+		 
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">uid</span>:int</code> &mdash; must be a valid uid for some user in the database
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">callback</span>:Function</code> &mdash; a callback function that takes a single parameter, an Object, that
+		                 represents the userInfo.
+		 
+		 </td></tr></table></p></div><a name="getUserLease()"></a><a name="getUserLease(int,Function)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">getUserLease</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public static function getUserLease(uid:int, callback:Function):void</code><p></p><p></p><p>
+		 <p>
+		 Passes an object that stores the information for a user's leases with the given uid to the
+		 call back function. The user's lease information came from the database and the object is
+		 of the following form:
+		 </p>
+		 <p>
+		 		userLease = {uid:userId, lease0:{lid:leaseUId, numUnits:num}, ..., leaseN:{lid:leaseUId, numUnits:num}}
+		 </p>
+		 <p>
+		 The lid refers to the person that uid is leasing their units to and numUnits in the number of
+		 units they are leasing.
+		 If the uid does not match any user in the database, then the object passed to the
+		 callback function is null.
+		 </p>
+		 
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">uid</span>:int</code> &mdash; must be a valid uid for some user in the database
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">callback</span>:Function</code> &mdash; a callback function that takes a single parameter, an Object, that
+		                 represents the user's leases.
+		 
+		 </td></tr></table></p></div><br/><br/><hr><br/><p></p><center class="copyright"><footer></footer><br/>Fri Apr 29 2011, 04:50 AM -07:00  </center></div></body></html><!--<br/>Fri Apr 29 2011, 04:50 AM -07:00  -->
