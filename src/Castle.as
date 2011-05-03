@@ -52,7 +52,7 @@ package
 			//_upgrades = ;
 			_unitCap = 40;
 			_towerCap = 40;
-			this.fixed = true;
+			this.solid = true;
 			
 		}
 		
@@ -151,24 +151,24 @@ package
 		}
 		
 		
-		override public function hitRight(Contact:FlxObject, Velocity:Number):void {
+		public function hitRight(Contact:FlxObject, Velocity:Number):void {
 			if (Contact is EnemyUnit) {
 				_gameOver = true;
 			}	
 		}
 		
-		override public function hitLeft(Contact:FlxObject, Velocity:Number):void {
+		public function hitLeft(Contact:FlxObject, Velocity:Number):void {
 			if (Contact is EnemyUnit) {
 				_gameOver = true;
 			}	
 		}
-		override public function hitTop(Contact:FlxObject, Velocity:Number):void {
+		public function hitTop(Contact:FlxObject, Velocity:Number):void {
 			if (Contact is EnemyUnit) {
 				_gameOver = true;
 			}	
 		}
 		
-		override public function hitBottom(Contact:FlxObject, Velocity:Number):void {
+		public function hitBottom(Contact:FlxObject, Velocity:Number):void {
 			if (Contact is EnemyUnit) {
 				_gameOver = true;
 			}	

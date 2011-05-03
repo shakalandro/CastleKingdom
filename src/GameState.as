@@ -20,6 +20,8 @@ package
 		
 		private var _hud:FlxGroup;
 		
+		private var _header:FlxSprite;
+		
 		/**
 		 * Constructs a new GameState. This is a helper superclass state. All persistent gamestate materials are held here. 
 		 * @param tutorial
@@ -32,7 +34,7 @@ package
 			_menusActive = menusActive;
 			if (map == null) map = new FlxTilemap();
 			_map = map;
-			bgColor = 0xffffffff;
+			FlxG.bgColor = 0xffffffff;
 		}
 		
 		/**
@@ -43,10 +45,8 @@ package
 			createHUD();
 			
 			_map = new FlxTilemap();
-			_map.drawIndex = 0;
-			_map.collideIndex = 2;
-			_map.loadMap(new Util.assets[Assets.TILE_LAYOUT], Util.assets[Assets.MAP_TILES], CastleKingdom.TILE_SIZE);
-			_map.y = _hud.height;
+			_map.loadMap(new Util.assets[Assets.TILE_LAYOUT], Util.assets[Assets.MAP_TILES],CastleKingdom.TILE_SIZE, CastleKingdom.TILE_SIZE, FlxTilemap.OFF, 0, 0, 1);
+			_map.y = _header.height;
 			add(_map);
 		}
 		
@@ -74,16 +74,23 @@ package
 		}
 		
 		/**
+		 * 
+		 * @return The main banner of the HUD. Nothing in the HUD should exceed the dimensions of this.
+		 * 
+		 */		
+		public function get header():FlxSprite {
+			return _header;
+		}
+		
+		/**
 		 * Draws the HUD basics that are persistent throughout states. 
 		 * When overriding this function, simply add any additial UI components to hud instead of to the stage.
 		 * 
 		 */		
 		protected function createHUD():void {
 			_hud = new FlxGroup();
-			var header:FlxSprite = new FlxSprite(0, 0, Util.assets[Assets.HUD_HEADER]);
-			_hud.add(header);
-			_hud.width = header.width;
-			_hud.height = header.height;
+			_header = new FlxSprite(0, 0, Util.assets[Assets.HUD_HEADER]);
+			_hud.add(_header);
 			add(_hud);
 		}
 	}

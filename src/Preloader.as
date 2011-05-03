@@ -1,6 +1,6 @@
 package
 {
-	import org.flixel.FlxPreloader;
+	import org.flixel.system.FlxPreloader;
 	import flash.display.LoaderInfo;
 	
 	public class Preloader extends FlxPreloader

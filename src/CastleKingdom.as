@@ -4,7 +4,6 @@ package
 	import flash.display.LoaderInfo;
 	
 	import org.flixel.*;
-	import org.flixel.data.FlxMouse;
 	
 	[SWF(width="736", height="460", backgroundColor="#ffffff")]
 	[Frame(factoryClass="Preloader")]

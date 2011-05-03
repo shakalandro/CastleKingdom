@@ -4,7 +4,8 @@ package
 	import flash.utils.Dictionary;
 	
 	import org.flixel.*;
-	import org.flixel.data.FlxMouse;
+	import org.flixel.system.FlxWindow;
+	import org.flixel.system.input.Mouse;
 	
 	/**
 	 * This class contains all globally useful helper functions. Coordinate math, database read/write operations and more qualify for inclusion. 
@@ -30,7 +31,7 @@ package
 		 * @return The mouse object for this game.
 		 * 
 		 */		
-		public static function get mouse():FlxMouse {
+		public static function get mouse():Mouse {
 			return FlxG.mouse;
 		}
 		
@@ -65,7 +66,7 @@ package
 		 */		
 		public static function get minY():Number {
 			if (FlxG.state is GameState) {
-				return (FlxG.state as GameState).hud.height;
+				return (FlxG.state as GameState).header.height;
 			} else {
 				return 0;
 			}
@@ -275,7 +276,7 @@ package
 		}
 		
 		public static function window(x:Number, y:Number, contents:FlxObject, title:String = "", 
-					bgColor:uint = 0xffffffff, padding:Number = 10, closable:Boolean = true, width:Number = -1, height:Number = -1):FlxObject {
+					bgColor:uint = 0xffffffff, padding:Number = 10, closable:Boolean = true, width:Number = -1, height:Number = -1):FlxBasic {
 			if (width == -1) {
 				width = contents.width + padding * 2;
 			}
@@ -283,27 +284,26 @@ package
 				height = contents.height + padding * 4;
 			}
 			var window:FlxGroup = new FlxGroup();
-			window.x = x;
-			window.y = y;
 			ExternalImage.setData(new BitmapData(width, height, true, bgColor), title);
 			var box:FlxSprite = new FlxSprite(x, y, ExternalImage);
+			box.x = x;
+			box.y = y;
 			var text:FlxText = new FlxText(x + padding * 2, y, width - padding * 3, title);
 			window.add(box);
 			contents.x = x + padding;
 			contents.y = y + padding * 3;
 			window.add(contents);
 			if (closable) {
-				var close:FlxButton = new FlxButton(x, y, function():void {
+				var close:FlxButton = new FlxButton(x, y, "X", function():void {
 					window.kill();
 				});
 				close.width = 20;
-				var btnText:FlxText = new FlxText(0, 0, 10, "X");
-				close.loadText(btnText);
 				window.add(close);
 			}
 			window.add(text);
 			return window;
 		}
+		
 		
 		/**
 		 * Super duper logging function for ultimate haxxors only!!!

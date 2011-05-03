@@ -8,7 +8,6 @@ package
 	{
 		private var _beginButton:FlxButton;
 		private var _loginButton:FlxButton;
-		private var _loginText:FlxText;
 		
 		public function LoginState()
 		{
@@ -18,15 +17,12 @@ package
 		override public function create():void {
 			super.create();
 			
-			_beginButton = new FlxButton(0, 0, start);
-			_beginButton.loadText(new FlxText(0, 0, 100, "Begin"));
+			_beginButton = new FlxButton(0, 0, "begin", start);
 			Util.center(_beginButton);
 			add(_beginButton);
 			
 			if (CastleKingdom.FACEBOOK_ON) {
-				_loginButton = new FlxButton(0, 0, login);
-				_loginText = new FlxText(0, 0, 100, "Log in to Facebook");
-				_loginButton.loadText(_loginText);
+				_loginButton = new FlxButton(0, 0, "Log in", login);
 				Util.center(_loginButton);
 				_loginButton.y += _beginButton.height * 2;
 				add(_loginButton);
@@ -38,20 +34,20 @@ package
 				if (ready) {
 					FaceBook.userInfo(function(info:Object):void {
 						if (info) {
-							_loginText.text = "Hi " + info.name + "!";
+							_loginButton.label.text = "Hi " + info.name + "!";
 						} else {
 							Util.log("Failed to get user info");
 						}
 					});
 				} else {
-					_loginText.text = "Try again :(";
+					_loginButton.label.text = "Try again :(";
 					Util.log("LoginState.login failed: " + ready);
 				}
 			}, CastleKingdom.flashVars.accessToken);
 		}
 		
 		private function start():void {
-			FlxG.state = new ActiveState(false, true, this.map);
+			FlxG.switchState(new ActiveState(false, true, this.map));
 		}
 	}
 }
