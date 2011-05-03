@@ -44,7 +44,7 @@ package
 			
 			_map = new FlxTilemap();
 			_map.drawIndex = 0;
-			_map.collideIndex = 2;
+			_map.collideIndex = 1;
 			_map.loadMap(new Util.assets[Assets.TILE_LAYOUT], Util.assets[Assets.MAP_TILES], CastleKingdom.TILE_SIZE);
 			_map.y = _hud.height;
 			add(_map);

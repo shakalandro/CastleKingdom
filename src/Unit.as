@@ -51,12 +51,13 @@ package
 		//private var _unitTimer:Timer;
 		private var _attackCounter:Number;
 		private var _type:String;
+		private var _goldCapacity:int;
 		
 		private var _healthyBar:HealthBar;
 		
 		// Constructs a DefenseUnit at (x, y) with the given towerID, looking
 		// up what its stats are based on its tower ID
-		public function Unit(x:Number, y:Number, unitID:int) {
+		public function Unit(x:Number, y:Number, unitID:int, hpBar:HealthBar = null) {
 			super (x,y,null);
 			if (this.x < Util.castle.x) {
 				velocity.x = FlxG.timeScale * _speed;
@@ -80,9 +81,12 @@ package
 			health = _maxHealth;
 			//_img = GLOBALLOOKUP[SKIN][unitID];
 			_attackCounter = 100/_rate;
-			_healthyBar = new HealthBar(0,0,this._maxHealth,this.width);
-			this.draw(_healthyBar);
 			
+			_healthyBar = hpBar;
+			if (_healthyBar != null) {
+				trace("Starting health bar");
+				_healthyBar.start(x,y,this._maxHealth,this.width);
+			}
 			
 			
 		}
@@ -94,7 +98,10 @@ package
 		 * Moves the character as needed if possible
 		 * */
 		override public function update():void {
-			this.draw(_healthyBar);
+			//this.draw(_healthyBar);
+			if (_healthyBar != null) {
+				_healthyBar.updateLoc(x,y,this.health, this.width);
+			} 
 			_attackCounter--;
 			if(_attackCounter <= 0) {				//first check if this unit's timer has expired
 				if(executeAttack()) {		// Tries to attack if possible, fails if no units in range
@@ -216,6 +223,11 @@ package
 		public function get type():String {
 			return _type;
 		}
+		
+		public function get goldCapacity():int {
+			return _goldCapacity;
+		}
+		
 		
 		public function set goldCost(value:int):void {
 			_goldCost = value;

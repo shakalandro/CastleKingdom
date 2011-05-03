@@ -65,6 +65,7 @@ package
 					add(Util.window(100, 100, sprite, "Yeah, my picture"));
 				}, "me", false, "large");
 			}
+		
 		}
 		
 		/**

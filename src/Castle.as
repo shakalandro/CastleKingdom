@@ -56,17 +56,20 @@ package
 			
 		}
 		
-		//Adds the given upgrade to the castle
+		/** Adds the given upgrade to the castle
+		 * */
 		public function setUpgrade(upgradeid:int):void {
 			
 		}
 		
-		// Returns the player's unit capacity as a function of the purchased upgrades and acheivements
+		/** Returns the player's unit capacity as a function of the purchased upgrades and acheivements
+		 * */
 		public function get unitCapacity():int {
 			return _unitCap;
 		}
 		
-		// Returns how many army units the player has to use
+		/** Returns how many army units the player has to use
+		 * */
 		public function get armyUnitsAvailable():int {
 			return _unitCap - unitCostSum(_army);
 		}
@@ -78,6 +81,30 @@ package
 		// Returns how many tower units the player has to use
 		public function get towerUnitsAvailable():int {
 			return _towerCap - unitCostSum(_towers);
+		}
+		
+		public function get gold():int {
+			return _gold;
+		}
+		
+		/**
+		 * 
+		 * @param amount - +/- amount to add to gold supply
+		 * @return true if this is a valid change and was completed or capped
+		 * 			false if the sum brought the value below 0
+		 * 
+		 */		
+		public function addGold(amount:int):Boolean {
+			if(amount > 0 && amount + _gold < 0) { // handle overflow
+				_gold = int.MAX_VALUE; // Caps gold at largest amount;
+				return true;
+			}
+			_gold += amount;
+			if (_gold < 0) {
+				_gold += amount;
+				return false;
+			}
+			return true;
 		}
 		
 		// Returns an array of what towerIDs are available for use 
@@ -120,7 +147,7 @@ package
 			return cost;
 		}
 		
-		/**
+		/** Returns the unit numbers for the units unlocked by the castle's upgrade levels
 		 * 
 		 * @param unitType Either Castle.TOWER or Castle.ARMY to search for each type
 		 * @return 
@@ -151,6 +178,8 @@ package
 		}
 		
 		
+		/** If castle is hit by EnemyUnit, game is over.
+		 * */
 		override public function hitRight(Contact:FlxObject, Velocity:Number):void {
 			if (Contact is EnemyUnit) {
 				_gameOver = true;
