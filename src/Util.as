@@ -275,32 +275,45 @@ package
 			return y;
 		}
 		
-		public static function window(x:Number, y:Number, contents:FlxObject, title:String = "", 
-					bgColor:uint = 0xffffffff, padding:Number = 10, closable:Boolean = true, width:Number = -1, height:Number = -1):FlxBasic {
-			if (width == -1) {
+		public static function window(x:Number, y:Number, contents:FlxObject, closeCallback:Function, title:String = "", bgColor:uint = FlxG.WHITE, 
+					padding:Number = 10, width:int = 100, height:int = 100, borderThickness:Number = 3):FlxBasic {
+			if (width == -1 && contents) {
 				width = contents.width + padding * 2;
 			}
-			if (height == -1) {
+			if (height == -1 && contents) {
 				height = contents.height + padding * 4;
 			}
 			var window:FlxGroup = new FlxGroup();
 			ExternalImage.setData(new BitmapData(width, height, true, bgColor), title);
 			var box:FlxSprite = new FlxSprite(x, y, ExternalImage);
+			var right:Number = box.width - borderThickness + 1;
+			var bottom:Number = box.height - borderThickness + 1;
+			box.drawLine(0, 0, right, 0, FlxG.BLACK, borderThickness);
+			box.drawLine(right, 0, right, bottom, FlxG.BLACK, borderThickness);
+			box.drawLine(right, bottom, 0, bottom, FlxG.BLACK, borderThickness);
+			box.drawLine(0, bottom, 0, 0, FlxG.BLACK, borderThickness);
 			box.x = x;
 			box.y = y;
-			var text:FlxText = new FlxText(x + padding * 2, y, width - padding * 3, title);
 			window.add(box);
-			contents.x = x + padding;
-			contents.y = y + padding * 3;
-			window.add(contents);
-			if (closable) {
-				var close:FlxButton = new FlxButton(x, y, "X", function():void {
-					window.kill();
-				});
-				close.width = 20;
-				window.add(close);
+			if (contents) {
+				contents.x = x + padding;
+				contents.y = y + padding * 3;
+				window.add(contents);
 			}
+			var text:FlxText = new FlxText(x + padding, y, width - padding * 3, title);
+			text.color = FlxG.BLACK;
+			var close:FlxButton = new FlxButton(x + borderThickness, y + borderThickness	, "Close", function():void {
+				if (closeCallback != null) closeCallback();
+				window.kill();
+			});
+			window.add(close);
+			text.x += close.width;
 			window.add(text);
+			for each(var m:FlxBasic in window.members) {
+				if (m is FlxObject) {
+					(m as FlxObject).allowCollisions = FlxObject.NONE;
+				}
+			}
 			return window;
 		}
 		

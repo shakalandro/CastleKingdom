@@ -30,7 +30,7 @@ package
 		 */		
 		private var _units:FlxGroup;
 		
-		private var _openMenu:FlxSprite;
+		private var _openMenu:FlxBasic;
 		
 		/** 
 		 * An active state is a helper super class for interactive game states such as DefendState and UpgradeState. 
@@ -62,9 +62,11 @@ package
 			add(_castle);
 			if (CastleKingdom.FACEBOOK_ON) {
 				FaceBook.picture(function(pic:Class):void {
-					var sprite:FlxSprite = new FlxSprite(100, 100, pic);
-					add(Util.window(100, 100, sprite, "Hello Window"));
-				}, "me", false, "large");
+					var profilePic:FlxSprite = new FlxSprite(0, 0, pic);
+					Util.center(profilePic, header);
+					profilePic.x = Util.maxX - profilePic.width;
+					hud.add(profilePic);
+				}, "me", false, "small");
 			}
 		}
 		
@@ -117,10 +119,10 @@ package
 		 */		 
 		public function showMenu(menu:String):void {
 			if (_openMenu != null) _openMenu.kill();
-			_openMenu = new FlxSprite(400, 100, Util.assets[Assets.MENU_BG]);
-			var text:FlxText = new FlxText(400, 100, 150, menu);
+			pause();
+			_openMenu = Util.window(CastleKingdom.WIDTH / 4, CastleKingdom.HEIGHT / 4, null, unpause, menu, 0xffffffff, 10, 
+					CastleKingdom.WIDTH / 2, CastleKingdom.HEIGHT / 2);
 			add(_openMenu);
-			add(text);
 		}
 		
 		/**

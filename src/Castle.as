@@ -52,8 +52,8 @@ package
 			//_upgrades = ;
 			_unitCap = 40;
 			_towerCap = 40;
-			this.solid = true;
-			
+			solid = true;
+			immovable = true;
 		}
 		
 		//Adds the given upgrade to the castle
