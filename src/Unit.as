@@ -288,16 +288,16 @@ package
 		/** Responds appropriately to any collisions that may have taken place
 		 * Relies on hitRanged to set target to closest.
 		 * */
-		override public function hitLeft(contact:FlxObject, velocity:Number):void {
+		public function hitLeft(contact:FlxObject, velocity:Number):void {
 			hitRanged(contact,velocity);
 		}
-		override public function hitRight(contact:FlxObject, velocity:Number):void {
+		public function hitRight(contact:FlxObject, velocity:Number):void {
 			hitRanged(contact,velocity);
 		}
-		override public function hitTop(contact:FlxObject, velocity:Number):void {
+		public function hitTop(contact:FlxObject, velocity:Number):void {
 			hitRanged(contact,velocity);
 		}
-		override public function hitBottom(contact:FlxObject, velocity:Number):void {
+		public function hitBottom(contact:FlxObject, velocity:Number):void {
 			hitRanged(contact,velocity);
 		}
 		

@@ -1,10 +1,12 @@
+
 package
 {
 	import flash.display.BitmapData;
 	import flash.utils.Dictionary;
 	
 	import org.flixel.*;
-	import org.flixel.data.FlxMouse;
+	import org.flixel.system.FlxWindow;
+	import org.flixel.system.input.Mouse;
 	
 	/**
 	 * This class contains all globally useful helper functions. Coordinate math, database read/write operations and more qualify for inclusion. 
@@ -30,7 +32,7 @@ package
 		 * @return The mouse object for this game.
 		 * 
 		 */		
-		public static function get mouse():FlxMouse {
+		public static function get mouse():Mouse {
 			return FlxG.mouse;
 		}
 		
@@ -65,7 +67,7 @@ package
 		 */		
 		public static function get minY():Number {
 			if (FlxG.state is GameState) {
-				return (FlxG.state as GameState).hud.height;
+				return (FlxG.state as GameState).header.height;
 			} else {
 				return 0;
 			}
@@ -133,12 +135,11 @@ package
 		 * @return A FlxPoint containing tile indices.
 		 * 
 		 */		
-		public static function cartesianToIndices(cartesian:FlxPoint, ignoreBounds:Boolean = false):FlxPoint {
-			if (!Util.inBounds(cartesian.x, cartesian.y) && !ignoreBounds) {
+		public static function cartesianToIndices(cartesian:FlxPoint):FlxPoint {
+			if (!Util.inBounds(cartesian.x, cartesian.y)) {
 				trace("The given coordinates were out of bounds: " + cartesian);
 				return null;
 			}
-			
 			var xIndex:Number = (cartesian.x - Util.minX) / CastleKingdom.TILE_SIZE;
 			var yIndex:Number = (cartesian.y - Util.minY) / CastleKingdom.TILE_SIZE;
 			return new FlxPoint(xIndex, yIndex);
@@ -153,12 +154,11 @@ package
 		 * @return Cartesian coordinates cooresponding to the upper left corner of the specified tile.
 		 * 
 		 */		
-		public static function indicesToCartesian(indices:FlxPoint, ignoreBounds:Boolean = false):FlxPoint {
-			if (!Util.inTileBounds(indices.x, indices.y) && !ignoreBounds) {
-				trace("Given indices were out of bounds: " + indices + ", ignore = " + ignoreBounds);
+		public static function indicesToCartesian(indices:FlxPoint):FlxPoint {
+			if (!Util.inTileBounds(indices.x, indices.y)) {
+				trace("Given indices were out of bounds: " + indices);
 				return null;
 			}
-			
 			return new FlxPoint(indices.x * CastleKingdom.TILE_SIZE + Util.minX, indices.y * CastleKingdom.TILE_SIZE + Util.minY);
 		}
 		
@@ -263,66 +263,61 @@ package
 		 * @return The y coordinate of where the object was placed with respect to the stage.
 		 * 
 		 */		
-		public static function placeOnGround(obj:FlxObject, map:FlxTilemap, ignoreCenter:Boolean = false):Number {
-			
-			
+		public static function placeOnGround(obj:FlxObject, map:FlxTilemap):Number {
 			var x:Number = obj.x + obj.width / 2;
-			
-			// Fixes unit drop problem
-			if(ignoreCenter) {
-				x -= obj.width / 2;
-				if( x > Util.maxX /2) {
-					x = Util.maxX - 10; // keeps on screen but places near edge
-				} else if ( x < Util.maxX / 2 ){
-					x = Util.minX - 22; // tries to start unit picture off edge of screen
-				} 
-			}
-			
-			
-			
-			
-			
-			var indices:FlxPoint = cartesianToIndices(new FlxPoint(x, Util.minY), true);
+			var indices:FlxPoint = cartesianToIndices(new FlxPoint(x, Util.minY));
 			var tileType:int = map.getTile(indices.x, indices.y);
 			while (tileType < map.collideIndex && indices.y < map.heightInTiles) {
 				indices.y++;
 				tileType = map.getTile(indices.x, indices.y);
 			}
-			var y:Number = Util.indicesToCartesian(indices, true).y - obj.height;
-			obj.y = y
+			var y:Number = Util.indicesToCartesian(indices).y - obj.height;
+			obj.y = y;
 			return y;
 		}
 		
-		public static function window(x:Number, y:Number, contents:FlxObject, title:String = "", 
-									  bgColor:uint = 0xffffffff, padding:Number = 10, closable:Boolean = true, width:Number = -1, height:Number = -1):FlxObject {
-			if (width == -1) {
+		public static function window(x:Number, y:Number, contents:FlxObject, closeCallback:Function, title:String = "", bgColor:uint = FlxG.WHITE, 
+					padding:Number = 10, width:int = 100, height:int = 100, borderThickness:Number = 3):FlxBasic {
+			if (width == -1 && contents) {
 				width = contents.width + padding * 2;
 			}
-			if (height == -1) {
+			if (height == -1 && contents) {
 				height = contents.height + padding * 4;
 			}
 			var window:FlxGroup = new FlxGroup();
-			window.x = x;
-			window.y = y;
 			ExternalImage.setData(new BitmapData(width, height, true, bgColor), title);
 			var box:FlxSprite = new FlxSprite(x, y, ExternalImage);
-			var text:FlxText = new FlxText(x + padding * 2, y, width - padding * 3, title);
+			var right:Number = box.width - borderThickness + 1;
+			var bottom:Number = box.height - borderThickness + 1;
+			box.drawLine(0, 0, right, 0, FlxG.BLACK, borderThickness);
+			box.drawLine(right, 0, right, bottom, FlxG.BLACK, borderThickness);
+			box.drawLine(right, bottom, 0, bottom, FlxG.BLACK, borderThickness);
+			box.drawLine(0, bottom, 0, 0, FlxG.BLACK, borderThickness);
+			box.x = x;
+			box.y = y;
 			window.add(box);
-			contents.x = x + padding;
-			contents.y = y + padding * 3;
-			window.add(contents);
-			if (closable) {
-				var close:FlxButton = new FlxButton(x, y, function():void {
-					window.kill();
-				});
-				close.width = 20;
-				var btnText:FlxText = new FlxText(0, 0, 10, "X");
-				close.loadText(btnText);
-				window.add(close);
+			if (contents) {
+				contents.x = x + padding;
+				contents.y = y + padding * 3;
+				window.add(contents);
 			}
+			var text:FlxText = new FlxText(x + padding, y, width - padding * 3, title);
+			text.color = FlxG.BLACK;
+			var close:FlxButton = new FlxButton(x + borderThickness, y + borderThickness	, "Close", function():void {
+				if (closeCallback != null) closeCallback();
+				window.kill();
+			});
+			window.add(close);
+			text.x += close.width;
 			window.add(text);
+			for each(var m:FlxBasic in window.members) {
+				if (m is FlxObject) {
+					(m as FlxObject).allowCollisions = FlxObject.NONE;
+				}
+			}
 			return window;
 		}
+		
 		
 		/**
 		 * Super duper logging function for ultimate haxxors only!!!
@@ -379,4 +374,4 @@ class Closure {
 		f(_context, index);
 	}
 }
-
+		

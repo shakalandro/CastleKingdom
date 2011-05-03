@@ -1,6 +1,7 @@
 package
 {
 	import org.flixel.*;
+	import org.flixel.system.FlxWindow;
 	
 	/**
 	 * Creates additional functionality for game states whether the player is actively involved. 
@@ -29,7 +30,7 @@ package
 		 */		
 		private var _units:FlxGroup;
 		
-		private var _openMenu:FlxSprite;
+		private var _openMenu:FlxBasic;
 		
 		/** 
 		 * An active state is a helper super class for interactive game states such as DefendState and UpgradeState. 
@@ -61,9 +62,11 @@ package
 			add(_castle);
 			if (CastleKingdom.FACEBOOK_ON) {
 				FaceBook.picture(function(pic:Class):void {
-					var sprite:FlxSprite = new FlxSprite(100, 100, pic);
-					add(Util.window(100, 100, sprite, "Yeah, my picture"));
-				}, "me", false, "large");
+					var profilePic:FlxSprite = new FlxSprite(0, 0, pic);
+					Util.center(profilePic, header);
+					profilePic.x = Util.maxX - profilePic.width;
+					hud.add(profilePic);
+				}, "me", false, "small");
 			}
 		
 		}
@@ -78,8 +81,8 @@ package
 		 * </ul>
 		 * 
 		 */		
-		override public function collide():void {
-			super.collide();
+		public function collide():void {
+			FlxG.collide();
 		}
 		
 		/**
@@ -117,10 +120,10 @@ package
 		 */		 
 		public function showMenu(menu:String):void {
 			if (_openMenu != null) _openMenu.kill();
-			_openMenu = new FlxSprite(400, 100, Util.assets[Assets.MENU_BG]);
-			var text:FlxText = new FlxText(400, 100, 150, menu);
+			pause();
+			_openMenu = Util.window(CastleKingdom.WIDTH / 4, CastleKingdom.HEIGHT / 4, null, unpause, menu, 0xffffffff, 10, 
+					CastleKingdom.WIDTH / 2, CastleKingdom.HEIGHT / 2);
 			add(_openMenu);
-			add(text);
 		}
 		
 		/**
@@ -197,22 +200,19 @@ package
 		
 		override protected function createHUD():void {
 			super.createHUD();
-			var attack:FlxButton = new FlxButton(0, 0, function():void {
+			var attack:FlxButton = new FlxButton(0, 0, "attack", function():void {
 				showMenu(ActiveState.ATTACK_MENU);
 			});
 			attack.width = 100;
-			attack.loadText(new FlxText(0, 0, 40, "attack"));
 			
-			var defend:FlxButton = new FlxButton(150, 0, function():void {
+			var defend:FlxButton = new FlxButton(150, 0, "defend", function():void {
 				showMenu(ActiveState.DEFEND_MENU);
 			});
-			defend.loadText(new FlxText(0, 0, 40, "defend"));
 			defend.width = 100;
 			
-			var upgrade:FlxButton = new FlxButton(300, 0, function():void {
+			var upgrade:FlxButton = new FlxButton(300, 0, "upgrade", function():void {
 				showMenu(ActiveState.UPGRADE_MENU);
 			});
-			upgrade.loadText(new FlxText(0, 0, 60, "upgrade"));
 			upgrade.width = 100;
 			
 			hud.add(attack);
