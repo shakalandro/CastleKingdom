@@ -22,6 +22,8 @@ package
 		private var _hud:FlxGroup;
 		
 		private var _header:FlxSprite;
+		
+		private var _background:FlxSprite;
 				
 		/**
 		 * Constructs a new GameState. This is a helper superclass state. All persistent gamestate materials are held here. 
@@ -48,6 +50,9 @@ package
 			_map = new FlxTilemap();
 			_map.loadMap(new Util.assets[Assets.TILE_LAYOUT], Util.assets[Assets.MAP_TILES],CastleKingdom.TILE_SIZE, CastleKingdom.TILE_SIZE, FlxTilemap.OFF, 0, 0, 1);
 			_map.y = _header.height;
+			
+			_background = new FlxSprite(0, _header.height, Util.assets[Assets.BACKGROUND]);
+			
 			add(_map);
 		}
 		
@@ -111,7 +116,7 @@ package
 		protected function createHUD():void {
 			_hud = new FlxGroup();
 			_header = new FlxSprite(0, 0, Util.assets[Assets.HUD_HEADER]);
-			_header.drawLine(0, _header.height - 3, _header.width, _header.height - 3, FlxG.BLACK, 4);
+			_header.drawLine(0, _header.height, _header.width, _header.height, FlxG.BLACK, 4);
 			_hud.add(_header);
 			add(_hud);
 		}
