@@ -18,6 +18,7 @@ package
 		private var primaryTarget:Unit = null;
 		
 		private var _dragging:Boolean;
+		private var _dragOffset:FlxPoint;
 		
 		/**
 		 * 
@@ -28,22 +29,24 @@ package
 		 */		
 		public function DefenseUnit(x:Number, y:Number, towerID:int) {
 			super (x,y,towerID);
+			this.loadGraphic(Util.assets[Assets.ARROW_TOWER], true, false, CastleKingdom.TILE_SIZE, CastleKingdom.TILE_SIZE * 3);
 			_dragging = false;
 		}
 		
 		override public function preUpdate():void {
+			var mouseCoords:FlxPoint = FlxG.mouse.getScreenPosition();
 			if (FlxG.mouse.justPressed() && checkClick()) {
 				_dragging = true;
-			} else if (_dragging && FlxG.mouse.justReleased() && checkClick()) {
+				_dragOffset = new FlxPoint(mouseCoords.x - this.x, mouseCoords.y - this.y);
+			} else if (_dragging && FlxG.mouse.justReleased()) {
 				_dragging = false;
-				var newCoords:FlxPoint = Util.roundToNearestTile(FlxG.mouse.getScreenPosition());
-				this.x = newCoords.x;
-				this.y = newCoords.y;
+				this.x = mouseCoords.x - _dragOffset.x;
+				Util.placeOnGround(this, Util.state.map, false, true);
+				_dragOffset = null;
 			}
 			if (_dragging) {
-				var mouseCoords:FlxPoint = FlxG.mouse.getScreenPosition();
-				this.x = mouseCoords.x;
-				this.y = mouseCoords.y;
+				this.x = mouseCoords.x - _dragOffset.x;
+				this.y = mouseCoords.y - _dragOffset.y;
 			}
 		}
 		

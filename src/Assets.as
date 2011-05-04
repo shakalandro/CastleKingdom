@@ -102,6 +102,7 @@ package
 			_normal[Assets.CASTLE] = castle_img;
 			_normal[Assets.CURSOR] = cursor_img;
 			_normal[Assets.BACKGROUND] = background_img;
+			_normal[Assets.ARROW_TOWER] = arrow_tower_normal;
 		}
 		
 		/**
