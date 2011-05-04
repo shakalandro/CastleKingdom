@@ -203,7 +203,7 @@ package
 		}
 		
 		
-		public function contactWithEnemy() {
+		public function contactWithEnemy():void {
 			
 			_gameOver = true;
 		}
