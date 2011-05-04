@@ -354,8 +354,8 @@ package
 				callback(null);
 		}
 		
-		public function getTowerUnits(callback:Function):void {
-			var result:Object = [
+		public static function getTowerUnits(callback:Function):void {
+			var result:Array = [
 				{
 					did: 0,
 					name: "tower1",
