@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application 
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	creationComplete="init()"
+	minWidth="955" minHeight="600"
+>
+	<mx:Script>
+		<![CDATA[
+			import com.Logging.*;
+			
+			public function init():void
+			{	
+				var client:CGSClient = new CGSClient(CGSClientConstants.URL, 1, 1);
+				client.SetUid(function f(d:String):void {
+					//Starting level 1!
+					//First we need a new dqid to associate with this play of the level.
+					client.SetDqid(function f(d:String):void {
+						client.ReportLevel(d, 1, function g(d:String):void {
+							//Now that server has responded, let's send some actions.
+							var action:ClientAction = new ClientAction();
+							action.aid = ClientActionType.ENEMY_KILLED;
+							action.ts = 5000; //Happened 5000 ms in
+							action.uid = client.message.uid;
+							action.detail = new Object();
+							action.detail["x"] = 100;
+							action.detail["y"] = 15;
+							
+							client.LogAction(action);
+							
+							//There was only one enemy.  Start the next level.
+							//First we'll need a new dqid...
+							client.SetDqid(function f(d:String):void {
+								client.ReportLevel(d, 2, function g(d:String):void {
+									//Now that server has responded, let's send some actions.
+									var action:ClientAction = new ClientAction();
+									action.aid = ClientActionType.ENEMY_KILLED;
+									action.ts = 4000; //4000 ms in
+									action.uid = client.message.uid;
+									action.detail = new Object();
+									action.detail["x"] = 15;
+									action.detail["y"] = 25;
+									client.LogAction(action);
+									
+									action = new ClientAction();
+									action.aid = ClientActionType.ENEMY_KILLED;
+									action.ts = 10000; //10000 ms in
+									action.uid = client.message.uid;
+									action.detail = new Object();
+									action.detail["x"] = 10;
+									action.detail["y"] = 25;
+									
+									client.LogAction(action);
+								});
+							});		
+						});
+					});
+				});
+			}
+		]]>	
+	</mx:Script>	
+</mx:Application>
