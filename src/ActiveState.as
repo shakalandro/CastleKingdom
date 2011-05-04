@@ -130,6 +130,7 @@ package
 					for (var i:int = 0; i < towers.length; i++) {
 						var towerStats:Object = towers[i];
 						group.add(new FlxSprite(i * 20 % CastleKingdom.WIDTH / 2, i * 20 / (CastleKingdom.WIDTH / 2), Util.assets[Assets.SWORDSMAN]));
+						group.add(new FlxText(i * 20 % CastleKingdom.WIDTH / 2, i * 20 / (CastleKingdom.WIDTH / 2) + 10, towerStats.name));
 					}
 					_openMenu = Util.window(CastleKingdom.WIDTH / 4, CastleKingdom.HEIGHT / 4, group, unpause, menu, 0xffffffff, 10, 
 						CastleKingdom.WIDTH / 2, CastleKingdom.HEIGHT / 2);

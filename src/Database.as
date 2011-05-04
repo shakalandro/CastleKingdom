@@ -353,7 +353,7 @@ package
 			} else
 				callback(null);
 		}
-		
+
 		public static function getTowerUnits(callback:Function):void {
 			var result:Array = [
 				{
