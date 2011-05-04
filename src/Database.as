@@ -33,7 +33,7 @@ package
 			var loader:URLLoader = new URLLoader();
 			loader.dataFormat = URLLoaderDataFormat.TEXT;
 			loader.addEventListener(Event.COMPLETE, function(evt:Event):void {
-				callback(evt);
+				callback(new XML(evt.target.data));
 			});
 			loader.load(request);
 		}
@@ -57,10 +57,10 @@ package
 		 *                 represents the userInfo.
 		 * 
 		 */		
-		public static function getUserInfo(uid:int, callback:Function):void
-		{
-			getMain(uid, callback, "http://24.18.189.178/CastleKingdom/database/getUserInfo.php", getUserInfoHelper);
-		}
+//		public static function getUserInfo(uid:int, callback:Function):void
+//		{
+//			getMain(uid, callback, "http://24.18.189.178/CastleKingdom/database/getUserInfo.php", getUserInfoHelper);
+//		}
 		
 		/**
 		 * <p>
@@ -116,10 +116,10 @@ package
 		 *                 represents the userCastle.
 		 * 
 		 */
-		public static function getUserCastle(uid:int, callback:Function):void
-		{
-			getMain(uid, callback, "http://24.18.189.178/CastleKingdom/database/getUserCastle.php", getUserCastleHelper);
-		}
+//		public static function getUserCastle(uid:int, callback:Function):void
+//		{
+//			getMain(uid, callback, "http://24.18.189.178/CastleKingdom/database/getUserCastle.php", getUserCastleHelper);
+//		}
 		
 		/**
 		 * <p>
@@ -147,11 +147,11 @@ package
 		 *                 represents the user's castle.
 		 * 
 		 */
-		private static function getUserCastleHelper(evt:Event, callback:Function):void
-		{
-			var xmlData:XML = new XML(evt.target.data);
-			getMainHelper(xmlData, xmlData.cpart, "cpart", callback);
-		}
+//		private static function getUserCastleHelper(evt:Event, callback:Function):void
+//		{
+//			var xmlData:XML = new XML(evt.target.data);
+//			getMainHelper(xmlData, xmlData.cpart, "cpart", callback);
+//		}
 		
 		/**
 		 * <p>
@@ -172,10 +172,10 @@ package
 		 *                 represents the user's defence.
 		 * 
 		 */
-		public static function getUserDef(uid:int, callback:Function):void
-		{
-			getMain(uid, callback, "http://24.18.189.178/CastleKingdom/database/getUserDef.php", getUserDefHelper);
-		}
+//		public static function getUserDef(uid:int, callback:Function):void
+//		{
+//			getMain(uid, callback, "http://24.18.189.178/CastleKingdom/database/getUserDef.php", getUserDefHelper);
+//		}
 		
 		/**
 		 * <p>
@@ -203,11 +203,11 @@ package
 		 *                 represents the user's defence.
 		 * 
 		 */
-		private static function getUserDefHelper(evt:Event, callback:Function):void
-		{
-			var xmlData:XML = new XML(evt.target.data);
-			getMainHelper(xmlData, xmlData.def, "def", callback);
-		}
+//		private static function getUserDefHelper(evt:Event, callback:Function):void
+//		{
+//			var xmlData:XML = new XML(evt.target.data);
+//			getMainHelper(xmlData, xmlData.def, "def", callback);
+//		}
 		
 		/**
 		 * <p>
@@ -230,10 +230,10 @@ package
 		 *                 represents the user's leases.
 		 * 
 		 */
-		public static function getUserLease(uid:int, callback:Function):void
-		{
-			getMain(uid, callback, "http://24.18.189.178/CastleKingdom/database/getUserLeases.php", getUserLeaseHelper);
-		}
+//		public static function getUserLease(uid:int, callback:Function):void
+//		{
+//			getMain(uid, callback, "http://24.18.189.178/CastleKingdom/database/getUserLeases.php", getUserLeaseHelper);
+//		}
 		
 		/**
 		 * <p>
@@ -260,11 +260,11 @@ package
 		 *                 represents the user's leases.
 		 * 
 		 */
-		private static function getUserLeaseHelper(evt:Event, callback:Function):void
-		{
-			var xmlData:XML = new XML(evt.target.data);
-			getMainHelper(xmlData, xmlData.lease, "lease", callback);
-		}
+//		private static function getUserLeaseHelper(evt:Event, callback:Function):void
+//		{
+//			var xmlData:XML = new XML(evt.target.data);
+//			getMainHelper(xmlData, xmlData.lease, "lease", callback);
+//		}
 		
 		/**
 		 * <p>
@@ -286,10 +286,10 @@ package
 		 *                 represents the user's attacks.
 		 * 
 		 */
-		public static function getUserAttacks(uid:int, callback:Function):void
-		{
-			getMain(uid, callback, "http://24.18.189.178/CastleKingdom/database/getUserAttacks.php", getUserAttackHelper);
-		}
+//		public static function getUserAttacks(uid:int, callback:Function):void
+//		{
+//			getMain(uid, callback, "http://24.18.189.178/CastleKingdom/database/getUserAttacks.php", getUserAttackHelper);
+//		}
 		
 		/**
 		 * <p>
@@ -328,35 +328,54 @@ package
 		 *        has the information from the sql query.
 		 * 
 		 */		
-		
 		public static function getUserInfo(callback:Function, ids:Object = null):void {
-			getMain("../../database/getUserInfo.php", function(e:Event):void {
-				var xmlData:XML = new XML(e.target.data);
+			getMain("games.washington.edu/capstone/11sp/castlekd/database/getUserInfo.php", function(xmlData:XML):void {
 				callback(processList(xmlData.def, function(unit:XML):Object {
 					return {
-						id: unit.uid
+						uid: unit.uid,
+						gold: unit.gold,
+						units: unit.units
 					};
 				}));
 			}, ids);
 		}
 		
 		public static function getDefenseUnitInfo(callback:Function, ids:Object = null):void {
-			getMain("../../database/getDefInfo.php", function(e:Event):void {
-				var xmlData:XML = new XML(e.target.data);
+			getMain("games.washington.edu/capstone/11sp/castlekd/database/getDefInfo.php", function(xmlData:XML):void {
 				callback(processList(xmlData.def, function(unit:XML):Object {
 					return {
-						id: unit.did
+						did: unit.did,
+						name: unit.name,
+						level: unit.level,
+						unitCost: unit.unitCost,
+						maxHealth: unit.maxHealth,
+						range: unit.range,
+						damage: unit.damage,
+						rate: unit.rate,
+						type: unit.type,
+						clas: unit.clas
 					};
 				}));
 			}, ids);
 		}
 
 		public static function getEnemyInfo(callback:Function, ids:Object = null):void {
-			getMain("../../database/getArmyInfo.php", function(e:Event):void {
-				var xmlData:XML = new XML(e.target.data);
+			getMain("games.washington.edu/capstone/11sp/castlekd/database/getArmyInfo.php", function(xmlData:XML):void {
 				callback(processList(xmlData.army, function(unit:XML):Object {
 					return {
-						id: unit.aid
+						aid: unit.aid,
+						name: unit.name,
+						level: unit.level,
+						unitCost: unit.unitCost,
+						goldCost: unit.goldCost,
+						maxHealth: unit.maxHealth,
+						range: unit.range,
+						damage: unit.damage,
+						rate: unit.rate,
+						reward: unit.reward,
+						move: unit.move,
+						type: unit.type,
+						clas: unit.clas
 					};
 				}));
 			}, ids);
