@@ -55,7 +55,7 @@ package
 			super.create();
 			var state:FlxText = new FlxText(Util.maxX-100,30,70,"Attack State");
 			this.add(state);
-			
+			add(new DefenseUnit(Util.minX, Util.minY, 0));
 		}
 		
 		
