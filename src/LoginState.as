@@ -46,11 +46,13 @@ package
 		}
 		
 		private function start():void {
-			FlxG.switchState(new AttackState(false, true, this.map));
+			FlxG.switchState(new ActiveState(true, true, this.map));
 		}
 		
 		private function drawHelp(x:Number = CastleKingdom.WIDTH / 4, y:Number = CastleKingdom.HEIGHT / 4, 
 								  		width:Number = CastleKingdom.WIDTH / 2, height:Number = CastleKingdom.HEIGHT / 2):void {
+			var helpText:String = "This is CastleKingdom! Here, gold is precious and everyone wants yours. " +
+				"Defend your castle to protect your treasure. Loot other castles to make a profit.";
 			var body:FlxText = new FlxText(0, 0, width, "This is CastleKingdom!");
 			body.color = 0x000000;
 			pause();

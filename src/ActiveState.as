@@ -15,6 +15,8 @@ package
 		public static const ATTACK_MENU:String = "attack";
 		public static const DEFEND_MENU:String = "defend";
 		
+		private static const HUD_BUTTON_PADDING:uint = 10;
+		
 		/**
 		 * A reference to the singleton castle object.
 		 */		
@@ -127,10 +129,24 @@ package
 		 * 
 		 */		 
 		public function showMenu(menu:String):void {
-			if (_openMenu != null) _openMenu.kill();
+			if (_openMenu != null) {
+				_openMenu.kill();	
+			}
 			pause();
-			_openMenu = Util.window(CastleKingdom.WIDTH / 4, CastleKingdom.HEIGHT / 4, null, unpause, menu, 0xffffffff, 10, 
+			if (menu == ActiveState.DEFEND_MENU) {
+				Database.getTowerUnits(function(towers:Array):void {
+					var group:FlxGroup = new FlxGroup();
+					for (var i:int = 0; i < towers.length; i++) {
+						var towerStats:Object = towers[i];
+						group.add(new FlxSprite(i * 20 % CastleKingdom.WIDTH / 2, i * 20 / (CastleKingdom.WIDTH / 2), Util.assets[Assets.SWORDSMAN]));
+					}
+					_openMenu = Util.window(CastleKingdom.WIDTH / 4, CastleKingdom.HEIGHT / 4, group, unpause, menu, 0xffffffff, 10, 
+						CastleKingdom.WIDTH / 2, CastleKingdom.HEIGHT / 2);
+				});
+			} else {
+				_openMenu = Util.window(CastleKingdom.WIDTH / 4, CastleKingdom.HEIGHT / 4, null, unpause, menu, 0xffffffff, 10, 
 					CastleKingdom.WIDTH / 2, CastleKingdom.HEIGHT / 2);
+			}
 			add(_openMenu);
 		}
 		
@@ -208,20 +224,30 @@ package
 		
 		override protected function createHUD():void {
 			super.createHUD();
-			var attack:FlxButton = new FlxButton(0, 0, "attack", function():void {
-				showMenu(ActiveState.ATTACK_MENU);
+			var attack:FlxButton = new FlxButton(0, 0, "Attack", function():void {
+				showMenu(ATTACK_MENU);
 			});
-			attack.width = 100;
 			
-			var defend:FlxButton = new FlxButton(150, 0, "defend", function():void {
-				showMenu(ActiveState.DEFEND_MENU);
+			var defend:FlxButton = new FlxButton(0, 0, "Defend", function():void {
+				showMenu(DEFEND_MENU);
 			});
-			defend.width = 100;
 			
-			var upgrade:FlxButton = new FlxButton(300, 0, "upgrade", function():void {
-				showMenu(ActiveState.UPGRADE_MENU);
+			var upgrade:FlxButton = new FlxButton(0, 0, "Upgrade", function():void {
+				showMenu(UPGRADE_MENU);
 			});
-			upgrade.width = 100;
+			
+			attack.allowCollisions = FlxObject.NONE;
+			defend.allowCollisions = FlxObject.NONE;
+			upgrade.allowCollisions = FlxObject.NONE;
+			
+			Util.centerY(attack, header);
+			Util.centerY(defend, header);
+			Util.centerY(upgrade, header);
+			
+			upgrade.x = Util.maxX - upgrade.width - 70;
+			attack.x = upgrade.x - attack.width - HUD_BUTTON_PADDING;
+			defend.x = attack.x - defend.width - HUD_BUTTON_PADDING;
+			Util.log(upgrade.width, attack.width, defend.width);
 			
 			
 			//		_towerDisplay = new FlxSprite(Util.maxX-100,20);

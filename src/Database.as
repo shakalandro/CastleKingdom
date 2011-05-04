@@ -353,5 +353,50 @@ package
 			} else
 				callback(null);
 		}
+		
+		public static function getTowerUnits(callback:Function):void {
+			var result:Array = [
+				{
+					did: 0,
+					name: "tower1",
+					level: 10,
+					unitCost: 5,
+					maxHealth: 100,
+					range: 3,
+					damage: 10, 
+					rate: 1,
+					shots: 2,
+					type: "ground",
+					clazz: "poo"
+				},
+				{
+					did: 1,
+					name: "tower2",
+					level: 10,
+					unitCost: 5,
+					maxHealth: 100,
+					range: 3,
+					damage: 10, 
+					rate: 1,
+					shots: 2,
+					type: "ground",
+					clazz: "poo"
+				},
+				{
+					did: 2,
+					name: "tower3",
+					level: 10,
+					unitCost: 5,
+					maxHealth: 100,
+					range: 3,
+					damage: 10, 
+					rate: 1,
+					shots: 2,
+					type: "ground",
+					clazz: "poo"
+				}
+			];
+			callback(result);
+		}
 	}
 }
