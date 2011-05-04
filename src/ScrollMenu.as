@@ -1,13 +1,8 @@
-package 
+
+package
 {
 	import flash.display.BitmapData;
-	import org.flixel.FlxBasic;
-	import org.flixel.FlxButton;
-	import org.flixel.FlxG;
-	import org.flixel.FlxGroup;
-	import org.flixel.FlxObject;
-	import org.flixel.FlxSprite;
-	import org.flixel.FlxText;
+	import org.flixel.*;
 
 	public class ScrollMenu
 	{
