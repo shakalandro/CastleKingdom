@@ -46,7 +46,7 @@ package
 		}
 		
 		private function start():void {
-			FlxG.switchState(new AttackState(true, true, this.map));
+			FlxG.switchState(new DefenseState(true, true, this.map));
 		}
 		
 		private function drawHelp(x:Number = CastleKingdom.WIDTH / 4, y:Number = CastleKingdom.HEIGHT / 4, 

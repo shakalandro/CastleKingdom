@@ -62,8 +62,7 @@ package
 		override public function update():void {
 			
 			this.castle.addGold(1);
-			
-			
+						
 			if(this.castle.isGameOver()) {		// Checks if castle has been breached
 				// recover cost, units disband
 				var armyCost:int = sumArmyCost();
@@ -75,7 +74,7 @@ package
 				GameMessages.LOSE_FIGHT("Bob Barker",6);
 			//	FlxG.state = new ActiveState();
 				
-				_activeAttack = false;
+				//_activeAttack = false;
 			} else if ( deathCheck(this.units)) { // Check if peeps are still alive
 				var armyCost2:int = sumArmyCost();
 				this.castle.addGold(armyCost2);
@@ -108,7 +107,7 @@ package
 			if(_unitDropCounter <= 0) {
 				_unitDropCounter = 50;
 				placeDudes(_placeOnLeft, Util.minX);
-				placeDudes(_placeOnRight, Util.maxX);
+				placeDudes(_placeOnRight, Util.maxX - 20);
 			}
 			super.collide();
 			super.update();
@@ -261,9 +260,8 @@ package
 			if (dudes == null || dudes.length <= 0 ){
 				return;
 			}
-			var i:int = 0;
 			var bar:HealthBar = new HealthBar();
-			var dude:Unit = new EnemyUnit(xVal-10*i, Util.minTileY, dudes[i],bar);
+			var dude:Unit = new EnemyUnit(xVal, Util.minTileY, dudes[0],bar);
 			if (dude.type == Unit.UNDERGROUND) {
 				// set dude on ground dude 
 			} else if (dude.type == Unit.AIR) {
