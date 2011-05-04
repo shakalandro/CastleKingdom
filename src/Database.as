@@ -353,20 +353,30 @@ package
 			} else
 				callback(null);
 		}
+		
+		public static function getDefenseUnitsInfo(callback:Function):void {
+			getMain(0, callback, "http://24.18.189.178/CastleKingdom/database/getDefInfo.php", function(e:Event, callback:Function):void {
+				var xmlData:XML = new XML(e.target.data);
+				callback(processList(xmlData.def, function(unit:XML):Object {
+					return {
+						id: unit.did
+					};
+				}));
+			});
+		}
 
-		public static function getUnitsInfo(callback:Function):void {
-			getMain(0, callback, "http://24.18.189.178/CastleKingdom/database/getUserAttacks.php", function(e:Event, callback:Function):void {
-				callback(processList(e, function(unit:XML):Object {
+		public static function getEnemiesInfo(callback:Function):void {
+			getMain(0, callback, "http://24.18.189.178/CastleKingdom/database/getArmyInfo.php", function(e:Event, callback:Function):void {
+				var xmlData:XML = new XML(e.target.data);
+				callback(processList(xmlData.army, function(unit:XML):Object {
 					return {
 						id: unit.aid
-					}
+					};
 				}));
 			});
 		}
 		
-		private static function processList(e:Event, format:Function):Array {
-			var xmlData:XML = new XML(e.target.data);
-			var units:XMLList = xmlData.army;
+		private static function processList(units:XMLList, format:Function):Array {
 			if (units != null && units.length != 0) {
 				var result:Array = [];
 				for each(var xml:XML in units) {
