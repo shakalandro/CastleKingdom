@@ -11,6 +11,8 @@ package
 		private static var _userInfo:Array;
 		private static var _enemyInfo:Array;
 		private static var _defUnitInfo:Array;
+		private static const _startGold:int = 0;
+		private static const _startUnits:int = 5;
 		
 				
 		private static function getMain(url:String, callback:Function, ids:Object = null):void
@@ -247,6 +249,15 @@ package
 			var loader:URLLoader = new URLLoader();
 			loader.dataFormat = URLLoaderDataFormat.TEXT;
 			loader.load(request);
+		}
+		
+		public static function addNewUser(uid:int):void
+		{
+			var variables:URLVariables = new URLVariables();
+			variables.uid = "" + uid;
+			variables.gold = "" + _startGold;
+			variables.units = "" + _startUnits;
+			update("http://games.cs.washington.edu/capstone/11sp/castlekd/database/addNewUser.php", variables);
 		}
 		
 		public static function updateUserInfo(userInfo:Object):void
