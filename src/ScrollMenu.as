@@ -1,6 +1,7 @@
-package org.flixel
+package
 {
 	import flash.display.BitmapData;
+	import org.flixel.*;
 
 	public class ScrollMenu
 	{

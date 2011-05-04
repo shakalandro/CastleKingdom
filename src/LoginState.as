@@ -37,7 +37,7 @@ package
 		private function login():void {
 			FaceBook.connect(function(ready:Boolean):void {
 				if (ready) {
-					FlxG.switchState(new AttackState(true, false, map));
+					FlxG.switchState(new ActiveState(true, false, map));
 				} else {
 					_startButton.label.text = "Try again :(";
 					Util.log("LoginState.login failed: " + ready);
@@ -46,7 +46,7 @@ package
 		}
 		
 		private function start():void {
-			FlxG.switchState(new DefenseState(true, true, this.map));
+			FlxG.switchState(new ActiveState(true, true, this.map));
 		}
 		
 		private function drawHelp(x:Number = CastleKingdom.WIDTH / 4, y:Number = CastleKingdom.HEIGHT / 4, 

@@ -258,11 +258,11 @@ package
 		override protected function createHUD():void {
 			super.createHUD();
 			var attack:FlxButton = new FlxButton(0, 0, "Attack", function():void {
-				showMenu(ATTACK_MENU);
+				FlxG.switchState(new AttackState(false, false, map));
 			});
 			
 			var defend:FlxButton = new FlxButton(0, 0, "Defend", function():void {
-				showMenu(DEFEND_MENU);
+				FlxG.switchState(new DefenseState(false, false, map));
 			});
 			
 			var upgrade:FlxButton = new FlxButton(0, 0, "Upgrade", function():void {

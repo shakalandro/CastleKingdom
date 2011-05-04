@@ -1,7 +1,8 @@
 package 
 {
-	import org.flixel.*;
 	import flash.geom.*;
+	
+	import org.flixel.*;
 
 	/** DefenseUnit class
 	 * 
@@ -16,6 +17,8 @@ package
 		
 		private var primaryTarget:Unit = null;
 		
+		private var _dragging:Boolean;
+		
 		/**
 		 * 
 		 * @param x X coord to start at
@@ -25,8 +28,27 @@ package
 		 */		
 		public function DefenseUnit(x:Number, y:Number, towerID:int) {
 			super (x,y,towerID);
-			
-			
+			_dragging = false;
+		}
+		
+		override public function preUpdate():void {
+			if (FlxG.mouse.justPressed() && checkClick()) {
+				_dragging = true;
+			} else if (_dragging && FlxG.mouse.justReleased() && checkClick()) {
+				_dragging = false;
+				var newCoords:FlxPoint = Util.roundToNearestTile(FlxG.mouse.getScreenPosition());
+				this.x = newCoords.x;
+				this.y = newCoords.y;
+			}
+			if (_dragging) {
+				var mouseCoords:FlxPoint = FlxG.mouse.getScreenPosition();
+				this.x = mouseCoords.x;
+				this.y = mouseCoords.y;
+			}
+		}
+		
+		private function checkClick():Boolean {
+			return this.overlapsPoint(FlxG.mouse.getScreenPosition(), true);
 		}
 		
 		/** This function responds to this Unit coming within range of another FlxObject
