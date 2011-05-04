@@ -12,19 +12,7 @@ package
 		private static var _enemyInfo:Array;
 		private static var _defUnitInfo:Array;
 		
-		/**
-		 * This is the main getter method that is called by all the public getter methods. This makes the
-		 * general passing of params to php for the sql query. It also makes an event listner that will
-		 * call the appropriate event method for the getter.
-		 *  
-		 * @param uid the uid to get the information for.
-		 * @param callback a function that takes one parameter, an object, that holds the information
-		 *        returned from the sql query.
-		 * @param url the url to connect to to pass variables to php.
-		 * @param eventFunction the event function to call that corresponds to the private helper function
-		 *        for the public getters.
-		 * 
-		 */		
+				
 		private static function getMain(url:String, callback:Function, ids:Object = null):void
 		{
 			var request:URLRequest = new URLRequest(url);
@@ -42,296 +30,7 @@ package
 			loader.load(request);
 		}
 		
-		/**
-		 * <p>
-		 * Passes an object that stores the information for a user with the given uid to the
-		 * call back function. The user information came from the database and the object is
-		 * of the following form:
-		 * </p>
-		 * <p>
-		 * 		userInfo = {uid:userId, gold:userGold, units:userUnits}
-		 * </p>
-		 * <p>
-		 * If the uid does not match any user in the database, then the object passed to the
-		 * callback function is null.
-		 * </p>
-		 * 
-		 * @param uid must be a valid uid for some user in the database
-		 * @param callback a callback function that takes a single parameter, an Object, that
-		 *                 represents the userInfo.
-		 * 
-		 */		
-//		public static function getUserInfo(uid:int, callback:Function):void
-//		{
-//			getMain(uid, callback, "http://24.18.189.178/CastleKingdom/database/getUserInfo.php", getUserInfoHelper);
-//		}
-		
-		/**
-		 * <p>
-		 * Receives information from php that represents the results of the sql query for
-		 * a given users information. The information received from php is in XML format
-		 * like the following:
-		 * </p>
-		 * <pre>
-		 * &lt;user&gt;
-		 * 	&lt;uid&gt;userId&lt;/uid&gt;
-		 * 	&lt;gold&gt;userGold&lt;/gold&gt;
-		 * 	&lt;units&gt;userUnits&lt;/units&gt;
-		 * &lt;/user&gt;
-		 * </pre>
-		 * <p>
-		 * After reading the php in, the user object is created and passed to the callback function.
-		 * </p>
-		 * 
-		 * @param evt the event that the php has completed rendering on the screen
-		 * @param callback a callback function that takes a single parameter, an Object, that
-		 *                 represents the user info.
-		 * 
-		 */		
-		private static function getUserInfoHelper(evt:Event, callback:Function):void
-		{
-			var xmlData:XML = new XML(evt.target.data);
-			var users:XMLList = xmlData.user;
-			var user:XML = users[0];
-			if (user != null) {
-				var userInfo:Object = {uid:user.uid.text(), gold:user.gold.text(), units:user.units.text()};
-				callback(userInfo);
-			} else {
-				callback(null);
-			}
-		}
-		
-		/**
-		 * <p>
-		 * Passes an object that stores the information for a user's castle with the given uid to the
-		 * call back function. The user's castle information came from the database and the object is
-		 * of the following form:
-		 * </p>
-		 * <p>
-		 * 		userCastle = {uid:userId, cpart0:{cid:cId, xpos:xPos, ypos:yPos}, ..., cpartN:{cid:cId, xpos:xPos, ypos:yPos}}
-		 * </p>
-		 * <p>
-		 * If the uid does not match any user in the database, then the object passed to the
-		 * callback function is null.
-		 * </p>
-		 * 
-		 * @param uid must be a valid uid for some user in the database
-		 * @param callback a callback function that takes a single parameter, an Object, that
-		 *                 represents the userCastle.
-		 * 
-		 */
-//		public static function getUserCastle(uid:int, callback:Function):void
-//		{
-//			getMain(uid, callback, "http://24.18.189.178/CastleKingdom/database/getUserCastle.php", getUserCastleHelper);
-//		}
-		
-		/**
-		 * <p>
-		 * Receives information from php that represents the results of the sql query for
-		 * a given user's castle. The information received from php is in XML format
-		 * like the following:
-		 * </p>
-		 * <pre>
-		 * &lt;user&gt;
-		 * 	&lt;uid&gt;userId&lt;/uid&gt;
-		 * 	&lt;cpart0&gt;
-		 * 		&lt;cid&gt;cId&lt;/cid&gt;
-		 * 		&lt;xpos&gt;xPos&lt;/xpos&gt;
-		 * 		&lt;ypos&gt;yPos&lt;/ypos&gt;
-		 * 	&lt;/cpart0&gt;
-		 * 	...
-		 * &lt;/user&gt;
-		 * </pre>
-		 * <p>
-		 * After reading the php in, the user object is created and passed to the callback function.
-		 * </p>
-		 * 
-		 * @param evt the event that the php has completed rendering on the screen
-		 * @param callback a callback function that takes a single parameter, an Object, that
-		 *                 represents the user's castle.
-		 * 
-		 */
-//		private static function getUserCastleHelper(evt:Event, callback:Function):void
-//		{
-//			var xmlData:XML = new XML(evt.target.data);
-//			getMainHelper(xmlData, xmlData.cpart, "cpart", callback);
-//		}
-		
-		/**
-		 * <p>
-		 * Passes an object that stores the information for a user's defense with the given uid to the
-		 * call back function. The user's defence information came from the database and the object is
-		 * of the following form:
-		 * </p>
-		 * <p>
-		 * 		userDef = {uid:userId, def0:{did:cId, xpos:xPos, ypos:yPos}, ..., defN:{did:cId, xpos:xPos, ypos:yPos}}
-		 * </p>
-		 * <p>
-		 * If the uid does not match any user in the database, then the object passed to the
-		 * callback function is null.
-		 * </p>
-		 * 
-		 * @param uid must be a valid uid for some user in the database
-		 * @param callback a callback function that takes a single parameter, an Object, that
-		 *                 represents the user's defence.
-		 * 
-		 */
-//		public static function getUserDef(uid:int, callback:Function):void
-//		{
-//			getMain(uid, callback, "http://24.18.189.178/CastleKingdom/database/getUserDef.php", getUserDefHelper);
-//		}
-		
-		/**
-		 * <p>
-		 * Receives information from php that represents the results of the sql query for
-		 * a given user's defence. The information received from php is in XML format
-		 * like the following:
-		 * </p>
-		 * <pre>
-		 * &lt;user&gt;
-		 * 	&lt;uid&gt;userId&lt;/uid&gt;
-		 * 	&lt;def0&gt;
-		 * 		&lt;cid&gt;cId&lt;/cid&gt;
-		 * 		&lt;xpos&gt;xPos&lt;/xpos&gt;
-		 * 		&lt;ypos&gt;yPos&lt;/ypos&gt;
-		 * 	&lt;/def0&gt;
-		 * 	...
-		 * &lt;/user&gt;
-		 * </pre>
-		 * <p>
-		 * After reading the php in, the user object is created and passed to the callback function.
-		 * </p>
-		 * 
-		 * @param evt the event that the php has completed rendering on the screen
-		 * @param callback a callback function that takes a single parameter, an Object, that
-		 *                 represents the user's defence.
-		 * 
-		 */
-//		private static function getUserDefHelper(evt:Event, callback:Function):void
-//		{
-//			var xmlData:XML = new XML(evt.target.data);
-//			getMainHelper(xmlData, xmlData.def, "def", callback);
-//		}
-		
-		/**
-		 * <p>
-		 * Passes an object that stores the information for a user's leases with the given uid to the
-		 * call back function. The user's lease information came from the database and the object is
-		 * of the following form:
-		 * </p>
-		 * <p>
-		 * 		userLease = {uid:userId, lease0:{lid:leaseUId, numUnits:num}, ..., leaseN:{lid:leaseUId, numUnits:num}}
-		 * </p>
-		 * <p>
-		 * The lid refers to the person that uid is leasing their units to and numUnits in the number of
-		 * units they are leasing.
-		 * If the uid does not match any user in the database, then the object passed to the
-		 * callback function is null.
-		 * </p>
-		 * 
-		 * @param uid must be a valid uid for some user in the database
-		 * @param callback a callback function that takes a single parameter, an Object, that
-		 *                 represents the user's leases.
-		 * 
-		 */
-//		public static function getUserLease(uid:int, callback:Function):void
-//		{
-//			getMain(uid, callback, "http://24.18.189.178/CastleKingdom/database/getUserLeases.php", getUserLeaseHelper);
-//		}
-		
-		/**
-		 * <p>
-		 * Receives information from php that represents the results of the sql query for
-		 * a given user's leases. The information received from php is in XML format
-		 * like the following:
-		 * </p>
-		 * <pre>
-		 * &lt;user&gt;
-		 * 	&lt;lease&gt;
-		 * 		&lt;uid&gt;userId&lt;/uid&gt;
-		 * 		&lt;lid&gt;leaseId&lt;/lid&gt;
-		 * 		&lt;numUnits&gt;numUnits&lt;/numUnits&gt;
-		 * 	&lt;lease&gt;
-		 * 	...
-		 * &lt;/user&gt;
-		 * </pre>
-		 * <p>
-		 * After reading the php in, the user object is created and passed to the callback function.
-		 * </p>
-		 * 
-		 * @param evt the event that the php has completed rendering on the screen
-		 * @param callback a callback function that takes a single parameter, an Object, that
-		 *                 represents the user's leases.
-		 * 
-		 */
-//		private static function getUserLeaseHelper(evt:Event, callback:Function):void
-//		{
-//			var xmlData:XML = new XML(evt.target.data);
-//			getMainHelper(xmlData, xmlData.lease, "lease", callback);
-//		}
-		
-		/**
-		 * <p>
-		 * Passes an object that stores the information for a user's attacks with the given uid to the
-		 * call back function. The user's attack information came from the database and the object is
-		 * of the following form:
-		 * </p>
-		 * <p>
-		 * 		userLease = {uid:userId, attack0:aid, ..., attackN:aid}
-		 * </p>
-		 * <p>
-		 * The aid refers to the person that uid is attacking.
-		 * If the uid does not match any user in the database, then the object passed to the
-		 * callback function is null.
-		 * </p>
-		 * 
-		 * @param uid must be a valid uid for some user in the database
-		 * @param callback a callback function that takes a single parameter, an Object, that
-		 *                 represents the user's attacks.
-		 * 
-		 */
-//		public static function getUserAttacks(uid:int, callback:Function):void
-//		{
-//			getMain(uid, callback, "http://24.18.189.178/CastleKingdom/database/getUserAttacks.php", getUserAttackHelper);
-//		}
-		
-		/**
-		 * <p>
-		 * Receives information from php that represents the results of the sql query for
-		 * a given user's attacks. The information received from php is in XML format
-		 * like the following:
-		 * </p>
-		 * <pre>
-		 * &lt;user&gt;
-		 * 	&lt;attck&gt;
-		 * 		&lt;aid&gt;aId&lt;/aid&gt;
-		 * 	&lt;attack&gt;
-		 * 	...
-		 * &lt;/user&gt;
-		 * </pre>
-		 * <p>
-		 * After reading the php in, the user object is created and passed to the callback function.
-		 * </p>
-		 * 
-		 * @param evt the event that the php has completed rendering on the screen
-		 * @param callback a callback function that takes a single parameter, an Object, that
-		 *                 represents the user's attacks.
-		 * 
-		 */
-		
-		
-		/**
-		 * The main private helper function that all the other private getter helper functions
-		 * call. This one process all the data and create the object that will be passed to the
-		 * callback function.
-		 *  
-		 * @param xmlData the xml data that is retrieved from the php request.
-		 * @param xmlList the list that corresponds to the xml (i.e. xmlData.attack)
-		 * @param type the type of the getter (i.e. def, attack, lease)
-		 * @param callback the callback function that takes a single parameter, an object, that
-		 *        has the information from the sql query.
-		 * 
-		 */		
+			
 		public static function getUserInfo(callback:Function, ids:Object = null, forceRefresh:Boolean = false):void {
 			if (forceRefresh || _userInfo == null) {
 				getMain("http://games.cs.washington.edu/capstone/11sp/castlekd/database/getUserInfo.php", function(xmlData:XML):void {
@@ -400,6 +99,96 @@ package
 			}
 		}
 		
+		public static function getMineInfo(callback:Function, ids:Object = null, forceRefresh:Boolean = false):void {
+			if (forceRefresh || _userInfo == null) {
+				getMain("http://games.cs.washington.edu/capstone/11sp/castlekd/database/getMineInfo.php", function(xmlData:XML):void {
+					_userInfo = processList(xmlData.mine, function(unit:XML):Object {
+						return {
+							id: unit.mid,
+							name: unit.name,
+							unitWorth: unit.unitWorth,
+							goldCost: unit.goldCost
+						};
+					})
+					callback(_userInfo);
+				}, ids);
+			} else {
+				callback(getAll(_userInfo, ids));
+			}
+		}
+		
+		public static function getFoundryInfo(callback:Function, ids:Object = null, forceRefresh:Boolean = false):void {
+			if (forceRefresh || _userInfo == null) {
+				getMain("http://games.cs.washington.edu/capstone/11sp/castlekd/database/getFoundryInfo.php", function(xmlData:XML):void {
+					_userInfo = processList(xmlData.foundry, function(unit:XML):Object {
+						return {
+							id: unit.fid,
+							name: unit.name,
+							unitWorth: unit.unitWorth,
+							goldCost: unit.goldCost
+						};
+					})
+					callback(_userInfo);
+				}, ids);
+			} else {
+				callback(getAll(_userInfo, ids));
+			}
+		}
+		
+		public static function getAviaryInfo(callback:Function, ids:Object = null, forceRefresh:Boolean = false):void {
+			if (forceRefresh || _userInfo == null) {
+				getMain("http://games.cs.washington.edu/capstone/11sp/castlekd/database/getAviaryInfo.php", function(xmlData:XML):void {
+					_userInfo = processList(xmlData.aviary, function(unit:XML):Object {
+						return {
+							id: unit.aid,
+							name: unit.name,
+							unitWorth: unit.unitWorth,
+							goldCost: unit.goldCost
+						};
+					})
+					callback(_userInfo);
+				}, ids);
+			} else {
+				callback(getAll(_userInfo, ids));
+			}
+		}
+		
+		public static function getBarracksInfo(callback:Function, ids:Object = null, forceRefresh:Boolean = false):void {
+			if (forceRefresh || _userInfo == null) {
+				getMain("http://games.cs.washington.edu/capstone/11sp/castlekd/database/getBarracksInfo.php", function(xmlData:XML):void {
+					_userInfo = processList(xmlData.barrack, function(unit:XML):Object {
+						return {
+							id: unit.bid,
+							name: unit.name,
+							unitWorth: unit.unitWorth,
+							goldCost: unit.goldCost
+						};
+					})
+					callback(_userInfo);
+				}, ids);
+			} else {
+				callback(getAll(_userInfo, ids));
+			}
+		}
+		
+		public static function getCastleInfo(callback:Function, ids:Object = null, forceRefresh:Boolean = false):void {
+			if (forceRefresh || _userInfo == null) {
+				getMain("http://games.cs.washington.edu/capstone/11sp/castlekd/database/getCastleInfo.php", function(xmlData:XML):void {
+					_userInfo = processList(xmlData.castle, function(unit:XML):Object {
+						return {
+							id: unit.cid,
+							name: unit.name,
+							unitWorth: unit.unitWorth,
+							goldCost: unit.goldCost
+						};
+					})
+					callback(_userInfo);
+				}, ids);
+			} else {
+				callback(getAll(_userInfo, ids));
+			}
+		}
+		
 		private static function getAll(stuff:Array, ids:Object):Array {
 			if (stuff == null) {
 				return null;
@@ -430,6 +219,35 @@ package
 			} else {
 				return null;
 			}
+		}
+		
+		private static function update(url:String, variables:URLVariables):void
+		{
+			var request:URLRequest = new URLRequest(url);
+			
+			request.data = variables;
+			request.method = URLRequestMethod.POST;
+			var loader:URLLoader = new URLLoader();
+			loader.dataFormat = URLLoaderDataFormat.TEXT;
+			loader.load(request);
+		}
+		
+		public static function updateUserInfo(userInfo:Object):void
+		{
+			var variables:URLVariables = new URLVariables();
+			variables.uid = "" + userInfo["id"];
+			variables.gold = "" + userInfo["gold"];
+			variables.units = "" + userInfo["units"];
+			update("http://games.cs.washington.edu/capstone/11sp/castlekd/database/updateUserInfo.php", variables);
+		}
+		
+		public static function addUserLease(leaseInfo:Object):void
+		{
+			var variables:URLVariables = new URLVariables();
+			variables.uid = "" + leaseInfo["id"];
+			variables.lid = "" + leaseInfo["lid"];
+			variables.numUnits = "" + leaseInfo["numUnits"];
+			update("http://games.cs.washington.edu/capstone/11sp/castlekd/database/addUserLease.php", variables);
 		}
 	}
 }
