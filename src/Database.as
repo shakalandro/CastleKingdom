@@ -329,7 +329,7 @@ package
 		 * 
 		 */		
 		public static function getUserInfo(callback:Function, ids:Object = null):void {
-			getMain("games.washington.edu/capstone/11sp/castlekd/database/getUserInfo.php", function(xmlData:XML):void {
+			getMain("http://games.cs.washington.edu/capstone/11sp/castlekd/database/getUserInfo.php", function(xmlData:XML):void {
 				callback(processList(xmlData.def, function(unit:XML):Object {
 					return {
 						uid: unit.uid,
@@ -341,7 +341,7 @@ package
 		}
 		
 		public static function getDefenseUnitInfo(callback:Function, ids:Object = null):void {
-			getMain("games.washington.edu/capstone/11sp/castlekd/database/getDefInfo.php", function(xmlData:XML):void {
+			getMain("http://games.cs.washington.edu/capstone/11sp/castlekd/database/getDefInfo.php", function(xmlData:XML):void {
 				callback(processList(xmlData.def, function(unit:XML):Object {
 					return {
 						did: unit.did,
@@ -360,7 +360,7 @@ package
 		}
 
 		public static function getEnemyInfo(callback:Function, ids:Object = null):void {
-			getMain("games.washington.edu/capstone/11sp/castlekd/database/getArmyInfo.php", function(xmlData:XML):void {
+			getMain("http://games.cs.washington.edu/capstone/11sp/castlekd/database/getArmyInfo.php", function(xmlData:XML):void {
 				callback(processList(xmlData.army, function(unit:XML):Object {
 					return {
 						aid: unit.aid,

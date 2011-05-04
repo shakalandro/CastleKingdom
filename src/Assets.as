@@ -67,6 +67,10 @@ package
 		[Embed(source = "../images/cursor.png")]
 		private static var cursor_img:Class;
 		public static const CURSOR:String = "cursor";
+		
+		[Embed(source = "../images/background.png")]
+		private static var background_img:Class;
+		public static const BACKGROUND:String = "background";
 	
 		
 		// Other resources
@@ -97,6 +101,7 @@ package
 			_normal[Assets.MENU_BG] = menu_bg;
 			_normal[Assets.CASTLE] = castle_img;
 			_normal[Assets.CURSOR] = cursor_img;
+			_normal[Assets.BACKGROUND] = background_img;
 		}
 		
 		/**
