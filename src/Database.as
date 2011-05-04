@@ -27,7 +27,7 @@ package
 			request.method = URLRequestMethod.POST;
 			if (ids != null) {
 				var variables:URLVariables = new URLVariables();
-				variables.id = ids.toString() + "";
+				variables.uid = ids.toString() + "";
 				request.data = variables;
 			}
 			var loader:URLLoader = new URLLoader();
