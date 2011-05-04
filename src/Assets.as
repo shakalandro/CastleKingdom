@@ -24,13 +24,25 @@ package
 		
 		// Images
 		
-		[Embed(source = "../images/playfield_tiles.png")] 
+		[Embed(source = "../images/tiles.png")] 
 		private static var tilesImg_normal:Class;
 		public static const MAP_TILES:String = "tiles";
 		
 		[Embed(source = "../images/swordsman.png")]
 		private static var swordsman_normal:Class;
 		public static const SWORDSMAN:String = "swordsman";
+		
+		[Embed(source = "../images/archer.png")]
+		private static var archer_normal:Class;
+		public static const ARCHER:String = "archer";
+		
+		[Embed(source = "../images/ram.png")]
+		private static var ram_normal:Class;
+		public static const RAM:String = "ram";
+		
+		[Embed(source = "../images/cannon.png")]
+		private static var cannon_normal:Class;
+		public static const CANNON:String = "cannon";
 		
 		[Embed(source = "../images/hud_header.png")]
 		private static var hud_header:Class;
@@ -43,10 +55,23 @@ package
 		[Embed(source = "../images/castle.png")]
 		private static var castle_img:Class;
 		public static const CASTLE:String = "castle";
+	
+		[Embed(source = "../images/wall.png")]
+		private static var wall_normal:Class;
+		public static const WALL:String = "wall";
+		
+		[Embed(source = "../images/arrow_tower.png")]
+		private static var arrow_tower_normal:Class;
+		public static const ARROW_TOWER:String = "arrow_tower";
 		
 		[Embed(source = "../images/cursor.png")]
 		private static var cursor_img:Class;
 		public static const CURSOR:String = "cursor";
+		
+		[Embed(source = "../images/background.png")]
+		private static var background_img:Class;
+		public static const BACKGROUND:String = "background";
+	
 		
 		// Other resources
 		
@@ -76,6 +101,7 @@ package
 			_normal[Assets.MENU_BG] = menu_bg;
 			_normal[Assets.CASTLE] = castle_img;
 			_normal[Assets.CURSOR] = cursor_img;
+			_normal[Assets.BACKGROUND] = background_img;
 		}
 		
 		/**

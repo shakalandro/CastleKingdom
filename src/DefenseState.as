@@ -1,8 +1,6 @@
 package
 {
-	import org.flixel.FlxButton;
-	import org.flixel.FlxGroup;
-	import org.flixel.FlxTilemap;
+	import org.flixel.*;
 	
 	public class DefenseState extends ActiveState
 	{
@@ -15,20 +13,18 @@ package
 		{
 			super(tutorial, menusActive, map);
 			_towerChoices = new Array();
-			_towerChoices = this.castle.unitsUnlocked(Castle.TOWER);
+		//	_towerChoices = this.castle.unitsUnlocked(Castle.TOWER);
 			
-			Database.getTowerUnits(function(towers:Array):void {
+			/*Database.getTowerUnits(function(towers:Array):void {
 				var group:FlxGroup = new FlxGroup();
 				for (var i:int = 0; i < towers.length; i++) {
 					var towerStats:Object = towers[i];
 					group.add(new FlxSprite(i * 20 % CastleKingdom.WIDTH / 2, i * 20 / (CastleKingdom.WIDTH / 2), Util.assets[Assets.SWORDSMAN]));
-				}
-				var sm:ScrollMenu = new ScrollMenu(CastleKingdom.WIDTH / 4, CastleKingdom.HEIGHT / 4, group, unpause, menu, 0xffffffff, 10, 
-					CastleKingdom.WIDTH / 2, CastleKingdom.HEIGHT / 2);
-				_openMenu = sm.window;
+				}*/
+			
 				//Util.window(CastleKingdom.WIDTH / 4, CastleKingdom.HEIGHT / 4, group, unpause, menu, 0xffffffff, 10, 
 				//	CastleKingdom.WIDTH / 2, CastleKingdom.HEIGHT / 2);
-			});
+			//});
 		}
 		
 		public function generateUnitSelector(uid:int):FlxGroup {
@@ -37,17 +33,25 @@ package
 			// Put on image
 			// Put on descriptive text
 			// on click, ... be able 
-			loc = FlxG.getScreenPosition();
-			
+			//loc = FlxG.getScreenPosition();
+			return null;
 			
 		}
 		
 		override public function create():void {
 			super.create();
+			var group:FlxGroup = new FlxGroup();
+			var text:FlxText = new FlxText(0,0,20,"hi");
+			text.color = 0xffff0000;
+			group.add(text);
+			
+			var sm:ScrollMenu = new ScrollMenu(CastleKingdom.WIDTH / 4, CastleKingdom.HEIGHT / 4, group, unpause, "Tower Selector", 0xffffffff, 10, 
+				CastleKingdom.WIDTH / 2, CastleKingdom.HEIGHT / 2);
+			
+			add(sm.window);
 			
 			
-			
-			Util.window(10,Util.minY,
+			//Util.window(10,Util.minY,
 		}
 		// Display Tower selection menu
 		

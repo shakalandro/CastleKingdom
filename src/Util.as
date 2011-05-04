@@ -17,6 +17,8 @@ package
 	{		
 		private static const _assets:Assets = new Assets();
 		
+		private var _data:Database;
+		
 		/**
 		 * Provides access to all assets according to the current skin setting
 		 *  
