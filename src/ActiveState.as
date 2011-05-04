@@ -92,8 +92,37 @@ package
 		 * 
 		 */		
 		public function collide():void {
-			FlxG.collide();
+			FlxG.collide(_units, _towers, fightCollide);
+			FlxG.collide(_units, this.castle, endGameCollide);
+			//FlxG.collide(_units, this.map, groundCollide);
 		}
+		
+		//
+		private function fightCollide(unit1:FlxSprite, unit2:FlxSprite):void {
+			(unit1 as Unit).hitRanged(unit2);
+			(unit2 as Unit).hitRanged(unit1);
+		}
+		
+		/**
+		 * Initiates procedure for units hitting the castle
+		 * */
+		private function endGameCollide(unit1:FlxSprite, unit2:FlxSprite):void {
+			if(unit1 is Castle) {
+				(unit1 as Castle).hitRanged(unit2);
+				(unit2 as Unit).hitRanged(unit1);
+			} else {
+				(unit1 as Unit).hitRanged(unit2);
+				(unit2 as Castle).hitRanged(unit1);	
+			}
+		}
+		
+		/** Initiates procedure for interacting with ground
+		 * */
+		private function groundCollide(unit1:FlxSprite, unit2:FlxSprite):void {
+			//(unit1 as Unit).hitRanged(unit2);
+			//(unit2 as Unit).hitRanged(unit1);
+		}
+		
 		
 		/**
 		 * 
@@ -140,8 +169,11 @@ package
 						var towerStats:Object = towers[i];
 						group.add(new FlxSprite(i * 20 % CastleKingdom.WIDTH / 2, i * 20 / (CastleKingdom.WIDTH / 2), Util.assets[Assets.SWORDSMAN]));
 					}
-					_openMenu = Util.window(CastleKingdom.WIDTH / 4, CastleKingdom.HEIGHT / 4, group, unpause, menu, 0xffffffff, 10, 
+					var sm:ScrollMenu = new ScrollMenu(CastleKingdom.WIDTH / 4, CastleKingdom.HEIGHT / 4, group, unpause, menu, 0xffffffff, 10, 
 						CastleKingdom.WIDTH / 2, CastleKingdom.HEIGHT / 2);
+					_openMenu = sm.window;
+					//Util.window(CastleKingdom.WIDTH / 4, CastleKingdom.HEIGHT / 4, group, unpause, menu, 0xffffffff, 10, 
+					//	CastleKingdom.WIDTH / 2, CastleKingdom.HEIGHT / 2);
 				});
 			} else {
 				_openMenu = Util.window(CastleKingdom.WIDTH / 4, CastleKingdom.HEIGHT / 4, null, unpause, menu, 0xffffffff, 10, 

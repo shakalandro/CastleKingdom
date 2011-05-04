@@ -177,6 +177,12 @@ package
 		}
 		
 		
+		public function hitRanged(Contact:FlxObject):void {
+			if (Contact is EnemyUnit) {
+				_gameOver = true;
+			}	
+		}
+		
 		/** If castle is hit by EnemyUnit, game is over.
 		 * */
 		public function hitRight(Contact:FlxObject, Velocity:Number):void {		
@@ -203,7 +209,7 @@ package
 		}
 		
 		
-		public function contactWithEnemy() {
+		public function contactWithEnemy():void {
 			
 			_gameOver = true;
 		}

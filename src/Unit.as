@@ -279,7 +279,7 @@ package
 		
 		/** This function responds to this Unit coming within range of another FlxObject
 		 * */
-		public function hitRanged(contact:FlxObject, velocity:Number):void {
+		public function hitRanged(contact:FlxObject):void {
 			if ( contact is Unit ) {
 				
 			}
@@ -289,16 +289,16 @@ package
 		 * Relies on hitRanged to set target to closest.
 		 * */
 		public function hitLeft(contact:FlxObject, velocity:Number):void {
-			hitRanged(contact,velocity);
+			hitRanged(contact);
 		}
 		public function hitRight(contact:FlxObject, velocity:Number):void {
-			hitRanged(contact,velocity);
+			hitRanged(contact);
 		}
 		public function hitTop(contact:FlxObject, velocity:Number):void {
-			hitRanged(contact,velocity);
+			hitRanged(contact);
 		}
 		public function hitBottom(contact:FlxObject, velocity:Number):void {
-			hitRanged(contact,velocity);
+			hitRanged(contact);
 		}
 		
 		

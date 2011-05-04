@@ -35,8 +35,8 @@ package
 		 * @param velocity Suggested velocity to change
 		 * 
 		 */
-		override public function hitRanged(contact:FlxObject, velocity:Number):void {
-			super.hitRanged(contact, velocity);
+		override public function hitRanged(contact:FlxObject):void {
+			super.hitRanged(contact);
 			if ( contact is EnemyUnit ) {
 				primaryTarget = betterTarget(primaryTarget, contact as Unit);	
 			}
