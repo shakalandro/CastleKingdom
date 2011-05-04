@@ -8,6 +8,10 @@ package
 	public class Database
 	{
 		
+		private static var _userInfo:Array;
+		private static var _enemyInfo:Array;
+		private static var _defUnitInfo:Array;
+		
 		/**
 		 * This is the main getter method that is called by all the public getter methods. This makes the
 		 * general passing of params to php for the sql query. It also makes an event listner that will
@@ -328,57 +332,92 @@ package
 		 *        has the information from the sql query.
 		 * 
 		 */		
-		public static function getUserInfo(callback:Function, ids:Object = null):void {
-			getMain("http://games.cs.washington.edu/capstone/11sp/castlekd/database/getUserInfo.php", function(xmlData:XML):void {
-				callback(processList(xmlData.def, function(unit:XML):Object {
-					return {
-						uid: unit.uid,
-						gold: unit.gold,
-						units: unit.units
-					};
-				}));
-			}, ids);
+		public static function getUserInfo(callback:Function, ids:Object = null, forceRefresh:Boolean = false):void {
+			if (forceRefresh || _userInfo == null) {
+				getMain("http://games.cs.washington.edu/capstone/11sp/castlekd/database/getUserInfo.php", function(xmlData:XML):void {
+					_userInfo = processList(xmlData.def, function(unit:XML):Object {
+						return {
+							id: unit.uid,
+							gold: unit.gold,
+							units: unit.units
+						};
+					})
+					callback(_userInfo);
+				}, ids);
+			} else {
+				callback(getAll(_userInfo, ids));
+			}
 		}
 		
-		public static function getDefenseUnitInfo(callback:Function, ids:Object = null):void {
-			getMain("http://games.cs.washington.edu/capstone/11sp/castlekd/database/getDefInfo.php", function(xmlData:XML):void {
-				callback(processList(xmlData.def, function(unit:XML):Object {
-					return {
-						did: unit.did,
-						name: unit.name,
-						level: unit.level,
-						unitCost: unit.unitCost,
-						maxHealth: unit.maxHealth,
-						range: unit.range,
-						damage: unit.damage,
-						rate: unit.rate,
-						type: unit.type,
-						clas: unit.clas
-					};
-				}));
-			}, ids);
+		public static function getDefenseUnitInfo(callback:Function, ids:Object = null, forceRefresh:Boolean = false):void {
+			if (forceRefresh || _defUnitInfo == null) {
+				getMain("http://games.cs.washington.edu/capstone/11sp/castlekd/database/getDefInfo.php", function(xmlData:XML):void {
+					_defUnitInfo = processList(xmlData.def, function(unit:XML):Object {
+						return {
+							id: unit.did,
+							name: unit.name,
+							level: unit.level,
+							unitCost: unit.unitCost,
+							maxHealth: unit.maxHealth,
+							range: unit.range,
+							damage: unit.damage,
+							rate: unit.rate,
+							type: unit.type,
+							clas: unit.clas
+						};
+					});
+					callback(_defUnitInfo);
+				}, ids);
+			} else {
+				callback(getAll(_defUnitInfo, ids));
+			}
 		}
 
-		public static function getEnemyInfo(callback:Function, ids:Object = null):void {
-			getMain("http://games.cs.washington.edu/capstone/11sp/castlekd/database/getArmyInfo.php", function(xmlData:XML):void {
-				callback(processList(xmlData.army, function(unit:XML):Object {
-					return {
-						aid: unit.aid,
-						name: unit.name,
-						level: unit.level,
-						unitCost: unit.unitCost,
-						goldCost: unit.goldCost,
-						maxHealth: unit.maxHealth,
-						range: unit.range,
-						damage: unit.damage,
-						rate: unit.rate,
-						reward: unit.reward,
-						move: unit.move,
-						type: unit.type,
-						clas: unit.clas
-					};
-				}));
-			}, ids);
+		public static function getEnemyInfo(callback:Function, ids:Object = null, forceRefresh:Boolean = false):void {
+			if (forceRefresh || _enemyInfo == null) {
+				getMain("http://games.cs.washington.edu/capstone/11sp/castlekd/database/getArmyInfo.php", function(xmlData:XML):void {
+					_enemyInfo = processList(xmlData.army, function(unit:XML):Object {
+						return {
+							id: unit.aid,
+							name: unit.name,
+							level: unit.level,
+							unitCost: unit.unitCost,
+							goldCost: unit.goldCost,
+							maxHealth: unit.maxHealth,
+							range: unit.range,
+							damage: unit.damage,
+							rate: unit.rate,
+							reward: unit.reward,
+							move: unit.move,
+							type: unit.type,
+							clas: unit.clas
+						};
+					});
+					callback(_enemyInfo);
+				}, ids);
+			} else {
+				callback(getAll(_enemyInfo, ids));
+			}
+		}
+		
+		private static function getAll(stuff:Array, ids:Object):Array {
+			if (stuff == null) {
+				return null;
+			}
+			if (ids == null) {
+				return stuff;
+			} else if (ids is Number) {
+				ids = [(ids as Number)];
+			}
+			ids = (ids as Array);
+			stuff = stuff.filter(function(item:Object, index:int, arr:Array):Boolean {
+				return ids.indexOf(item.id) >= 0;
+			});
+			if (stuff.length != ids.length) {
+				return null;
+			} else {
+				return stuff;
+			}
 		}
 		
 		private static function processList(units:XMLList, format:Function):Array {
