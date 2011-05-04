@@ -314,11 +314,7 @@ package
 		 *                 represents the user's attacks.
 		 * 
 		 */
-		private static function getUserAttackHelper(evt:Event, callback:Function):void
-		{
-			var xmlData:XML = new XML(evt.target.data);
-			getMainHelper(xmlData, xmlData.attack, "attack", callback);
-		}
+		
 		
 		/**
 		 * The main private helper function that all the other private getter helper functions
@@ -332,50 +328,38 @@ package
 		 *        has the information from the sql query.
 		 * 
 		 */		
-		private static function getMainHelper(xmlData:XML, xmlList:XMLList, type:String, callback:Function):void
-		{
-			var user:XMLList = xmlData.user;
-			if (user != null && xmlList.length != 0) {
-				var obj:Object = {};
-				obj["uid"] = xmlData.uid;
-				var i:int = 0;
-				for each(var xml:XML in xmlList) {
-					if (type == "cpart")
-						obj[type + i] = {cid:xml.cid, xpos:xml.xpos, ypos:xml.ypos};
-					else if (type == "def")
-						obj[type + i] = {did:xml.did, xpos:xml.xpos, ypos:xml.ypos};
-					else if (type == "lease")
-						obj[type + i] = {lid:xml.lid, numUnits:xml.numUnits};
-					else if (type == "attack")
-						obj[type + i] = xml.aid;
-					i++;
-				}
-				obj["size"] = i;
-				callback(obj);
-			} else
-				callback(null);
+		
+		public static function getUserInfo(callback:Function, ids:Object = null):void {
+			getMain("../../database/getUserInfo.php", function(e:Event):void {
+				var xmlData:XML = new XML(e.target.data);
+				callback(processList(xmlData.def, function(unit:XML):Object {
+					return {
+						id: unit.uid
+					};
+				}));
+			}, ids);
 		}
 		
-		public static function getDefenseUnitsInfo(callback:Function):void {
-			getMain("http://24.18.189.178/CastleKingdom/database/getDefInfo.php", function(e:Event):void {
+		public static function getDefenseUnitInfo(callback:Function, ids:Object = null):void {
+			getMain("../../database/getDefInfo.php", function(e:Event):void {
 				var xmlData:XML = new XML(e.target.data);
 				callback(processList(xmlData.def, function(unit:XML):Object {
 					return {
 						id: unit.did
 					};
 				}));
-			});
+			}, ids);
 		}
 
-		public static function getEnemiesInfo(callback:Function):void {
-			getMain("http://24.18.189.178/CastleKingdom/database/getArmyInfo.php", function(e:Event):void {
+		public static function getEnemyInfo(callback:Function, ids:Object = null):void {
+			getMain("../../database/getArmyInfo.php", function(e:Event):void {
 				var xmlData:XML = new XML(e.target.data);
 				callback(processList(xmlData.army, function(unit:XML):Object {
 					return {
 						id: unit.aid
 					};
 				}));
-			});
+			}, ids);
 		}
 		
 		private static function processList(units:XMLList, format:Function):Array {
