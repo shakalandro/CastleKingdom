@@ -7,6 +7,15 @@ package
 	 * or there is a detected automated attack. 
 	 * 
 	 * It will either create a random attack or use a received set of targets
+	 * 
+	 * @todo : complete "endgame" scenarios
+	 * 				Figure out sum of gold dropped
+	 * 				Call API to update database (gold to winner)
+	 * 
+	 * 			Add in towers
+	 * 			Complete Util integration (all units, friend waves, etc)
+	 * 			
+	 * 			Add user prompting ("you lost X gold", "enemy dropped Y gold");
 	 *  
 	 * @author Justin
 	 * 
@@ -21,25 +30,58 @@ package
 		private var _activeAttack:Boolean;
 		private var _droppedGold:int;
 		
+		private var _placeOnLeft:Array;
+		private var _placeOnRight:Array;
+		
+		private var _unitDropCounter:int;
+		
+		
 		
 		
 		public function AttackState(tutorial:Boolean=false, menusActive:Boolean=false, map:FlxTilemap=null)
 		{
 			super(tutorial, menusActive, map);
 			_activeAttack = false;
+			_unitDropCounter = 10;
+			
 		}
 		
+		/**
+		 * Sets up the Tilemap based on the information in FlxSave or the Database
+		 * Draws tutorial UI components if tutorial is true. Draws the menu buttons on the screen.
+		 * 
+		 */		
+		override public function create():void {
+			super.create();
+			var state:FlxText = new FlxText(Util.maxX-100,30,70,"Attack State");
+			this.add(state);
+			
+		}
+		
+		
 		override public function update():void {
-			// chekc if castle has been hit
-			if(this.castle.isGameOver()) {
-				// take portion of gold and give to attacker
-				for(var unit:Object in this.units) {
-					(unit as Unit).destroy();
-				}
-			} else if ( deathCheck(this.units)) {
+			
+			this.castle.addGold(1);
+			
+			
+			if(this.castle.isGameOver()) {		// Checks if castle has been breached
+				// recover cost, units disband
+				var armyCost:int = sumArmyCost();
+				// take portion of defender's gold and give to attacker
+				var cash:int = this.castle.gold;
+				var cashStolen:int = computeStolen(units, cash);
+				this.castle.addGold(-cashStolen);
+				//Util.goldStolenFromAttack(cashStolen + armyCost);
+				GameMessages.LOSE_FIGHT("Bob Barker",6);
+			//	FlxG.state = new ActiveState();
 				
+				_activeAttack = false;
+			} else if ( deathCheck(this.units)) { // Check if peeps are still alive
+				var armyCost2:int = sumArmyCost();
+				this.castle.addGold(armyCost2);
+				//_activeAttack = false;
 			}
-			// Check if peeps are still alive
+			
 			
 			// Do nothing if peeps are still alive
 			if(!_activeAttack) {
@@ -54,11 +96,19 @@ package
 				if (type == AttackState.REQUESTED){
 					generateArmy(leftSide, rightSide, 10, 10);
 				} else if ( type == AttackState.TIDAL ) {
-					generateArmy(leftSide, rightSide, 0, 10);
+					generateArmy(leftSide, rightSide, 0, 15);
 				} else {  //== AttackState.REQUESTED
 					getFriendWave(leftSide, rightSide);
 				}
 				placeArmy(leftSide, rightSide);
+				
+			}
+			
+			_unitDropCounter--;
+			if(_unitDropCounter <= 0) {
+				_unitDropCounter = 50;
+				placeDudes(_placeOnLeft, Util.minX);
+				placeDudes(_placeOnRight, Util.maxX);
 			}
 			super.collide();
 			super.update();
@@ -80,6 +130,17 @@ package
 			}
 			return true;
 		}
+		
+		private function computeStolen(units:FlxGroup, cash:int):int {
+			
+			var cap:int = 0;
+			for(var unit:Object in units) {
+				unit = unit as Unit;
+				cap += unit.goldCapacity;
+			}
+			return Math.min(.7*cash, cap);
+		}
+		
 		
 		/** Generates a random army with strength within a certain range of the user's defensive capabilities
 		
@@ -105,8 +166,8 @@ package
 				if (maxIndex >= 0 ) {
 					// random index in range of array, of valid cost elements. +2 adds preference for strong units
 					var randIndex:int = Math.min(maxIndex, Math.round(Math.random()*(maxIndex + 2))); 
-					var unitNum:int = possibleUnits[rand];
-					var side:int = Math.round(Math.random()*2);
+					var unitNum:int = possibleUnits[randIndex];
+					var side:int = Math.round(Math.random());
 					if (side == 0) {
 						leftSide.push(unitNum);
 					} else {
@@ -162,6 +223,16 @@ package
 			return AttackState.REQUESTED;
 		}
 		
+		
+		private function sumArmyCost():int {
+			var cost:int = 0;
+			for(var unit:Object in this.units) {
+				unit = unit as Unit;
+				cost += unit.cost;
+			}
+			return cost;
+		}
+		
 		/**
 		 * Places all army units for the left and right sides on the screen, 
 		 * in order of their placement on the screen. 
@@ -171,33 +242,41 @@ package
 		 * 
 		 */		
 		private function placeArmy( leftSide:Array, rightSide:Array):void {
-			placeDudes(leftSide, Util.minX+ 100);
-			placeDudes(rightSide, Util.maxX- 100);
+			_placeOnLeft = leftSide;
+			_placeOnRight = rightSide;
+			//placeDudes(leftSide, Util.minX+ 100);
+			//placeDudes(rightSide, Util.maxX- 100);
 			
 		}
 		
 		/**
-		 * Places an array of Units on the board starting at xVal x address 
-		 * @param dudes Array of Units to place
+		 * Places first unit in an array of Units on the board starting at xVal x address 
+		 * @param dudes Array of Units (numbers) to place
 		 * @param xVal X location to start placing units at
 		 * 
 		 */		
 		private function placeDudes(dudes:Array, xVal:int):void {
-			trace("Called PlaceUnits with size: " + dudes.length + " active attack: " + _activeAttack);
-			for( var i:int = 0; i < dudes.length; i++) {
-				var dude:Unit = new EnemyUnit(xVal-10*i, Util.minTileY, dudes[i]);;
-				if (dude.type == Unit.UNDERGROUND) {
-					// set dude on ground dude 
-				} else if (dude.type == Unit.AIR) {
-					// set dude on air dude = new Unit(xVal, Util.minTileY, dudes[i]);
-				} else {
-					//dude = new Unit(xVal, Util.minTileY, dudes[i]);
-					Util.placeOnGround(dude, this.map);
-				}
-				units.add(dude);
-				//trace("adding dude: " + dude.x + " " + dude.y);
-				this.add(dude);
+			//trace("Called PlaceUnits with size: " + dudes.length + " active attack: " + _activeAttack);
+			//for( var i:int = 0; i < dudes.length; i++) {
+			if (dudes == null || dudes.length <= 0 ){
+				return;
 			}
+			var i:int = 0;
+			var bar:HealthBar = new HealthBar();
+			var dude:Unit = new EnemyUnit(xVal-10*i, Util.minTileY, dudes[i],bar);
+			if (dude.type == Unit.UNDERGROUND) {
+				// set dude on ground dude 
+			} else if (dude.type == Unit.AIR) {
+				// set dude on air dude = new Unit(xVal, Util.minTileY, dudes[i]);
+			} else {
+				//dude = new Unit(xVal, Util.minTileY, dudes[i]);
+				Util.placeOnGround(dude, this.map, true);
+			}
+			units.add(dude);
+			//trace("adding dude: " + dude.x + " " + dude.y);
+			this.add(bar);
+			this.add(dude);
+			dudes.shift();
 		}
 	}
 }

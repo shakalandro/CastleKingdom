@@ -23,9 +23,9 @@ package
 		private var _target:Unit;
 		private var _type:String; 
 		
-		public function EnemyUnit(x:Number, y:Number, towerID:int) {
+		public function EnemyUnit(x:Number, y:Number, towerID:int, bar:HealthBar) {
 			
-			super (x,y,towerID);
+			super (x,y,towerID, bar);
 			this._type = Unit.GROUND;
 			
 			this.speed = 10;
@@ -56,6 +56,8 @@ package
 		 * 
 		 */
 		override public function update():void {
+			
+			health-=.05;
 			/*if (contact != null) {
 				if(contact.health <= 0) {
 					contact = getUnitsInRange()[0];

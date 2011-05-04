@@ -33,10 +33,8 @@ package
 		private var _gold:int;	
 		
 		private var _unitCap:int;	
-		private var _army:Array;
 				
 		private var _towerCap:int;
-		private var _towers:Array;
 		
 		private var _leasedInNumber:int;
 		private var _leasedOutNumber:int;
@@ -50,25 +48,29 @@ package
 			//TODO: implement function
 			super(X, Y, SimpleGraphic);
 			//_upgrades = ;
+			
 			_unitCap = 40;
 			_towerCap = 40;
 			solid = true;
 			immovable = true;
 		}
 		
-		//Adds the given upgrade to the castle
+		/** Adds the given upgrade to the castle
+		 * */
 		public function setUpgrade(upgradeid:int):void {
 			
 		}
 		
-		// Returns the player's unit capacity as a function of the purchased upgrades and acheivements
+		/** Returns the player's unit capacity as a function of the purchased upgrades and acheivements
+		 * */
 		public function get unitCapacity():int {
 			return _unitCap;
 		}
 		
-		// Returns how many army units the player has to use
+		/** Returns how many army units the player has to use
+		 * */
 		public function get armyUnitsAvailable():int {
-			return _unitCap - unitCostSum(_army);
+			return _unitCap - unitCostSum((FlxG.state as ActiveState).units);
 		}
 		
 		public function get towerCapacity():int {
@@ -77,7 +79,31 @@ package
 		
 		// Returns how many tower units the player has to use
 		public function get towerUnitsAvailable():int {
-			return _towerCap - unitCostSum(_towers);
+			return _towerCap - unitCostSum((FlxG.state as ActiveState).towers);
+		}
+		
+		public function get gold():int {
+			return _gold;
+		}
+		
+		/**
+		 * 
+		 * @param amount - +/- amount to add to gold supply
+		 * @return true if this is a valid change and was completed or capped
+		 * 			false if the sum brought the value below 0
+		 * 
+		 */		
+		public function addGold(amount:int):Boolean {
+			if(amount > 0 && amount + _gold < 0) { // handle overflow
+				_gold = int.MAX_VALUE; // Caps gold at largest amount;
+				return true;
+			}
+			_gold += amount;
+			if (_gold < 0) {
+				_gold += amount;
+				return false;
+			}
+			return true;
 		}
 		
 		// Returns an array of what towerIDs are available for use 
@@ -112,7 +138,7 @@ package
 		
 		
 		
-		private function unitCostSum(unitList:Array):int {
+		private function unitCostSum(unitList:FlxGroup):int {
 			var cost:int = 0;
 			for each (var unit:Unit in unitList) {
 				cost += unit.cost; 
@@ -120,7 +146,7 @@ package
 			return cost;
 		}
 		
-		/**
+		/** Returns the unit numbers for the units unlocked by the castle's upgrade levels
 		 * 
 		 * @param unitType Either Castle.TOWER or Castle.ARMY to search for each type
 		 * @return 
@@ -151,7 +177,9 @@ package
 		}
 		
 		
-		public function hitRight(Contact:FlxObject, Velocity:Number):void {
+		/** If castle is hit by EnemyUnit, game is over.
+		 * */
+		public function hitRight(Contact:FlxObject, Velocity:Number):void {		
 			if (Contact is EnemyUnit) {
 				_gameOver = true;
 			}	
@@ -170,9 +198,16 @@ package
 		
 		public function hitBottom(Contact:FlxObject, Velocity:Number):void {
 			if (Contact is EnemyUnit) {
-				_gameOver = true;
+				_gameOver = true
 			}	
 		}
+		
+		
+		public function contactWithEnemy() {
+			
+			_gameOver = true;
+		}
+		
 	
 	}
 }

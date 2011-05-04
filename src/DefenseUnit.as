@@ -26,6 +26,7 @@ package
 		public function DefenseUnit(x:Number, y:Number, towerID:int) {
 			super (x,y,towerID);
 			
+			
 		}
 		
 		/** This function responds to this Unit coming within range of another FlxObject
