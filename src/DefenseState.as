@@ -45,10 +45,12 @@ package
 			text.color = 0xffff0000;
 			group.add(text);
 			
-			var sm:ScrollMenu = new ScrollMenu(CastleKingdom.WIDTH / 4, CastleKingdom.HEIGHT / 4, group, unpause, "Tower Selector", 0xffffffff, 10, 
-				CastleKingdom.WIDTH / 2, CastleKingdom.HEIGHT / 2);
+			group.add(new DefenseUnit(0, 0, 0));
 			
-			add(sm.window);
+			//var sm:ScrollMenu = new ScrollMenu(CastleKingdom.WIDTH / 4, CastleKingdom.HEIGHT / 4, group, unpause, "Tower Selector", 0xffffffff, 10, 
+			//	CastleKingdom.WIDTH / 2, CastleKingdom.HEIGHT / 2);
+			
+			add(group);
 			
 			
 			//Util.window(10,Util.minY,

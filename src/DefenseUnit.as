@@ -1,7 +1,8 @@
 package 
 {
-	import org.flixel.*;
 	import flash.geom.*;
+	
+	import org.flixel.*;
 
 	/** DefenseUnit class
 	 * 
@@ -16,6 +17,9 @@ package
 		
 		private var primaryTarget:Unit = null;
 		
+		private var _dragging:Boolean;
+		private var _dragOffset:FlxPoint;
+		
 		/**
 		 * 
 		 * @param x X coord to start at
@@ -25,8 +29,29 @@ package
 		 */		
 		public function DefenseUnit(x:Number, y:Number, towerID:int) {
 			super (x,y,towerID);
-			
-			
+			this.loadGraphic(Util.assets[Assets.ARROW_TOWER], true, false, CastleKingdom.TILE_SIZE, CastleKingdom.TILE_SIZE * 3);
+			_dragging = false;
+		}
+		
+		override public function preUpdate():void {
+			var mouseCoords:FlxPoint = FlxG.mouse.getScreenPosition();
+			if (FlxG.mouse.justPressed() && checkClick()) {
+				_dragging = true;
+				_dragOffset = new FlxPoint(mouseCoords.x - this.x, mouseCoords.y - this.y);
+			} else if (_dragging && FlxG.mouse.justReleased()) {
+				_dragging = false;
+				this.x = mouseCoords.x - _dragOffset.x;
+				Util.placeOnGround(this, Util.state.map, false, true);
+				_dragOffset = null;
+			}
+			if (_dragging) {
+				this.x = mouseCoords.x - _dragOffset.x;
+				this.y = mouseCoords.y - _dragOffset.y;
+			}
+		}
+		
+		private function checkClick():Boolean {
+			return this.overlapsPoint(FlxG.mouse.getScreenPosition(), true);
 		}
 		
 		/** This function responds to this Unit coming within range of another FlxObject

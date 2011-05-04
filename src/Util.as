@@ -29,6 +29,10 @@ package
 			return _assets.assets[CastleKingdom.SKIN];
 		}
 		
+		public static function get state():GameState {
+			return (FlxG.state as GameState);
+		}
+		
 		/**
 		 * 
 		 * @return The mouse object for this game.
@@ -142,8 +146,8 @@ package
 				trace("The given coordinates were out of bounds: " + cartesian);
 				return null;
 			}
-			var xIndex:Number = (cartesian.x - Util.minX) / CastleKingdom.TILE_SIZE;
-			var yIndex:Number = (cartesian.y - Util.minY) / CastleKingdom.TILE_SIZE;
+			var xIndex:Number = Math.floor((cartesian.x - Util.minX) / CastleKingdom.TILE_SIZE);
+			var yIndex:Number = Math.floor((cartesian.y - Util.minY) / CastleKingdom.TILE_SIZE);
 			return new FlxPoint(xIndex, yIndex);
 		}
 		
@@ -265,7 +269,9 @@ package
 		 * @return The y coordinate of where the object was placed with respect to the stage.
 		 * 
 		 */		
-		public static function placeOnGround(obj:FlxObject, map:FlxTilemap, ignoreX:Boolean = false):Number {
+		public static function placeOnGround(obj:FlxObject, map:FlxTilemap = null, ignoreX:Boolean = false, snapX:Boolean = false):Number {
+			if (map == null) map = Util.state.map;
+			
 			var x:Number = obj.x + obj.width / 2;
 			
 			// Fixes "off the screen" bug
@@ -278,16 +284,22 @@ package
 				} 
 			}
 			var indices:FlxPoint = cartesianToIndices(new FlxPoint(x, Util.minY), ignoreX);
+
 			var tileType:int = map.getTile(indices.x, indices.y);
 			while (tileType < map.collideIndex && indices.y < map.heightInTiles) {
 				indices.y++;
 				tileType = map.getTile(indices.x, indices.y);
 			}
-			var y:Number = Util.indicesToCartesian(indices, ignoreX).y - obj.height;
+			var coords:FlxPoint = Util.indicesToCartesian(indices, ignoreX);
+			Util.log(indices.x, indices.y, coords.x, coords.y);
+			var y:Number = coords.y - obj.height;
 			obj.y = y;
+			if (snapX)  {
+				obj.x = coords.x;
+			}
 			return y;
 		}
-		
+				
 		public static function window(x:Number, y:Number, contents:FlxBasic, closeCallback:Function, title:String = "", bgColor:uint = FlxG.WHITE, 
 					padding:Number = 10, width:int = 100, height:int = 100, borderThickness:Number = 3):FlxBasic {
 			var window:FlxGroup = new FlxGroup();

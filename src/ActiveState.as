@@ -191,8 +191,8 @@ package
 		 * @return Whether placing the tower was successful. This could fail if the given place is not open.
 		 * 
 		 */				
-		public function addDefenseUnit(tower:DefenseUnit, x:Number, y:Number):Boolean {
-			return addUnit(_towers, tower, x, y);
+		public function addDefenseUnit(tower:DefenseUnit):Boolean {
+			return addUnit(_towers, tower);
 		}
 		
 		/**
@@ -204,8 +204,8 @@ package
 		 * @return Whether the given unit was able to be placed.
 		 * 
 		 */	
-		public function addEnemyUnit(enemy:EnemyUnit, x:Number, y:Number):Boolean {				
-			return addUnit(_units, enemy, x, y);
+		public function addEnemyUnit(enemy:EnemyUnit):Boolean {				
+			return addUnit(_units, enemy);
 		}
 		
 		/**
@@ -218,11 +218,12 @@ package
 		 * @return 
 		 * 
 		 */		
-		private function addUnit(group:FlxGroup, unit:Unit, x:Number, y:Number):Boolean {
-			if (placeable(x, y)) {
-				var coordinates:FlxPoint = Util.roundToNearestTile(new FlxPoint(x, y));
+		private function addUnit(group:FlxGroup, unit:Unit, snapToGround:Boolean = true):Boolean {
+			if (placeable(unit.x, unit.y)) {
+				var coordinates:FlxPoint = Util.roundToNearestTile(new FlxPoint(unit.x, unit.y));
 				unit.x = coordinates.x;
 				unit.y = coordinates.y;
+				if (snapToGround) Util.placeOnGround(unit, map, false, true);
 				group.add(unit);
 				return true;
 			}
@@ -258,11 +259,11 @@ package
 		override protected function createHUD():void {
 			super.createHUD();
 			var attack:FlxButton = new FlxButton(0, 0, "Attack", function():void {
-				showMenu(ATTACK_MENU);
+				FlxG.switchState(new AttackState(false, false, map));
 			});
 			
 			var defend:FlxButton = new FlxButton(0, 0, "Defend", function():void {
-				showMenu(DEFEND_MENU);
+				FlxG.switchState(new DefenseState(false, false, map));
 			});
 			
 			var upgrade:FlxButton = new FlxButton(0, 0, "Upgrade", function():void {
