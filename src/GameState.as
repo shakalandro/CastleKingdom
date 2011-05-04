@@ -52,7 +52,10 @@ package
 			_map.y = _header.height;
 			
 			_background = new FlxSprite(0, _header.height, Util.assets[Assets.BACKGROUND]);
+			_background.allowCollisions = FlxObject.NONE;
+			_background.immovable = true;
 			
+			add(_background);
 			add(_map);
 		}
 		

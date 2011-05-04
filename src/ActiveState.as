@@ -73,6 +73,8 @@ package
 			if (CastleKingdom.FACEBOOK_ON) {
 				FaceBook.picture(function(pic:Class):void {
 					var profilePic:FlxSprite = new FlxSprite(0, 0, pic);
+					profilePic.allowCollisions = FlxObject.NONE;
+					profilePic.immovable = true;
 					Util.center(profilePic, header);
 					profilePic.x = Util.maxX - profilePic.width;
 					hud.add(profilePic);
