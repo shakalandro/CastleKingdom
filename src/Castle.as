@@ -33,10 +33,8 @@ package
 		private var _gold:int;	
 		
 		private var _unitCap:int;	
-		private var _army:Array;
 				
 		private var _towerCap:int;
-		private var _towers:Array;
 		
 		private var _leasedInNumber:int;
 		private var _leasedOutNumber:int;
@@ -50,6 +48,7 @@ package
 			//TODO: implement function
 			super(X, Y, SimpleGraphic);
 			//_upgrades = ;
+			
 			_unitCap = 40;
 			_towerCap = 40;
 			solid = true;
@@ -71,7 +70,7 @@ package
 		/** Returns how many army units the player has to use
 		 * */
 		public function get armyUnitsAvailable():int {
-			return _unitCap - unitCostSum(_army);
+			return _unitCap - unitCostSum((FlxG.state as ActiveState).units);
 		}
 		
 		public function get towerCapacity():int {
@@ -80,7 +79,7 @@ package
 		
 		// Returns how many tower units the player has to use
 		public function get towerUnitsAvailable():int {
-			return _towerCap - unitCostSum(_towers);
+			return _towerCap - unitCostSum((FlxG.state as ActiveState).towers);
 		}
 		
 		public function get gold():int {
@@ -139,7 +138,7 @@ package
 		
 		
 		
-		private function unitCostSum(unitList:Array):int {
+		private function unitCostSum(unitList:FlxGroup):int {
 			var cost:int = 0;
 			for each (var unit:Unit in unitList) {
 				cost += unit.cost; 
@@ -199,9 +198,16 @@ package
 		
 		public function hitBottom(Contact:FlxObject, Velocity:Number):void {
 			if (Contact is EnemyUnit) {
-				_gameOver = true;
+				_gameOver = true
 			}	
 		}
+		
+		
+		public function contactWithEnemy() {
+			
+			_gameOver = true;
+		}
+		
 	
 	}
 }

@@ -135,8 +135,8 @@ package
 		 * @return A FlxPoint containing tile indices.
 		 * 
 		 */		
-		public static function cartesianToIndices(cartesian:FlxPoint):FlxPoint {
-			if (!Util.inBounds(cartesian.x, cartesian.y)) {
+		public static function cartesianToIndices(cartesian:FlxPoint, ignoreX:Boolean = false):FlxPoint {
+			if (!Util.inBounds(cartesian.x, cartesian.y) && !ignoreX) {
 				trace("The given coordinates were out of bounds: " + cartesian);
 				return null;
 			}
@@ -154,8 +154,8 @@ package
 		 * @return Cartesian coordinates cooresponding to the upper left corner of the specified tile.
 		 * 
 		 */		
-		public static function indicesToCartesian(indices:FlxPoint):FlxPoint {
-			if (!Util.inTileBounds(indices.x, indices.y)) {
+		public static function indicesToCartesian(indices:FlxPoint, ignoreX:Boolean = false):FlxPoint {
+			if (!Util.inTileBounds(indices.x, indices.y) && !ignoreX) {
 				trace("Given indices were out of bounds: " + indices);
 				return null;
 			}
@@ -263,15 +263,25 @@ package
 		 * @return The y coordinate of where the object was placed with respect to the stage.
 		 * 
 		 */		
-		public static function placeOnGround(obj:FlxObject, map:FlxTilemap):Number {
+		public static function placeOnGround(obj:FlxObject, map:FlxTilemap, ignoreX:Boolean = false):Number {
 			var x:Number = obj.x + obj.width / 2;
-			var indices:FlxPoint = cartesianToIndices(new FlxPoint(x, Util.minY));
+			
+			// Fixes "off the screen" bug
+			if(ignoreX) {
+				x = obj.x;
+				if ( x < Util.minX) {
+					x = Util.minX;
+				} else if (x > Util.maxX) {
+					x = Util.maxX - 10;
+				} 
+			}
+			var indices:FlxPoint = cartesianToIndices(new FlxPoint(x, Util.minY), ignoreX);
 			var tileType:int = map.getTile(indices.x, indices.y);
 			while (tileType < map.collideIndex && indices.y < map.heightInTiles) {
 				indices.y++;
 				tileType = map.getTile(indices.x, indices.y);
 			}
-			var y:Number = Util.indicesToCartesian(indices).y - obj.height;
+			var y:Number = Util.indicesToCartesian(indices, ignoreX).y - obj.height;
 			obj.y = y;
 			return y;
 		}

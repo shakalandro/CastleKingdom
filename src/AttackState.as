@@ -60,6 +60,10 @@ package
 		
 		
 		override public function update():void {
+			
+			this.castle.addGold(1);
+			
+			
 			if(this.castle.isGameOver()) {		// Checks if castle has been breached
 				// recover cost, units disband
 				var armyCost:int = sumArmyCost();
@@ -69,7 +73,7 @@ package
 				this.castle.addGold(-cashStolen);
 				//Util.goldStolenFromAttack(cashStolen + armyCost);
 				GameMessages.LOSE_FIGHT("Bob Barker",6);
-				FlxG.state = new ActiveState();
+			//	FlxG.state = new ActiveState();
 				
 				_activeAttack = false;
 			} else if ( deathCheck(this.units)) { // Check if peeps are still alive

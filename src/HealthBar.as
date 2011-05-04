@@ -30,7 +30,7 @@ package
 			this.x = X;
 			this.y = Y-6;
 			this.width = maxxWidth;
-			this.height = 6;
+			this.height = 5;
 			this._maxHealth = maxxHealth;
 			this._curHealth = maxxHealth;
 			this._maxWidth = maxxWidth;
@@ -52,42 +52,30 @@ package
 			
 		}
 		
-		public function hit(newHealth:Number):void {
-			_curHealth = newHealth;
-			var healthPercent:Number = _curHealth / _maxHealth;
-			this.width =  healthPercent * _maxWidth;
-			if( healthPercent > .66) {
-				this.fill(0x33ff0000);
-			} else if (healthPercent > .33) {
-				this.fill(0xffcc0000);
-			} else {
-				this.fill(0xff000000);
-			}
-			
-			
-		}
 		
 		public function updateLoc(x:int, y:int, newHealth:Number, maxSize:int):void {
-			
 			this.x = x;
 			this.y = y-6;
+			this.height = 6;
 			_curHealth = newHealth;
 			var healthPercent:Number = _curHealth / _maxHealth;
 			if (healthPercent <= 0 ) {
 				return;
 			}
 			this.width =  healthPercent * maxSize;
-			this.createGraphic(this.width,5,0x33ff0000);
-			this._alpha = 1;
-			trace("health at " +this.width + " at " + x +"," + y);
+			
+		//	trace("health at " +this.width + " at " + x +"," + y);
 			trace("" + healthPercent + " " + _maxWidth); 
 
 			if( healthPercent > .66) {
 				this.fill(0x33ff0000);
+				this._alpha = 1;
 			} else if (healthPercent > .33) {
+				this._alpha = 1;
 				this.fill(0xffcc0000);
 			} else {
 				this.fill(0xff000000);
+				this._alpha = 1;
 			}
 			
 		}

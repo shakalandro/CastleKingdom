@@ -32,6 +32,14 @@ package
 		
 		private var _openMenu:FlxBasic;
 		
+		
+		/** FlxSprites for unit caps/gold;
+		 * 
+		 * */
+		private var _goldDisplay:FlxText;
+		private var _towerDisplay:FlxText;
+		private var _armyDisplay:FlxText;
+		
 		/** 
 		 * An active state is a helper super class for interactive game states such as DefendState and UpgradeState. 
 		 * Maintains the tilemap and a reference to the castle object. Performs ranged collision calculation.
@@ -215,9 +223,40 @@ package
 			});
 			upgrade.width = 100;
 			
+			
+			//		_towerDisplay = new FlxSprite(Util.maxX-100,20);
+			//		_armyDisplay = new FlxSprite(Util.maxX-100,40);
+			//_goldDisplay.
+			
 			hud.add(attack);
 			hud.add(defend);
 			hud.add(upgrade);
+		}
+		
+		override public function update():void {
+			drawStats();
+			
+			super.update();
+		}
+		
+		public function drawStats(startX:int = 0, startY:int = 0):void {
+			hud.remove(_goldDisplay);
+			_goldDisplay = new FlxText(startX,startY,100, "Gold: " + this.castle.gold);
+			hud.add(_goldDisplay);
+			
+			hud.remove(_armyDisplay);
+			
+			_armyDisplay = new FlxText(startX,startY+10,100, 
+				this.castle.unitCapacity - this.castle.armyUnitsAvailable + " of " + this.castle.unitCapacity + " Armies");
+			
+			hud.add(_armyDisplay);
+			
+			hud.remove(_towerDisplay);
+			_towerDisplay = new FlxText(startX,startY+20,100, 
+				this.castle.towerCapacity - this.castle.towerUnitsAvailable + 
+				" of " + this.castle.towerCapacity + " Towers");
+			hud.add(_towerDisplay);
+			
 		}
 	}
 }

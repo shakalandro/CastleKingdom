@@ -57,7 +57,7 @@ package
 		 */
 		override public function update():void {
 			
-			health-=5;
+			health-=.05;
 			/*if (contact != null) {
 				if(contact.health <= 0) {
 					contact = getUnitsInRange()[0];
