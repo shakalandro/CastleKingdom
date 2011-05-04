@@ -68,7 +68,7 @@ package
 		private static var cursor_img:Class;
 		public static const CURSOR:String = "cursor";
 		
-		[Embed(source = "../images/background.png")]
+		[Embed(source = "../images/wholemap.png")]
 		private static var background_img:Class;
 		public static const BACKGROUND:String = "background";
 	
