@@ -21,18 +21,20 @@ package
 		 *        for the public getters.
 		 * 
 		 */		
-		private static function getMain(uid:int, callback:Function, url:String, eventFunction:Function):void
+		private static function getMain(url:String, callback:Function, ids:Object = null):void
 		{
-			var variables:URLVariables = new URLVariables();
-			variables.uid = uid + "";
-			
 			var request:URLRequest = new URLRequest(url);
-			request.data = variables;
 			request.method = URLRequestMethod.POST;
-			
+			if (ids != null) {
+				var variables:URLVariables = new URLVariables();
+				variables.id = ids.toString() + "";
+				request.data = variables;
+			}
 			var loader:URLLoader = new URLLoader();
 			loader.dataFormat = URLLoaderDataFormat.TEXT;
-			loader.addEventListener(Event.COMPLETE, function(evt:Event):void {eventFunction(evt, callback);});
+			loader.addEventListener(Event.COMPLETE, function(evt:Event):void {
+				callback(evt);
+			});
 			loader.load(request);
 		}
 		
@@ -355,7 +357,7 @@ package
 		}
 		
 		public static function getDefenseUnitsInfo(callback:Function):void {
-			getMain(0, callback, "http://24.18.189.178/CastleKingdom/database/getDefInfo.php", function(e:Event, callback:Function):void {
+			getMain("http://24.18.189.178/CastleKingdom/database/getDefInfo.php", function(e:Event):void {
 				var xmlData:XML = new XML(e.target.data);
 				callback(processList(xmlData.def, function(unit:XML):Object {
 					return {
@@ -366,7 +368,7 @@ package
 		}
 
 		public static function getEnemiesInfo(callback:Function):void {
-			getMain(0, callback, "http://24.18.189.178/CastleKingdom/database/getArmyInfo.php", function(e:Event, callback:Function):void {
+			getMain("http://24.18.189.178/CastleKingdom/database/getArmyInfo.php", function(e:Event):void {
 				var xmlData:XML = new XML(e.target.data);
 				callback(processList(xmlData.army, function(unit:XML):Object {
 					return {
