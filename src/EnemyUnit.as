@@ -99,7 +99,8 @@ package
 			} 
 			if ( contact is Castle ) {
 				// Either disappear, climb, or ?? 
-				this.velocity.y = -10;
+				this.velocity.y = 0;
+				this.velocity.x = 0;
 				this.play("attack");
 
 			} else {}
