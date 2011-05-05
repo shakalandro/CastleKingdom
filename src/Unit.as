@@ -36,7 +36,6 @@ package
 		
 		// HP
 		private var _maxHealth:Number;
-		private var _health:Number;
 		
 		// Attack
 		private var _range:int;
@@ -91,13 +90,6 @@ package
 			}
 			
 			
-		}
-		
-		public function get canDrag():Boolean {
-			return _currentlyDraggable;
-		}
-		public function set canDrag(draggable:Boolean):void {
-			_currentlyDraggable = draggable;
 		}
 		
 		/** Initiates check for all units in range
@@ -280,8 +272,8 @@ package
 		 * else returns false
 		 * */
 		public function inflictDamage(damageDealt:int):Boolean {
-			this._health -= damageDealt;
-			if (this._health <= 0) {
+			this.health -= damageDealt;
+			if (this.health <= 0) {
 				this.kill();
 				return true;
 			} else {
@@ -309,6 +301,7 @@ package
 		/** This function responds to this Unit coming within range of another FlxObject
 		 * */
 		public function hitRanged(contact:FlxObject):void {
+			Util.log("Unit hitranged called");
 			if ( contact is Unit ) {
 				
 			}

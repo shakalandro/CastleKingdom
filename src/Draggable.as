@@ -11,6 +11,8 @@ package
 		 */	
 		function checkDrag():void;
 		function set dragCallback(callback:Function):void;
+		function get canDrag():Boolean;
+		function set canDrag(t:Boolean):void;
 		function get objx():Number;
 		function get objy():Number;
 		function set objx(n:Number):void;

@@ -15,13 +15,14 @@ package
 	 */	
 	public class DefenseUnit extends Unit implements Draggable {
 		
-		private var primaryTarget:Unit = null;
+		private var _target:FlxObject;
 		
 		private var _currentlyDraggable:Boolean;
 		private var _dragging:Boolean;
 		private var _dragCallback:Function;
 		private var _preDragCoords:FlxPoint;
 		private var _dragOffset:FlxPoint;
+		private var _canDrag:Boolean;
 		
 		/**
 		 * 
@@ -30,11 +31,21 @@ package
 		 * @param towerID Type of Tower to generate
 		 * 
 		 */		
-		public function DefenseUnit(x:Number, y:Number, towerID:int, dragCallback:Function = null) {
+		public function DefenseUnit(x:Number, y:Number, towerID:int, canDrag:Boolean = true, dragCallback:Function = null) {
 			super (x,y,towerID);
 			this.loadGraphic(Util.assets[Assets.ARROW_TOWER], true, false, CastleKingdom.TILE_SIZE, CastleKingdom.TILE_SIZE * 3);
 			_dragging = false;
 			_dragCallback = dragCallback;
+			_canDrag = canDrag;
+			_target = null;
+		}
+		
+		public function get canDrag():Boolean {
+			return _canDrag;
+		}
+		
+		public function set canDrag(t:Boolean):void {
+			_canDrag = t;
 		}
 		
 		public function set dragCallback(callback:Function):void {
@@ -46,22 +57,24 @@ package
 		}
 		
 		public function checkDrag():void {
-			var mouseCoords:FlxPoint = FlxG.mouse.getScreenPosition();
-			if (FlxG.mouse.justPressed() && checkClick()) {
-				_dragging = true;
-				_preDragCoords = new FlxPoint(x, y);
-				_dragOffset = new FlxPoint(mouseCoords.x - this.x, mouseCoords.y - this.y);
-			} else if (_dragging && FlxG.mouse.justReleased()) {
-				_dragging = false;
-				this.x = mouseCoords.x - _dragOffset.x;
-				this.y = mouseCoords.y - _dragOffset.y;
-				_dragOffset = null;
-				if (_dragCallback != null) _dragCallback(this, x, y, _preDragCoords.x, _preDragCoords.y);
-				_preDragCoords = null;
-			}
-			if (_dragging) {
-				this.x = mouseCoords.x - _dragOffset.x;
-				this.y = mouseCoords.y - _dragOffset.y;
+			if (_canDrag) {
+				var mouseCoords:FlxPoint = FlxG.mouse.getScreenPosition();
+				if (FlxG.mouse.justPressed() && checkClick()) {
+					_dragging = true;
+					_preDragCoords = new FlxPoint(x, y);
+					_dragOffset = new FlxPoint(mouseCoords.x - this.x, mouseCoords.y - this.y);
+				} else if (_dragging && FlxG.mouse.justReleased()) {
+					_dragging = false;
+					this.x = mouseCoords.x - _dragOffset.x;
+					this.y = mouseCoords.y - _dragOffset.y;
+					_dragOffset = null;
+					if (_dragCallback != null) _dragCallback(this, x, y, _preDragCoords.x, _preDragCoords.y);
+					_preDragCoords = null;
+				}
+				if (_dragging) {
+					this.x = mouseCoords.x - _dragOffset.x;
+					this.y = mouseCoords.y - _dragOffset.y;
+				}
 			}
 		}
 		
@@ -77,33 +90,19 @@ package
 		 */
 		override public function hitRanged(contact:FlxObject):void {
 			super.hitRanged(contact);
-			if ( contact is EnemyUnit ) {
-				primaryTarget = betterTarget(primaryTarget, contact as Unit);	
+			if (contact is EnemyUnit) {
+				if (_target == null) {
+					_target = contact;
+				}
+				_target.health -= this.damageDone;
 			}
 		}
 		
-		/** Executes whatever attack the unit does
-		 *  Returns true if the unit has used its attack, false otherwise
-		 * If unit has multiple shots, it selects any 3 units in range and attacks them
-		 * Defaults to false
-		 * 
-		 * @return true if the attack is used, false if not 
-		 * 
-		 */
-		private function executeAttack():Boolean {
-			if( shots > 1) {
-	/*			var unitsInRange:Array = getUnitsInRange();
-				for(var shotNum = 1; shotNum <= _shots; shotNum++) {
-					unitsInRange[shotNum-1].damage(_damage);
-				}
-				return true;  */
-			} else if(primaryTarget != null) {
-				return false;
-			} else if (primaryTarget.inflictDamage(damageDone)) { // deal damage
-	//			primaryTarget = findClosestTarget();	// reset to closest target
-				return true;
+		override public function update():void {
+			if (health <= 0) {
+				this.kill();
 			}
-			return false;
+			this.frame = Math.floor(frames * (health / this.maxHealth));
 		}
 		
 		
@@ -118,7 +117,7 @@ package
 		 * 
 		 */		
 		public function betterTarget(target1:Unit, target2:Unit):Unit {
-			if (	target1 != null && target1.health > 0 
+			if (target1 != null && target1.health > 0 
 					&& compareDistance(target1, target2) <= 0 ) {
 				return target1;
 			} else if (target2 != null && target2.health > 0 ) {

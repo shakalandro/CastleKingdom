@@ -38,9 +38,9 @@ package
 		
 		
 		
-		public function AttackState(tutorial:Boolean=false, menusActive:Boolean=false, map:FlxTilemap=null)
+		public function AttackState(tutorial:Boolean=false, menusActive:Boolean=false, map:FlxTilemap=null, towers:FlxGroup = null, units:FlxGroup = null)
 		{
-			super(tutorial, menusActive, map);
+			super(tutorial, menusActive, map, towers, units);
 			_activeAttack = false;
 			_unitDropCounter = 10;
 			
@@ -56,7 +56,7 @@ package
 			var state:FlxText = new FlxText(Util.maxX-100,30,70,"Attack State");
 			this.add(state);
 
-			add(new DefenseUnit(Util.minX, Util.minY, 0));
+			//add(new DefenseUnit(Util.minX, Util.minY, 0));
 		}
 		
 		

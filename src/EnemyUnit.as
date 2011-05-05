@@ -20,7 +20,7 @@ package
 	 **/
 	public class EnemyUnit extends Unit
 	{
-		private var _target:Unit;
+		private var _target:FlxObject;
 		private var _type:String; 
 		
 		public function EnemyUnit(x:Number, y:Number, towerID:int, canDrag:Boolean = false, bar:HealthBar = null) {
@@ -43,11 +43,7 @@ package
 				// goes right
 				this.velocity.x = speed;
 				this.facing = RIGHT;
-
-
 			}
-			
-			
 		}
 		
 		/** Moves the character as needed if possible
@@ -57,16 +53,10 @@ package
 			if(this.health <= 0) {
 				this.kill();
 			}
-			/*if (contact != null) {
-				if(contact.health <= 0) {
-					contact = getUnitsInRange()[0];
-				}
-			}*/
 			if (type == Unit.GROUND && this.y <= Util.castle.y ){
 				this.velocity.y = 0 ;
 			}
 			if(this._target == null) {
-				// Corrects facing/movement
 				if(this.x > Util.maxX/2) {
 					// goes left
 					this.velocity.x = -speed;
@@ -75,10 +65,10 @@ package
 					// goes right
 					this.velocity.x = speed;
 					this.facing = RIGHT;
-							
 				}
+			} else {
+				_target.health -= this.damageDone;
 			}
-			
 			super.update();
 		
 		}
@@ -89,22 +79,10 @@ package
 		 * */
 		
 		override public function hitRanged(contact:FlxObject):void {
-			if ( contact is DefenseUnit ) {
-				this.velocity.x = 0;
-				this.velocity.y = 0;
-				if(this._target == null || this._target.health <= 0) {
-					this._target = contact as Unit;
-				}
-				this.play("attack");
-			} 
-			if ( contact is Castle ) {
-				// Either disappear, climb, or ?? 
-				this.velocity.y = 0;
-				this.velocity.x = 0;
-				this.play("attack");
-
-			} else {}
-			
+			this._target = contact;
+			this.velocity.y = 0;
+			this.velocity.x = 0;
+			this.play("attack");
 		}
 		
 		
