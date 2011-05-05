@@ -1,3 +1,4 @@
+
 package
 {
 	import flash.display.BitmapData;
@@ -56,6 +57,7 @@ package
 			//Set up window box
 			ExternalImage.setData(new BitmapData(width, height, true, bgColor), title);
 			var box:FlxSprite = new FlxSprite(x, y, ExternalImage);
+			box.alpha = .5;
 			var right:Number = box.width - borderThickness + 1;
 			var bottom:Number = box.height - borderThickness + 1;
 			box.drawLine(0, 0, right, 0, FlxG.BLACK, borderThickness);

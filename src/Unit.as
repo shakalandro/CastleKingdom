@@ -9,7 +9,7 @@ package
 {	
 	import flash.geom.*;
 	
-	import org.flixel.*;
+	import org.flixel.*;	
 	
 	public class Unit extends FlxSprite
 	{
@@ -52,16 +52,20 @@ package
 		private var _goldCapacity:int;
 		
 		private var _healthyBar:HealthBar;
+		private var _currentlyDraggable:Boolean;
+
 		
 		// Constructs a DefenseUnit at (x, y) with the given towerID, looking
 		// up what its stats are based on its tower ID
-		public function Unit(x:Number, y:Number, unitID:int, hpBar:HealthBar = null) {
+		public function Unit(x:Number, y:Number, unitID:int, canDrag:Boolean = false, hpBar:HealthBar = null) {
 			super (x,y,null);
 			if (this.x < Util.castle.x) {
 				velocity.x = FlxG.timeScale * _speed;
 			} else {
 				velocity.x = FlxG.timeScale * - _speed;
 			}
+			//this.immovable = true;
+			
 			// look up unit info, set fields
 			// {cost, goldCost, maxHealth,speed,range,damage,rate)
 			
@@ -89,6 +93,12 @@ package
 			
 		}
 		
+		public function get canDrag():Boolean {
+			return _currentlyDraggable;
+		}
+		public function set canDrag(draggable:Boolean):void {
+			_currentlyDraggable = draggable;
+		}
 		
 		/** Initiates check for all units in range
 		 * If attack timer allows (based on rate), calls executeAttack function 
@@ -171,7 +181,7 @@ package
 			othPoints[3] = new Point(this.x + this.width, this.y + this.height);
 			var lowCost:Number = Point.distance(thisPoints[0], othPoints[0]);
 			for (var i:int = 0; i < 4; i++) {
-				for(var j:int = 0; j< 4; i++) {
+				for(var j:int = 0; j< 4; j++) {
 					lowCost = Math.min(lowCost, Point.distance(thisPoints[i],othPoints[j]));
 				}
 			}
@@ -226,12 +236,17 @@ package
 			return _shots;
 		}
 		
+		
 		public function set maxHealth(value:int):void {
 			_maxHealth = value;
 		}
 		
 		public function set cost(value:int):void {
 			_cost = value;
+		}
+		
+		public function get unitID():int {
+			return _unitID;
 		}
 		
 		public function get type():String {
@@ -360,6 +375,11 @@ package
 		
 		private function hi():void {
 			
+		}
+		
+		public function clone():FlxBasic {
+			var yuri:Unit = new Unit(x,y,this._unitID,true, new HealthBar());
+			return yuri;
 		}
 	}
 }

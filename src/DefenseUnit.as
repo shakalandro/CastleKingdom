@@ -17,6 +17,7 @@ package
 		
 		private var primaryTarget:Unit = null;
 		
+		private var _currentlyDraggable:Boolean;
 		private var _dragging:Boolean;
 		private var _dragCallback:Function;
 		private var _preDragCoords:FlxPoint;

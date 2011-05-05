@@ -38,6 +38,8 @@ package
 			
 		}
 		
+		/** Displays tower placement menu
+		 * */
 		override public function create():void {
 			super.create();
 			
@@ -72,6 +74,7 @@ package
 			}
 			return result;
 		}
+		
 		// Display Tower selection menu
 		
 		// Enable drag and drop
@@ -80,6 +83,15 @@ package
 		// Decrease towers available
 		
 		// 
+		
+		override public function update():void {
+			
+			
+			
+			
+			super.update();
+		
+		}
 		
 	}
 }

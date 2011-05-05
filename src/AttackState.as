@@ -55,6 +55,7 @@ package
 			super.create();
 			var state:FlxText = new FlxText(Util.maxX-100,30,70,"Attack State");
 			this.add(state);
+
 			add(new DefenseUnit(Util.minX, Util.minY, 0));
 		}
 		
@@ -261,14 +262,16 @@ package
 				return;
 			}
 			var bar:HealthBar = new HealthBar();
-			var dude:Unit = new EnemyUnit(xVal, Util.minTileY, dudes[0],bar);
+			bar = null;
+			var dude:Unit = new EnemyUnit(xVal, Util.minY, dudes[0],false, bar);
 			if (dude.type == Unit.UNDERGROUND) {
 				// set dude on ground dude 
 			} else if (dude.type == Unit.AIR) {
 				// set dude on air dude = new Unit(xVal, Util.minTileY, dudes[i]);
 			} else {
 				//dude = new Unit(xVal, Util.minTileY, dudes[i]);
-				Util.placeOnGround(dude, this.map, true);
+				//Util.placeOnGround(dude, this.map, true);
+				this.addEnemyUnit(dude as EnemyUnit, true);
 			}
 			units.add(dude);
 			//trace("adding dude: " + dude.x + " " + dude.y);

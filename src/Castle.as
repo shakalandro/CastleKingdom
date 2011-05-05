@@ -94,15 +94,14 @@ package
 		 * 
 		 */		
 		public function addGold(amount:int):Boolean {
-			if(amount > 0 && amount + _gold < 0) { // handle overflow
+			if(amount > 0 && (amount > 0 && amount + _gold < 0)) { // handle overflow
 				_gold = int.MAX_VALUE; // Caps gold at largest amount;
 				return true;
 			}
-			_gold += amount;
-			if (_gold < 0) {
-				_gold += amount;
+			if (_gold + amount < 0) {
 				return false;
 			}
+			_gold += amount;
 			return true;
 		}
 		

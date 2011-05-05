@@ -23,9 +23,9 @@ package
 		private var _target:Unit;
 		private var _type:String; 
 		
-		public function EnemyUnit(x:Number, y:Number, towerID:int, bar:HealthBar) {
+		public function EnemyUnit(x:Number, y:Number, towerID:int, canDrag:Boolean = false, bar:HealthBar = null) {
 			
-			super (x,y,towerID, bar);
+			super (x,y,towerID, canDrag, bar);
 			this._type = Unit.GROUND;
 			
 			this.speed = 10;
@@ -33,6 +33,7 @@ package
 			this.loadGraphic(Util.assets[Assets.SWORDSMAN],true,true,23,23,true);
 			this.addAnimation("walk", [0,1,2,3],speed/2,true);
 			this.addAnimation("attack",[4,5,6,7],_rate*2,true);
+			this.addAnimation("die",[8,9,10,11],_rate*2,false);
 			this.play("walk");
 			if(this.x > Util.maxX/2) {
 				// goes left
@@ -49,15 +50,13 @@ package
 			
 		}
 		
-		
-		
-		
 		/** Moves the character as needed if possible
 		 * 
 		 */
 		override public function update():void {
-			
-			health-=.05;
+			if(this.health <= 0) {
+				this.kill();
+			}
 			/*if (contact != null) {
 				if(contact.health <= 0) {
 					contact = getUnitsInRange()[0];
@@ -66,17 +65,18 @@ package
 			if (type == Unit.GROUND && this.y <= Util.castle.y ){
 				this.velocity.y = 0 ;
 			}
-			// Corrects facing/movement
-			if(this.x > Util.maxX/2) {
-				// goes left
-				this.velocity.x = -speed;
-				this.facing = LEFT;
-			} else {
-				// goes right
-				this.velocity.x = speed;
-				this.facing = RIGHT;
-				
-				
+			if(this._target == null) {
+				// Corrects facing/movement
+				if(this.x > Util.maxX/2) {
+					// goes left
+					this.velocity.x = -speed;
+					this.facing = LEFT;
+				} else {
+					// goes right
+					this.velocity.x = speed;
+					this.facing = RIGHT;
+							
+				}
 			}
 			
 			super.update();
@@ -99,6 +99,7 @@ package
 			} 
 			if ( contact is Castle ) {
 				// Either disappear, climb, or ?? 
+				this.velocity.y = -10;
 				this.play("attack");
 
 			} else {}
@@ -109,6 +110,7 @@ package
 		
 		override public function destroy():void {
 			this.color =  0x112233; 
+			this.play("die");
 		//	this.velocity.x = 0;
 		//	play("die");
 			
