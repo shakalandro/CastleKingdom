@@ -59,7 +59,6 @@ package
 		}
 		
 		
-		
 		private function checkClick():Boolean {
 			return this.overlapsPoint(FlxG.mouse.getScreenPosition(), true);
 		}

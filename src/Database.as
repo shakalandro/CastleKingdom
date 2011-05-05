@@ -11,6 +11,9 @@ package
 		private static var _userInfo:Array;
 		private static var _enemyInfo:Array;
 		private static var _defUnitInfo:Array;
+
+		private static const _startGold:int = 0;
+		private static const _startUnits:int = 5;
 		
 				
 		private static function getMain(url:String, callback:Function, ids:Object = null):void
@@ -189,6 +192,23 @@ package
 			}
 		}
 		
+		public static function getUserLeaseInfo(callback:Function, ids:Object = null, forceRefresh:Boolean = false):void {
+			if (forceRefresh || _userInfo == null) {
+				getMain("http://games.cs.washington.edu/capstone/11sp/castlekd/database/getUserLeases.php", function(xmlData:XML):void {
+					_userInfo = processList(xmlData.user, function(unit:XML):Object {
+						return {
+							id: unit.uid,
+							lid: unit.lid,
+							numUnits: unit.numUnits
+						};
+					})
+					callback(_userInfo);
+				}, ids);
+			} else {
+				callback(getAll(_userInfo, ids));
+			}
+		}
+		
 		private static function getAll(stuff:Array, ids:Object):Array {
 			if (stuff == null) {
 				return null;
@@ -232,6 +252,16 @@ package
 			loader.load(request);
 		}
 		
+
+		public static function addNewUser(uid:int):void
+		{
+			var variables:URLVariables = new URLVariables();
+			variables.uid = "" + uid;
+			variables.gold = "" + _startGold;
+			variables.units = "" + _startUnits;
+			update("http://games.cs.washington.edu/capstone/11sp/castlekd/database/addNewUser.php", variables);
+		}
+		
 		public static function updateUserInfo(userInfo:Object):void
 		{
 			var variables:URLVariables = new URLVariables();
@@ -248,6 +278,15 @@ package
 			variables.lid = "" + leaseInfo["lid"];
 			variables.numUnits = "" + leaseInfo["numUnits"];
 			update("http://games.cs.washington.edu/capstone/11sp/castlekd/database/addUserLease.php", variables);
+		}
+		
+		public static function removeUserLease(leaseInfo:Object):void
+		{
+			var variables:URLVariables = new URLVariables();
+			variables.uid = "" + leaseInfo["id"];
+			variables.lid = "" + leaseInfo["lid"];
+			variables.numUnits = "" + leaseInfo["numUnits"];
+			update("http://games.cs.washington.edu/capstone/11sp/castlekd/database/removeUserLease.php", variables);
 		}
 	}
 }

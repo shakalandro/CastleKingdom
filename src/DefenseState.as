@@ -52,7 +52,7 @@ package
 				CastleKingdom.WIDTH / 2, CastleKingdom.HEIGHT / 2);
 			setScrollMenu(sm);
 			add(sm.window);
-			
+
 			
 			//Util.window(10,Util.minY,
 		}
