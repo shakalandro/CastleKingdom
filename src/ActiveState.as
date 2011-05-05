@@ -106,11 +106,9 @@ package
 		public function collide():void {
 			FlxG.collide(units, towers, fightCollide);
 			FlxG.collide(units, this.castle, endGameCollide);
-			FlxG.collide(units,this.map);
-			//FlxG.collide(_units, this.map, groundCollide);
+			FlxG.collide(units, this.map);
 		}
 		
-		//
 		private function fightCollide(unit1:FlxSprite, unit2:FlxSprite):void {
 			(unit1 as Unit).hitRanged(unit2);
 			(unit2 as Unit).hitRanged(unit1);
@@ -283,6 +281,7 @@ package
 				if (FlxG.state is DefenseState) {
 					var defenseTowers:FlxGroup = remove(towers);
 					defenseTowers.setAll("canDrag", false);
+					defenseTowers.setAll("canHighlight", false);
 					FlxG.switchState(new AttackState(false, false, map, defenseTowers));
 				} else {
 					FlxG.switchState(new AttackState(false, false, map));

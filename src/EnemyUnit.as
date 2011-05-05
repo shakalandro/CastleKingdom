@@ -21,7 +21,7 @@ package
 	public class EnemyUnit extends Unit
 	{
 		private var _target:FlxObject;
-		private var _type:String; 
+		private var _type:String;
 		
 		public function EnemyUnit(x:Number, y:Number, towerID:int, canDrag:Boolean = false, bar:HealthBar = null) {
 			
@@ -71,7 +71,6 @@ package
 				_target.health -= this.damageDone;
 			}
 			super.update();
-		
 		}
 		
 		
