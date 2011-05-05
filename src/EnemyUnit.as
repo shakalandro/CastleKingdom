@@ -56,7 +56,7 @@ package
 			if (type == Unit.GROUND && this.y <= Util.castle.y ){
 				this.velocity.y = 0 ;
 			}
-			if(this._target == null) {
+			if(this._target == null || _target.health <= 0) {
 				if(this.x > Util.maxX/2) {
 					// goes left
 					this.velocity.x = -speed;
@@ -66,6 +66,7 @@ package
 					this.velocity.x = speed;
 					this.facing = RIGHT;
 				}
+				this.play("walk");
 			} else {
 				_target.health -= this.damageDone;
 			}
@@ -79,15 +80,17 @@ package
 		 * */
 		
 		override public function hitRanged(contact:FlxObject):void {
-			this._target = contact;
-			this.velocity.y = 0;
-			this.velocity.x = 0;
-			this.play("attack");
+			if(this._target == null || _target.health <= 0) {
+				this._target = contact;
+				this.velocity.y = 0;
+				this.velocity.x = 0;
+				this.play("attack");
+			}
 		}
 		
 		
 		
-		override public function destroy():void {
+		override public function kill():void {
 			this.color =  0x112233; 
 			this.play("die");
 		//	this.velocity.x = 0;

@@ -68,7 +68,7 @@ package
 			// look up unit info, set fields
 			// {cost, goldCost, maxHealth,speed,range,damage,rate)
 			
-			var unitStats:Array = [1,10,50,1,1,10,1] ;//unitStatLookup(unitID);
+			var unitStats:Array = [1,10,5000,1,1,1,1] ;//unitStatLookup(unitID);
 			
 			_cost = unitStats[0];
 			_goldCost = unitStats[1];
@@ -282,12 +282,6 @@ package
 			
 		}
 		
-		/** Called when this unit's health is reduced to &lt;= 0
-		 * */
-		override public function destroy():void {
-			
-		}
-		
 		protected function rescale(scalar:Number):void {
 			//this.scale.x = scalar;
 			//this.scale.y = scalar;
@@ -364,10 +358,6 @@ package
 			} else {
 				return -1;
 			}
-		}
-		
-		private function hi():void {
-			
 		}
 		
 		public function clone():FlxBasic {

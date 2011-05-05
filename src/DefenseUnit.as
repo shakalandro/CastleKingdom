@@ -91,7 +91,7 @@ package
 		override public function hitRanged(contact:FlxObject):void {
 			super.hitRanged(contact);
 			if (contact is EnemyUnit) {
-				if (_target == null) {
+				if (_target == null || _target.health <= 0) {
 					_target = contact;
 				}
 				_target.health -= this.damageDone;
@@ -102,7 +102,7 @@ package
 			if (health <= 0) {
 				this.kill();
 			}
-			this.frame = Math.floor(frames * (health / this.maxHealth));
+			this.frame = 7 - Math.floor(7 * (health / this.maxHealth));
 		}
 		
 		

@@ -346,7 +346,7 @@ package
 		
 		public function drawStats(startX:int = 0, startY:int = 0):void {
 			_armyDisplay.text = this.castle.unitCapacity - this.castle.armyUnitsAvailable + " of " + this.castle.unitCapacity + " Armies";
-			_towerDisplay.text = this.castle.towerCapacity - this.castle.towerUnitsAvailable + " of " + this.castle.towerCapacity + " Towers";
+			_towerDisplay.text = this.towers.length + " of " + this.castle.towerCapacity + " Towers";
 			_goldDisplay.text = "Gold: " + this.castle.gold;
 		}
 	}
