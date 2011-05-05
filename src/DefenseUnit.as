@@ -17,6 +17,7 @@ package
 		
 		private var primaryTarget:Unit = null;
 		
+		private var _currentlyDraggable:Boolean;
 		private var _dragging:Boolean;
 		private var _dragOffset:FlxPoint;
 		
@@ -27,13 +28,18 @@ package
 		 * @param towerID Type of Tower to generate
 		 * 
 		 */		
-		public function DefenseUnit(x:Number, y:Number, towerID:int) {
-			super (x,y,towerID);
+		public function DefenseUnit(x:Number, y:Number, towerID:int, canDrag:Boolean = false, hpBar:HealthBar = null) {
+			super (x,y,towerID, canDrag, hpBar);
 			this.loadGraphic(Util.assets[Assets.ARROW_TOWER], true, false, CastleKingdom.TILE_SIZE, CastleKingdom.TILE_SIZE * 3);
 			_dragging = false;
+			_currentlyDraggable = canDrag;
+			this.immovable = true;
 		}
 		
 		override public function preUpdate():void {
+			if ( !_currentlyDraggable) {
+				return;
+			}
 			var mouseCoords:FlxPoint = FlxG.mouse.getScreenPosition();
 			if (FlxG.mouse.justPressed() && checkClick()) {
 				_dragging = true;
@@ -42,6 +48,8 @@ package
 				_dragging = false;
 				this.x = mouseCoords.x - _dragOffset.x;
 				Util.placeOnGround(this, Util.state.map, false, true);
+				(FlxG.state as ActiveState).addDefenseUnit(this);
+				(FlxG.state as ActiveState).openScrollMenu.replace(this);
 				_dragOffset = null;
 			}
 			if (_dragging) {
@@ -49,6 +57,8 @@ package
 				this.y = mouseCoords.y - _dragOffset.y;
 			}
 		}
+		
+		
 		
 		private function checkClick():Boolean {
 			return this.overlapsPoint(FlxG.mouse.getScreenPosition(), true);

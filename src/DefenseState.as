@@ -38,6 +38,8 @@ package
 			
 		}
 		
+		/** Displays tower placement menu
+		 * */
 		override public function create():void {
 			super.create();
 			var group:FlxGroup = new FlxGroup();
@@ -45,16 +47,25 @@ package
 			text.color = 0xffff0000;
 			group.add(text);
 			
-			group.add(new DefenseUnit(0, 0, 0));
-			
-			//var sm:ScrollMenu = new ScrollMenu(CastleKingdom.WIDTH / 4, CastleKingdom.HEIGHT / 4, group, unpause, "Tower Selector", 0xffffffff, 10, 
-			//	CastleKingdom.WIDTH / 2, CastleKingdom.HEIGHT / 2);
-			
-			add(group);
+			group.add(createPlaceableTowerGroup(0,0,0,10));
+			var sm:ScrollMenu = new ScrollMenu(CastleKingdom.WIDTH / 4, CastleKingdom.HEIGHT / 4, group, unpause, "Tower Selector", 0xffffffff, 10, 
+				CastleKingdom.WIDTH / 2, CastleKingdom.HEIGHT / 2);
+			setScrollMenu(sm);
+			add(sm.window);
 			
 			
 			//Util.window(10,Util.minY,
 		}
+		
+		private function createPlaceableTowerGroup(x:int,y:int,unitID:int,num:int):FlxGroup {
+			var group:FlxGroup = new FlxGroup();
+			group.add(new DefenseUnit(x,y,unitID,true));
+			for(var i:int = 0; i < num-1; i++) {
+				group.add(new DefenseUnit(x,y,unitID, false));
+			}
+			return group;
+		}
+		
 		// Display Tower selection menu
 		
 		// Enable drag and drop
@@ -63,6 +74,15 @@ package
 		// Decrease towers available
 		
 		// 
+		
+		override public function update():void {
+			
+			
+			
+			
+			super.update();
+		
+		}
 		
 	}
 }

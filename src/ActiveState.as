@@ -32,7 +32,9 @@ package
 		 */		
 		private var _units:FlxGroup;
 		
+		private var _openScrollMenu:ScrollMenu;
 		private var _openMenu:FlxBasic;
+		
 		
 		
 		/** FlxSprites for unit caps/gold;
@@ -96,6 +98,7 @@ package
 		public function collide():void {
 			FlxG.collide(_units, _towers, fightCollide);
 			FlxG.collide(_units, this.castle, endGameCollide);
+			//FlxG.collide(_units,this.map.,groundCollide);
 			//FlxG.collide(_units, this.map, groundCollide);
 		}
 		
@@ -121,8 +124,8 @@ package
 		/** Initiates procedure for interacting with ground
 		 * */
 		private function groundCollide(unit1:FlxSprite, unit2:FlxSprite):void {
-			//(unit1 as Unit).hitRanged(unit2);
-			//(unit2 as Unit).hitRanged(unit1);
+			(unit1 as Unit).hitRanged(unit2);
+			(unit2 as Unit).hitRanged(unit1);
 		}
 		
 		
@@ -151,6 +154,14 @@ package
 		 */		
 		public function get towers():FlxGroup {
 			return _towers;
+		}
+		
+		public function get openScrollMenu():ScrollMenu {
+			return _openScrollMenu;
+		}
+		
+		public function setScrollMenu(menu:ScrollMenu):void {
+			_openScrollMenu = menu;
 		}
 		
 		/**
@@ -191,8 +202,8 @@ package
 		 * @return Whether placing the tower was successful. This could fail if the given place is not open.
 		 * 
 		 */				
-		public function addDefenseUnit(tower:DefenseUnit):Boolean {
-			return addUnit(_towers, tower);
+		public function addDefenseUnit(tower:DefenseUnit, snapToGround:Boolean = true):Boolean {
+			return addUnit(_towers, tower, snapToGround);
 		}
 		
 		/**
@@ -204,8 +215,8 @@ package
 		 * @return Whether the given unit was able to be placed.
 		 * 
 		 */	
-		public function addEnemyUnit(enemy:EnemyUnit):Boolean {				
-			return addUnit(_units, enemy);
+		public function addEnemyUnit(enemy:EnemyUnit, snapToGround:Boolean = false):Boolean {				
+			return addUnit(_units, enemy, snapToGround);
 		}
 		
 		/**
@@ -220,11 +231,14 @@ package
 		 */		
 		private function addUnit(group:FlxGroup, unit:Unit, snapToGround:Boolean = true):Boolean {
 			if (placeable(unit.x, unit.y)) {
+				this.castle.addGold(-100);
 				var coordinates:FlxPoint = Util.roundToNearestTile(new FlxPoint(unit.x, unit.y));
 				unit.x = coordinates.x;
 				unit.y = coordinates.y;
 				if (snapToGround) Util.placeOnGround(unit, map, false, true);
+				unit.canDrag = false;
 				group.add(unit);
+				add(unit);
 				return true;
 			}
 			return false;
