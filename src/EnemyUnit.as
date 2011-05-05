@@ -48,6 +48,9 @@ package
 			}
 			
 			
+			this.allowCollisions = FlxObject.ANY;
+			//this.immovable = true;
+			
 		}
 		
 		

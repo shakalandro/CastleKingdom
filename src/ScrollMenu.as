@@ -49,10 +49,10 @@ package
 						if(n is FlxGroup) {
 							// is group of placeable towers/armies
 							for each (var n2:FlxBasic in n) {
-								if(n2.visible == true) {
+							//	if(n2.visible == true) {
 									(n as FlxGroup).remove(n2);
 									drawIfObject(n2);
-								}
+							//	}
 							}
 						}
 						else {
@@ -75,7 +75,7 @@ package
 				}
 				_width = width;
 				_startX = x;
-				_window.add(contents);
+				//_window.add(contents);
 			}
 			
 			// Draws scroll buttons
@@ -95,7 +95,8 @@ package
 		}
 		
 		public function drawIfObject(n:FlxBasic):void {
-			if (n is FlxObject && n.visible==true) {
+			_window.add(n);
+			if (n is FlxObject) {
 				(n as FlxObject).x += _startX;
 				(n as FlxObject).y += _startY + 10;
 				if( (n as FlxObject).x > _startX + _width-(n as FlxObject).width  ) {
