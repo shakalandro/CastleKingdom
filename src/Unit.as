@@ -11,8 +11,6 @@ package
 	
 	import org.flixel.*;
 	
-	
-	
 	public class Unit extends FlxSprite
 	{
 		
@@ -184,6 +182,22 @@ package
 		/** Getters and setters
 		 * There should be getters and setters for each of the above fields except _img
 		 * */
+		
+		public function get objx():Number {
+			return x;
+		}
+		
+		public function set objx(newX:Number):void {
+			x = newX;
+		}
+		
+		public function get objy():Number {
+			return y;
+		}
+		
+		public function set objy(newY:Number):void {
+			y = newY;
+		}
 		
 		public function get maxHealth():int {
 			return _maxHealth;

@@ -13,11 +13,13 @@ package
 	 * @author Justin
 	 * 
 	 */	
-	public class DefenseUnit extends Unit {
+	public class DefenseUnit extends Unit implements Draggable {
 		
 		private var primaryTarget:Unit = null;
 		
 		private var _dragging:Boolean;
+		private var _dragCallback:Function;
+		private var _preDragCoords:FlxPoint;
 		private var _dragOffset:FlxPoint;
 		
 		/**
@@ -27,22 +29,34 @@ package
 		 * @param towerID Type of Tower to generate
 		 * 
 		 */		
-		public function DefenseUnit(x:Number, y:Number, towerID:int) {
+		public function DefenseUnit(x:Number, y:Number, towerID:int, dragCallback:Function = null) {
 			super (x,y,towerID);
 			this.loadGraphic(Util.assets[Assets.ARROW_TOWER], true, false, CastleKingdom.TILE_SIZE, CastleKingdom.TILE_SIZE * 3);
 			_dragging = false;
+			_dragCallback = dragCallback;
+		}
+		
+		public function set dragCallback(callback:Function):void {
+			_dragCallback = callback;
 		}
 		
 		override public function preUpdate():void {
+			checkDrag();
+		}
+		
+		public function checkDrag():void {
 			var mouseCoords:FlxPoint = FlxG.mouse.getScreenPosition();
 			if (FlxG.mouse.justPressed() && checkClick()) {
 				_dragging = true;
+				_preDragCoords = new FlxPoint(x, y);
 				_dragOffset = new FlxPoint(mouseCoords.x - this.x, mouseCoords.y - this.y);
 			} else if (_dragging && FlxG.mouse.justReleased()) {
 				_dragging = false;
 				this.x = mouseCoords.x - _dragOffset.x;
-				Util.placeOnGround(this, Util.state.map, false, true);
+				this.y = mouseCoords.y - _dragOffset.y;
 				_dragOffset = null;
+				if (_dragCallback != null) _dragCallback(this, x, y, _preDragCoords.x, _preDragCoords.y);
+				_preDragCoords = null;
 			}
 			if (_dragging) {
 				this.x = mouseCoords.x - _dragOffset.x;
@@ -112,6 +126,5 @@ package
 				return null;
 			}
 		}
-	
 	}
 }

@@ -40,20 +40,37 @@ package
 		
 		override public function create():void {
 			super.create();
-			var group:FlxGroup = new FlxGroup();
-			var text:FlxText = new FlxText(0,0,20,"hi");
-			text.color = 0xffff0000;
-			group.add(text);
 			
-			group.add(new DefenseUnit(0, 0, 0));
-			
-			//var sm:ScrollMenu = new ScrollMenu(CastleKingdom.WIDTH / 4, CastleKingdom.HEIGHT / 4, group, unpause, "Tower Selector", 0xffffffff, 10, 
-			//	CastleKingdom.WIDTH / 2, CastleKingdom.HEIGHT / 2);
-			
-			add(group);
-			
-			
-			//Util.window(10,Util.minY,
+			Database.getDefenseUnitInfo(function(info:Array):void {
+				var pages:Array = createTowers(info);
+				var sm:ScrollMenu = new ScrollMenu(CastleKingdom.WIDTH / 4, CastleKingdom.HEIGHT / 4, pages, unpause, "Tower Selector", 
+						0xffffffff, 10, CastleKingdom.WIDTH / 2, CastleKingdom.HEIGHT / 2, 3, 
+						function(draggable:Draggable, newX:Number, newY:Number, oldX:Number, oldY:Number):void {
+							var tower:DefenseUnit = (draggable as DefenseUnit);
+							towers.add(tower);
+							Util.placeOnGround(tower, map,false, true);
+							tower.dragCallback = function(draggable:Draggable, newX:Number, newY:Number, oldX:Number, oldY:Number):void {
+								Util.placeOnGround(draggable as DefenseUnit, map,false, true);
+							};
+						});
+				add(sm);
+			});
+		}
+		
+		public function createTowers(info:Array, perRow:int = 4, perColumn:int = 2, 
+									 width:Number = CastleKingdom.WIDTH / 2, height:Number = CastleKingdom.HEIGHT / 2):Array {
+			var result:Array = [];
+			for (var i:int = 0; i < info.length / (perRow * perColumn); i++) {
+				var group:FlxGroup = new FlxGroup;
+				for (var j:int = 0; j < perColumn; j++) {
+					for (var k:int = 0; k < perRow; k++) {
+						var tower:DefenseUnit = new DefenseUnit(k * (width / perRow), j * (height / perColumn), info[i].id);
+						group.add(tower);
+					}
+				}
+				result[i] = group;
+			}
+			return result;
 		}
 		// Display Tower selection menu
 		

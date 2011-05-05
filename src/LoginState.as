@@ -37,7 +37,17 @@ package
 		private function login():void {
 			FaceBook.connect(function(ready:Boolean):void {
 				if (ready) {
-					FlxG.switchState(new ActiveState(true, false, map));
+					FaceBook.userInfo(function(fbInfo:Object):void {
+						Util.log('fb user info retrieved: ' + fbInfo.id);
+						Database.getUserInfo(function(dbInfo:Array):void {
+							Util.log('db user info retrieved');
+							if (dbInfo == null || dbInfo.length == 0) {
+								Util.log(fbInfo.id, typeof(fbInfo.id));
+								Database.addNewUser(fbInfo.id);
+								FlxG.switchState(new ActiveState(true, false, map));
+							}
+						}, fbInfo.id);
+					});
 				} else {
 					_startButton.label.text = "Try again :(";
 					Util.log("LoginState.login failed: " + ready);

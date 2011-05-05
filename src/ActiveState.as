@@ -270,6 +270,22 @@ package
 				showMenu(UPGRADE_MENU);
 			});
 			
+			var testSave:FlxButton = new FlxButton(0, 0, "TestSaveInfo", function():void {
+				if (FaceBook.facebookReady) {
+					Util.log(FaceBook.uid, _castle.gold, _castle.unitCapacity);
+					Database.updateUserInfo({
+						id: FaceBook.uid,
+						gold: _castle.gold,
+						units: _castle.unitCapacity
+					});
+				}
+			});
+			
+			testSave.allowCollisions = FlxObject.NONE;
+			Util.centerY(testSave, header);
+			testSave.x = 150;
+			hud.add(testSave);
+			
 			attack.allowCollisions = FlxObject.NONE;
 			defend.allowCollisions = FlxObject.NONE;
 			upgrade.allowCollisions = FlxObject.NONE;

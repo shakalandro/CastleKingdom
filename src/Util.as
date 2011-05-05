@@ -383,6 +383,12 @@ package
 				new Closure(stuff[i]).eval(f, i);
 			}
 		}
+		
+		public static function getKnownFriends(callback:Function):void {
+			FaceBook.friends(function(friends:Array):void {
+				
+			});
+		}
 	}
 }
 
