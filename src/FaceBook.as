@@ -118,9 +118,6 @@ package
 				Facebook.api("/" + uid, function(results:Object, fail:Object):void {
 					if (results) {
 						_facebookUserInfo[uid] = results;
-//						if (uid == "me") {
-//							_facbookUID = results.id;
-//						}
 						callback(results);
 					} else {
 						FlxG.log("Util.facebookUserInfo: failed /" + uid + " " + fail);

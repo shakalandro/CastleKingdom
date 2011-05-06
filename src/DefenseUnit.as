@@ -13,16 +13,19 @@ package
 	 * @author Justin
 	 * 
 	 */	
-	public class DefenseUnit extends Unit implements Draggable {
+	public class DefenseUnit extends Unit implements Draggable, Highlightable {
 		
 		private var _target:Unit;
 		
-		private var _currentlyDraggable:Boolean;
 		private var _dragging:Boolean;
 		private var _dragCallback:Function;
 		private var _preDragCoords:FlxPoint;
 		private var _dragOffset:FlxPoint;
 		private var _canDrag:Boolean;
+		
+		private var _canHighlight:Boolean;
+		private var _highlightCallback:Function;
+		private var _highlighted:Boolean;
 		
 		/**
 		 * 
@@ -31,14 +34,36 @@ package
 		 * @param towerID Type of Tower to generate
 		 * 
 		 */		
-		public function DefenseUnit(x:Number, y:Number, towerID:int, canDrag:Boolean = true, dragCallback:Function = null) {
+		public function DefenseUnit(x:Number, y:Number, towerID:int, canDrag:Boolean = true, dragCallback:Function = null, 
+					canHighlight:Boolean = true, highlightCallback:Function = null) {
 			super (x,y,towerID);
-			this.loadGraphic(Util.assets[Assets.ARROW_TOWER], true, false, CastleKingdom.TILE_SIZE, CastleKingdom.TILE_SIZE * 3);
+			loadGraphic(Util.assets[Assets.ARROW_TOWER], true, false, CastleKingdom.TILE_SIZE, CastleKingdom.TILE_SIZE * 3);
+			addAnimation("die", [5, 6, 7], 1, false);
+			addAnimation("highlight", [0], 1, true); 
 			_dragging = false;
 			_dragCallback = dragCallback;
 			_canDrag = canDrag;
+			_canHighlight = canHighlight;
+			_highlightCallback = highlightCallback;
+			_highlighted = false;
 			_target = null;
 			this.range = 6;
+		}
+		
+		public function get canHighlight():Boolean {
+			return _canHighlight;
+		}
+		
+		public function set canHighlight(t:Boolean):void {
+			_canHighlight = t;
+		}
+		
+		public function set highlightCallback(callback:Function):void {
+			_highlightCallback = callback;
+		}
+		
+		public function get highlighted():Boolean {
+			return _highlighted;
 		}
 		
 		public function get canDrag():Boolean {
@@ -56,9 +81,10 @@ package
 		
 		override public function preUpdate():void {
 			checkDrag();
+			_highlighted = checkHighlight();
 		}
 		
-		public function checkDrag():void {
+		public function checkDrag():Boolean {
 			if (_canDrag) {
 				var mouseCoords:FlxPoint = FlxG.mouse.getScreenPosition();
 				if (FlxG.mouse.justPressed() && checkClick()) {
@@ -76,8 +102,20 @@ package
 				if (_dragging) {
 					this.x = mouseCoords.x - _dragOffset.x;
 					this.y = mouseCoords.y - _dragOffset.y;
+					return true;
 				}
 			}
+			return false;
+		}
+		
+		public function checkHighlight():Boolean {
+			if (_canHighlight) {
+				var mouseCoords:FlxPoint = FlxG.mouse.getScreenPosition();
+				if (checkClick()) {
+					return true;
+				}
+			}
+			return false;
 		}
 		
 		override public function executeAttack():Boolean {
@@ -120,8 +158,18 @@ package
 			} else {
 				this.color = 0xffffffff; 
 			}
-			this.frame = 7 - Math.floor(7 * Math.sqrt((health / this.maxHealth)));
+			
+			if (_highlighted) {
+				frame = 0;
+			} else {
+				this.frame = 6 - Math.floor(6 * Math.sqrt((health / this.maxHealth)));
+			}
 			super.update();
+		}
+		
+		override public function kill():void {
+			play("die");
+			super.kill();
 		}
 		
 		
@@ -144,6 +192,10 @@ package
 			} else {
 				return null;
 			}
+		}
+		
+		override public function clone():FlxBasic {
+			return new DefenseUnit(x, y, unitID, _canDrag, _dragCallback, _canHighlight, _highlightCallback);
 		}
 	}
 }

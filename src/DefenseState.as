@@ -4,9 +4,12 @@ package
 	
 	public class DefenseState extends ActiveState
 	{		
-		public function DefenseState(tutorial:Boolean=false, menusActive:Boolean=false, map:FlxTilemap=null)
+		
+		private var _menu:ScrollMenu;
+		
+		public function DefenseState(menusActive:Boolean=false, map:FlxTilemap=null)
 		{
-			super(tutorial, menusActive, map);
+			super(menusActive, map);
 		}
 		
 		/**
@@ -17,10 +20,10 @@ package
 			super.create();
 			
 			Database.getDefenseUnitInfo(function(info:Array):void {
-				var pages:Array = createTowers(info);
-				var sm:ScrollMenu = new ScrollMenu(CastleKingdom.WIDTH / 4, CastleKingdom.HEIGHT / 4, pages, unpause, "Tower Selector", 
-						0xffffffff, 10, CastleKingdom.WIDTH / 2, CastleKingdom.HEIGHT / 2, 3, takeTower);
-				add(sm);
+				var pages:Array = createTowers(info, 2, 4, Castle.TILE_WIDTH * CastleKingdom.TILE_SIZE, Util.maxY - Util.minY - 50);
+				_menu = new ScrollMenu(castle.x, Util.minY, pages, unpause, Util.assets[Assets.TOWER_WINDOW_TITLE], 
+						0xffffffff, 10, Castle.TILE_WIDTH * CastleKingdom.TILE_SIZE, Util.maxY - Util.minY, 3, takeTower);
+				add(_menu);
 			});
 		}
 		
@@ -35,6 +38,10 @@ package
 		 */		
 		public function takeTower(draggable:Draggable, newX:Number, newY:Number, oldX:Number, oldY:Number):void {
 			var tower:DefenseUnit = (draggable as DefenseUnit);
+			var newTower:DefenseUnit = tower.clone() as DefenseUnit;
+			newTower.x = oldX;
+			newTower.y = oldY;
+			_menu.addToCurrentPage(newTower);
 			towers.add(tower);
 			Util.placeOnGround(tower, map,false, true);
 			tower.allowCollisions = FlxObject.ANY;
@@ -62,6 +69,7 @@ package
 				for (var j:int = 0; j < perColumn; j++) {
 					for (var k:int = 0; k < perRow; k++) {
 						var tower:DefenseUnit = new DefenseUnit(k * (width / perRow), j * (height / perColumn), info[i].id);
+						tower.x += tower.width / 2;
 						group.add(tower);
 					}
 				}

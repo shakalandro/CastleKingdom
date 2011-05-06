@@ -22,7 +22,7 @@ package
 	{
 		private var _target:Unit;
 		private var _type:String; 
-		
+
 		public function EnemyUnit(x:Number, y:Number, towerID:int, canDrag:Boolean = false, bar:HealthBar = null) {
 			
 			super (x,y,towerID, canDrag, bar);
@@ -88,7 +88,6 @@ package
 				}
 			}
 			super.update();
-		
 		}
 		
 		override public function executeAttack():Boolean {
@@ -109,7 +108,7 @@ package
 				this.velocity.y = 0;
 				this.velocity.x = 0;
 				this.play("attack");
-			}
+			}	
 		}
 		
 		
@@ -125,6 +124,5 @@ package
 		//	play("die");
 			
 		}
-		
 	}
 }

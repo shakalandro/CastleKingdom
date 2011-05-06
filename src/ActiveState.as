@@ -14,6 +14,7 @@ package
 		public static const UPGRADE_MENU:String = "upgrade";
 		public static const ATTACK_MENU:String = "attack";
 		public static const DEFEND_MENU:String = "defend";
+		public static const BUTTON_DIST:Number = 75;
 		
 		private static const HUD_BUTTON_PADDING:uint = 10;
 		
@@ -32,17 +33,13 @@ package
 		 */		
 		private var _units:FlxGroup;
 		
-		private var _openScrollMenu:ScrollMenu;
-		private var _openMenu:FlxBasic;
-		
-		
-		
 		/** FlxSprites for unit caps/gold;
 		 * 
 		 * */
 		private var _goldDisplay:FlxText;
 		private var _towerDisplay:FlxText;
 		private var _armyDisplay:FlxText;
+		private var _hudButtons:Array;
 		
 		/** 
 		 * An active state is a helper super class for interactive game states such as DefendState and UpgradeState. 
@@ -52,9 +49,9 @@ package
 		 * @param menusActive Whether the menu buttons are active
 		 * 
 		 */		
-		public function ActiveState(tutorial:Boolean = false, menusActive:Boolean = false, map:FlxTilemap = null, towers:FlxGroup = null, units:FlxGroup = null)
+		public function ActiveState(menusActive:Boolean = false, map:FlxTilemap = null, towers:FlxGroup = null, units:FlxGroup = null)
 		{
-			super(tutorial, menusActive, map);
+			super(menusActive, map);
 			if (towers != null) {
 				_towers = towers;
 			} else {
@@ -65,6 +62,7 @@ package
 			} else {
 				_units = new FlxGroup();
 			}
+			_hudButtons = [];
 		}
 		
 		/**
@@ -106,11 +104,9 @@ package
 		public function collide():void {
 			FlxG.collide(units, towers, fightCollide);
 			FlxG.collide(units, this.castle, endGameCollide);
-			FlxG.collide(units,this.map);
-			//FlxG.collide(_units, this.map, groundCollide);
+			FlxG.collide(units, this.map);
 		}
 		
-		//
 		private function fightCollide(unit1:FlxSprite, unit2:FlxSprite):void {
 			(unit1 as Unit).hitRanged(unit2);
 			(unit2 as Unit).hitRanged(unit1);
@@ -162,44 +158,6 @@ package
 		 */		
 		public function get towers():FlxGroup {
 			return _towers;
-		}
-		
-		public function get openScrollMenu():ScrollMenu {
-			return _openScrollMenu;
-		}
-		
-		public function setScrollMenu(menu:ScrollMenu):void {
-			_openScrollMenu = menu;
-		}
-		
-		/**
-		 * This should respond by drawing the given enabled menu on screen. Best called using the constants ActiveState.ATTACK_MENU, etc.
-		 * 
-		 * @param menu Which menu to draw.
-		 * 
-		 */		 
-		public function showMenu(menu:String):void {
-			if (_openMenu != null) {
-				_openMenu.kill();	
-			}
-			pause();
-			if (menu == ActiveState.DEFEND_MENU) {
-
-//				Database.getTowerUnits(function(towers:Array):void {
-//					var group:FlxGroup = new FlxGroup();
-//					for (var i:int = 0; i < towers.length; i++) {
-//						var towerStats:Object = towers[i];
-//						group.add(new FlxSprite(i * 20 % CastleKingdom.WIDTH / 2, i * 20 / (CastleKingdom.WIDTH / 2), Util.assets[Assets.SWORDSMAN]));
-//						group.add(new FlxText(i * 20 % CastleKingdom.WIDTH / 2, i * 20 / (CastleKingdom.WIDTH / 2) + 10, towerStats.name));
-//					}
-//					_openMenu = Util.window(CastleKingdom.WIDTH / 4, CastleKingdom.HEIGHT / 4, group, unpause, menu, 0xffffffff, 10, 
-//						CastleKingdom.WIDTH / 2, CastleKingdom.HEIGHT / 2);
-//				});
-			} else {
-				_openMenu = Util.window(CastleKingdom.WIDTH / 4, CastleKingdom.HEIGHT / 4, null, unpause, menu, 0xffffffff, 10, 
-					CastleKingdom.WIDTH / 2, CastleKingdom.HEIGHT / 2);
-			}
-			add(_openMenu);
 		}
 		
 		/**
@@ -261,7 +219,7 @@ package
 		 * @return Whether a tower could be placed at (x, y)
 		 * 
 		 */		
-		private function placeable(x:int, y:int):Boolean {
+		public function placeable(x:int, y:int):Boolean {
 			if (!Util.inBounds(x, y)) return false;
 			var indices:FlxPoint = Util.cartesianToIndices(new FlxPoint(x, y));
 			var tileType:int = map.getTile(indices.x, indices.y);
@@ -277,55 +235,59 @@ package
 			return true;
 		}
 		
+		public function droppable(x:int, y:int):Boolean {
+			if (!Util.inBounds(x, y)) return false;
+			var indices:FlxPoint = Util.cartesianToIndices(new FlxPoint(x, y));
+			var castleStart:int = Util.cartesianToIndices(new FlxPoint(Util.castle.x, Util.castle.y)).x;
+			var castleStop:int = Util.cartesianToIndices(new FlxPoint(Util.castle.x + Util.castle.width, Util.castle.y)).x;
+			if (indices.x >= castleStart && indices.x < castleStop) {
+				return false;
+			}
+			for each (var obj:FlxObject in _towers.members) {
+				var objStart:FlxPoint = Util.cartesianToIndices(new FlxPoint(obj.x, obj.y));
+				var objStop:FlxPoint = Util.cartesianToIndices(new FlxPoint(obj.x + obj.width, obj.y));
+				if (indices.x >= objStart.x && indices.x < objStop.x) {
+					return false;
+				}
+			}
+			return true;
+		}
+		
 		override protected function createHUD():void {
 			super.createHUD();
-			var attack:FlxButton = new FlxButton(0, 0, "Attack", function():void {
-				if (FlxG.state is DefenseState) {
-					var defenseTowers:FlxGroup = remove(towers);
-					defenseTowers.setAll("canDrag", false);
-					FlxG.switchState(new AttackState(false, false, map, defenseTowers));
-				} else {
-					FlxG.switchState(new AttackState(false, false, map));
-				}
+			var _prepare:FlxButton = new FlxButton(0, 0, Util.assets[Assets.PLACE_TOWER_BUTTON], function():void {
+				FlxG.switchState(new DefenseState(false, map));
+			});
+			var _release:FlxButton = new FlxButton(0, 0, Util.assets[Assets.RELEASE_WAVE_BUTTON], function():void {
+				var defTowers:FlxGroup = remove(_towers);
+				FlxG.switchState(new AttackState(false, map, defTowers));
+			});
+			var _upgrade:FlxButton = new FlxButton(0, 0, Util.assets[Assets.UPGRADE_BUTTON], function():void {
+				//FlxG.switchState(new DefenseState(false, map));
+			});
+			var _attack:FlxButton = new FlxButton(0, 0, Util.assets[Assets.ATTACK_BUTTON], function():void {
+				//FlxG.switchState(new DefenseState(false, map));
+			});
+			var _lease:FlxButton = new FlxButton(0, 0, Util.assets[Assets.LEASE_BUTTON], function():void {
+				//FlxG.switchState(new DefenseState(false, map));
 			});
 			
-			var defend:FlxButton = new FlxButton(0, 0, "Defend", function():void {
-				FlxG.switchState(new DefenseState(false, false, map));
-			});
+			_hudButtons.push(_prepare);
+			_hudButtons.push(_release);
+			_hudButtons.push(_upgrade);
+			_hudButtons.push(_attack);
+			_hudButtons.push(_lease);
 			
-			var upgrade:FlxButton = new FlxButton(0, 0, "Upgrade", function():void {
-				showMenu(UPGRADE_MENU);
-			});
-			
-			var testSave:FlxButton = new FlxButton(0, 0, "TestSaveInfo", function():void {
-				if (FaceBook.facebookReady) {
-					Util.log(FaceBook.uid, _castle.gold, _castle.unitCapacity);
-					Database.updateUserInfo({
-						id: FaceBook.uid,
-						gold: _castle.gold,
-						units: _castle.unitCapacity
-					});
-				}
-			});
-			
-			testSave.allowCollisions = FlxObject.NONE;
-			Util.centerY(testSave, header);
-			testSave.x = 150;
-			hud.add(testSave);
-			
-			attack.allowCollisions = FlxObject.NONE;
-			defend.allowCollisions = FlxObject.NONE;
-			upgrade.allowCollisions = FlxObject.NONE;
-			
-			Util.centerY(attack, header);
-			Util.centerY(defend, header);
-			Util.centerY(upgrade, header);
-			
-			upgrade.x = Util.maxX - upgrade.width - 70;
-			attack.x = upgrade.x - attack.width - HUD_BUTTON_PADDING;
-			defend.x = attack.x - defend.width - HUD_BUTTON_PADDING;
-			Util.log(upgrade.width, attack.width, defend.width);
-			
+			Util.centerY(_prepare, header);
+			Util.centerY(_release, header);
+			Util.centerY(_upgrade, header);
+			Util.centerY(_attack, header);
+			Util.centerY(_lease, header);
+			spreadPosition(_prepare, 5, 5);
+			spreadPosition(_release, 5, 4);
+			spreadPosition(_upgrade, 5, 3);
+			spreadPosition(_attack, 5, 2);
+			spreadPosition(_lease, 5, 1);
 			
 			_armyDisplay = new FlxText(0, 10, 100, "");
 			_towerDisplay = new FlxText(0, 20,100, "");
@@ -334,14 +296,21 @@ package
 			hud.add(_armyDisplay);
 			hud.add(_towerDisplay);
 
-			hud.add(attack);
-			hud.add(defend);
-			hud.add(upgrade);
+			hud.add(_prepare);
+			hud.add(_release);
+			hud.add(_upgrade);
+			hud.add(_attack);
+			hud.add(_lease);
+		}
+		
+		private function spreadPosition(thing:FlxObject, peices:Number, place:int):void {
+			var width:Number = (FlxG.width - BUTTON_DIST * 2) / (peices + 1);
+			thing.x = place * width + BUTTON_DIST - thing.width / 2;
 		}
 		
 		override public function update():void {
-			drawStats();
 			super.update();
+			drawStats();
 		}
 		
 		public function drawStats(startX:int = 0, startY:int = 0):void {

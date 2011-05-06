@@ -9,7 +9,7 @@ package
 		 * callback(obj:Draggable, newX:Number, newY:Number, oldX:Number, oldY:Number):void.
 		 * 
 		 */	
-		function checkDrag():void;
+		function checkDrag():Boolean;
 		function set dragCallback(callback:Function):void;
 		function get canDrag():Boolean;
 		function set canDrag(t:Boolean):void;

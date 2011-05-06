@@ -25,11 +25,14 @@ package
 	{
 		
 		private var _gameOver:Boolean = false;
+		public static const ACID_TRIP_MODE:Boolean = false;
 		
 		public static const ARMY:int = 0;  // stores index of barracks level in _upgrades
 		public static const TOWER:int = 1; // stores index of foundry level in _upgrades
 		public static const UNIT_INFO:Array = new Array(); // stores all unit information 
 				// Tower/Unit --> ID --> info
+
+		public static const TILE_WIDTH:int = 8;
 		
 		private var _upgrades:Array;  // should be:  {Castle level, Barracks level, foundry level, Smith level?}
 		private var _gold:int;	
@@ -62,7 +65,7 @@ package
 			_upgrades = new Array();
 		}
 		
-		
+		/** Adds the given upgrade to the castle**/
 		private function initUserInfo(info:Array):void {
 			 _gold = info[0].gold;
 			 
@@ -303,6 +306,12 @@ package
 			_gameOver = true;
 		}
 		
+		override public function update():void {
+			if(Castle.ACID_TRIP_MODE) {
+				this.color =  Math.random() * 0xffffffff; 
+			}
+			super.update();
+		}
 	
 	}
 }

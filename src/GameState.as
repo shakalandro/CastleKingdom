@@ -15,8 +15,6 @@ package
 		 */		
 		private var _map:FlxTilemap;
 		
-		private var _tutorial:Boolean;
-		
 		private var _menusActive:Boolean;
 		
 		private var _hud:FlxGroup;
@@ -31,9 +29,8 @@ package
 		 * @param menusActive
 		 * 
 		 */		
-		public function GameState(tutorial:Boolean = false, menusActive:Boolean = false, map:FlxTilemap = null) {
+		public function GameState(menusActive:Boolean = false, map:FlxTilemap = null) {
 			super();
-			_tutorial = tutorial;
 			_menusActive = menusActive;
 			if (map == null) map = new FlxTilemap();
 			_map = map;

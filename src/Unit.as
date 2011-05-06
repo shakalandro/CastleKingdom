@@ -80,7 +80,6 @@ package
 			
 			// Set default fields
 			health = _maxHealth;
-			//_img = GLOBALLOOKUP[SKIN][unitID];
 			_attackCounter = 100/_rate;
 			
 			_healthyBar = hpBar;
@@ -98,6 +97,9 @@ package
 		 * Moves the character as needed if possible
 		 * */
 		override public function update():void {
+			if(Castle.ACID_TRIP_MODE) {
+				this.color =  Math.random() * 0xffffffff; 
+			}
 			if(this.health <= 0) {
 				super.update();
 				return;
