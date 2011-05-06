@@ -52,11 +52,19 @@ package
 		 * @param menusActive Whether the menu buttons are active
 		 * 
 		 */		
-		public function ActiveState(tutorial:Boolean = false, menusActive:Boolean = false, map:FlxTilemap = null)
+		public function ActiveState(tutorial:Boolean = false, menusActive:Boolean = false, map:FlxTilemap = null, towers:FlxGroup = null, units:FlxGroup = null)
 		{
 			super(tutorial, menusActive, map);
-			_towers = new FlxGroup();
-			_units = new FlxGroup();
+			if (towers != null) {
+				_towers = towers;
+			} else {
+				_towers = new FlxGroup();	
+			}
+			if (units != null) {
+				_units = units;
+			} else {
+				_units = new FlxGroup();
+			}
 		}
 		
 		/**
@@ -96,9 +104,9 @@ package
 		 * 
 		 */		
 		public function collide():void {
-			FlxG.collide(_units, _towers, fightCollide);
-			FlxG.collide(_units, this.castle, endGameCollide);
-			//FlxG.collide(_units,this.map.,groundCollide);
+			FlxG.collide(units, towers, fightCollide);
+			FlxG.collide(units, this.castle, endGameCollide);
+			FlxG.collide(units,this.map);
 			//FlxG.collide(_units, this.map, groundCollide);
 		}
 		
@@ -236,9 +244,8 @@ package
 				unit.x = coordinates.x;
 				unit.y = coordinates.y;
 				if (snapToGround) Util.placeOnGround(unit, map, false, true);
-				unit.canDrag = false;
 				group.add(unit);
-				add(unit);
+				//add(unit);
 				return true;
 			}
 			return false;
@@ -273,7 +280,13 @@ package
 		override protected function createHUD():void {
 			super.createHUD();
 			var attack:FlxButton = new FlxButton(0, 0, "Attack", function():void {
-				FlxG.switchState(new AttackState(false, false, map));
+				if (FlxG.state is DefenseState) {
+					var defenseTowers:FlxGroup = remove(towers);
+					defenseTowers.setAll("canDrag", false);
+					FlxG.switchState(new AttackState(false, false, map, defenseTowers));
+				} else {
+					FlxG.switchState(new AttackState(false, false, map));
+				}
 			});
 			
 			var defend:FlxButton = new FlxButton(0, 0, "Defend", function():void {
@@ -283,6 +296,22 @@ package
 			var upgrade:FlxButton = new FlxButton(0, 0, "Upgrade", function():void {
 				showMenu(UPGRADE_MENU);
 			});
+			
+			var testSave:FlxButton = new FlxButton(0, 0, "TestSaveInfo", function():void {
+				if (FaceBook.facebookReady) {
+					Util.log(FaceBook.uid, _castle.gold, _castle.unitCapacity);
+					Database.updateUserInfo({
+						id: FaceBook.uid,
+						gold: _castle.gold,
+						units: _castle.unitCapacity
+					});
+				}
+			});
+			
+			testSave.allowCollisions = FlxObject.NONE;
+			Util.centerY(testSave, header);
+			testSave.x = 150;
+			hud.add(testSave);
 			
 			attack.allowCollisions = FlxObject.NONE;
 			defend.allowCollisions = FlxObject.NONE;
@@ -298,10 +327,13 @@ package
 			Util.log(upgrade.width, attack.width, defend.width);
 			
 			
-			//		_towerDisplay = new FlxSprite(Util.maxX-100,20);
-			//		_armyDisplay = new FlxSprite(Util.maxX-100,40);
-			//_goldDisplay.
-			
+			_armyDisplay = new FlxText(0, 10, 100, "");
+			_towerDisplay = new FlxText(0, 20,100, "");
+			_goldDisplay = new FlxText(0, 0, 100, "");
+			hud.add(_goldDisplay);
+			hud.add(_armyDisplay);
+			hud.add(_towerDisplay);
+
 			hud.add(attack);
 			hud.add(defend);
 			hud.add(upgrade);
@@ -309,28 +341,13 @@ package
 		
 		override public function update():void {
 			drawStats();
-			
 			super.update();
 		}
 		
 		public function drawStats(startX:int = 0, startY:int = 0):void {
-			hud.remove(_goldDisplay);
-			_goldDisplay = new FlxText(startX,startY,100, "Gold: " + this.castle.gold);
-			hud.add(_goldDisplay);
-			
-			hud.remove(_armyDisplay);
-			
-			_armyDisplay = new FlxText(startX,startY+10,100, 
-				this.castle.unitCapacity - this.castle.armyUnitsAvailable + " of " + this.castle.unitCapacity + " Armies");
-			
-			hud.add(_armyDisplay);
-			
-			hud.remove(_towerDisplay);
-			_towerDisplay = new FlxText(startX,startY+20,100, 
-				this.castle.towerCapacity - this.castle.towerUnitsAvailable + 
-				" of " + this.castle.towerCapacity + " Towers");
-			hud.add(_towerDisplay);
-			
+			_armyDisplay.text = this.castle.unitCapacity - this.castle.armyUnitsAvailable + " of " + this.castle.unitCapacity + " Armies";
+			_towerDisplay.text = this.towers.length + " of " + this.castle.towerCapacity + " Towers";
+			_goldDisplay.text = "Gold: " + this.castle.gold;
 		}
 	}
 }

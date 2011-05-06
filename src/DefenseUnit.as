@@ -13,13 +13,16 @@ package
 	 * @author Justin
 	 * 
 	 */	
-	public class DefenseUnit extends Unit {
+	public class DefenseUnit extends Unit implements Draggable {
 		
-		private var primaryTarget:Unit = null;
+		private var _target:Unit;
 		
 		private var _currentlyDraggable:Boolean;
 		private var _dragging:Boolean;
+		private var _dragCallback:Function;
+		private var _preDragCoords:FlxPoint;
 		private var _dragOffset:FlxPoint;
+		private var _canDrag:Boolean;
 		
 		/**
 		 * 
@@ -28,36 +31,64 @@ package
 		 * @param towerID Type of Tower to generate
 		 * 
 		 */		
-		public function DefenseUnit(x:Number, y:Number, towerID:int, canDrag:Boolean = false, hpBar:HealthBar = null) {
-			super (x,y,towerID, canDrag, hpBar);
+		public function DefenseUnit(x:Number, y:Number, towerID:int, canDrag:Boolean = true, dragCallback:Function = null) {
+			super (x,y,towerID);
 			this.loadGraphic(Util.assets[Assets.ARROW_TOWER], true, false, CastleKingdom.TILE_SIZE, CastleKingdom.TILE_SIZE * 3);
 			_dragging = false;
-			_currentlyDraggable = canDrag;
-			this.immovable = true;
+			_dragCallback = dragCallback;
+			_canDrag = canDrag;
+			_target = null;
+			this.range = 6;
+		}
+		
+		public function get canDrag():Boolean {
+			return _canDrag;
+		}
+		
+		public function set canDrag(t:Boolean):void {
+			_canDrag = t;
+			
+		}
+		
+		public function set dragCallback(callback:Function):void {
+			_dragCallback = callback;
 		}
 		
 		override public function preUpdate():void {
-			if ( !_currentlyDraggable) {
-				return;
-			}
-			var mouseCoords:FlxPoint = FlxG.mouse.getScreenPosition();
-			if (FlxG.mouse.justPressed() && checkClick()) {
-				_dragging = true;
-				_dragOffset = new FlxPoint(mouseCoords.x - this.x, mouseCoords.y - this.y);
-			} else if (_dragging && FlxG.mouse.justReleased()) {
-				_dragging = false;
-				this.x = mouseCoords.x - _dragOffset.x;
-				Util.placeOnGround(this, Util.state.map, false, true);
-				(FlxG.state as ActiveState).addDefenseUnit(this);
-				(FlxG.state as ActiveState).openScrollMenu.replace(this);
-				_dragOffset = null;
-			}
-			if (_dragging) {
-				this.x = mouseCoords.x - _dragOffset.x;
-				this.y = mouseCoords.y - _dragOffset.y;
+			checkDrag();
+		}
+		
+		public function checkDrag():void {
+			if (_canDrag) {
+				var mouseCoords:FlxPoint = FlxG.mouse.getScreenPosition();
+				if (FlxG.mouse.justPressed() && checkClick()) {
+					_dragging = true;
+					_preDragCoords = new FlxPoint(x, y);
+					_dragOffset = new FlxPoint(mouseCoords.x - this.x, mouseCoords.y - this.y);
+				} else if (_dragging && FlxG.mouse.justReleased()) {
+					_dragging = false;
+					this.x = mouseCoords.x - _dragOffset.x;
+					this.y = mouseCoords.y - _dragOffset.y;
+					_dragOffset = null;
+					if (_dragCallback != null) _dragCallback(this, x, y, _preDragCoords.x, _preDragCoords.y);
+					_preDragCoords = null;
+				}
+				if (_dragging) {
+					this.x = mouseCoords.x - _dragOffset.x;
+					this.y = mouseCoords.y - _dragOffset.y;
+				}
 			}
 		}
 		
+		override public function executeAttack():Boolean {
+			if(_target != null) {
+				if(_target.inflictDamage(this.damageDone)){
+					_target = null;
+				}
+				return true;
+			}
+			return false;
+		}
 		
 		private function checkClick():Boolean {
 			return this.overlapsPoint(FlxG.mouse.getScreenPosition(), true);
@@ -70,34 +101,27 @@ package
 		 * 
 		 */
 		override public function hitRanged(contact:FlxObject):void {
-			super.hitRanged(contact);
-			if ( contact is EnemyUnit ) {
-				primaryTarget = betterTarget(primaryTarget, contact as Unit);	
+		//	super.hitRanged(contact);
+			if (contact is EnemyUnit) {
+				if (_target == null || _target.health <= 0) {
+					_target = contact as Unit;
+				}
 			}
 		}
 		
-		/** Executes whatever attack the unit does
-		 *  Returns true if the unit has used its attack, false otherwise
-		 * If unit has multiple shots, it selects any 3 units in range and attacks them
-		 * Defaults to false
-		 * 
-		 * @return true if the attack is used, false if not 
-		 * 
-		 */
-		private function executeAttack():Boolean {
-			if( shots > 1) {
-	/*			var unitsInRange:Array = getUnitsInRange();
-				for(var shotNum = 1; shotNum <= _shots; shotNum++) {
-					unitsInRange[shotNum-1].damage(_damage);
-				}
-				return true;  */
-			} else if(primaryTarget != null) {
-				return false;
-			} else if (primaryTarget.inflictDamage(damageDone)) { // deal damage
-	//			primaryTarget = findClosestTarget();	// reset to closest target
-				return true;
+		override public function update():void {
+			if (health <= 0) {
 			}
-			return false;
+			if(this._target == null) {
+				this.color =  0xcccccccc; 
+				//this.checkRangedCollision();
+				_target = this.getUnitsInRange()[0];
+				//trace(""+_target);
+			} else {
+				this.color = 0xffffffff; 
+			}
+			this.frame = 7 - Math.floor(7 * Math.sqrt((health / this.maxHealth)));
+			super.update();
 		}
 		
 		
@@ -112,7 +136,7 @@ package
 		 * 
 		 */		
 		public function betterTarget(target1:Unit, target2:Unit):Unit {
-			if (	target1 != null && target1.health > 0 
+			if (target1 != null && target1.health > 0 
 					&& compareDistance(target1, target2) <= 0 ) {
 				return target1;
 			} else if (target2 != null && target2.health > 0 ) {
@@ -121,6 +145,5 @@ package
 				return null;
 			}
 		}
-	
 	}
 }

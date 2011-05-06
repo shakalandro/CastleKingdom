@@ -3,85 +3,75 @@ package
 	import org.flixel.*;
 	
 	public class DefenseState extends ActiveState
-	{
-		private var _towerChoices:Array;
-		private var _towerPlacing:FlxSprite; // keeps user 
-		private var _mode:String;  // stores whether the user is placing or destroying
-		
-		
+	{		
 		public function DefenseState(tutorial:Boolean=false, menusActive:Boolean=false, map:FlxTilemap=null)
 		{
 			super(tutorial, menusActive, map);
-			_towerChoices = new Array();
-		//	_towerChoices = this.castle.unitsUnlocked(Castle.TOWER);
-			
-			/*Database.getTowerUnits(function(towers:Array):void {
-				var group:FlxGroup = new FlxGroup();
-				for (var i:int = 0; i < towers.length; i++) {
-					var towerStats:Object = towers[i];
-					group.add(new FlxSprite(i * 20 % CastleKingdom.WIDTH / 2, i * 20 / (CastleKingdom.WIDTH / 2), Util.assets[Assets.SWORDSMAN]));
-				}*/
-			
-				//Util.window(CastleKingdom.WIDTH / 4, CastleKingdom.HEIGHT / 4, group, unpause, menu, 0xffffffff, 10, 
-				//	CastleKingdom.WIDTH / 2, CastleKingdom.HEIGHT / 2);
-			//});
 		}
 		
-		public function generateUnitSelector(uid:int):FlxGroup {
-			
-			// getUnitInfo
-			// Put on image
-			// Put on descriptive text
-			// on click, ... be able 
-			//loc = FlxG.getScreenPosition();
-			return null;
-			
-		}
-		
-		/** Displays tower placement menu
-		 * */
+		/**
+		 * Displays the drag and drop defenseunit menu 
+		 * 
+		 */		
 		override public function create():void {
 			super.create();
-			var group:FlxGroup = new FlxGroup();
-			var text:FlxText = new FlxText(0,0,20,"hi");
-			text.color = 0xffff0000;
-			group.add(text);
 			
-			group.add(createPlaceableTowerGroup(0,0,0,10));
-			var sm:ScrollMenu = new ScrollMenu(CastleKingdom.WIDTH / 4, CastleKingdom.HEIGHT / 4, group, unpause, "Tower Selector", 0xffffffff, 10, 
-				CastleKingdom.WIDTH / 2, CastleKingdom.HEIGHT / 2);
-			setScrollMenu(sm);
-			add(sm.window);
-
-			
-			//Util.window(10,Util.minY,
+			Database.getDefenseUnitInfo(function(info:Array):void {
+				var pages:Array = createTowers(info);
+				var sm:ScrollMenu = new ScrollMenu(CastleKingdom.WIDTH / 4, CastleKingdom.HEIGHT / 4, pages, unpause, "Tower Selector", 
+						0xffffffff, 10, CastleKingdom.WIDTH / 2, CastleKingdom.HEIGHT / 2, 3, takeTower);
+				add(sm);
+			});
 		}
 		
-		private function createPlaceableTowerGroup(x:int,y:int,unitID:int,num:int):FlxGroup {
-			var group:FlxGroup = new FlxGroup();
-			group.add(new DefenseUnit(x,y,unitID,true));
-			for(var i:int = 0; i < num-1; i++) {
-				group.add(new DefenseUnit(x,y,unitID, false));
+		/**
+		 * Takes a tower from the menu and puts it into the state 
+		 * @param draggable the tower being pulled over
+		 * @param newX its new x position
+		 * @param newY its new y position
+		 * @param oldX its x position before being dragged
+		 * @param oldY its y position before being dragged
+		 * 
+		 */		
+		public function takeTower(draggable:Draggable, newX:Number, newY:Number, oldX:Number, oldY:Number):void {
+			var tower:DefenseUnit = (draggable as DefenseUnit);
+			towers.add(tower);
+			Util.placeOnGround(tower, map,false, true);
+			tower.allowCollisions = FlxObject.ANY;
+			tower.immovable = true;
+			tower.dragCallback = function(draggable:Draggable, newX:Number, newY:Number, oldX:Number, oldY:Number):void {
+				Util.placeOnGround(draggable as DefenseUnit, map,false, true);
+			};
+		}
+		
+		/**
+		 * Given an array of tower info objects constructs and returns an Array of FlxGroups intended for plcement in a ScrollMenu 
+		 * @param info The array of towers
+		 * @param perRow how many towers per row in a group
+		 * @param perColumn how many towers per column in a group
+		 * @param width how wide can the group spread
+		 * @param height how tall can the group spread
+		 * @return An array of FlxGroups containing towers in a grid pattern.
+		 * 
+		 */		
+		public function createTowers(info:Array, perRow:int = 4, perColumn:int = 2, 
+									 width:Number = CastleKingdom.WIDTH / 2, height:Number = CastleKingdom.HEIGHT / 2):Array {
+			var result:Array = [];
+			for (var i:int = 0; i < info.length / (perRow * perColumn); i++) {
+				var group:FlxGroup = new FlxGroup;
+				for (var j:int = 0; j < perColumn; j++) {
+					for (var k:int = 0; k < perRow; k++) {
+						var tower:DefenseUnit = new DefenseUnit(k * (width / perRow), j * (height / perColumn), info[i].id);
+						group.add(tower);
+					}
+				}
+				result[i] = group;
 			}
-			return group;
+			return result;
 		}
-		
-		// Display Tower selection menu
-		
-		// Enable drag and drop
-		// call placement check
-		
-		// Decrease towers available
-		
-		// 
 		
 		override public function update():void {
-			
-			
-			
-			
 			super.update();
-		
 		}
 		
 	}

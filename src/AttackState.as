@@ -38,9 +38,9 @@ package
 		
 		
 		
-		public function AttackState(tutorial:Boolean=false, menusActive:Boolean=false, map:FlxTilemap=null)
+		public function AttackState(tutorial:Boolean=false, menusActive:Boolean=false, map:FlxTilemap=null, towers:FlxGroup = null, units:FlxGroup = null)
 		{
-			super(tutorial, menusActive, map);
+			super(tutorial, menusActive, map, towers, units);
 			_activeAttack = false;
 			_unitDropCounter = 10;
 			
@@ -55,9 +55,8 @@ package
 			super.create();
 			var state:FlxText = new FlxText(Util.maxX-100,30,70,"Attack State");
 			this.add(state);
-			placeDefenses();
 
-			add(new DefenseUnit(Util.minX, Util.minY, 0));
+			//add(new DefenseUnit(Util.minX, Util.minY, 0));
 		}
 		
 		
@@ -277,17 +276,9 @@ package
 			units.add(dude);
 			//trace("adding dude: " + dude.x + " " + dude.y);
 			this.add(bar);
-			this.add(dude);
+			this.addEnemyUnit(dude as EnemyUnit,true);
+		//	this.add(dude);
 			dudes.shift();
-		}
-		
-		
-		private function placeDefenses():void {
-			this.addDefenseUnit(new DefenseUnit(50,100,0,false),true);
-			this.addDefenseUnit(new DefenseUnit(600,100,0,false),true);
-			this.addDefenseUnit(new DefenseUnit(90,100,0,false),true);
-
-			
 		}
 	}
 }

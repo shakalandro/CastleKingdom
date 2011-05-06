@@ -28,6 +28,8 @@ package
 		
 		public static const ARMY:int = 0;  // stores index of barracks level in _upgrades
 		public static const TOWER:int = 1; // stores index of foundry level in _upgrades
+		public static const UNIT_INFO:Array = new Array(); // stores all unit information 
+				// Tower/Unit --> ID --> info
 		
 		private var _upgrades:Array;  // should be:  {Castle level, Barracks level, foundry level, Smith level?}
 		private var _gold:int;	
@@ -38,6 +40,7 @@ package
 		
 		private var _leasedInNumber:int;
 		private var _leasedOutNumber:int;
+		private var _netWorth:int;
 		
 		private var _availableArmies:Array;			// all unitIDs unlocked up to upgrade level
 		private var _availableTowers:Array; 		// all towerIDs unlocked up to upgrade level
@@ -47,13 +50,100 @@ package
 		{
 			//TODO: implement function
 			super(X, Y, SimpleGraphic);
+			UNIT_INFO[Castle.ARMY] = new Array();
+			UNIT_INFO[Castle.TOWER] = new Array();
 			//_upgrades = ;
-			
-			_unitCap = 40;
-			_towerCap = 40;
+			Database.getUserUpgrades(initUpgrades,FaceBook.uid);
+			Database.getDefenseUnitInfo(initDefense, FaceBook.uid); 
+			_unitCap = 10;
+			_towerCap = 10;
 			solid = true;
 			immovable = true;
+			_upgrades = new Array();
 		}
+		
+		
+		private function initUserInfo(info:Array):void {
+			 _gold = info[0].gold;
+			 
+		}
+		
+		private function initArmy(info:Array):void {
+			for each (var obj:Object in info) {
+				var ui:Array = new Array();
+				ui["uid"] = obj.uid;
+				ui["name"] = obj.name;
+				ui["level"] = obj.level;
+				ui["unitCost"] = obj.unitCost;
+				ui["goldCost"] = obj.goldCost;
+				ui["maxHealth"] = obj.maxHealth;
+				ui["range"] = obj.range;
+				ui["damage"] = obj.damage;
+				ui["rate"] = obj.rate;
+				ui["reward"] = obj.reward;
+				ui["move"] = obj.move;
+				ui["type"] = obj.type;
+				ui["clas"] = obj.clas;
+				UNIT_INFO[Castle.ARMY][obj.id] = ui;
+			}
+		}
+		
+		private function initDefense(info:Array):void {
+			
+			for each (var obj:Object in info) {
+				var ui:Array = new Array();
+				ui["uid"] = obj.uid;
+				ui["name"] = obj.name;
+				ui["level"] = obj.level;
+				ui["unitCost"] = obj.unitCost;
+				ui["maxHealth"] = obj.maxHealth;
+				ui["range"] = obj.range;
+				ui["damage"] = obj.damage;
+				ui["rate"] = obj.rate;
+				ui["type"] = obj.type;
+				ui["clas"] = obj.clas;
+				UNIT_INFO[Castle.TOWER][obj.id] = ui;
+			}
+		}
+		
+		private function initUpgrades(info:Array):void {
+			for each (var obj:Object in info) {
+				if(obj.cid != "") {
+					_upgrades[0]++;
+					Database.getCastleInfo(initGenericPieces,obj.cid);
+				} else if (obj.bid != "") {
+					_upgrades[1]++;
+					Database.getCastleInfo(initBarracksPieces,obj.bid);
+				} else if (obj.fid != "") {
+					_upgrades[2]++;
+					Database.getCastleInfo(initFoundryPieces,obj.fid);
+				} else if (obj.mid != "") {
+					_upgrades[3]++;
+					Database.getCastleInfo(initGenericPieces,obj.mid);
+				} else if (obj.aid != "") {
+					_upgrades[4]++;
+					Database.getCastleInfo(initGenericPieces,obj.aid);
+				}
+			}
+		}
+		
+		private function initGenericPieces(info:Array):void {
+			_towerCap += info[0].unitWorth;
+			_unitCap += info[0].unitWorth;
+			_netWorth += info[0].goldCost;
+
+		}
+		
+		private function initBarracksPieces(info:Array):void {
+			_unitCap += info[0].unitWorth;
+			_netWorth += info[0].goldCost;
+		}
+		private function initFoundryPieces(info:Array):void {
+			_towerCap += info[0].unitWorth;
+			_netWorth += info[0].goldCost;
+	
+		}
+		
 		
 		/** Adds the given upgrade to the castle
 		 * */
