@@ -38,9 +38,9 @@ package
 		
 		
 		
-		public function AttackState(tutorial:Boolean=false, menusActive:Boolean=false, map:FlxTilemap=null, towers:FlxGroup = null, units:FlxGroup = null)
+		public function AttackState(menusActive:Boolean=false, map:FlxTilemap=null, towers:FlxGroup = null, units:FlxGroup = null)
 		{
-			super(tutorial, menusActive, map, towers, units);
+			super(menusActive, map, towers, units);
 			_activeAttack = false;
 			_unitDropCounter = 10;
 			
@@ -72,7 +72,7 @@ package
 				var cashStolen:int = computeStolen(units, cash);
 				this.castle.addGold(-cashStolen);
 				//Util.goldStolenFromAttack(cashStolen + armyCost);
-				GameMessages.LOSE_FIGHT("Bob Barker",6);
+				//GameMessages.LOSE_FIGHT("Bob Barker",6);
 			//	FlxG.state = new ActiveState();
 				
 				//_activeAttack = false;

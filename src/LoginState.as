@@ -44,7 +44,7 @@ package
 							if (dbInfo == null || dbInfo.length == 0) {
 								Util.log(fbInfo.id, typeof(fbInfo.id));
 								Database.addNewUser(fbInfo.id);
-								FlxG.switchState(new ActiveState(true, false, map));
+								FlxG.switchState(new ActiveState(false, map));
 							}
 						}, fbInfo.id);
 					});
@@ -56,7 +56,7 @@ package
 		}
 		
 		private function start():void {
-			FlxG.switchState(new ActiveState(true, true, this.map));
+			FlxG.switchState(new ActiveState(true, this.map));
 		}
 		
 		private function drawHelp(x:Number = CastleKingdom.WIDTH / 4, y:Number = CastleKingdom.HEIGHT / 4, 
