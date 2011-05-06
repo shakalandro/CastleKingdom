@@ -84,7 +84,7 @@ package
 				this.velocity.y = 0;
 				this.velocity.x = 0;
 				this.play("attack");
-			}
+			}	
 		}
 		
 		
@@ -96,6 +96,5 @@ package
 		//	play("die");
 			
 		}
-		
 	}
 }

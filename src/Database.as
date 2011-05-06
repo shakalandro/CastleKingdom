@@ -20,6 +20,7 @@ package
 		private static var _barracksInfo:Array;
 		private static var _castleInfo:Array;
 		private static var _userLeaseInfo:Array;
+		private static var _userTutorialInfo:Array;
 		private static const _startGold:int = 0;
 		private static const _startUnits:int = 5;
 		
@@ -411,6 +412,43 @@ package
 			}
 		}
 		
+		/**
+		 * <p>
+		 * Passes an array of objects representing the given users (based on the given ids) tutorial information to
+		 * the callback function. The object that is passed to the callback function is of the following form:
+		 * </p>
+		 * <p>
+		 * {id, tut1, tut2, tut3, tut4, tut5}
+		 * </p>
+		 * <p>
+		 * If the user does not have any tutorial information, the the array that is passed to the callback is null.
+		 * </p>
+		 * 
+		 * @param callback a function that takes one argument, an array of objects
+		 * @param ids either a number or an array of numbers representing the user ids
+		 * @param forceRefresh
+		 * 
+		 */
+		public static function getUserTutorialInfo(callback:Function, ids:Object = null, forceRefresh:Boolean = false):void {
+			if (forceRefresh || _userTutorialInfo == null) {
+				getMain("http://games.cs.washington.edu/capstone/11sp/castlekd/database/getUserTutorial.php", function(xmlData:XML):void {
+					_userTutorialInfo = processList(xmlData.user, function(unit:XML):Object {
+						return {
+							id: unit.uid,
+							tut1: unit.tut1,
+							tut2: unit.tut2,
+							tut3: unit.tut3,
+							tut4: unit.tut4,
+							tut5: unit.tut5
+						};
+					})
+					callback(_userTutorialInfo);
+				}, ids);
+			} else {
+				callback(getAll(_userTutorialInfo, ids));
+			}
+		}
+		
 		private static function getAll(stuff:Array, ids:Object):Array {
 			if (stuff == null) {
 				return null;
@@ -494,6 +532,23 @@ package
 			variables.gold = "" + userInfo["gold"];
 			variables.units = "" + userInfo["units"];
 			update("http://games.cs.washington.edu/capstone/11sp/castlekd/database/updateUserInfo.php", variables);
+		}
+		
+		/**
+		 * <p>
+		 * Updates the given users tutorial information by setting the tutorial level completion to
+		 * true for the given level.
+		 *  
+		 * @param uid the given users uid
+		 * @param tutLevelComp the tutorial level that has been completed
+		 * 
+		 */
+		public static function updateUserTutorialInfo(uid:int, tutLevelComp:int):void
+		{
+			var variables:URLVariables = new URLVariables();
+			variables.uid = "" + uid;
+			variables.tutNum = "" + tutLevelComp;
+			update("http://games.cs.washington.edu/capstone/11sp/castlekd/database/updateUserTutorialInfo.php", variables);
 		}
 		
 		/**

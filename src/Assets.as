@@ -64,6 +64,10 @@ package
 		private static var arrow_tower_normal:Class;
 		public static const ARROW_TOWER:String = "arrow_tower";
 		
+		[Embed(source = "../images/flame_tower.png")]
+		private static var flame_tower_normal:Class;
+		public static const FLAME_TOWER:String = "flame_tower";
+		
 		[Embed(source = "../images/cursor.png")]
 		private static var cursor_img:Class;
 		public static const CURSOR:String = "cursor";
