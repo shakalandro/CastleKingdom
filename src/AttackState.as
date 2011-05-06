@@ -279,7 +279,8 @@ package
 			units.add(dude);
 			//trace("adding dude: " + dude.x + " " + dude.y);
 			this.add(bar);
-			this.add(dude);
+			this.addEnemyUnit(dude as EnemyUnit,true);
+		//	this.add(dude);
 			dudes.shift();
 		}
 	}

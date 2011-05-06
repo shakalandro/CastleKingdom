@@ -203,7 +203,7 @@ package
 				unit.y = coordinates.y;
 				if (snapToGround) Util.placeOnGround(unit, map, false, true);
 				group.add(unit);
-				add(unit);
+				//add(unit);
 				return true;
 			}
 			return false;

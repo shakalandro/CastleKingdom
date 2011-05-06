@@ -212,6 +212,8 @@ package
 		 * {id, name, unitWorth, goldCost}
 		 * </p>
 		 * <p>
+		 * id = the mine mid, name is the name of the mine piece, unitWorth is the worth of the mine
+		 * piece, and goldCost is the cost to "build" the new mine piece.
 		 * If the mine does not have any information, the the array that is passed to the callback is null.
 		 * </p>
 		 * 
@@ -247,6 +249,8 @@ package
 		 * {id, name, unitWorth, goldCost}
 		 * </p>
 		 * <p>
+		 * id = the foundry fid, name is the name of the foundry piece, unitWorth is the worth of the foundry
+		 * piece, and goldCost is the cost to "build" the new foundry piece.
 		 * If the foundry does not have any information, the the array that is passed to the callback is null.
 		 * </p>
 		 * 
@@ -282,6 +286,8 @@ package
 		 * {id, name, unitWorth, goldCost}
 		 * </p>
 		 * <p>
+		 * id = the aviary aid, name is the name of the aviary piece, unitWorth is the worth of the aviary
+		 * piece, and goldCost is the cost to "build" the new aviary piece.
 		 * If the aviary does not have any information, the the array that is passed to the callback is null.
 		 * </p>
 		 * 
@@ -317,6 +323,8 @@ package
 		 * {id, name, unitWorth, goldCost}
 		 * </p>
 		 * <p>
+		 * id = the barrack bid, name is the name of the barrack piece, unitWorth is the worth of the barrack
+		 * piece, and goldCost is the cost to "build" the new barrack piece.
 		 * If the barrack does not have any information, the the array that is passed to the callback is null.
 		 * </p>
 		 * 
@@ -352,6 +360,8 @@ package
 		 * {id, name, unitWorth, goldCost}
 		 * </p>
 		 * <p>
+		 * id = the castle cid, name is the name of the castle piece, unitWorth is the worth of the castle
+		 * piece, and goldCost is the cost to "build" the new castle piece.
 		 * If the castle does not have any information, the the array that is passed to the callback is null.
 		 * </p>
 		 * 
@@ -387,6 +397,8 @@ package
 		 * {id, lid, numUnits}
 		 * </p>
 		 * <p>
+		 * id = the user uid, lid = the uid of the person you are leasing to, and numUnits is the number of units
+		 * they are leasing to lid.
 		 * If the user does not have any lease information, the the array that is passed to the callback is null.
 		 * </p>
 		 * 
@@ -421,6 +433,7 @@ package
 		 * {id, tut1, tut2, tut3, tut4, tut5}
 		 * </p>
 		 * <p>
+		 * the fields tut1,...,tut5 are either 0 or 1 (0 indicates false, 1 indicates true).
 		 * If the user does not have any tutorial information, the the array that is passed to the callback is null.
 		 * </p>
 		 * 
