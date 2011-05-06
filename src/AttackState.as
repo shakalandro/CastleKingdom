@@ -38,9 +38,9 @@ package
 		
 		
 		
-		public function AttackState(tutorial:Boolean=false, menusActive:Boolean=false, map:FlxTilemap=null, towers:FlxGroup = null, units:FlxGroup = null)
+		public function AttackState(menusActive:Boolean=false, map:FlxTilemap=null, towers:FlxGroup = null, units:FlxGroup = null)
 		{
-			super(tutorial, menusActive, map, towers, units);
+			super(menusActive, map, towers, units);
 			_activeAttack = false;
 			_unitDropCounter = 10;
 			

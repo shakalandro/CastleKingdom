@@ -80,7 +80,6 @@ package
 			
 			// Set default fields
 			health = _maxHealth;
-			//_img = GLOBALLOOKUP[SKIN][unitID];
 			_attackCounter = 100/_rate;
 			
 			_healthyBar = hpBar;

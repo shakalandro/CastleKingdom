@@ -28,6 +28,7 @@ package
 		
 		public static const ARMY:int = 0;  // stores index of barracks level in _upgrades
 		public static const TOWER:int = 1; // stores index of foundry level in _upgrades
+		public static const TILE_WIDTH:int = 8;
 		
 		private var _upgrades:Array;  // should be:  {Castle level, Barracks level, foundry level, Smith level?}
 		private var _gold:int;	

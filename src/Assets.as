@@ -79,6 +79,14 @@ package
 		private static var tileLayout_normal:Class;
 		public static const TILE_LAYOUT:String = "tileLayout";
 		
+		public static const PLACE_TOWER_BUTTON:String = "place tower button";
+		public static const RELEASE_WAVE_BUTTON:String = "release wave button";
+		public static const UPGRADE_BUTTON:String = "upgrade button";
+		public static const ATTACK_BUTTON:String = "attack button";
+		public static const LEASE_BUTTON:String = "lease button";
+		public static const INITIAL_PENDING_WAVE_TEXT:String = "initial pending wave text";
+		public static const TOWER_WINDOW_TITLE:String = "tower window title"
+		
 		// End resource embed area
 		
 		/**
@@ -103,6 +111,17 @@ package
 			_normal[Assets.CURSOR] = cursor_img;
 			_normal[Assets.BACKGROUND] = background_img;
 			_normal[Assets.ARROW_TOWER] = arrow_tower_normal;
+			
+			//Textual assets
+			_normal[Assets.PLACE_TOWER_BUTTON] = "Defend";
+			_normal[Assets.RELEASE_WAVE_BUTTON] = "Release";
+			_normal[Assets.UPGRADE_BUTTON] = "Upgrade";
+			_normal[Assets.ATTACK_BUTTON] = "Attack";
+			_normal[Assets.LEASE_BUTTON] = "Lease";
+			_normal[Assets.TOWER_WINDOW_TITLE] = "Available Towers";
+			_normal[Assets.INITIAL_PENDING_WAVE_TEXT] = "Welcome to the cutthroat world of Castle Kingdom. " +
+				"Your castle is your life and the gold within is yours means to glory. But right now a band of" +
+				" enemies is on their way to steal your gold. You must defend yourself.";
 		}
 		
 		/**

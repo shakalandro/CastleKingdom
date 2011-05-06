@@ -173,5 +173,9 @@ package
 				return null;
 			}
 		}
+		
+		override public function clone():FlxBasic {
+			return new DefenseUnit(x, y, unitID, _canDrag, _dragCallback, _canHighlight, _highlightCallback);
+		}
 	}
 }

@@ -6,7 +6,7 @@ package
 	import org.flixel.*;
 
 	public class ScrollMenu extends FlxGroup {
-		
+		private var _text:FlxText;
 		private var _pages:Array;
 		private var _currentPage:int;
 		private var _width:int = 0;
@@ -31,9 +31,9 @@ package
 			_dragCallback = dragCallback;
 			
 			//Set the title text and pageText;
-			var text:FlxText = new FlxText(_x, _y, width - padding * 2, title);
-			text.color = FlxG.BLACK;
-			text.alignment = "center";
+			_text = new FlxText(_x, _y, width - padding * 2, title);
+			_text.color = FlxG.BLACK;
+			_text.alignment = "center";
 			_pageCount = new FlxText(_x, _y, width - padding * 2, "0/" + _pages.length);
 			_pageCount.color = FlxG.BLACK;
 			_pageCount.alignment = "right";
@@ -46,18 +46,16 @@ package
 			});
 			close.x -= close.width / 2;
 			close.y -= close.height / 2;
-			_leftButton = new FlxButton(x + padding, y + height - padding * 2, "<===8", scrollLeft);
+			_leftButton = new FlxButton(x + padding, y + height - padding * 2, "<<", scrollLeft);
 			_leftButton.y -= _leftButton.height / 2;
-			_rightButton = new FlxButton(x + width - padding, y + height - padding * 2, "8===>", scrollRight);
+			_rightButton = new FlxButton(x + width - padding, y + height - padding * 2, ">>", scrollRight);
 			_rightButton.x -= _rightButton.width;
-			_rightButton.y -= _rightButton.height / 2;
-			_height += close.height + text.height;
-			
+			_rightButton.y -= _rightButton.height / 2;	
 			
 			//Set up window box
 			ExternalImage.setData(new BitmapData(width, height, true, bgColor), title);
 			var box:FlxSprite = new FlxSprite(x, y, ExternalImage);
-			box.alpha = .5;
+			box.alpha = .65;
 			var right:Number = box.width - borderThickness + 1;
 			var bottom:Number = box.height - borderThickness + 1;
 			box.drawLine(0, 0, right, 0, FlxG.BLACK, borderThickness);
@@ -69,7 +67,7 @@ package
 			
 			//Add everything
 			add(box);
-			add(text);
+			add(_text);
 			add(_pageCount);
 			add(_leftButton);
 			add(_rightButton);
@@ -105,27 +103,30 @@ package
 			for (var i:int = 0; i < _pages.length; i++) {
 				var stuff:FlxGroup = _pages[i];
 				for each (var thing:FlxBasic in stuff.members) {
-					if (thing is FlxObject) {
-						var obj:FlxObject = (thing as FlxObject);
-						obj.x += _x + _padding + _pageCount.height;
-						obj.y += _y + _padding;
-						obj.allowCollisions = FlxObject.NONE;
-						obj.immovable = true;
-					}
-					Util.log(stuff.members.indexOf(thing));
-					if (thing is Draggable) {
-						(thing as Draggable).dragCallback = function(tower:Draggable, newX:Number, newY:Number, oldX:Number, oldY:Number):void {
-							if (inWindow(newX, newY)) {
-								tower.objx = oldX;
-								tower.objy = oldY;
-							} else {
-								_dragCallback(tower, newX, newY, oldX, oldY);
-								_pages[_currentPage].remove(tower, true);
-								displayPage(_currentPage, _currentPage);
-							}
-						};
-					}
+					formatObject(thing);
 				}
+			}
+		}
+		
+		private function formatObject(thing:FlxBasic):void {
+			if (thing is FlxObject) {
+				var obj:FlxObject = (thing as FlxObject);
+				obj.x += _x + _padding + _pageCount.height;
+				obj.y += _y + _padding + _text.height;
+				obj.allowCollisions = FlxObject.NONE;
+				obj.immovable = true;
+			}
+			if (thing is Draggable) {
+				(thing as Draggable).dragCallback = function(tower:Draggable, newX:Number, newY:Number, oldX:Number, oldY:Number):void {
+					if (inWindow(newX, newY) || !(FlxG.state as ActiveState).droppable(newX, newY)) {
+						tower.objx = oldX;
+						tower.objy = oldY;
+					} else {
+						_dragCallback(tower, newX, newY, oldX, oldY);
+						_pages[_currentPage].remove(tower, true);
+						displayPage(_currentPage, _currentPage);
+					}
+				};
 			}
 		}
 		
@@ -136,6 +137,15 @@ package
 		public function displayPage(n:int, old:int):void {
 			remove(_pages[old]);
 			add(_pages[n]);
+		}
+		
+		public function addToCurrentPage(thing:FlxObject, absoluteCoords:Boolean = true):void {
+			_pages[_currentPage].add(thing);
+			formatObject(thing);
+			if (absoluteCoords) {
+				thing.x -= _x + _padding + _pageCount.height;
+				thing.y -= _y + _padding + _text.height;
+			}
 		}
 		
 		public function set pageCount(n:int):void {
