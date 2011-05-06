@@ -18,8 +18,13 @@ package
 			_btn1 = new FlxButton(0, 0, button1Text, button1Callback);
 			_btn1.x = Util.maxX - _btn1.width - _padding;
 			_btn2 = new FlxButton(0, 0, button1Text, button1Callback);
+			_btn1.x = _btn1.x - _btn2.width - _padding;
 			
 			_text = new FlxText(0, 0, FlxG.width, title);
+			
+			add(_btn1);
+			add(_btn2);
+			add(_text);
 		}
 	}
 }

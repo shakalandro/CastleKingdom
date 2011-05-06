@@ -1,5 +1,9 @@
 package
 {
+	import flashx.textLayout.elements.SubParagraphGroupElement;
+	
+	import mx.utils.StringUtil;
+	
 	import org.flixel.*;
 	
 	/**
@@ -81,7 +85,6 @@ package
 				this.castle.addGold(armyCost2);
 				//_activeAttack = false;
 			}
-			
 			
 			// Do nothing if peeps are still alive
 			if(!_activeAttack) {
