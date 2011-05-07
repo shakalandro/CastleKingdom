@@ -29,7 +29,7 @@ package
 		
 		public static const ARMY:String = "barracks";  // stores index of barracks level in _upgrades
 		public static const TOWER:String = "foundry"; // stores index of foundry level in _upgrades
-		public static var UNIT_INFO:Array = new Array(); // stores all unit information 
+		public static var UNIT_INFO:Array;// stores all unit information 
 				// Tower/Unit --> ID --> info
 
 		public static const TILE_WIDTH:int = 8;
@@ -54,18 +54,24 @@ package
 		{
 			//TODO: implement function
 			super(X, Y, SimpleGraphic);
-			UNIT_INFO[Castle.ARMY] = new Array();
-			UNIT_INFO[Castle.TOWER] = new Array();
-			//_upgrades = ;
-	//		Database.getUserInfo(initUserInfo, FaceBook.uid);
-			Database.getUserUpgrades(initUpgrades,FaceBook.uid);
-			Database.getDefenseUnitInfo(initDefense,FaceBook.uid); 
-			Database.getEnemyInfo(initArmy,FaceBook.uid);
-			_unitCap = 10;
-			_towerCap = 10;
+			if ( UNIT_INFO == null) {
+				UNIT_INFO = new Array(); 
+			
+				UNIT_INFO[Castle.ARMY] = new Array();
+				UNIT_INFO[Castle.TOWER] = new Array();
+		
+				//_upgrades = ;
+		//		Database.getUserInfo(initUserInfo, FaceBook.uid);
+				Database.getUserUpgrades(initUpgrades,FaceBook.uid);
+				Database.getDefenseUnitInfo(initDefense,FaceBook.uid); 
+				Database.getEnemyInfo(initArmy,FaceBook.uid);
+			}
+			_unitCap = 100;
+			_towerCap = 100;
 			solid = true;
 			immovable = true;
 			_upgrades = new Array();
+			
 		}
 		
 		/** Adds the given upgrade to the castle**/
@@ -82,19 +88,19 @@ package
 			trace("army info size: " + info.length + " : " + info);
 			for each (var obj:Object in info) {
 				var ui:Array = new Array();
-				ui["uid"] = obj.uid;
-				ui["name"] = obj.name;
-				ui["level"] = obj.level;
-				ui["unitCost"] = obj.unitCost;
-				ui["goldCost"] = obj.goldCost;
-				ui["maxHealth"] = obj.maxHealth;
-				ui["range"] = obj.range;
-				ui["damage"] = obj.damage;
-				ui["rate"] = obj.rate;
-				ui["reward"] = obj.reward;
-				ui["move"] = obj.move;
-				ui["type"] = obj.type;
-				ui["clas"] = obj.clas;
+				ui["uid"] = obj.id.toString();
+				ui["name"] = obj.name.toString();
+				ui["level"] = obj.level.toString();
+				ui["unitCost"] = obj.unitCost.toString();
+				ui["goldCost"] = obj.goldCost.toString();
+				ui["maxHealth"] = obj.maxHealth.toString();
+				ui["range"] = obj.range.toString();
+				ui["damage"] = obj.damage.toString();
+				ui["rate"] = obj.rate.toString();
+				ui["reward"] = obj.reward.toString();
+				ui["move"] = obj.move.toString();
+				ui["type"] = obj.type.toString();
+				ui["clas"] = obj.clas.toString();
 				UNIT_INFO[Castle.ARMY][obj.id] = ui;
 				if(UNIT_INFO[Castle.ARMY]["byLevel"][obj.level] == null) {
 					UNIT_INFO[Castle.ARMY]["byLevel"][obj.level] = new Array();
@@ -118,24 +124,25 @@ package
 			UNIT_INFO[Castle.TOWER]["byLevel"] = new Array();
 			for each (var obj:Object in info) {
 				var ui:Array = new Array();
-				ui["uid"] = obj.uid;
-				ui["name"] = obj.name;
-				ui["level"] = obj.level;
-				ui["unitCost"] = obj.unitCost;
-				ui["maxHealth"] = obj.maxHealth;
-				ui["range"] = obj.range;
-				ui["damage"] = obj.damage;
-				ui["rate"] = obj.rate;
-				ui["type"] = obj.type;
-				ui["clas"] = obj.clas;
+				ui["uid"] = obj.id.toString();
+				ui["name"] = obj.name.toString();
+				ui["level"] = obj.level.toString();
+				ui["unitCost"] = obj.unitCost.toString();
+				ui["maxHealth"] = obj.maxHealth.toString();
+				ui["range"] = obj.range.toString();
+				ui["damage"] = obj.damage.toString();
+				ui["rate"] = obj.rate.toString();
+				ui["type"] = obj.type.toString();
+				ui["clas"] = obj.clas.toString();
 				UNIT_INFO[Castle.TOWER][obj.id] = ui;
 				if(UNIT_INFO[Castle.TOWER]["byLevel"][obj.level] == null) {
 					UNIT_INFO[Castle.TOWER]["byLevel"][obj.level] = new Array();
 				}
 				UNIT_INFO[Castle.TOWER]["byLevel"][obj.level].push(ui);
 				
-				continueSetup();
 			}
+			continueSetup();
+
 		}
 		
 		private function initUpgrades(info:Array):void {
@@ -291,9 +298,12 @@ package
 			trace(unitType + " " + UNIT_INFO[unitType]);
 			// Iterates over upgrade list to add all unitIDs contained
 			var unitList:Array = new Array();
-			for (var upgradeLevel:int = 0; upgradeLevel <= typeLevel && UNIT_INFO[unitType][upgradeLevel] != null ; upgradeLevel++) {
-				for(var unitID:Object in UNIT_INFO[unitType][upgradeLevel]) {
-					unitList.push(unitID["uid"]);	
+			var upgradeLevel:int = 1;
+			for (; upgradeLevel <= typeLevel ; upgradeLevel++) {
+				if (UNIT_INFO[unitType].byLevel[upgradeLevel] != null) {
+					for(var unitID:Object in UNIT_INFO[unitType].byLevel[upgradeLevel]) {
+						unitList.push(UNIT_INFO[unitType].byLevel[upgradeLevel][unitID].uid);	
+					}
 				}
 			}
 			trace("hi");

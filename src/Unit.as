@@ -356,6 +356,12 @@ package
 			}
 		}
 		
+		/** compares by unit cost */
+		public static function compareByCost(unit1:int, unit2:int):int {
+			
+			return Castle.UNIT_INFO["barracks"][unit1].cost -  Castle.UNIT_INFO["barracks"][unit2].cost;
+		}
+		
 		/** Compares the distance from two other units to the current Unit
 		 *
 		 * @param unit1 1st unit to compare
