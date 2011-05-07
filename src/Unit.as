@@ -68,7 +68,7 @@ package
 			// look up unit info, set fields
 			// {cost, goldCost, maxHealth,speed,range,damage,rate)
 			
-			var unitStats:Array = [2,10,100,10,1,10,2] ;//unitStatLookup(unitID);
+			var unitStats:Array = [1,10,100,10,1,10,2] ;//unitStatLookup(unitID);
 			
 			_cost = unitStats[0];
 			_goldCost = unitStats[1];
@@ -98,7 +98,8 @@ package
 		 * */
 		override public function update():void {
 			if(Castle.ACID_TRIP_MODE) {
-				this.color =  Math.random() * 0xffffffff; 
+				this.color =  Math.random() * 0xffffffff;
+				
 			}
 			if(this.health <= 0) {
 				super.update();

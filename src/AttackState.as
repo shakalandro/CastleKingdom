@@ -151,10 +151,16 @@ package
 		 * 
 		 */		
 		private function generateArmy(leftSide:Array, rightSide:Array, lowRange:Number, highRange:Number):void {
-			var possibleUnits:Array = this.castle.unitsUnlocked(Castle.ARMY, true); // gets highest upgrade level of units
+			
+			// gets highest upgrade level of units that army can use
+			var possibleUnits:Array = this.castle.unitsUnlocked(Castle.ARMY, true); 
+			
+			// Creates random army size based on user's defensive capability
 			var enemyCap:int = this.castle.towerCapacity;
 			var rand:int = Math.round(Math.random()*(highRange/100*enemyCap  + lowRange/100*enemyCap)) - lowRange/100*enemyCap; // maps to -lowRange% <= rand% <= highRange%
 			enemyCap += rand;
+			
+			
 			possibleUnits.sort(Unit.compare);
 			
 			// Randomly select units from the array, reducing size each time
@@ -173,7 +179,7 @@ package
 					} else {
 						rightSide.push(unitNum);
 					}
-					remaining -= 2; // cost of unit
+					remaining -= Castle.UNIT_INFO[Castle.ARMY][unitNum][unitCost]; // cost of unit
 				}
 			} while (remaining > 0 && maxIndex >=0 ) ;
 				
