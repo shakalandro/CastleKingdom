@@ -36,10 +36,10 @@ package
 				// set to default image
 				imgResource = Util.assets[Assets.WALL];
 			}
-			
+			var sizer:FlxSprite = new FlxSprite(0,0,imgResource);
 			this.loadGraphic(imgResource,true,true,
-					(imgResource).width / 12,
-					(imgResource).height-1,true);
+					sizer.width / 12,
+					sizer.height,true);
 			this.addAnimation("walk", [0,1,2,3],speed/2,true);
 			this.addAnimation("attack",[4,5,6,7],_rate*2,true);
 			this.addAnimation("die",[8,9,10,11],_rate*2, false);

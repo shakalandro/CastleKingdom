@@ -62,11 +62,11 @@ package
 		
 		[Embed(source = "../images/arrow_tower.png")]
 		private static var arrow_tower_normal:Class;
-		public static const ARROW_TOWER:String = "Arrow Tower";
+		public static const ARROW_TOWER:String = "Arrow_Tower";
 		
 		[Embed(source = "../images/flame_tower.png")]
 		private static var flame_tower_normal:Class;
-		public static const FLAME_TOWER:String = "Flame Tower";
+		public static const FLAME_TOWER:String = "Flame_Tower";
 		
 		[Embed(source = "../images/cursor.png")]
 		private static var cursor_img:Class;
