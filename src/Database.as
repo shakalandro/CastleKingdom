@@ -18,6 +18,7 @@ package
 		private static var _foundryInfo:Array;
 		private static var _aviaryInfo:Array;
 		private static var _barracksInfo:Array;
+		private static var _upgradeInfo:Array;
 		private static var _castleInfo:Array;
 		private static var _userLeaseInfo:Array;
 		private static var _userTutorialInfo:Array;
@@ -311,6 +312,44 @@ package
 				}, ids);
 			} else {
 				callback(getAll(_aviaryInfo, ids));
+			}
+		}
+		
+		/**
+		 * <p>
+		 * Passes an array of objects representing the given upgrade (based on the given ids) information to
+		 * the callback function. The object that is passed to the callback function is of the following form:
+		 * </p>
+		 * <p>
+		 * {id, name, unitWorth, goldCost, type}
+		 * </p>
+		 * <p>
+		 * id = the upgrade id, name is the name of the upgrade piece, unitWorth is the worth of the upgrade
+		 * piece, goldCost is the cost to "build" the new upgrade piece and type is what type the upgrade is.
+		 * If the upgrade does not have any information, the the array that is passed to the callback is null.
+		 * </p>
+		 * 
+		 * @param callback a function that takes one argument, an array of objects
+		 * @param ids either a number or an array of numbers representing the user ids
+		 * @param forceRefresh
+		 * 
+		 */
+		public static function getUpgradesInfo(callback:Function, ids:Object = null, forceRefresh:Boolean = false):void {
+			if (forceRefresh || _upgradeInfo == null) {
+				getMain("http://games.cs.washington.edu/capstone/11sp/castlekd/database/getUpgradesInfo.php", function(xmlData:XML):void {
+					_upgradeInfo = processList(xmlData.upgrade, function(unit:XML):Object {
+						return {
+							id: unit.bid,
+							name: unit.name,
+							unitWorth: unit.unitWorth,
+							goldCost: unit.goldCost,
+							type: unit.type
+						};
+					})
+					callback(_upgradeInfo);
+				}, ids);
+			} else {
+				callback(getAll(_upgradeInfo, ids));
 			}
 		}
 		

@@ -107,9 +107,15 @@ package
 		}
 		
 		private function formatObject(thing:FlxBasic):void {
-			if (thing is FlxObject) {
+			Util.log("Scrollmenu.formatObj: " + (thing is FlxGroup));
+			if (thing is FlxGroup) {
+				for each (var member:FlxBasic in (thing as FlxGroup).members) {
+					Util.log("recursive scrollmenu format");
+					formatObject(member);
+				}
+			} else if (thing is FlxObject) {
 				var obj:FlxObject = (thing as FlxObject);
-				obj.x += _x + _padding + _pageCount.height;
+				obj.x += _x + _padding;
 				obj.y += _y + _padding + _text.height;
 				obj.allowCollisions = FlxObject.NONE;
 				obj.immovable = true;
@@ -141,7 +147,7 @@ package
 			_pages[_currentPage].add(thing);
 			formatObject(thing);
 			if (absoluteCoords) {
-				thing.x -= _x + _padding + _pageCount.height;
+				thing.x -= _x + _padding;
 				thing.y -= _y + _padding + _text.height;
 			}
 		}
@@ -176,7 +182,6 @@ package
 		
 		public function get onClose():Function {
 			return function():void {
-				Util.log(_closeCallback);
 				if (_closeCallback != null) _closeCallback();
 				kill();
 			}

@@ -57,8 +57,6 @@ package
 		 */
 		override public function create():void {
 			super.create();
-			var state:FlxText = new FlxText(Util.maxX-100,30,70,"Attack State");
-			this.add(state);
 			_gameOver = false;
 		}
 		
@@ -66,6 +64,24 @@ package
 			toggleButtons(0);
 			if (tutorialLevel == TUTORIAL_FIRST_DEFEND) {
 				Database.updateUserTutorialInfo(FaceBook.uid, TUTORIAL_FIRST_WAVE);
+				tutorialLevel = TUTORIAL_FIRST_WAVE;
+			}
+		}
+		
+		private function waveFinished(win:Boolean):void {
+			Util.log("AttackState.waveFinished: " + win, tutorialLevel);
+			if (win && tutorialLevel == TUTORIAL_FIRST_WAVE) {
+				add(new MessageBox(Util.assets[Assets.FIRST_WIN], "Okay", function():void {
+					toggleButtons(3);
+					Database.updateUserTutorialInfo(FaceBook.uid, TUTORIAL_UPGRADE);
+					tutorialLevel = TUTORIAL_UPGRADE;
+				}));
+			} else if (!win && tutorialLevel == TUTORIAL_FIRST_WAVE) {
+				add(new MessageBox(StringUtil.substitute(Util.assets[Assets.FIRST_LOSS], castle.unitCapacity), 
+					"Okay", function():void {
+				}));
+			} else if (tutorialLevel == TUTORIAL_UPGRADE){
+				toggleButtons(3);
 			}
 		}
 		
@@ -129,22 +145,6 @@ package
 			super.collide();
 			super.update();
 			
-		}
-		
-		private function waveFinished(win:Boolean):void {
-			if (win && tutorialLevel == TUTORIAL_FIRST_WAVE) {
-				hud.add(new MessageBox(Util.assets[Assets.FIRST_WIN], "Okay", function():void {
-					toggleButtons(2);
-					Database.updateUserTutorialInfo(FaceBook.uid, TUTORIAL_UPGRADE);
-					tutorialLevel = TUTORIAL_UPGRADE;
-				}));
-			} else if (!win && tutorialLevel == TUTORIAL_FIRST_WAVE) {
-				hud.add(new MessageBox(StringUtil.substitute(Util.assets[Assets.FIRST_LOSS], castle.unitCapacity), 
-						"Okay", function():void {
-				}));
-			} else if (tutorialLevel == TUTORIAL_UPGRADE){
-				toggleButtons(3);
-			}
 		}
 		
 		/**

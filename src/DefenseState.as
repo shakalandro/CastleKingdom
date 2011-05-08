@@ -19,18 +19,22 @@ package
 		override public function create():void {
 			super.create();
 			Database.getDefenseUnitInfo(function(info:Array):void {
-				var pages:Array = createTowers(info, 2, 4, Castle.TILE_WIDTH * CastleKingdom.TILE_SIZE, Util.maxY - Util.minY - 50);
+				var padding:Number = 10;
+				var pages:Array = createTowers(info, 2, 4, Castle.TILE_WIDTH * CastleKingdom.TILE_SIZE - padding * 2, Util.maxY - Util.minY - 50 - padding * 2, 10);
 				_menu = new ScrollMenu(castle.x, Util.minY, pages, null, Util.assets[Assets.TOWER_WINDOW_TITLE], 
-						0xffffffff, 10, Castle.TILE_WIDTH * CastleKingdom.TILE_SIZE, Util.maxY - Util.minY, 3, takeTower);
+						0xffffffff, padding, Castle.TILE_WIDTH * CastleKingdom.TILE_SIZE, Util.maxY - Util.minY, 3, takeTower);
 				add(_menu);
 			});
 		}
 		
 		override protected function setTutorialUI():void {
+			toggleButtons(0);
 			if (tutorialLevel == TUTORIAL_FIRST_DEFEND || tutorialLevel == TUTORIAL_FIRST_WAVE) {
 				_menu.onClose = function():void {
 					unpause();
-					toggleButtons(2);
+					add(new MessageBox(Util.assets[Assets.FIRST_DEFENSE], "Okay", function():void {
+						toggleButtons(2);
+					}));
 				};
 			} else if (tutorialLevel == TUTORIAL_UPGRADE) {
 				_menu.onClose = function():void {
@@ -75,7 +79,7 @@ package
 		 * 
 		 */		
 		public function createTowers(info:Array, perRow:int = 4, perColumn:int = 2, 
-									 width:Number = CastleKingdom.WIDTH / 2, height:Number = CastleKingdom.HEIGHT / 2):Array {
+				width:Number = CastleKingdom.WIDTH / 2, height:Number = CastleKingdom.HEIGHT / 2, padding:Number = 10):Array {
 			var result:Array = [];
 			for (var i:int = 0; i < info.length / (perRow * perColumn); i++) {
 				var group:FlxGroup = new FlxGroup;
@@ -83,9 +87,14 @@ package
 					for (var k:int = 0; k < perRow; k++) {
 						var index:Number = i * (perRow * perColumn) + j * perRow + k;
 						if (index < info.length) {
+							var towerGroup:FlxGroup = new FlxGroup();
 							var tower:DefenseUnit = new DefenseUnit(k * (width / perRow), j * (height / perColumn), info[index].id);
-							tower.x += tower.width / 2;
-							group.add(tower);
+							tower.x += tower.width;
+							var name:FlxText = new FlxText(k * (width / perRow), j * (height / perColumn) + tower.height, width / perRow, info[index].name);
+							name.color = FlxG.BLACK;
+							towerGroup.add(tower);
+							towerGroup.add(name);
+							group.add(towerGroup);
 						}
 					}
 				}

@@ -143,7 +143,7 @@ package
 		 */		
 		public static function cartesianToIndices(cartesian:FlxPoint, ignoreX:Boolean = false):FlxPoint {
 			if (!Util.inBounds(cartesian.x, cartesian.y) && !ignoreX) {
-				trace("The given coordinates were out of bounds: " + cartesian);
+				trace("The given coordinates were out of bounds: (" + cartesian.x + "," + cartesian.y + ")");
 				return null;
 			}
 			var xIndex:Number = Math.floor((cartesian.x - Util.minX) / CastleKingdom.TILE_SIZE);
@@ -189,6 +189,10 @@ package
 		 */		
 		public static function inBounds(x:Number, y:Number):Boolean {
 			return x >= Util.minX && x < Util.maxX && y >= Util.minY && y < Util.maxY;
+		}
+		
+		public static function checkClick(obj:FlxObject):Boolean {
+			return obj.overlapsPoint(Util.mouse.getScreenPosition(), true);
 		}
 		
 		/**
