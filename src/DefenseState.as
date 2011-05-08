@@ -18,13 +18,21 @@ package
 		 */		
 		override public function create():void {
 			super.create();
-			
+			function setTutorial2():void {
+				Database.updateUserTutorialInfo(FaceBook.uid, 2);
+				tutorial2();
+			}
 			Database.getDefenseUnitInfo(function(info:Array):void {
+				Util.logObj("Defence Units retrieved:", info, info[0], info[1]);
 				var pages:Array = createTowers(info, 2, 4, Castle.TILE_WIDTH * CastleKingdom.TILE_SIZE, Util.maxY - Util.minY - 50);
-				_menu = new ScrollMenu(castle.x, Util.minY, pages, unpause, Util.assets[Assets.TOWER_WINDOW_TITLE], 
+				_menu = new ScrollMenu(castle.x, Util.minY, pages, setTutorial2, Util.assets[Assets.TOWER_WINDOW_TITLE], 
 						0xffffffff, 10, Castle.TILE_WIDTH * CastleKingdom.TILE_SIZE, Util.maxY - Util.minY, 3, takeTower);
 				add(_menu);
 			});
+		}
+		
+		override protected function tutorial2():void {
+			super.tutorial2();
 		}
 		
 		/**
