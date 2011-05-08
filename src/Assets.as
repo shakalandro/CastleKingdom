@@ -76,12 +76,7 @@ package
 		private static var background_img:Class;
 		public static const BACKGROUND:String = "background";
 	
-		
-		// Other resources
-		
-		[Embed(source = "mapLayout.txt", mimeType = "application/octet-stream")]
-		private static var tileLayout_normal:Class;
-		public static const TILE_LAYOUT:String = "tileLayout";
+		// Text resources
 		
 		public static const PLACE_TOWER_BUTTON:String = "place tower button";
 		public static const RELEASE_WAVE_BUTTON:String = "release wave button";
@@ -93,6 +88,12 @@ package
 		public static const FIRST_WIN:String = "first win";
 		public static const FIRST_LOSS:String = "first loss";
 		public static const UPGRADE_AVAILABLE:String = "upgrade available";
+		
+		// Other resources
+		
+		[Embed(source = "mapLayout.txt", mimeType = "application/octet-stream")]
+		private static var tileLayout_normal:Class;
+		public static const TILE_LAYOUT:String = "tileLayout";
 			
 		// End resource embed area
 		

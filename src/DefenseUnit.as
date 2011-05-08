@@ -38,15 +38,18 @@ package
 					canHighlight:Boolean = true, highlightCallback:Function = null) {
 			super (x,y,towerID, "foundry");
 			var unitName:String = Castle.UNIT_INFO["foundry"][towerID].name;
+			Util.log("Loaded Unit Name: <" + unitName + ">");
 			var imgResource:Class = Util.assets[unitName];
 			if (imgResource == null) {
 				// set to default image
 				imgResource = Util.assets[Assets.WALL];
 			}
+			imgResource.
 			trace("img dimensions = " + (imgResource).width +" by " + (imgResource).height);
 			this.loadGraphic(imgResource,true,true,
 				(imgResource).width / 8,
 				(imgResource).height, true);
+			
 			
 			//loadGraphic(Util.assets[Assets.ARROW_TOWER], true, false, CastleKingdom.TILE_SIZE, CastleKingdom.TILE_SIZE * 3);
 			addAnimation("die", [5, 6, 7], 1, false);
