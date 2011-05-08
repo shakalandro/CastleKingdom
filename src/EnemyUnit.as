@@ -25,7 +25,7 @@ package
 
 		public function EnemyUnit(x:Number, y:Number, towerID:int, canDrag:Boolean = false, bar:HealthBar = null) {
 			
-			super (x,y,towerID, canDrag, bar);
+			super (x,y,towerID, "barracks", canDrag, bar);
 			this._type = Unit.GROUND;
 			
 			this.speed = 20;

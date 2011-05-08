@@ -36,8 +36,18 @@ package
 		 */		
 		public function DefenseUnit(x:Number, y:Number, towerID:int, canDrag:Boolean = true, dragCallback:Function = null, 
 					canHighlight:Boolean = true, highlightCallback:Function = null) {
-			super (x,y,towerID);
-			loadGraphic(Util.assets[Assets.ARROW_TOWER], true, false, CastleKingdom.TILE_SIZE, CastleKingdom.TILE_SIZE * 3);
+			super (x,y,towerID, "foundry");
+			var unitName:String = Castle.UNIT_INFO["foundry"][towerID].name;
+			var imgResource:Class = Util.assets[unitName];
+			if (imgResource == null) {
+				// set to default image
+				imgResource = Util.assets[Assets.WALL];
+			}
+			this.loadGraphic(imgResource,true,true,
+				(imgResource).width / 8,
+				(imgResource).height);
+			
+			//loadGraphic(Util.assets[Assets.ARROW_TOWER], true, false, CastleKingdom.TILE_SIZE, CastleKingdom.TILE_SIZE * 3);
 			addAnimation("die", [5, 6, 7], 1, false);
 			addAnimation("highlight", [0], 1, true); 
 			_dragging = false;

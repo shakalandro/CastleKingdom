@@ -58,15 +58,15 @@ package
 	
 		[Embed(source = "../images/wall.png")]
 		private static var wall_normal:Class;
-		public static const WALL:String = "wall";
+		public static const WALL:String = "Walls";
 		
 		[Embed(source = "../images/arrow_tower.png")]
 		private static var arrow_tower_normal:Class;
-		public static const ARROW_TOWER:String = "arrow_tower";
+		public static const ARROW_TOWER:String = "Arrow Tower";
 		
 		[Embed(source = "../images/flame_tower.png")]
 		private static var flame_tower_normal:Class;
-		public static const FLAME_TOWER:String = "flame_tower";
+		public static const FLAME_TOWER:String = "Flame Tower";
 		
 		[Embed(source = "../images/cursor.png")]
 		private static var cursor_img:Class;

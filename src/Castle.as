@@ -29,7 +29,7 @@ package
 		
 		public static const ARMY:String = "barracks";  // stores index of barracks level in _upgrades
 		public static const TOWER:String = "foundry"; // stores index of foundry level in _upgrades
-		public static var UNIT_INFO:Array;// stores all unit information 
+		public static const UNIT_INFO:Array = new Array();// stores all unit information 
 				// Tower/Unit --> ID --> info
 
 		public static const TILE_WIDTH:int = 8;
@@ -54,18 +54,16 @@ package
 		{
 			//TODO: implement function
 			super(X, Y, SimpleGraphic);
-			if ( UNIT_INFO == null) {
-				UNIT_INFO = new Array(); 
+
+			UNIT_INFO[Castle.ARMY] = new Array();
+			UNIT_INFO[Castle.TOWER] = new Array();
+	
+			//_upgrades = ;
+	//		Database.getUserInfo(initUserInfo, FaceBook.uid);
+			Database.getUserUpgrades(initUpgrades,FaceBook.uid);
+			Database.getDefenseUnitInfo(initDefense); 
+			Database.getEnemyInfo(initArmy);
 			
-				UNIT_INFO[Castle.ARMY] = new Array();
-				UNIT_INFO[Castle.TOWER] = new Array();
-		
-				//_upgrades = ;
-		//		Database.getUserInfo(initUserInfo, FaceBook.uid);
-				Database.getUserUpgrades(initUpgrades,FaceBook.uid);
-				Database.getDefenseUnitInfo(initDefense,FaceBook.uid); 
-				Database.getEnemyInfo(initArmy,FaceBook.uid);
-			}
 			_unitCap = 100;
 			_towerCap = 100;
 			solid = true;
