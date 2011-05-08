@@ -43,7 +43,7 @@ package
 			
 			if (CastleKingdom.DEBUG) {
 				_debug = new FlxDebugger(CastleKingdom.WIDTH, CastleKingdom.HEIGHT);
-				_debug.setLayout(FlxG.DEBUGGER_STANDARD);
+				_debug.setLayout(FlxG.DEBUGGER_BIG);
 			}
 		}
 		

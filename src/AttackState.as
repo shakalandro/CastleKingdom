@@ -42,9 +42,9 @@ package
 		
 		
 		
-		public function AttackState(menusActive:Boolean=false, map:FlxTilemap=null, towers:FlxGroup = null, units:FlxGroup = null)
+		public function AttackState(map:FlxTilemap=null, castle:Castle = null, towers:FlxGroup = null, units:FlxGroup = null)
 		{
-			super(menusActive, map, towers, units);
+			super(map, castle, towers, units);
 			_activeAttack = false;
 			_unitDropCounter = 10;
 			
@@ -54,13 +54,19 @@ package
 		 * Sets up the Tilemap based on the information in FlxSave or the Database
 		 * Draws tutorial UI components if tutorial is true. Draws the menu buttons on the screen.
 		 * 
-		 */		
+		 */
 		override public function create():void {
 			super.create();
 			var state:FlxText = new FlxText(Util.maxX-100,30,70,"Attack State");
 			this.add(state);
-
-			//add(new DefenseUnit(Util.minX, Util.minY, 0));
+			
+		}
+		
+		override protected function setTutorialUI():void {
+			toggleButtons(0);
+			if (tutorialLevel == TUTORIAL_FIRST_DEFEND) {
+				Database.updateUserTutorialInfo(FaceBook.uid, TUTORIAL_FIRST_WAVE);
+			}
 		}
 		
 		
@@ -68,7 +74,7 @@ package
 			
 			this.castle.addGold(1);
 						
-			if(this.castle.isGameOver()) {		// Checks if castle has been breached
+			if (_activeAttack && this.castle.isGameOver()) {		// Checks if castle has been breached
 				// recover cost, units disband
 				var armyCost:int = sumArmyCost();
 				// take portion of defender's gold and give to attacker
@@ -79,11 +85,13 @@ package
 				//GameMessages.LOSE_FIGHT("Bob Barker",6);
 			//	FlxG.state = new ActiveState();
 				
-				//_activeAttack = false;
-			} else if ( deathCheck(this.units)) { // Check if peeps are still alive
+				
+				_activeAttack = false;
+			} else if (_activeAttack && deathCheck(this.units)) { // Check if peeps are still alive
 				var armyCost2:int = sumArmyCost();
 				this.castle.addGold(armyCost2);
-				//_activeAttack = false;
+				waveFinished(true);
+				_activeAttack = false;
 			}
 			
 			// Do nothing if peeps are still alive
@@ -116,6 +124,22 @@ package
 			super.collide();
 			super.update();
 			
+		}
+		
+		private function waveFinished(win:Boolean):void {
+			if (win && tutorialLevel == TUTORIAL_FIRST_WAVE) {
+				hud.add(new MessageBox(Util.assets[Assets.FIRST_WIN], "Okay", function():void {
+					toggleButtons(2);
+					Database.updateUserTutorialInfo(FaceBook.uid, TUTORIAL_UPGRADE);
+					tutorialLevel = TUTORIAL_UPGRADE;
+				}));
+			} else if (!win && tutorialLevel == TUTORIAL_FIRST_WAVE) {
+				hud.add(new MessageBox(StringUtil.substitute(Util.assets[Assets.FIRST_LOSS], castle.unitCapacity), 
+						"Okay", function():void {
+				}));
+			} else if (tutorialLevel == TUTORIAL_UPGRADE){
+				toggleButtons(3);
+			}
 		}
 		
 		/**

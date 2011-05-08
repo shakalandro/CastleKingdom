@@ -50,7 +50,7 @@ package
 							Util.log("Facebook.login failed: " + fail);
 							FaceBook.connectListener(callback);
 						} else {
-							FlxG.log("" + success);
+							Util.log("" + success);
 							_facebookReady = true;
 						}
 						callback(_facebookReady);
@@ -72,14 +72,14 @@ package
 		 */		
 		private static function connectListener(callback:Function):void {
 			Facebook.addJSEventListener("auth.sessionChange", function(result:Object):void {
-				FlxG.log("called");
+				Util.log("called");
 				if (result.status == "connected") {
 					_facebookReady = true;
-					FlxG.log("Facebook.getLoginStatus successful: " + result);
+					Util.log("Facebook.getLoginStatus successful: " + result);
 					callback(_facebookReady);
 					Facebook.removeJSEventListener("auth.sessionChange", this);
 				} else {
-					FlxG.log("Facebook.getLoginStatus failed: " + result.status);
+					Util.log("Facebook.getLoginStatus failed: " + result.status);
 				}
 			});
 			Facebook.getLoginStatus();
@@ -95,7 +95,7 @@ package
 			if (_facebookReady) {
 				return Facebook.getSession();
 			} else {
-				FlxG.log("Util.facebookUserInfo: _facbookReady is false");
+				Util.log("Util.facebookUserInfo: _facbookReady is false");
 				return null;
 			}
 		}
@@ -110,7 +110,7 @@ package
 		 */		
 		public static function userInfo(callback:Function, forceRefresh:Boolean = false, uid:String = "me"):void {
 			if (!_facebookReady) {
-				FlxG.log("Util.facebookUserInfo: _facebookReady = false");
+				Util.log("Util.facebookUserInfo: _facebookReady = false");
 				callback(null);
 			} else if (_facebookUserInfo[uid] && !forceRefresh) {
 				callback(_facebookUserInfo[uid]);
@@ -120,7 +120,7 @@ package
 						_facebookUserInfo[uid] = results;
 						callback(results);
 					} else {
-						FlxG.log("Util.facebookUserInfo: failed /" + uid + " " + fail);
+						Util.log("Util.facebookUserInfo: failed /" + uid + " " + fail);
 					}
 				});
 			}

@@ -7,9 +7,9 @@ package
 		
 		private var _menu:ScrollMenu;
 		
-		public function DefenseState(menusActive:Boolean=false, map:FlxTilemap=null)
+		public function DefenseState(map:FlxTilemap=null, castle:Castle = null, towers:FlxGroup = null)
 		{
-			super(menusActive, map);
+			super(map, castle, towers);
 		}
 		
 		/**
@@ -18,21 +18,26 @@ package
 		 */		
 		override public function create():void {
 			super.create();
-			function setTutorial2():void {
-				Database.updateUserTutorialInfo(FaceBook.uid, 2);
-				tutorial2();
-			}
 			Database.getDefenseUnitInfo(function(info:Array):void {
-				Util.logObj("Defence Units retrieved:", info, info[0], info[1]);
 				var pages:Array = createTowers(info, 2, 4, Castle.TILE_WIDTH * CastleKingdom.TILE_SIZE, Util.maxY - Util.minY - 50);
-				_menu = new ScrollMenu(castle.x, Util.minY, pages, setTutorial2, Util.assets[Assets.TOWER_WINDOW_TITLE], 
+				_menu = new ScrollMenu(castle.x, Util.minY, pages, null, Util.assets[Assets.TOWER_WINDOW_TITLE], 
 						0xffffffff, 10, Castle.TILE_WIDTH * CastleKingdom.TILE_SIZE, Util.maxY - Util.minY, 3, takeTower);
 				add(_menu);
 			});
 		}
 		
-		override protected function tutorial2():void {
-			super.tutorial2();
+		override protected function setTutorialUI():void {
+			if (tutorialLevel == TUTORIAL_FIRST_DEFEND || tutorialLevel == TUTORIAL_FIRST_WAVE) {
+				_menu.onClose = function():void {
+					unpause();
+					toggleButtons(2);
+				};
+			} else if (tutorialLevel == TUTORIAL_UPGRADE) {
+				_menu.onClose = function():void {
+					unpause();
+					toggleButtons(3);
+				};
+			}
 		}
 		
 		/**

@@ -136,7 +136,6 @@ package
 		 * 
 		 */
 		public static function getDefenseUnitInfo(callback:Function, ids:Object = null, forceRefresh:Boolean = false):void {
-			Util.log("_defUnitInfo: " + _defUnitInfo == null);
 			if (forceRefresh || _defUnitInfo == null) {
 				getMain("http://games.cs.washington.edu/capstone/11sp/castlekd/database/getDefInfo.php", function(xmlData:XML):void {
 					_defUnitInfo = processList(xmlData.def, function(unit:XML):Object {
@@ -153,7 +152,6 @@ package
 							clas: unit.clas
 						};
 					});
-					Util.log("_defUnitInfo: " + _defUnitInfo == null);
 					callback(_defUnitInfo);
 				}, ids);
 			} else {

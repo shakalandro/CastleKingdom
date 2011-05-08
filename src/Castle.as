@@ -62,9 +62,9 @@ package
 		
 				//_upgrades = ;
 		//		Database.getUserInfo(initUserInfo, FaceBook.uid);
-				Database.getUserUpgrades(initUpgrades,FaceBook.uid);
-				Database.getDefenseUnitInfo(initDefense,FaceBook.uid); 
-				Database.getEnemyInfo(initArmy,FaceBook.uid);
+				Database.getUserUpgrades(initUpgrades, FaceBook.uid);
+				Database.getDefenseUnitInfo(initDefense); 
+				Database.getEnemyInfo(initArmy);
 			}
 			_unitCap = 100;
 			_towerCap = 100;
