@@ -40,17 +40,18 @@ package
 			var unitName:String = Castle.UNIT_INFO["foundry"][towerID].name;
 			Util.log("Loaded Unit Name: <" + unitName + ">");
 			var imgResource:Class = Util.assets[unitName];
+			//imgResource.bitMapData.height; 
 			if (imgResource == null) {
 				// set to default image
-				imgResource = Util.assets[Assets.WALL];
+				imgResource = Util.assets[Assets.ARROW_TOWER];
 			}
-			trace("img dimensions = " + (imgResource).width +" by " + (imgResource).height);
-			this.loadGraphic(imgResource,true,true,
-				(imgResource).width / 8,
-				(imgResource).height, true);
+			var sizer:FlxSprite = new FlxSprite(0,0,imgResource);
 			
+			trace("img dimensions = " + (imgResource).width +" by " + (imgResource).height);
+			this.loadGraphic(imgResource,true,true,	sizer.width / 8,	sizer.height, true);
 			
 			//loadGraphic(Util.assets[Assets.ARROW_TOWER], true, false, CastleKingdom.TILE_SIZE, CastleKingdom.TILE_SIZE * 3);
+			addAnimation("normal", [1,2,3,4],1,false);
 			addAnimation("die", [5, 6, 7], 1, false);
 			addAnimation("highlight", [0], 1, true); 
 			_dragging = false;
