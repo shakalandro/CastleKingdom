@@ -90,7 +90,10 @@ package
 		public static const LEASE_BUTTON:String = "lease button";
 		public static const INITIAL_PENDING_WAVE_TEXT:String = "initial pending wave text";
 		public static const TOWER_WINDOW_TITLE:String = "tower window title"
-		
+		public static const FIRST_WIN:String = "first win";
+		public static const FIRST_LOSS:String = "first loss";
+		public static const UPGRADE_AVAILABLE:String = "upgrade available";
+			
 		// End resource embed area
 		
 		/**
@@ -128,8 +131,13 @@ package
 			_normal[Assets.LEASE_BUTTON] = "Lease";
 			_normal[Assets.TOWER_WINDOW_TITLE] = "Available Towers";
 			_normal[Assets.INITIAL_PENDING_WAVE_TEXT] = "Welcome to the cutthroat world of Castle Kingdom. " +
-				"Your castle is your life and the gold within is yours means to glory. But right now a band of" +
+				"Your castle is your life and the gold within is your means to glory. But right now a band of" +
 				" enemies is on their way to steal your gold. You must defend yourself.";
+			_normal[Assets.FIRST_WIN] = "Congratulations on defeated all those enemies. You can now upgrade " +
+				"your castle. Castle upgrades will allow you to use new kinds of towers, imcrease your stats " +
+				"and more. Save up your gold and try to buy 3 upgrades!";
+			_normal[Assets.FIRST_LOSS] = "Hmm, that tower configuration didn't seem to put up a fight against " +
+				"those enemeies. Try a different configuration and remember that you can set up to {0} tower units";
 		}
 		
 		/**

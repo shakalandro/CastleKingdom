@@ -14,9 +14,7 @@ package
 		 * The tilemap of game pieces. 
 		 */		
 		private var _map:FlxTilemap;
-		
-		private var _menusActive:Boolean;
-		
+			
 		private var _hud:FlxGroup;
 		
 		private var _header:FlxSprite;
@@ -29,9 +27,8 @@ package
 		 * @param menusActive
 		 * 
 		 */		
-		public function GameState(menusActive:Boolean = false, map:FlxTilemap = null) {
+		public function GameState(map:FlxTilemap = null) {
 			super();
-			_menusActive = menusActive;
 			if (map == null) map = new FlxTilemap();
 			_map = map;
 			FlxG.bgColor = 0xffffffff;

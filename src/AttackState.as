@@ -39,83 +39,112 @@ package
 		
 		private var _unitDropCounter:int;
 		
+		private var _gameOver:Boolean;
 		
 		
-		
-		public function AttackState(menusActive:Boolean=false, map:FlxTilemap=null, towers:FlxGroup = null, units:FlxGroup = null)
+		public function AttackState(map:FlxTilemap=null, castle:Castle = null, towers:FlxGroup = null, units:FlxGroup = null)
 		{
-			super(menusActive, map, towers, units);
+			super(map, castle, towers, units);
 			_activeAttack = false;
 			_unitDropCounter = 10;
-			
+
 		}
 		
 		/**
 		 * Sets up the Tilemap based on the information in FlxSave or the Database
 		 * Draws tutorial UI components if tutorial is true. Draws the menu buttons on the screen.
 		 * 
-		 */		
+		 */
 		override public function create():void {
 			super.create();
 			var state:FlxText = new FlxText(Util.maxX-100,30,70,"Attack State");
 			this.add(state);
-
-			//add(new DefenseUnit(Util.minX, Util.minY, 0));
+			_gameOver = false;
+		}
+		
+		override protected function setTutorialUI():void {
+			toggleButtons(0);
+			if (tutorialLevel == TUTORIAL_FIRST_DEFEND) {
+				Database.updateUserTutorialInfo(FaceBook.uid, TUTORIAL_FIRST_WAVE);
+			}
 		}
 		
 		
 		override public function update():void {
 			
-			this.castle.addGold(1);
-						
-			if(this.castle.isGameOver()) {		// Checks if castle has been breached
-				// recover cost, units disband
-				var armyCost:int = sumArmyCost();
-				// take portion of defender's gold and give to attacker
-				var cash:int = this.castle.gold;
-				var cashStolen:int = computeStolen(units, cash);
-				this.castle.addGold(-cashStolen);
-				//Util.goldStolenFromAttack(cashStolen + armyCost);
-				//GameMessages.LOSE_FIGHT("Bob Barker",6);
-			//	FlxG.state = new ActiveState();
-				
-				//_activeAttack = false;
-			} else if ( deathCheck(this.units)) { // Check if peeps are still alive
-				var armyCost2:int = sumArmyCost();
-				this.castle.addGold(armyCost2);
-				//_activeAttack = false;
-			}
-			
-			// Do nothing if peeps are still alive
-			if(!_activeAttack) {
-				_activeAttack = true;
-				// Check for incoming wave
-				// if none, check for automated
-				
-				// else if is, lock menus and drop dudes
-				var leftSide:Array = new Array();
-				var rightSide:Array = new Array();
-				var type:String = getAttackType();
-				if (type == AttackState.REQUESTED){
-					generateArmy(leftSide, rightSide, 10, 10);
-				} else if ( type == AttackState.TIDAL ) {
-					generateArmy(leftSide, rightSide, 0, 15);
-				} else {  //== AttackState.REQUESTED
-					getFriendWave(leftSide, rightSide);
+			if(!_gameOver) {	
+				this.castle.addGold(1);
+							
+				if (_activeAttack && this.castle.isGameOver()) {		// Checks if castle has been breached
+					// recover cost, units disband
+					var armyCost:int = sumArmyCost();
+					// take portion of defender's gold and give to attacker
+					var cash:int = this.castle.gold;
+					var cashStolen:int = computeStolen(units, cash);
+					this.castle.addGold(-cashStolen);
+					//Util.goldStolenFromAttack(cashStolen + armyCost);
+					//GameMessages.LOSE_FIGHT("Bob Barker",6);
+				//	FlxG.state = new ActiveState();
+					
+					_gameOver = true;
+					_activeAttack = false;
+					waveFinished(false);
+				} else if (_activeAttack && _placeOnLeft.length + _placeOnRight.length == 0 && deathCheck(this.units)) { // Check if peeps are still alive
+					var armyCost2:int = sumArmyCost();
+					this.castle.addGold(armyCost2);
+					_gameOver = true;
+					_activeAttack = false;
+					waveFinished(true);
 				}
-				placeArmy(leftSide, rightSide);
 				
-			}
-			
-			_unitDropCounter--;
-			if(_unitDropCounter <= 0) {
-				_unitDropCounter = 50;
-				placeDudes(_placeOnLeft, Util.minX);
-				placeDudes(_placeOnRight, Util.maxX - 20);
+				// Do nothing if peeps are still alive
+				if(!_activeAttack) {
+					_activeAttack = true;
+					// Check for incoming wave
+					// if none, check for automated
+					
+					// else if is, lock menus and drop dudes
+					var leftSide:Array = new Array();
+					var rightSide:Array = new Array();
+					var type:String = getAttackType();
+					if (type == AttackState.REQUESTED){
+						generateArmy(leftSide, rightSide, 10, 10);
+					} else if ( type == AttackState.TIDAL ) {
+						generateArmy(leftSide, rightSide, 0, 15);
+					} else {  //== AttackState.REQUESTED
+						getFriendWave(leftSide, rightSide);
+					}
+					placeArmy(leftSide, rightSide);
+					
+				}
+				
+				_unitDropCounter--;
+				if(_unitDropCounter <= 0) {
+					_unitDropCounter = 50;
+					placeDudes(_placeOnLeft, Util.minX);
+					placeDudes(_placeOnRight, Util.maxX - 20);
+				}
+				
 			}
 			super.collide();
 			super.update();
 			
+		}
+		
+		private function waveFinished(win:Boolean):void {
+			if (win && tutorialLevel == TUTORIAL_FIRST_WAVE) {
+				hud.add(new MessageBox(Util.assets[Assets.FIRST_WIN], "Okay", function():void {
+					toggleButtons(2);
+					Database.updateUserTutorialInfo(FaceBook.uid, TUTORIAL_UPGRADE);
+					tutorialLevel = TUTORIAL_UPGRADE;
+				}));
+			} else if (!win && tutorialLevel == TUTORIAL_FIRST_WAVE) {
+				hud.add(new MessageBox(StringUtil.substitute(Util.assets[Assets.FIRST_LOSS], castle.unitCapacity), 
+						"Okay", function():void {
+				}));
+			} else if (tutorialLevel == TUTORIAL_UPGRADE){
+				toggleButtons(3);
+			}
 		}
 		
 		/**

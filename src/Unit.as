@@ -79,7 +79,7 @@ package
 			// look up unit info, set fields
 			// {cost, goldCost, maxHealth,speed,range,damage,rate)
 			_creator = unitType
-			
+			_unitID = unitID;
 			var unitStats:Array = [1,10,100,10,1,10,2] ;//unitStatLookup(unitID);
 			
 			_cost = Castle.UNIT_INFO[unitType][unitID].unitCost;

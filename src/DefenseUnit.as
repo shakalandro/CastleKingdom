@@ -43,9 +43,10 @@ package
 				// set to default image
 				imgResource = Util.assets[Assets.WALL];
 			}
+			trace("img dimensions = " + (imgResource).width +" by " + (imgResource).height);
 			this.loadGraphic(imgResource,true,true,
 				(imgResource).width / 8,
-				(imgResource).height);
+				(imgResource).height, true);
 			
 			//loadGraphic(Util.assets[Assets.ARROW_TOWER], true, false, CastleKingdom.TILE_SIZE, CastleKingdom.TILE_SIZE * 3);
 			addAnimation("die", [5, 6, 7], 1, false);
