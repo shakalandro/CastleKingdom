@@ -81,7 +81,7 @@ package
 				var group:FlxGroup = new FlxGroup;
 				for (var j:int = 0; j < perColumn; j++) {
 					for (var k:int = 0; k < perRow; k++) {
-						var tower:DefenseUnit = new DefenseUnit(k * (width / perRow), j * (height / perColumn), info[i].id);
+						var tower:DefenseUnit = new DefenseUnit(k * (width / perRow), j * (height / perColumn), info[i * perRow + j].id);
 						tower.x += tower.width / 2;
 						group.add(tower);
 					}
