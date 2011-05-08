@@ -201,11 +201,11 @@ package
 			}
 		}
 		
-		public static function get uid():String {
+		public static function get uid():Number {
 			if (_facebookReady) {
-				return FaceBook.session().uid;
+				return parseInt(FaceBook.session().uid);
 			} else {
-				return null;
+				return NaN;
 			}
 		}
 	}

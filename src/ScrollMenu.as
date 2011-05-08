@@ -64,7 +64,58 @@ package
 			box.drawLine(0, bottom, 0, 0, FlxG.BLACK, borderThickness);
 			box.x = x;
 			box.y = y;
+			/*
+<<<<<<< HEAD
+			var text:FlxText = new FlxText(x + padding, y, width - padding * 3, title);
+			text.color = FlxG.BLACK;
+			var close:FlxButton = new FlxButton(x + borderThickness, y + borderThickness	, "Close", function():void {
+				if (closeCallback != null) closeCallback();
+				_window.kill();
+			});
 			
+			// Draws contents of menu
+			if (contents) {
+				if (contents is FlxGroup) {
+					_windowContents = contents as FlxGroup;
+					for each (var n:FlxBasic in _windowContents.members) {
+						if(n is FlxGroup) {
+							// is group of placeable towers/armies
+							for each (var n2:FlxBasic in n) {
+							//	if(n2.visible == true) {
+									(n as FlxGroup).remove(n2);
+									drawIfObject(n2);
+							//	}
+							}
+						}
+						else {
+							drawIfObject(n);
+						}
+					}
+				} else {
+					
+					_windowContents = new FlxGroup();
+					(_windowContents as FlxGroup).add(contents);
+					if(n is FlxGroup) {
+						for each (var n3:FlxBasic in n) {
+							drawIfObject(n3);
+						//	n3.visible = false;
+						}
+					} else {
+						(contents as FlxObject).x += x + padding;
+						(contents as FlxObject).y += y + text.height + padding;
+					}
+				}
+				_width = width;
+				_startX = x;
+				//_window.add(contents);
+			}
+			
+			// Draws scroll buttons
+			var leftButton:FlxButton = new FlxButton(x+5,y+height-25,"<<", scrollLeft);
+			var rightButton:FlxButton = new FlxButton(x+width - 85,y+height-25,">>",scrollRight);
+			_window.add(leftButton);
+			_window.add(rightButton);
+======= */
 			//Add everything
 			add(box);
 			add(_text);
@@ -82,7 +133,42 @@ package
 				pageCount = 0;
 			}
 		}
+		/*
+		public function drawIfObject(n:FlxBasic):void {
+			_window.add(n);
+			if (n is FlxObject) {
+				(n as FlxObject).x += _startX;
+				(n as FlxObject).y += _startY + 10;
+				if( (n as FlxObject).x > _startX + _width-(n as FlxObject).width  ) {
+					n.visible = false;
+					trace("out of screen");
+				} else {
+					n.visible = true;
+					trace("on screen");
+				}
+				_window.add(n);
+
+			}
+		}
 		
+		
+		public function replaceUnit(element:Unit):void {
+			var idToReplace:int = element.unitID;
+			for each ( var thing:String in _windowContents) {
+				if(thing is FlxGroup) {
+					var thingy:Array = (thing as FlxGroup).members;
+					if((thingy[0] as Unit).unitID == idToReplace) {
+						(thingy[0] as Unit).visible = true;
+						_window.add(thingy[0] );
+						(thing as FlxGroup).remove(thingy[0]);
+						
+					}
+				}
+			}
+			_window.remove(element);
+
+		}
+*/		
 		public function scrollLeft():void {
 			if (_currentPage - 1 >= 0) {
 				_currentPage--;

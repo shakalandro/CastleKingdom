@@ -136,6 +136,7 @@ package
 		 * 
 		 */
 		public static function getDefenseUnitInfo(callback:Function, ids:Object = null, forceRefresh:Boolean = false):void {
+			Util.log("_defUnitInfo: " + _defUnitInfo == null);
 			if (forceRefresh || _defUnitInfo == null) {
 				getMain("http://games.cs.washington.edu/capstone/11sp/castlekd/database/getDefInfo.php", function(xmlData:XML):void {
 					_defUnitInfo = processList(xmlData.def, function(unit:XML):Object {
@@ -152,6 +153,7 @@ package
 							clas: unit.clas
 						};
 					});
+					Util.log("_defUnitInfo: " + _defUnitInfo == null);
 					callback(_defUnitInfo);
 				}, ids);
 			} else {
@@ -458,7 +460,7 @@ package
 					callback(_userTutorialInfo);
 				}, ids);
 			} else {
-				callback(getAll(_userTutorialInfo, ids));
+				callback(getAll(_userTutorialInfo , ids));
 			}
 		}
 		
@@ -466,16 +468,22 @@ package
 			if (stuff == null) {
 				return null;
 			}
+			var idsArr:Array = null;
 			if (ids == null) {
 				return stuff;
 			} else if (ids is Number) {
-				ids = [(ids as Number)];
+				idsArr = [ids] 
+			} else if (ids is String) {
+				idsArr = [parseInt(ids as String)];
+			} else if (ids is Array) {
+				idsArr = ids as Array;
+			} else {
+				return null;
 			}
-			ids = (ids as Array);
 			stuff = stuff.filter(function(item:Object, index:int, arr:Array):Boolean {
-				return ids.indexOf(item.id) >= 0;
+				return idsArr.indexOf(item.id) >= 0;
 			});
-			if (stuff.length != ids.length) {
+			if (stuff.length != idsArr.length) {
 				return null;
 			} else {
 				return stuff;
@@ -483,7 +491,7 @@ package
 		}
 		
 		private static function processList(units:XMLList, format:Function):Array {
-			if (units != null && units.length != 0) {
+			if (units != null) {
 				var result:Array = [];
 				for each(var xml:XML in units) {
 					result.push(format(xml));

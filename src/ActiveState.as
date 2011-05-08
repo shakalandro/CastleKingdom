@@ -87,8 +87,48 @@ package
 					profilePic.x = Util.maxX - profilePic.width;
 					hud.add(profilePic);
 				}, "me", false, "small");
+			
+				Database.getUserTutorialInfo(function(info:Object):void {
+					if (info == null || info.length == 0) {
+						Util.logObj("Tutorial level newb: ", info);
+						tutorial0();
+					} else if (info[0].tut2 == 1) {
+						Util.logObj("Tutorial level 2: ", info[0]);
+					} else if (info[0].tut1 == 1) {
+						Util.logObj("Tutorial level 1: ", info[0]);
+						tutorial1();
+					} else {
+						Util.logObj("Tutorial level 0: ", info[0]);
+						tutorial0();
+					}
+				}, FaceBook.uid, true);
 			}
 		
+		}
+		
+		protected function tutorial2():void {
+			toggleButtons(2);
+		}
+		
+		protected function tutorial1():void {
+			toggleButtons(1);
+		}
+		
+		protected function tutorial0():void {
+			add(new MessageBox(Util.assets[Assets.INITIAL_PENDING_WAVE_TEXT], "Close", function():void {
+				toggleButtons(1);
+				Database.updateUserTutorialInfo(FaceBook.uid, 1);
+			}));
+			toggleButtons(0);
+		}
+		
+		protected function toggleButtons(index:int):void {
+			for (var i:int = index; i < _hudButtons.length - 1; i++) {
+				_hudButtons[i].active = false;
+			}
+			for (i = 0; i < index; i++) {
+				_hudButtons[i].active = true;
+			}
 		}
 		
 		/**
@@ -203,7 +243,7 @@ package
 				unit.y = coordinates.y;
 				if (snapToGround) Util.placeOnGround(unit, map, false, true);
 				group.add(unit);
-				add(unit);
+				//add(unit);
 				return true;
 			}
 			return false;
@@ -255,20 +295,20 @@ package
 		
 		override protected function createHUD():void {
 			super.createHUD();
-			var _prepare:FlxButton = new FlxButton(0, 0, Util.assets[Assets.PLACE_TOWER_BUTTON], function():void {
+			var _prepare:CKButton = new CKButton(0, 0, Util.assets[Assets.PLACE_TOWER_BUTTON], function():void {
 				FlxG.switchState(new DefenseState(false, map));
 			});
-			var _release:FlxButton = new FlxButton(0, 0, Util.assets[Assets.RELEASE_WAVE_BUTTON], function():void {
+			var _release:CKButton = new CKButton(0, 0, Util.assets[Assets.RELEASE_WAVE_BUTTON], function():void {
 				var defTowers:FlxGroup = remove(_towers);
 				FlxG.switchState(new AttackState(false, map, defTowers));
 			});
-			var _upgrade:FlxButton = new FlxButton(0, 0, Util.assets[Assets.UPGRADE_BUTTON], function():void {
+			var _upgrade:CKButton = new CKButton(0, 0, Util.assets[Assets.UPGRADE_BUTTON], function():void {
 				//FlxG.switchState(new DefenseState(false, map));
 			});
-			var _attack:FlxButton = new FlxButton(0, 0, Util.assets[Assets.ATTACK_BUTTON], function():void {
+			var _attack:CKButton = new CKButton(0, 0, Util.assets[Assets.ATTACK_BUTTON], function():void {
 				//FlxG.switchState(new DefenseState(false, map));
 			});
-			var _lease:FlxButton = new FlxButton(0, 0, Util.assets[Assets.LEASE_BUTTON], function():void {
+			var _lease:CKButton = new CKButton(0, 0, Util.assets[Assets.LEASE_BUTTON], function():void {
 				//FlxG.switchState(new DefenseState(false, map));
 			});
 			
@@ -318,5 +358,19 @@ package
 			_towerDisplay.text = this.towers.length + " of " + this.castle.towerCapacity + " Towers";
 			_goldDisplay.text = "Gold: " + this.castle.gold;
 		}
+	}
+}
+
+import org.flixel.FlxButton;
+
+class CKButton extends FlxButton {	
+	public function CKButton(x:Number, y:Number, text:String, onClick:Function = null, onOver:Function = null, onOut:Function = null) {
+		super(x, y, text, onClick, onOver, onOut);
+	}
+	public function set onClick(callback:Function):void {
+		_onClick = callback;
+	}
+	public function get onClick():Function {
+		return _onClick;
 	}
 }

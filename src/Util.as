@@ -229,12 +229,14 @@ package
 		 */		
 		public static function centerX(obj:FlxObject, parent:FlxObject = null):Number {
 			var max:Number;
+			var x:Number;
 			if (parent == null) {
 				max = Util.maxX - Util.minX;
+				x = (max / 2 - obj.width / 2) + Util.minX;
 			} else {
 				max = parent.width;
+				x = (max / 2 - obj.width / 2) + parent.x;
 			}
-			var x:Number = (max / 2 - obj.width / 2) + Util.minX;
 			obj.x = x;
 			return x;
 		}
@@ -250,12 +252,14 @@ package
 		 */	
 		public static function centerY(obj:FlxObject, parent:FlxObject = null):Number {
 			var max:Number;
+			var y:Number;
 			if (parent == null) {
 				max = Util.maxY - Util.minY;
+				y = (max / 2 - obj.height / 2) + Util.minX;
 			} else {
 				max = parent.height;
+				y = (max / 2 - obj.height / 2) + parent.y;
 			}
-			var y:Number = (max / 2 - obj.height / 2) + Util.minX;
 			obj.y = y;
 			return y;
 		}
@@ -366,6 +370,27 @@ package
 			FlxG.log(s);
 			trace(s);
 			// write to the logging data base
+		}
+		
+		public static function logObj(message:String = "", ...args:Array):void {
+			var s:String = message;
+			if (s != "") {
+				s += "\n";
+			}
+			if (args.length > 0) {
+				s += "\t" + typeof(args[0]) + ": \n";
+				for (var prop:String in args[0]) {
+					s += "\t\t" + prop + ": " + args[0][prop] + "\n";
+				}
+			}
+			for (var j:int = 1; j < args.length; j++) {
+				s += "\t" + typeof(args[j]) + ": \n";
+				for (var props:String in args[j]) {
+					s += "\t\t" + props + ": " + args[j][props] + "\n";
+				}
+			}
+			FlxG.log(s);
+			trace(s);
 		}
 		
 		/**

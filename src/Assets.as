@@ -30,19 +30,19 @@ package
 		
 		[Embed(source = "../images/swordsman.png")]
 		private static var swordsman_normal:Class;
-		public static const SWORDSMAN:String = "swordsman";
+		public static const SWORDSMAN:String = "Swordsman";
 		
 		[Embed(source = "../images/archer.png")]
 		private static var archer_normal:Class;
-		public static const ARCHER:String = "archer";
+		public static const ARCHER:String = "Archer";
 		
 		[Embed(source = "../images/ram.png")]
 		private static var ram_normal:Class;
-		public static const RAM:String = "ram";
+		public static const RAM:String = "Ram";
 		
 		[Embed(source = "../images/cannon.png")]
 		private static var cannon_normal:Class;
-		public static const CANNON:String = "cannon";
+		public static const CANNON:String = "Cannon";
 		
 		[Embed(source = "../images/hud_header.png")]
 		private static var hud_header:Class;
@@ -115,6 +115,10 @@ package
 			_normal[Assets.CURSOR] = cursor_img;
 			_normal[Assets.BACKGROUND] = background_img;
 			_normal[Assets.ARROW_TOWER] = arrow_tower_normal;
+			_normal[Assets.WALL] = wall_normal;
+			_normal[Assets.CANNON] = cannon_normal;
+			_normal[Assets.ARCHER] = archer_normal;
+			_normal[Assets.RAM] = ram_normal;
 			
 			//Textual assets
 			_normal[Assets.PLACE_TOWER_BUTTON] = "Defend";

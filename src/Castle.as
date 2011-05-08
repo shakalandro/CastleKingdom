@@ -25,9 +25,13 @@ package
 	{
 		
 		private var _gameOver:Boolean = false;
+		public static const ACID_TRIP_MODE:Boolean = false;
 		
-		public static const ARMY:int = 0;  // stores index of barracks level in _upgrades
-		public static const TOWER:int = 1; // stores index of foundry level in _upgrades
+		public static const ARMY:String = "barracks";  // stores index of barracks level in _upgrades
+		public static const TOWER:String = "foundry"; // stores index of foundry level in _upgrades
+		public static var UNIT_INFO:Array;// stores all unit information 
+				// Tower/Unit --> ID --> info
+
 		public static const TILE_WIDTH:int = 8;
 		
 		private var _upgrades:Array;  // should be:  {Castle level, Barracks level, foundry level, Smith level?}
@@ -39,22 +43,148 @@ package
 		
 		private var _leasedInNumber:int;
 		private var _leasedOutNumber:int;
+		private var _netWorth:int;
 		
 		private var _availableArmies:Array;			// all unitIDs unlocked up to upgrade level
 		private var _availableTowers:Array; 		// all towerIDs unlocked up to upgrade level
 		
+		private var _loadedInfo:int = 0;
 		
 		public function Castle(X:Number=0, Y:Number=0, SimpleGraphic:Class=null)
 		{
 			//TODO: implement function
 			super(X, Y, SimpleGraphic);
-			//_upgrades = ;
+			if ( UNIT_INFO == null) {
+				UNIT_INFO = new Array(); 
 			
-			_unitCap = 40;
-			_towerCap = 40;
+				UNIT_INFO[Castle.ARMY] = new Array();
+				UNIT_INFO[Castle.TOWER] = new Array();
+		
+				//_upgrades = ;
+		//		Database.getUserInfo(initUserInfo, FaceBook.uid);
+				Database.getUserUpgrades(initUpgrades,FaceBook.uid);
+				Database.getDefenseUnitInfo(initDefense,FaceBook.uid); 
+				Database.getEnemyInfo(initArmy,FaceBook.uid);
+			}
+			_unitCap = 100;
+			_towerCap = 100;
 			solid = true;
 			immovable = true;
+			_upgrades = new Array();
+			
 		}
+		
+		/** Adds the given upgrade to the castle**/
+		private function initUserInfo(info:Array):void {
+			 _gold = info[0].gold;
+			 
+			 continueSetup();
+			 
+			 
+		}
+		
+		private function initArmy(info:Array):void {
+			UNIT_INFO[Castle.ARMY]["byLevel"] = new Array();
+			trace("army info size: " + info.length + " : " + info);
+			for each (var obj:Object in info) {
+				var ui:Array = new Array();
+				ui["uid"] = obj.id.toString();
+				ui["name"] = obj.name.toString();
+				ui["level"] = obj.level.toString();
+				ui["unitCost"] = obj.unitCost.toString();
+				ui["goldCost"] = obj.goldCost.toString();
+				ui["maxHealth"] = obj.maxHealth.toString();
+				ui["range"] = obj.range.toString();
+				ui["damage"] = obj.damage.toString();
+				ui["rate"] = obj.rate.toString();
+				ui["reward"] = obj.reward.toString();
+				ui["move"] = obj.move.toString();
+				ui["type"] = obj.type.toString();
+				ui["clas"] = obj.clas.toString();
+				UNIT_INFO[Castle.ARMY][obj.id] = ui;
+				if(UNIT_INFO[Castle.ARMY]["byLevel"][obj.level] == null) {
+					UNIT_INFO[Castle.ARMY]["byLevel"][obj.level] = new Array();
+				}
+				UNIT_INFO[Castle.ARMY]["byLevel"][obj.level].push(ui);
+				
+			}
+			trace(UNIT_INFO);
+			trace(UNIT_INFO[ARMY]);
+			continueSetup();
+		}
+		
+		private function continueSetup():void {
+			_loadedInfo++;
+			if (_loadedInfo >= 4) {
+				
+			}
+		}
+		
+		private function initDefense(info:Array):void {
+			UNIT_INFO[Castle.TOWER]["byLevel"] = new Array();
+			for each (var obj:Object in info) {
+				var ui:Array = new Array();
+				ui["uid"] = obj.id.toString();
+				ui["name"] = obj.name.toString();
+				ui["level"] = obj.level.toString();
+				ui["unitCost"] = obj.unitCost.toString();
+				ui["maxHealth"] = obj.maxHealth.toString();
+				ui["range"] = obj.range.toString();
+				ui["damage"] = obj.damage.toString();
+				ui["rate"] = obj.rate.toString();
+				ui["type"] = obj.type.toString();
+				ui["clas"] = obj.clas.toString();
+				UNIT_INFO[Castle.TOWER][obj.id] = ui;
+				if(UNIT_INFO[Castle.TOWER]["byLevel"][obj.level] == null) {
+					UNIT_INFO[Castle.TOWER]["byLevel"][obj.level] = new Array();
+				}
+				UNIT_INFO[Castle.TOWER]["byLevel"][obj.level].push(ui);
+				
+			}
+			continueSetup();
+
+		}
+		
+		private function initUpgrades(info:Array):void {
+			for each (var obj:Object in info) {
+				if(obj.cid != "") {
+					_upgrades["castle"]++;
+					Database.getCastleInfo(initGenericPieces,obj.cid);
+				} else if (obj.bid != "") {
+					_upgrades["barracks"]++;
+					Database.getCastleInfo(initBarracksPieces,obj.bid);
+				} else if (obj.fid != "") {
+					_upgrades["foundry"]++;
+					Database.getCastleInfo(initFoundryPieces,obj.fid);
+				} else if (obj.mid != "") {
+					_upgrades["mine"]++;
+					Database.getCastleInfo(initGenericPieces,obj.mid);
+				} else if (obj.aid != "") {
+					_upgrades["aviary"]++;
+					Database.getCastleInfo(initGenericPieces,obj.aid);
+				}
+				continueSetup();
+
+			}
+		}
+		
+		private function initGenericPieces(info:Array):void {
+			_towerCap += info[0].unitWorth;
+			_unitCap += info[0].unitWorth;
+			_netWorth += info[0].goldCost;
+
+		}
+		
+		private function initBarracksPieces(info:Array):void {
+			_unitCap += info[0].unitWorth;
+			_netWorth += info[0].goldCost;
+		}
+		private function initFoundryPieces(info:Array):void {
+			_towerCap += info[0].unitWorth;
+			_netWorth += info[0].goldCost;
+	
+		}
+		
 		
 		/** Adds the given upgrade to the castle
 		 * */
@@ -152,23 +282,32 @@ package
 		 * @return 
 		 * 
 		 */		
-		public function unitsUnlocked(unitType:int, highest:Boolean = false):Array {
-			var typeLevel:int = 0; //_upgrades[unitType];
+		public function unitsUnlocked(unitType:String, highest:Boolean = false):Array {
+			
+			// Sets to level of barracks/foundry (max if highest is true)
+			var typeLevel:int = _upgrades[unitType];
 			if (highest) {
 				if(unitType == Castle.ARMY) {
-			//		typeLevel = Math.max(typeLevel,_upgrades[Castle.TOWER]);
+					typeLevel = Math.max(typeLevel,_upgrades[Castle.TOWER]);
 				} else {
-			//		typeLevel = Math.max(typeLevel,_upgrades[Castle.ARMY]);
+					typeLevel = Math.max(typeLevel,_upgrades[Castle.ARMY]);
 				}
 			}
+			typeLevel = 5;
+			trace(UNIT_INFO.length);
+			trace(unitType + " " + UNIT_INFO[unitType]);
 			// Iterates over upgrade list to add all unitIDs contained
 			var unitList:Array = new Array();
-			for (var upgradeLevel:int = 0; upgradeLevel <= typeLevel ; upgradeLevel++) {
-				//for(var unitID in unlockables[unitType][upgradeLevel]) {
-				//	unitList.push(unitID);	
-				//}
+			var upgradeLevel:int = 1;
+			for (; upgradeLevel <= typeLevel ; upgradeLevel++) {
+				if (UNIT_INFO[unitType].byLevel[upgradeLevel] != null) {
+					for(var unitID:Object in UNIT_INFO[unitType].byLevel[upgradeLevel]) {
+						unitList.push(UNIT_INFO[unitType].byLevel[upgradeLevel][unitID].uid);	
+					}
+				}
 			}
-			unitList.push(10101); // Test soldier
+			trace("hi");
+			trace(unitList.length);
 			return unitList;
 		}
 		
@@ -214,6 +353,15 @@ package
 			_gameOver = true;
 		}
 		
+		override public function update():void {
+			if(Castle.ACID_TRIP_MODE) {
+				if(Math.random() > .9) {
+					this.color =  Math.random() * 0xffffffff;
+				}
+				
+			}
+			super.update();
+		}
 	
 	}
 }

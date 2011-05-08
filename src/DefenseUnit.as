@@ -15,7 +15,7 @@ package
 	 */	
 	public class DefenseUnit extends Unit implements Draggable, Highlightable {
 		
-		private var _target:FlxObject;
+		private var _target:Unit;
 		
 		private var _dragging:Boolean;
 		private var _dragCallback:Function;
@@ -47,6 +47,7 @@ package
 			_highlightCallback = highlightCallback;
 			_highlighted = false;
 			_target = null;
+			this.range = 6;
 		}
 		
 		public function get canHighlight():Boolean {
@@ -71,6 +72,7 @@ package
 		
 		public function set canDrag(t:Boolean):void {
 			_canDrag = t;
+			
 		}
 		
 		public function set dragCallback(callback:Function):void {
@@ -116,6 +118,16 @@ package
 			return false;
 		}
 		
+		override public function executeAttack():Boolean {
+			if(_target != null) {
+				if(_target.inflictDamage(this.damageDone)){
+					_target = null;
+				}
+				return true;
+			}
+			return false;
+		}
+		
 		private function checkClick():Boolean {
 			return this.overlapsPoint(FlxG.mouse.getScreenPosition(), true);
 		}
@@ -127,24 +139,32 @@ package
 		 * 
 		 */
 		override public function hitRanged(contact:FlxObject):void {
-			super.hitRanged(contact);
+		//	super.hitRanged(contact);
 			if (contact is EnemyUnit) {
 				if (_target == null || _target.health <= 0) {
-					_target = contact;
+					_target = contact as Unit;
 				}
-				_target.health -= this.damageDone;
 			}
 		}
 		
 		override public function update():void {
 			if (health <= 0) {
-				this.kill();
 			}
+			if(this._target == null) {
+				this.color =  0xcccccccc; 
+				//this.checkRangedCollision();
+				_target = this.getUnitsInRange()[0];
+				//trace(""+_target);
+			} else {
+				this.color = 0xffffffff; 
+			}
+			
 			if (_highlighted) {
 				frame = 0;
 			} else {
-				frame = 6 - Math.floor(6 * (health / this.maxHealth)) + 1;
+				this.frame = 6 - Math.floor(6 * Math.sqrt((health / this.maxHealth)));
 			}
+			super.update();
 		}
 		
 		override public function kill():void {
