@@ -68,7 +68,7 @@ package
 			// look up unit info, set fields
 			// {cost, goldCost, maxHealth,speed,range,damage,rate)
 			
-			var unitStats:Array = [2,10,100,10,1,10,2] ;//unitStatLookup(unitID);
+			var unitStats:Array = [1,10,100,10,1,10,2] ;//unitStatLookup(unitID);
 			
 			_cost = unitStats[0];
 			_goldCost = unitStats[1];
@@ -98,7 +98,8 @@ package
 		 * */
 		override public function update():void {
 			if(Castle.ACID_TRIP_MODE) {
-				this.color =  Math.random() * 0xffffffff; 
+				this.color =  Math.random() * 0xffffffff;
+				
 			}
 			if(this.health <= 0) {
 				super.update();
@@ -353,6 +354,12 @@ package
 			} else {
 				return unit1.damageDone - unit2.damageDone;
 			}
+		}
+		
+		/** compares by unit cost */
+		public static function compareByCost(unit1:int, unit2:int):int {
+			
+			return Castle.UNIT_INFO["barracks"][unit1].cost -  Castle.UNIT_INFO["barracks"][unit2].cost;
 		}
 		
 		/** Compares the distance from two other units to the current Unit

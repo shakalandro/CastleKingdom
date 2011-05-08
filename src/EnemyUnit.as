@@ -30,7 +30,16 @@ package
 			
 			this.speed = 20;
 			this.velocity.x = speed;
-			this.loadGraphic(Util.assets[Assets.SWORDSMAN],true,true,23,23,true);
+			var unitName:String = Castle.UNIT_INFO["barracks"][towerID].name;
+			var imgResource:Class = Util.assets[unitName];
+			if (imgResource == null) {
+				// set to default image
+				imgResource = Util.assets[Assets.WALL];
+			}
+			
+			this.loadGraphic(imgResource,true,true,
+					(imgResource).width / 12,
+					(imgResource).height-1,true);
 			this.addAnimation("walk", [0,1,2,3],speed/2,true);
 			this.addAnimation("attack",[4,5,6,7],_rate*2,true);
 			this.addAnimation("die",[8,9,10,11],_rate*2, false);
