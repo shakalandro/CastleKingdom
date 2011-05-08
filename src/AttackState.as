@@ -85,7 +85,7 @@ package
 				//GameMessages.LOSE_FIGHT("Bob Barker",6);
 			//	FlxG.state = new ActiveState();
 				
-				
+				waveFinished(false);
 				_activeAttack = false;
 			} else if (_activeAttack && deathCheck(this.units)) { // Check if peeps are still alive
 				var armyCost2:int = sumArmyCost();

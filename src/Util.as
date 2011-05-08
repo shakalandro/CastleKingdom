@@ -277,16 +277,12 @@ package
 			if (map == null) map = Util.state.map;
 			
 			var x:Number = obj.x + obj.width / 2;
+			if ( x < Util.minX) {
+				x = Util.minX;
+			} else if (x > Util.maxX) {
+				x = Util.maxX - CastleKingdom.TILE_SIZE / 2;
+			} 
 			
-			// Fixes "off the screen" bug
-			if(ignoreX) {
-				x = obj.x;
-				if ( x < Util.minX) {
-					x = Util.minX;
-				} else if (x > Util.maxX) {
-					x = Util.maxX - 10;
-				} 
-			}
 			var indices:FlxPoint = cartesianToIndices(new FlxPoint(x, Util.minY), ignoreX);
 
 			var tileType:int = map.getTile(indices.x, indices.y);
@@ -295,7 +291,6 @@ package
 				tileType = map.getTile(indices.x, indices.y);
 			}
 			var coords:FlxPoint = Util.indicesToCartesian(indices, ignoreX);
-			Util.log(indices.x, indices.y, coords.x, coords.y);
 			var y:Number = coords.y - obj.height;
 			obj.y = y;
 			if (snapX)  {
