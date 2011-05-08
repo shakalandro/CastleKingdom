@@ -62,7 +62,7 @@ package
 		public static function getUserInfo(callback:Function, ids:Object = null, forceRefresh:Boolean = false):void {
 			if (forceRefresh || _userInfo == null) {
 				getMain("http://games.cs.washington.edu/capstone/11sp/castlekd/database/getUserInfo.php", function(xmlData:XML):void {
-					_userInfo = processList(xmlData.def, function(unit:XML):Object {
+					_userInfo = processList(xmlData.user, function(unit:XML):Object {
 						return {
 							id: unit.uid,
 							gold: unit.gold,
