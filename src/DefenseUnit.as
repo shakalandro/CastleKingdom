@@ -44,7 +44,6 @@ package
 				// set to default image
 				imgResource = Util.assets[Assets.WALL];
 			}
-			imgResource.
 			trace("img dimensions = " + (imgResource).width +" by " + (imgResource).height);
 			this.loadGraphic(imgResource,true,true,
 				(imgResource).width / 8,
