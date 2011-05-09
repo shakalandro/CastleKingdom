@@ -186,7 +186,7 @@ package
 		/** Adds the given upgrade to the castle
 		 * */
 		public function setUpgrade(upgrade:Upgrade):void {
-			Util.log("Castle.setUpgrade: purchased " + upgrade.name);
+			_upgrades[upgrade.type] = upgrade.level;
 		}
 		
 		/** Returns the player's unit capacity as a function of the purchased upgrades and acheivements
@@ -372,6 +372,18 @@ package
 		public function get upgrades():Array {
 			return _upgrades;
 		}
-	
+		
+		/**
+		 * Returns the number of upgrades purchased. 
+		 * @return the number of upgrades purchased
+		 * 
+		 */		
+		public function get numUpgrades():Number {
+			var n:Number = 0;
+			for each (var value:Number in _upgrades) {
+				n += value;
+			}
+			return n;
+		}
 	}
 }

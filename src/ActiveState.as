@@ -326,25 +326,30 @@ package
 		override protected function createHUD():void {
 			super.createHUD();
 			var _prepare:CKButton = new CKButton(0, 0, Util.assets[Assets.PLACE_TOWER_BUTTON], function():void {
-				var oldCastle:Castle = remove(_castle);
-				var defTowers:FlxGroup = remove(_towers);
+				var oldCastle:Castle = remove(castle);
+				var defTowers:FlxGroup = remove(towers);
 				defTowers.setAll("canDrag", true);
 				defTowers.setAll("canHighlight", true);
 				FlxG.switchState(new DefenseState(map, oldCastle, defTowers));
 			});
 			var _release:CKButton = new CKButton(0, 0, Util.assets[Assets.RELEASE_WAVE_BUTTON], function():void {
-				var defTowers:FlxGroup = remove(_towers);
+				var defTowers:FlxGroup = remove(towers);
 				defTowers.setAll("canDrag", false);
 				defTowers.setAll("canHighlight", false);
 				FlxG.switchState(new AttackState(map, null, defTowers));
 			});
 			var _upgrade:CKButton = new CKButton(0, 0, Util.assets[Assets.UPGRADE_BUTTON], function():void {
-				var oldCastle:Castle = remove(_castle);
-				var defTowers:FlxGroup = remove(_towers);
+				var oldCastle:Castle = remove(castle);
+				var defTowers:FlxGroup = remove(towers);
 				FlxG.switchState(new UpgradeState(map, oldCastle, defTowers));
 			});
 			var _attack:CKButton = new CKButton(0, 0, Util.assets[Assets.ATTACK_BUTTON], function():void {
-				//FlxG.switchState(new DefenseState(false, map));
+				var oldCastle:Castle = remove(castle);
+				var defTowers:FlxGroup = remove(towers);
+				var oldUnits:FlxGroup = remove(units);
+				defTowers.setAll("canDrag", false);
+				defTowers.setAll("canHighlight", false);
+				FlxG.switchState(new AttackFriendsState(map, oldCastle, defTowers, units));
 			});
 			var _lease:CKButton = new CKButton(0, 0, Util.assets[Assets.LEASE_BUTTON], function():void {
 				//FlxG.switchState(new DefenseState(false, map));

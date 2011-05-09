@@ -440,8 +440,14 @@ package
 		 */		
 		public static function getKnownFriends(callback:Function):void {
 			FaceBook.friends(function(friends:Array):void {
-				
-			});
+				var ids:Array = [];
+				for each (var friend:Object in friends) {
+					ids.push(friend.id);
+				}
+				Database.getUserInfo(function(knownFriends:Array):void {
+					if (callback != null) callback(knownFriends);
+				}, ids, true); 
+			}, false);
 		}
 	}
 }

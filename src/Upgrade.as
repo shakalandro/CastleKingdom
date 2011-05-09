@@ -10,15 +10,17 @@ package
 		public var unitWorth:Number;
 		public var goldCost:Number;
 		public var type:String;
+		public var level:Number;
 		private var _onClick:Function;
 		private var _box:FlxSprite;
 		
-		public function Upgrade(x:Number, y:Number, width:Number, height:Number, name:String, unitWorth:Number, 
+		public function Upgrade(x:Number, y:Number, width:Number, height:Number, name:String, unitWorth:Number, level:Number,
 				goldCost:Number, type:String, onClick:Function, bgColor:uint = FlxG.WHITE, borderThickness:Number = 3, padding:Number = 10, margin:Number = 5, borderColor:uint = FlxG.BLACK) {
 			this.name = name;
 			this.unitWorth = unitWorth;
 			this.goldCost = goldCost;
 			this.type = type;
+			this.level = level;
 			_onClick = onClick;
 			
 			ExternalImage.setData(new BitmapData(width - margin * 2, height - margin * 2, true, bgColor), name);

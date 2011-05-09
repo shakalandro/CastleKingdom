@@ -34,7 +34,8 @@ package
 		private function closeMenus():void {
 			_leftMenu.kill();
 			_rightMenu.kill();
-			if (castle.upgrades.length > TUTORIAL_UPGRADES_NEEDED) {
+			Util.log("Upgrades right now: " + castle.numUpgrades);
+			if (castle.numUpgrades > TUTORIAL_UPGRADES_NEEDED) {
 				add(new MessageBox(Util.assets[Assets.FIRST_ATTACK], "Okay", function():void {
 					toggleButtons(4);
 					Database.updateUserTutorialInfo(FaceBook.uid, TUTORIAL_UPGRADE);
@@ -64,7 +65,7 @@ package
 							else if (info[index].type == "foundry") bgColor = 0xFF767473;
 							else if (info[index].type == "barracks") bgColor = FlxG.GREEN;
 							var upgrade:Upgrade = new Upgrade(k * (width / perRow), j * (height / perColumn), 
-								width / perRow, height / perColumn, info[index].name, info[index].unitWorth, 
+								width / perRow, height / perColumn, info[index].name, info[index].unitWorth, info[index].level,
 								info[index].goldCost, info[index].type, clickCallback, bgColor);
 							group.add(upgrade);
 						}
