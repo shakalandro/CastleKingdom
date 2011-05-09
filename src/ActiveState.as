@@ -291,9 +291,11 @@ package
 				return false;
 			}
 			for each (var obj:FlxObject in _towers.members) {
-				var objIndices:FlxPoint = Util.cartesianToIndices(new FlxPoint(obj.x, obj.y));
-				if (objIndices.x == indices.x && objIndices.y == indices.y) {
-					return false;
+				if( obj != null) {
+					var objIndices:FlxPoint = Util.cartesianToIndices(new FlxPoint(obj.x, obj.y), true);
+					if (objIndices.x == indices.x && objIndices.y == indices.y) {
+						return false;
+					}
 				}
 			}
 			return true;
@@ -387,7 +389,7 @@ package
 		
 		public function drawStats(startX:int = 0, startY:int = 0):void {
 			_armyDisplay.text = this.castle.unitCapacity - this.castle.armyUnitsAvailable + " of " + this.castle.unitCapacity + " Armies";
-			_towerDisplay.text = this.towers.length + " of " + this.castle.towerCapacity + " Towers";
+			_towerDisplay.text = (this.castle.towerCapacity - this.castle.towerUnitsAvailable) + " of " + this.castle.towerCapacity + " Towers";
 			_goldDisplay.text = "Gold: " + this.castle.gold;
 		}
 	}
