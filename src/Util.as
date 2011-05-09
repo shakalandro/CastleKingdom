@@ -191,6 +191,12 @@ package
 			return x >= Util.minX && x < Util.maxX && y >= Util.minY && y < Util.maxY;
 		}
 		
+		/**
+		 * Determines if the given object collides with where the mouse currently is. 
+		 * @param obj Any object.
+		 * @return Whether the mouse collides with obj.
+		 * 
+		 */		
 		public static function checkClick(obj:FlxObject):Boolean {
 			return obj.overlapsPoint(Util.mouse.getScreenPosition(), true);
 		}
@@ -302,7 +308,22 @@ package
 			}
 			return y;
 		}
-				
+		
+		/**
+		 * This function returns a closable window that contains the given contents. 
+		 * @param x A cartesian x coordinate
+		 * @param y A cartesian y coordinate
+		 * @param contents Any FlxBasic that is the contents fo this window
+		 * @param closeCallback A callback for when teh window is closed
+		 * @param title A title string fro the window
+		 * @param bgColor The badckground color of the window
+		 * @param padding A padding to maintain inside the box between the contents
+		 * @param width The width of the box
+		 * @param height The height of the box
+		 * @param borderThickness How thick the border line is
+		 * @return A closable window object
+		 * 
+		 */		
 		public static function window(x:Number, y:Number, contents:FlxBasic, closeCallback:Function, title:String = "", bgColor:uint = FlxG.WHITE, 
 					padding:Number = 10, width:int = 100, height:int = 100, borderThickness:Number = 3):FlxBasic {
 			var window:FlxGroup = new FlxGroup();
@@ -351,13 +372,10 @@ package
 		
 		
 		/**
-		 * Super duper logging function for ultimate haxxors only!!!
-		 * Logs to Flx.log
-		 * Logs to trace
+		 * prints the given things to the log 
+		 * @param args Any number of things to print
 		 * 
-		 * Eventually will log to the data base that they are going to set up for us
-		 */
-		
+		 */		
 		public static function log(...args:Array):void {
 			var s:String = "";
 			if (args.length != 0) {
@@ -371,6 +389,12 @@ package
 			// write to the logging data base
 		}
 		
+		/**
+		 * Prints the given object's properties. Does not print teh object recursively 
+		 * @param message A string to preface the print with
+		 * @param args Any number of objects the print
+		 * 
+		 */		
 		public static function logObj(message:String = "", ...args:Array):void {
 			var s:String = message;
 			if (s != "") {
@@ -408,6 +432,12 @@ package
 			}
 		}
 		
+		/**
+		 * Calls the callback with an array of friends info. Each friends exists 
+		 * in our database and thus has played the game. 
+		 * @param callback A callback for when the data is ready.
+		 * 
+		 */		
 		public static function getKnownFriends(callback:Function):void {
 			FaceBook.friends(function(friends:Array):void {
 				

@@ -13,7 +13,20 @@ package
 		private var _borderThickness:Number;
 		private var _borderColor:uint;
 		
-		public function MessageBox(title:String, button1Text:String, button1Callback:Function, 
+		/**
+		 * Creates a message box just below the hud with the option for one of two buttons.
+		 * Leaving button2Text null will prevent the second button from being made.
+		 * @param message The text of the box
+		 * @param button1Text The text of the first button
+		 * @param button1Callback A callback for the first button
+		 * @param button2Text The text of the second button
+		 * @param button2Callback A callback for the second button
+		 * @param padding How much room there is between the box and its contents
+		 * @param borderColor The color of the border
+		 * @param borderThickness The thickness of the border
+		 * 
+		 */		
+		public function MessageBox(message:String, button1Text:String, button1Callback:Function, 
 					button2Text:String = null, button2Callback:Function = null, padding:Number = 10, borderColor:uint = FlxG.RED, borderThickness:Number = 3) {
 			super(0);
 			_padding = padding;	
@@ -35,9 +48,9 @@ package
 				_btn2.immovable = true;
 			}
 			if (button2Text != null) {
-				_text = new FlxText(_padding + Util.minX, Util.minY + _padding, _btn2.x - _padding * 2, title);
+				_text = new FlxText(_padding + Util.minX, Util.minY + _padding, _btn2.x - _padding * 2, message);
 			} else {
-				_text = new FlxText(_padding + Util.minX, Util.minY + _padding, _btn1.x - _padding * 2, title);
+				_text = new FlxText(_padding + Util.minX, Util.minY + _padding, _btn1.x - _padding * 2, message);
 			}
 			_text.color = FlxG.BLACK;
 			_text.allowCollisions = FlxObject.NONE;
@@ -66,6 +79,11 @@ package
 			add(_text);
 		}
 		
+		/**
+		 * Closes the message box calling the optional callback. 
+		 * @param callback
+		 * 
+		 */		
 		public function close(callback:Function):void {
 			if (callback != null) callback();
 			this.kill();

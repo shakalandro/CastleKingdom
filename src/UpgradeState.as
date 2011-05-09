@@ -34,6 +34,13 @@ package
 		private function closeMenus():void {
 			_leftMenu.kill();
 			_rightMenu.kill();
+			if (castle.upgrades.length > TUTORIAL_UPGRADES_NEEDED) {
+				add(new MessageBox(Util.assets[Assets.FIRST_ATTACK], "Okay", function():void {
+					toggleButtons(4);
+					Database.updateUserTutorialInfo(FaceBook.uid, TUTORIAL_UPGRADE);
+					tutorialLevel = TUTORIAL_FIRST_ATTACK;
+				}));
+			}
 		}
 		
 		private function acquireUpgrade(upgrade:Upgrade):void {
@@ -50,7 +57,9 @@ package
 						if (index < max) {
 							Util.log("Upgrade created: " + info[index].name);
 							var bgColor:uint = FlxG.WHITE;
+							Util.log("Upgrade type: " + info[index].type);
 							if (info[index].type == "mine") bgColor = 0xFFAA4E07;
+							else if (info[index].type == "castle") bgColor = FlxG.PINK;
 							else if (info[index].type == "aviary") bgColor = FlxG.BLUE;
 							else if (info[index].type == "foundry") bgColor = 0xFF767473;
 							else if (info[index].type == "barracks") bgColor = FlxG.GREEN;

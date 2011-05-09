@@ -78,7 +78,8 @@ package
 				}));
 			} else if (!win && tutorialLevel == TUTORIAL_FIRST_WAVE) {
 				add(new MessageBox(StringUtil.substitute(Util.assets[Assets.FIRST_LOSS], castle.unitCapacity), 
-					"Okay", function():void {
+						"Okay", function():void {
+					toggleButtons(2);
 				}));
 			} else if (tutorialLevel == TUTORIAL_UPGRADE){
 				toggleButtons(3);
