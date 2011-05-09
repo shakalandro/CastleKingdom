@@ -158,28 +158,38 @@ package
 		
 		override public function update():void {
 			if (health <= 0) {
-				this.kill();
-			}
-			if(this._target == null) {
-				this.color =  0xcccccccc; 
-				//this.checkRangedCollision();
-				_target = this.getUnitsInRange((FlxG.state as ActiveState).units)[0];
-				//trace(""+_target);
+				
+				if(this.finished) {
+					(FlxG.state as ActiveState).towers.remove(this, true); 
+					this.kill();
+				//	this.kill();
+				} else {
+					this.play("die");
+				}
+						
 			} else {
-				this.color = 0xffffffff; 
-			}
-			
-			if (_highlighted) {
-				frame = 0;
-			} else {
-				this.frame = 6 - Math.floor(6 * Math.sqrt((health / this.maxHealth)));
+				if(this._target == null) {
+					
+					//this.checkRangedCollision();
+					_target = this.getUnitsInRange((FlxG.state as ActiveState).units)[0];
+					//trace(""+_target);
+					if (this._target == null) this.color =  0xcccccccc; 
+				} else {
+					this.color = 0xffffffff; 
+				}
+				
+				if (_highlighted) {
+					frame = 0;
+				} else {
+					this.frame = 6 - Math.floor(6 * Math.sqrt((health / this.maxHealth)));
+				}
 			}
 			super.update();
 		}
 		
 		override public function kill():void {
-			play("die");
 			super.kill();
+			 
 		}
 		
 		

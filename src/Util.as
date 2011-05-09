@@ -280,7 +280,7 @@ package
 		public static function placeOnGround(obj:FlxObject, map:FlxTilemap = null, ignoreX:Boolean = false, snapX:Boolean = false):Number {
 			if (map == null) map = Util.state.map;
 			
-			var x:Number = obj.x + obj.width / 2;
+			var x:Number = obj.x;// + obj.width / 2;
 			if ( x < Util.minX) {
 				x = Util.minX;
 			} else if (x > Util.maxX) {

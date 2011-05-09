@@ -122,7 +122,8 @@ package
 			}
 			if (thing is Draggable) {
 				(thing as Draggable).dragCallback = function(tower:Draggable, newX:Number, newY:Number, oldX:Number, oldY:Number):void {
-					if (inWindow(newX, newY) || !(FlxG.state as ActiveState).droppable(newX, newY)) {
+					if (inWindow(newX, newY) || !(FlxG.state as ActiveState).droppable(newX, newY) 
+						|| (tower as Unit).cost > (FlxG.state as ActiveState).castle.towerUnitsAvailable) {
 						tower.objx = oldX;
 						tower.objy = oldY;
 					} else {

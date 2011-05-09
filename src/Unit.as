@@ -306,7 +306,7 @@ package
 			
 			this.health -= damageDealt;
 			if (this.health <= 0) {
-				this.kill();
+				//this.kill();
 				return true;
 			} else {
 				return false;
@@ -404,8 +404,9 @@ package
 		}
 		
 		override public function kill():void{
-		//	this.alive = false;
+			this.alive = false;
 			super.kill();
+			
 		}
 	}
 }
