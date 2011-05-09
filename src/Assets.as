@@ -62,19 +62,19 @@ package
 		
 		[Embed(source = "../images/arrow_tower.png")]
 		private static var arrow_tower_normal:Class;
-		public static const ARROW_TOWER:String = "Arrow_Tower";
+		public static const ARROW_TOWER:String = "Arrow Tower";
 		
 		[Embed(source = "../images/flame_tower.png")]
 		private static var flame_tower_normal:Class;
-		public static const FLAME_TOWER:String = "Flame_Tower";
+		public static const FLAME_TOWER:String = "Flame Tower";
 		
 		[Embed(source = "../images/multishot_tower.png")]
 		private static var multishot_tower_normal:Class;
-		public static const MULTISHOT_TOWER:String = "Multishot_Tower";
+		public static const MULTISHOT_TOWER:String = "Multi-Shot Tower";
 		
 		[Embed(source = "../images/iron_tower.png")]
 		private static var iron_tower_normal:Class;
-		public static const IRON_TOWER:String = "Iron_Tower";
+		public static const IRON_TOWER:String = "Iron Tower";
 		
 		[Embed(source = "../images/cursor.png")]
 		private static var cursor_img:Class;
@@ -128,6 +128,7 @@ package
 			_normal[Assets.CURSOR] = cursor_img;
 			_normal[Assets.BACKGROUND] = background_img;
 			_normal[Assets.ARROW_TOWER] = arrow_tower_normal;
+			_normal[Assets.MULTISHOT_TOWER] = multishot_tower_normal;
 			_normal[Assets.WALL] = wall_normal;
 			_normal[Assets.CANNON] = cannon_normal;
 			_normal[Assets.ARCHER] = archer_normal;

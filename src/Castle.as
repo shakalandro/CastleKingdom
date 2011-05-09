@@ -57,15 +57,14 @@ package
 
 			UNIT_INFO[Castle.ARMY] = new Array();
 			UNIT_INFO[Castle.TOWER] = new Array();
-	
+			_unitCap = 50;
+			_towerCap = 50;
 			//_upgrades = ;
 	//		Database.getUserInfo(initUserInfo, FaceBook.uid);
 			Database.getUserUpgrades(initUpgrades,FaceBook.uid);
 			Database.getDefenseUnitInfo(initDefense); 
 			Database.getEnemyInfo(initArmy);
-			
-			_unitCap = 100;
-			_towerCap = 100;
+
 			solid = true;
 			immovable = true;
 			_upgrades = new Array();
