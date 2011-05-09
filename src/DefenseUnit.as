@@ -38,6 +38,7 @@ package
 					canHighlight:Boolean = true, highlightCallback:Function = null) {
 			super (x,y,towerID, "foundry");
 			var unitName:String = Castle.UNIT_INFO["foundry"][towerID].name;
+			Util.log("Loaded Unit Name: <" + unitName + ">");
 			var imgResource:Class = Util.assets[unitName];
 			//imgResource.bitMapData.height; 
 			if (imgResource == null) {
@@ -60,7 +61,6 @@ package
 			_highlightCallback = highlightCallback;
 			_highlighted = false;
 			_target = null;
-			this.range = 6;
 		}
 		
 		public function get canHighlight():Boolean {
@@ -162,11 +162,12 @@ package
 		
 		override public function update():void {
 			if (health <= 0) {
+				this.kill();
 			}
 			if(this._target == null) {
 				this.color =  0xcccccccc; 
 				//this.checkRangedCollision();
-				_target = this.getUnitsInRange()[0];
+				_target = this.getUnitsInRange((FlxG.state as ActiveState).units)[0];
 				//trace(""+_target);
 			} else {
 				this.color = 0xffffffff; 

@@ -259,7 +259,7 @@ package
 		 */		
 		private function addUnit(group:FlxGroup, unit:Unit, snapToGround:Boolean = true):Boolean {
 			if (placeable(unit.x, unit.y)) {
-				this.castle.addGold(-100);
+				this.castle.addGold(-unit.goldCost || 0);
 				var coordinates:FlxPoint = Util.roundToNearestTile(new FlxPoint(unit.x, unit.y));
 				unit.x = coordinates.x;
 				unit.y = coordinates.y;

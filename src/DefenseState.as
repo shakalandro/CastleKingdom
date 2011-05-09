@@ -18,12 +18,20 @@ package
 		 */		
 		override public function create():void {
 			super.create();
+			// create selection menu of all avaiable towers
+			var unitsUnlocked:Array = this.castle.unitsUnlocked(Castle.TOWER);
+			
+			var pages:Array = createTowers(unitsUnlocked, 2, 4, Castle.TILE_WIDTH * CastleKingdom.TILE_SIZE, Util.maxY - Util.minY - 50);
+			_menu = new ScrollMenu(castle.x, Util.minY, pages, null, Util.assets[Assets.TOWER_WINDOW_TITLE], 
+				0xffffffff, 10, Castle.TILE_WIDTH * CastleKingdom.TILE_SIZE, Util.maxY - Util.minY, 3, takeTower);
+			add(_menu);
+			/*
 			Database.getDefenseUnitInfo(function(info:Array):void {
 				var pages:Array = createTowers(info, 2, 4, Castle.TILE_WIDTH * CastleKingdom.TILE_SIZE, Util.maxY - Util.minY - 50);
 				_menu = new ScrollMenu(castle.x, Util.minY, pages, null, Util.assets[Assets.TOWER_WINDOW_TITLE], 
 						0xffffffff, 10, Castle.TILE_WIDTH * CastleKingdom.TILE_SIZE, Util.maxY - Util.minY, 3, takeTower);
 				add(_menu);
-			});
+			}); */
 		}
 		
 		override protected function setTutorialUI():void {
@@ -81,9 +89,24 @@ package
 				var group:FlxGroup = new FlxGroup;
 				for (var j:int = 0; j < perColumn; j++) {
 					for (var k:int = 0; k < perRow; k++) {
-						var tower:DefenseUnit = new DefenseUnit(k * (width / perRow), j * (height / perColumn), info[i * perRow + j].id);
-						tower.x += tower.width / 2;
-						group.add(tower);
+						var index:Number = i * (perRow * perColumn) + j * perRow + k;
+						if (index < info.length) { 
+							// add tower itself
+							var tower:DefenseUnit = new DefenseUnit(k * (width / perRow) - 10, j * (height / perColumn), info[index]);
+						//	tower.x += tower.width / 2;
+							group.add(tower);
+							// add text
+							var description:FlxText = new FlxText(tower.x + tower.width, tower.y, 50, 
+								Castle.UNIT_INFO["foundry"][info[index]].name + 
+								"\nCost: " + tower.cost + 
+								"\nHP: " + tower.health +
+								"\nDmg: " + tower.damageDone +
+								"\nRange: " + tower.range +
+								"\nROF: " + tower.rate +
+								"\n");
+							description.color = 0x00000000;
+							group.add(description);
+						}
 					}
 				}
 				result[i] = group;

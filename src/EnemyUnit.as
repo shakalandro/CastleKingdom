@@ -22,16 +22,21 @@ package
 	{
 		private var _target:Unit;
 		private var _type:String; 
+		private var _reward:String;
 
 		public function EnemyUnit(x:Number, y:Number, towerID:int, canDrag:Boolean = false, bar:HealthBar = null) {
 			
 			super (x,y,towerID, "barracks", canDrag, bar);
-			this._type = Unit.GROUND;
+			this.speed = Castle.UNIT_INFO["barracks"][unitID].move;
+			this.goldCost = Castle.UNIT_INFO["barracks"][unitID].goldCost;
+			_reward = Castle.UNIT_INFO["barracks"][unitID].reward;
 			
-			this.speed = 20;
+			this._type = Unit.GROUND;
+			this.speed *= 2;
 			this.velocity.x = speed;
-			var unitName:String = Castle.UNIT_INFO["barracks"][towerID].name;
-			var imgResource:Class = Util.assets[unitName];
+			this.velocity.y = 1;
+			//var unitName:String = Castle.UNIT_INFO["barracks"][towerID].name;
+			var imgResource:Class = Util.assets[_unitName];
 			if (imgResource == null) {
 				// set to default image
 				imgResource = Util.assets[Assets.WALL];
@@ -41,8 +46,8 @@ package
 					sizer.width / 12,
 					sizer.height,true);
 			this.addAnimation("walk", [0,1,2,3],speed/2,true);
-			this.addAnimation("attack",[4,5,6,7],_rate*2,true);
-			this.addAnimation("die",[8,9,10,11],_rate*2, false);
+			this.addAnimation("attack",[4,5,6,7],_rate,true);
+			this.addAnimation("die",[8,9,10,11],_rate, false);
 			this.play("walk");
 			if(this.x > Util.maxX/2) {
 				// goes left
@@ -53,7 +58,7 @@ package
 				this.velocity.x = speed;
 				this.facing = RIGHT;
 			}
-			this.health = 100;
+
 			
 			
 			//this.allowCollisions = FlxObject.ANY;
@@ -81,23 +86,41 @@ package
 					this.velocity.y = 0 ;
 				}
 				if(this._target == null || _target.health <= 0) {
-					if(this.x > Util.maxX/2) {
-						// goes left
-						this.velocity.x = -speed;
-						this.facing = LEFT;
-					} else {
-						// goes right
-						this.velocity.x = speed;
-						this.facing = RIGHT;
-					}
-					this.play("walk");
 					_target = null;
+					var newTarget:Boolean = false;
+					if (range > 1) {
+						newTarget = setNewTarget() ;	
+					} 
+					if(!newTarget) {
+						if(this.x > Util.maxX/2) {
+							// goes left
+							this.velocity.x = -speed;
+							this.facing = LEFT;
+						} else {
+							// goes right
+							this.velocity.x = speed;
+							this.facing = RIGHT;
+						}
+						this.play("walk");
+						
+					}
 				} else {
 					
 				}
 			}
 			super.update();
 		}
+		
+		public function setNewTarget():Boolean {
+			this._target = null;
+			hitRanged(this.getUnitsInRange((FlxG.state as ActiveState).towers)[0]);
+			if(this._unitName == "Archer") {
+				var x:int = 1;
+			}
+			return (_target == null);
+			
+		}
+		
 		
 		override public function executeAttack():Boolean {
 			if(_target != null) {
@@ -128,7 +151,7 @@ package
 			this.velocity.x = 0;
 			this.play("die");
 			this.alive = false;
-			
+			super.kill();
 		//	this.velocity.x = 0;
 		//	play("die");
 			

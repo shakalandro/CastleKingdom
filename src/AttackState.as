@@ -73,7 +73,6 @@ package
 		override public function update():void {
 			
 			if(!_gameOver) {	
-				this.castle.addGold(1);
 							
 				if (_activeAttack && this.castle.isGameOver()) {		// Checks if castle has been breached
 					// recover cost, units disband
@@ -85,13 +84,14 @@ package
 					//Util.goldStolenFromAttack(cashStolen + armyCost);
 					//GameMessages.LOSE_FIGHT("Bob Barker",6);
 				//	FlxG.state = new ActiveState();
-					
+					this.remove(units);
 					_gameOver = true;
 					_activeAttack = false;
 					waveFinished(false);
-				} else if (_activeAttack && _placeOnLeft.length + _placeOnRight.length == 0 && deathCheck(this.units)) { // Check if peeps are still alive
+				} else if (_activeAttack && _placeOnLeft.length + _placeOnRight.length == 0  && deathCheck(this.units)) { // Check if peeps are still alive
 					var armyCost2:int = sumArmyCost();
 					this.castle.addGold(armyCost2);
+					this.remove(units);
 					_gameOver = true;
 					_activeAttack = false;
 					waveFinished(true);
@@ -132,6 +132,7 @@ package
 		}
 		
 		private function waveFinished(win:Boolean):void {
+			tutorialLevel = TUTORIAL_FIRST_WAVE;
 			if (win && tutorialLevel == TUTORIAL_FIRST_WAVE) {
 				hud.add(new MessageBox(Util.assets[Assets.FIRST_WIN], "Okay", function():void {
 					toggleButtons(2);
@@ -154,9 +155,9 @@ package
 		 * 
 		 */		
 		private function deathCheck(units:FlxGroup):Boolean {
-			for(var unit:Object in units) {
+			for each (var unit:Object in units.members) {
 				unit = unit as Unit;
-				if(unit.health > 0) {
+				if(unit != null && unit.health > 0) {
 					return false;
 				}
 			}
@@ -285,9 +286,6 @@ package
 		private function placeArmy( leftSide:Array, rightSide:Array):void {
 			_placeOnLeft = leftSide;
 			_placeOnRight = rightSide;
-			//placeDudes(leftSide, Util.minX+ 100);
-			//placeDudes(rightSide, Util.maxX- 100);
-			
 		}
 		
 		/**
@@ -312,7 +310,7 @@ package
 			} else {
 				//dude = new Unit(xVal, Util.minTileY, dudes[i]);
 				//Util.placeOnGround(dude, this.map, true);
-				this.addEnemyUnit(dude as EnemyUnit, true);
+			//	this.addEnemyUnit(dude as EnemyUnit, true);
 			}
 			units.add(dude);
 			//trace("adding dude: " + dude.x + " " + dude.y);

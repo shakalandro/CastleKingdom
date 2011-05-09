@@ -298,7 +298,7 @@ package
 			var unitList:Array = new Array();
 			var upgradeLevel:int = 1;
 			for (; upgradeLevel <= typeLevel ; upgradeLevel++) {
-				if (UNIT_INFO[unitType].byLevel[upgradeLevel] != null) {
+				if (UNIT_INFO[unitType].byLevel != null && UNIT_INFO[unitType].byLevel[upgradeLevel] != null) {
 					for(var unitID:Object in UNIT_INFO[unitType].byLevel[upgradeLevel]) {
 						unitList.push(UNIT_INFO[unitType].byLevel[upgradeLevel][unitID].uid);	
 					}
