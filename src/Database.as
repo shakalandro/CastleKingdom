@@ -224,22 +224,8 @@ package
 		 * @param forceRefresh
 		 * 
 		 */
-		public static function getMineInfo(callback:Function, ids:Object = null, forceRefresh:Boolean = false):void {
-			if (forceRefresh || _mineInfo == null) {
-				getMain("http://games.cs.washington.edu/capstone/11sp/castlekd/database/getMineInfo.php", function(xmlData:XML):void {
-					_mineInfo = processList(xmlData.mine, function(unit:XML):Object {
-						return {
-							id: unit.mid,
-							name: unit.name,
-							unitWorth: unit.unitWorth,
-							goldCost: unit.goldCost
-						};
-					})
-					callback(_mineInfo);
-				}, ids);
-			} else {
-				callback(getAll(_mineInfo, ids));
-			}
+		public static function getMineInfo(callback:Function, levels:Object = null, forceRefresh:Boolean = false):void {
+			getUpgradesInfo(callback, levels, "mine", forceRefresh);
 		}
 		
 		/**
@@ -261,22 +247,8 @@ package
 		 * @param forceRefresh
 		 * 
 		 */
-		public static function getFoundryInfo(callback:Function, ids:Object = null, forceRefresh:Boolean = false):void {
-			if (forceRefresh || _foundryInfo == null) {
-				getMain("http://games.cs.washington.edu/capstone/11sp/castlekd/database/getFoundryInfo.php", function(xmlData:XML):void {
-					_foundryInfo = processList(xmlData.foundry, function(unit:XML):Object {
-						return {
-							id: unit.fid,
-							name: unit.name,
-							unitWorth: unit.unitWorth,
-							goldCost: unit.goldCost
-						};
-					})
-					callback(_foundryInfo);
-				}, ids);
-			} else {
-				callback(getAll(_foundryInfo, ids));
-			}
+		public static function getFoundryInfo(callback:Function, levels:Object = null, forceRefresh:Boolean = false):void {
+			getUpgradesInfo(callback, levels, "foundry", forceRefresh);
 		}
 		
 		/**
@@ -298,22 +270,54 @@ package
 		 * @param forceRefresh
 		 * 
 		 */
-		public static function getAviaryInfo(callback:Function, ids:Object = null, forceRefresh:Boolean = false):void {
-			if (forceRefresh || _aviaryInfo == null) {
-				getMain("http://games.cs.washington.edu/capstone/11sp/castlekd/database/getAviaryInfo.php", function(xmlData:XML):void {
-					_aviaryInfo = processList(xmlData.aviary, function(unit:XML):Object {
-						return {
-							id: unit.aid,
-							name: unit.name,
-							unitWorth: unit.unitWorth,
-							goldCost: unit.goldCost
-						};
-					})
-					callback(_aviaryInfo);
-				}, ids);
-			} else {
-				callback(getAll(_aviaryInfo, ids));
-			}
+		public static function getAviaryInfo(callback:Function, levels:Object = null, forceRefresh:Boolean = false):void {
+			getUpgradesInfo(callback, levels, "aviary", forceRefresh);
+		}
+		
+		/**
+		 * <p>
+		 * Passes an array of objects representing the given barrack (based on the given ids) information to
+		 * the callback function. The object that is passed to the callback function is of the following form:
+		 * </p>
+		 * <p>
+		 * {id, name, unitWorth, goldCost}
+		 * </p>
+		 * <p>
+		 * id = the barrack bid, name is the name of the barrack piece, unitWorth is the worth of the barrack
+		 * piece, and goldCost is the cost to "build" the new barrack piece.
+		 * If the barrack does not have any information, the the array that is passed to the callback is null.
+		 * </p>
+		 * 
+		 * @param callback a function that takes one argument, an array of objects
+		 * @param ids either a number or an array of numbers representing the user ids
+		 * @param forceRefresh
+		 * 
+		 */
+		public static function getBarracksInfo(callback:Function, levels:Object = null, forceRefresh:Boolean = false):void {
+			getUpgradesInfo(callback, levels, "barracks", forceRefresh);
+		}
+		
+		/**
+		 * <p>
+		 * Passes an array of objects representing the given castles (based on the given ids) information to
+		 * the callback function. The object that is passed to the callback function is of the following form:
+		 * </p>
+		 * <p>
+		 * {id, name, unitWorth, goldCost}
+		 * </p>
+		 * <p>
+		 * id = the castle cid, name is the name of the castle piece, unitWorth is the worth of the castle
+		 * piece, and goldCost is the cost to "build" the new castle piece.
+		 * If the castle does not have any information, the the array that is passed to the callback is null.
+		 * </p>
+		 * 
+		 * @param callback a function that takes one argument, an array of objects
+		 * @param ids either a number or an array of numbers representing the user ids
+		 * @param forceRefresh
+		 * 
+		 */
+		public static function getCastleInfo(callback:Function, levels:Object = null, forceRefresh:Boolean = false):void {
+			getUpgradesInfo(callback, levels, "castle", forceRefresh);
 		}
 		
 		/**
@@ -417,80 +421,6 @@ package
 		
 		/**
 		 * <p>
-		 * Passes an array of objects representing the given barrack (based on the given ids) information to
-		 * the callback function. The object that is passed to the callback function is of the following form:
-		 * </p>
-		 * <p>
-		 * {id, name, unitWorth, goldCost}
-		 * </p>
-		 * <p>
-		 * id = the barrack bid, name is the name of the barrack piece, unitWorth is the worth of the barrack
-		 * piece, and goldCost is the cost to "build" the new barrack piece.
-		 * If the barrack does not have any information, the the array that is passed to the callback is null.
-		 * </p>
-		 * 
-		 * @param callback a function that takes one argument, an array of objects
-		 * @param ids either a number or an array of numbers representing the user ids
-		 * @param forceRefresh
-		 * 
-		 */
-		public static function getBarracksInfo(callback:Function, ids:Object = null, forceRefresh:Boolean = false):void {
-			if (forceRefresh || _barracksInfo == null) {
-				getMain("http://games.cs.washington.edu/capstone/11sp/castlekd/database/getBarracksInfo.php", function(xmlData:XML):void {
-					_barracksInfo = processList(xmlData.barrack, function(unit:XML):Object {
-						return {
-							id: unit.bid,
-							name: unit.name,
-							unitWorth: unit.unitWorth,
-							goldCost: unit.goldCost
-						};
-					})
-					callback(_barracksInfo);
-				}, ids);
-			} else {
-				callback(getAll(_barracksInfo, ids));
-			}
-		}
-		
-		/**
-		 * <p>
-		 * Passes an array of objects representing the given castles (based on the given ids) information to
-		 * the callback function. The object that is passed to the callback function is of the following form:
-		 * </p>
-		 * <p>
-		 * {id, name, unitWorth, goldCost}
-		 * </p>
-		 * <p>
-		 * id = the castle cid, name is the name of the castle piece, unitWorth is the worth of the castle
-		 * piece, and goldCost is the cost to "build" the new castle piece.
-		 * If the castle does not have any information, the the array that is passed to the callback is null.
-		 * </p>
-		 * 
-		 * @param callback a function that takes one argument, an array of objects
-		 * @param ids either a number or an array of numbers representing the user ids
-		 * @param forceRefresh
-		 * 
-		 */
-		public static function getCastleInfo(callback:Function, ids:Object = null, forceRefresh:Boolean = false):void {
-			if (forceRefresh || _castleInfo == null) {
-				getMain("http://games.cs.washington.edu/capstone/11sp/castlekd/database/getCastleInfo.php", function(xmlData:XML):void {
-					_castleInfo = processList(xmlData.castle, function(unit:XML):Object {
-						return {
-							id: unit.cid,
-							name: unit.name,
-							unitWorth: unit.unitWorth,
-							goldCost: unit.goldCost
-						};
-					})
-					callback(_castleInfo);
-				}, ids);
-			} else {
-				callback(getAll(_castleInfo, ids));
-			}
-		}
-		
-		/**
-		 * <p>
 		 * Passes an array of objects representing the given users (based on the given ids) lease information to
 		 * the callback function. The object that is passed to the callback function is of the following form:
 		 * </p>
@@ -553,7 +483,8 @@ package
 							tut2: unit.tut2,
 							tut3: unit.tut3,
 							tut4: unit.tut4,
-							tut5: unit.tut5
+							tut5: unit.tut5,
+							tut6: unit.tut6
 						};
 					})
 					callback(_userTutorialInfo);
