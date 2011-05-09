@@ -36,8 +36,22 @@ package
 		 */		
 		public function DefenseUnit(x:Number, y:Number, towerID:int, canDrag:Boolean = true, dragCallback:Function = null, 
 					canHighlight:Boolean = true, highlightCallback:Function = null) {
-			super (x,y,towerID);
-			loadGraphic(Util.assets[Assets.ARROW_TOWER], true, false, CastleKingdom.TILE_SIZE, CastleKingdom.TILE_SIZE * 3);
+			super (x,y,towerID, "foundry");
+			var unitName:String = Castle.UNIT_INFO["foundry"][towerID].name;
+			Util.log("Loaded Unit Name: <" + unitName + ">");
+			var imgResource:Class = Util.assets[unitName];
+			//imgResource.bitMapData.height; 
+			if (imgResource == null) {
+				// set to default image
+				imgResource = Util.assets[Assets.ARROW_TOWER];
+			}
+			var sizer:FlxSprite = new FlxSprite(0,0,imgResource);
+			
+			trace("img dimensions = " + (imgResource).width +" by " + (imgResource).height);
+			this.loadGraphic(imgResource,true,true,	sizer.width / 8,	sizer.height, true);
+			
+			//loadGraphic(Util.assets[Assets.ARROW_TOWER], true, false, CastleKingdom.TILE_SIZE, CastleKingdom.TILE_SIZE * 3);
+			addAnimation("normal", [1,2,3,4],1,false);
 			addAnimation("die", [5, 6, 7], 1, false);
 			addAnimation("highlight", [0], 1, true); 
 			_dragging = false;
@@ -47,7 +61,6 @@ package
 			_highlightCallback = highlightCallback;
 			_highlighted = false;
 			_target = null;
-			this.range = 6;
 		}
 		
 		public function get canHighlight():Boolean {
@@ -87,7 +100,7 @@ package
 		public function checkDrag():Boolean {
 			if (_canDrag) {
 				var mouseCoords:FlxPoint = FlxG.mouse.getScreenPosition();
-				if (FlxG.mouse.justPressed() && checkClick()) {
+				if (FlxG.mouse.justPressed() && Util.checkClick(this)) {
 					_dragging = true;
 					_preDragCoords = new FlxPoint(x, y);
 					_dragOffset = new FlxPoint(mouseCoords.x - this.x, mouseCoords.y - this.y);
@@ -111,7 +124,7 @@ package
 		public function checkHighlight():Boolean {
 			if (_canHighlight) {
 				var mouseCoords:FlxPoint = FlxG.mouse.getScreenPosition();
-				if (checkClick()) {
+				if (Util.checkClick(this)) {
 					return true;
 				}
 			}
@@ -126,10 +139,6 @@ package
 				return true;
 			}
 			return false;
-		}
-		
-		private function checkClick():Boolean {
-			return this.overlapsPoint(FlxG.mouse.getScreenPosition(), true);
 		}
 		
 		/** This function responds to this Unit coming within range of another FlxObject
@@ -149,11 +158,12 @@ package
 		
 		override public function update():void {
 			if (health <= 0) {
+				this.kill();
 			}
 			if(this._target == null) {
 				this.color =  0xcccccccc; 
 				//this.checkRangedCollision();
-				_target = this.getUnitsInRange()[0];
+				_target = this.getUnitsInRange((FlxG.state as ActiveState).units)[0];
 				//trace(""+_target);
 			} else {
 				this.color = 0xffffffff; 

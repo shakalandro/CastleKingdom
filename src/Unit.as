@@ -17,6 +17,7 @@ package
 		public static const AIR:String = "fly"; 
 		public static const GROUND:String = "land"; 
 		public static const UNDERGROUND:String = "mole"; 
+		
 		public static const WALL:String = "wall";
 		public static const TOWER:String = "tower";
 		
@@ -53,10 +54,21 @@ package
 		private var _healthyBar:HealthBar;
 		private var _currentlyDraggable:Boolean;
 
+		private var _creator:String;
+		protected var _unitName:String;
 		
-		// Constructs a DefenseUnit at (x, y) with the given towerID, looking
+		/** Constructs a DefenseUnit at (x, y) with the given towerID, looking
 		// up what its stats are based on its tower ID
-		public function Unit(x:Number, y:Number, unitID:int, canDrag:Boolean = false, hpBar:HealthBar = null) {
+		 * 
+		 * @param x
+		 * @param y
+		 * @param unitID - this unit's id number
+		 * @param unitType "barracks" or "foundry" 
+		 * @param canDrag - boolean to see if this unit is draggable or not
+		 * @param hpBar - optional HealthBar to keep track of unit's health
+		 * 
+		 */		
+		public function Unit(x:Number, y:Number, unitID:int, unitType:String, canDrag:Boolean = false, hpBar:HealthBar = null) {
 			super (x,y,null);
 			if (this.x < Util.castle.x) {
 				velocity.x = FlxG.timeScale * _speed;
@@ -67,20 +79,20 @@ package
 			
 			// look up unit info, set fields
 			// {cost, goldCost, maxHealth,speed,range,damage,rate)
-			
-			var unitStats:Array = [1,10,100,10,1,10,2] ;//unitStatLookup(unitID);
-			
-			_cost = unitStats[0];
-			_goldCost = unitStats[1];
-			_maxHealth = unitStats[2];
-			_speed = unitStats[3];
-			_range = unitStats[4];
-			_damageDone = unitStats[5];
-			_rate = unitStats[6];
+			_creator = unitType
+			_unitID = unitID;
+			_unitName = Castle.UNIT_INFO[unitType][unitID].name;
+			_cost = Castle.UNIT_INFO[unitType][unitID].unitCost;
+			_goldCost = Castle.UNIT_INFO[unitType][unitID].goldCost;
+			_maxHealth = Castle.UNIT_INFO[unitType][unitID].maxHealth;
+			_range = Castle.UNIT_INFO[unitType][unitID].range;
+			_damageDone = Castle.UNIT_INFO[unitType][unitID].damage;
+			_rate = Castle.UNIT_INFO[unitType][unitID].rate;
+			this.speed = 0;
 			
 			// Set default fields
 			health = _maxHealth;
-			_attackCounter = 100/_rate;
+			_attackCounter = 1000/_rate;
 			
 			_healthyBar = hpBar;
 			if (_healthyBar != null) {
@@ -121,8 +133,8 @@ package
 		
 		/** Calls hitRanged(contact, velocity) for any units in range of the current item
 		**/
-		protected function checkRangedCollision():void {
-			for each (var otherUnit:String in getUnitsInRange()) {
+		protected function checkRangedCollision(units:FlxGroup):void {
+			for each (var otherUnit:String in getUnitsInRange(units)) {
 				if(otherUnit == null) {
 					//break;
 				}
@@ -136,13 +148,13 @@ package
 		* What do arrays store by default? Out of bounds?
 		*/
 		
-		protected function getUnitsInRange():Array {
+		protected function getUnitsInRange(units:FlxGroup):Array {
 			var unitsInRange:Array = new Array();
 			var foundTarget:Boolean = false;
 			//trace("Units: " + (FlxG.state as ActiveState).units.length + " range: " + this.range);
-			for each ( var unit:Unit in (FlxG.state as ActiveState).units.members ) {
+			for each ( var unit:Unit in units.members ) {
 				trace("dist: " + this.unitDistance(unit as Unit) + " range: " + this._range*CastleKingdom.TILE_SIZE);
-				if( (unit != null) && (unit as Unit).alive && this.unitDistance(unit as Unit) <= this._range*CastleKingdom.TILE_SIZE ) {
+				if( (unit != null) && (unit as Unit).health >= 0 && this.unitDistance(unit as Unit) <= this._range*CastleKingdom.TILE_SIZE ) {
 					unitsInRange.push(unit as Unit);
 					foundTarget = true;
 				}
@@ -198,6 +210,10 @@ package
 		/** Getters and setters
 		 * There should be getters and setters for each of the above fields except _img
 		 * */
+		
+		public function get name():String {
+			return _unitName;
+		}
 		
 		public function get objx():Number {
 			return x;
@@ -383,8 +399,13 @@ package
 		}
 		
 		public function clone():FlxBasic {
-			var yuri:Unit = new Unit(x,y,this._unitID,true, new HealthBar());
+			var yuri:Unit = new Unit(x,y,this._unitID, _creator, true, new HealthBar());
 			return yuri;
+		}
+		
+		override public function kill():void{
+		//	this.alive = false;
+			super.kill();
 		}
 	}
 }

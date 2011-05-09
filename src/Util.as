@@ -143,7 +143,7 @@ package
 		 */		
 		public static function cartesianToIndices(cartesian:FlxPoint, ignoreX:Boolean = false):FlxPoint {
 			if (!Util.inBounds(cartesian.x, cartesian.y) && !ignoreX) {
-				trace("The given coordinates were out of bounds: " + cartesian);
+				trace("The given coordinates were out of bounds: (" + cartesian.x + "," + cartesian.y + ")");
 				return null;
 			}
 			var xIndex:Number = Math.floor((cartesian.x - Util.minX) / CastleKingdom.TILE_SIZE);
@@ -189,6 +189,10 @@ package
 		 */		
 		public static function inBounds(x:Number, y:Number):Boolean {
 			return x >= Util.minX && x < Util.maxX && y >= Util.minY && y < Util.maxY;
+		}
+		
+		public static function checkClick(obj:FlxObject):Boolean {
+			return obj.overlapsPoint(Util.mouse.getScreenPosition(), true);
 		}
 		
 		/**
@@ -277,16 +281,12 @@ package
 			if (map == null) map = Util.state.map;
 			
 			var x:Number = obj.x + obj.width / 2;
+			if ( x < Util.minX) {
+				x = Util.minX;
+			} else if (x > Util.maxX) {
+				x = Util.maxX - CastleKingdom.TILE_SIZE / 2;
+			} 
 			
-			// Fixes "off the screen" bug
-			if(ignoreX) {
-				x = obj.x;
-				if ( x < Util.minX) {
-					x = Util.minX;
-				} else if (x > Util.maxX) {
-					x = Util.maxX - 10;
-				} 
-			}
 			var indices:FlxPoint = cartesianToIndices(new FlxPoint(x, Util.minY), ignoreX);
 
 			var tileType:int = map.getTile(indices.x, indices.y);
@@ -295,7 +295,6 @@ package
 				tileType = map.getTile(indices.x, indices.y);
 			}
 			var coords:FlxPoint = Util.indicesToCartesian(indices, ignoreX);
-			Util.log(indices.x, indices.y, coords.x, coords.y);
 			var y:Number = coords.y - obj.height;
 			obj.y = y;
 			if (snapX)  {

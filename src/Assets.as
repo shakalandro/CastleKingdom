@@ -58,15 +58,15 @@ package
 	
 		[Embed(source = "../images/wall.png")]
 		private static var wall_normal:Class;
-		public static const WALL:String = "wall";
+		public static const WALL:String = "Walls";
 		
 		[Embed(source = "../images/arrow_tower.png")]
 		private static var arrow_tower_normal:Class;
-		public static const ARROW_TOWER:String = "arrow_tower";
+		public static const ARROW_TOWER:String = "Arrow_Tower";
 		
 		[Embed(source = "../images/flame_tower.png")]
 		private static var flame_tower_normal:Class;
-		public static const FLAME_TOWER:String = "flame_tower";
+		public static const FLAME_TOWER:String = "Flame_Tower";
 		
 		[Embed(source = "../images/cursor.png")]
 		private static var cursor_img:Class;
@@ -76,12 +76,7 @@ package
 		private static var background_img:Class;
 		public static const BACKGROUND:String = "background";
 	
-		
-		// Other resources
-		
-		[Embed(source = "mapLayout.txt", mimeType = "application/octet-stream")]
-		private static var tileLayout_normal:Class;
-		public static const TILE_LAYOUT:String = "tileLayout";
+		// Text resources
 		
 		public static const PLACE_TOWER_BUTTON:String = "place tower button";
 		public static const RELEASE_WAVE_BUTTON:String = "release wave button";
@@ -90,7 +85,17 @@ package
 		public static const LEASE_BUTTON:String = "lease button";
 		public static const INITIAL_PENDING_WAVE_TEXT:String = "initial pending wave text";
 		public static const TOWER_WINDOW_TITLE:String = "tower window title"
+		public static const FIRST_WIN:String = "first win";
+		public static const FIRST_LOSS:String = "first loss";
+		public static const UPGRADE_AVAILABLE:String = "upgrade available";
+		public static const FIRST_DEFENSE:String = "first defense";
 		
+		// Other resources
+		
+		[Embed(source = "mapLayout.txt", mimeType = "application/octet-stream")]
+		private static var tileLayout_normal:Class;
+		public static const TILE_LAYOUT:String = "tileLayout";
+			
 		// End resource embed area
 		
 		/**
@@ -128,8 +133,15 @@ package
 			_normal[Assets.LEASE_BUTTON] = "Lease";
 			_normal[Assets.TOWER_WINDOW_TITLE] = "Available Towers";
 			_normal[Assets.INITIAL_PENDING_WAVE_TEXT] = "Welcome to the cutthroat world of Castle Kingdom. " +
-				"Your castle is your life and the gold within is yours means to glory. But right now a band of" +
+				"Your castle is your life and the gold within is your means to glory. But right now a band of" +
 				" enemies is on their way to steal your gold. You must defend yourself.";
+			_normal[Assets.FIRST_WIN] = "Congratulations on defeating all those enemies. You can now upgrade " +
+				"your castle. Castle upgrades will allow you to use new kinds of towers, imcrease your stats " +
+				"and more. Save up your gold and try to buy 3 upgrades!";
+			_normal[Assets.FIRST_LOSS] = "Hmm, that tower configuration didn't seem to put up a fight against " +
+				"those enemeies. Try a different configuration and remember that you can set up to {0} tower units";
+			_normal[Assets.FIRST_DEFENSE] = "Let's see how that defensive strategy plays out, release " +
+				"the enemies to find out.";
 		}
 		
 		/**

@@ -28,7 +28,10 @@ package
 			_startButton.y -= BUTTON_SEPARATION / 2;
 			add(_startButton);
 			
-			_helpButton = new FlxButton(0, 0, "Help", drawHelp);
+			_helpButton = new FlxButton(0, 0, "Help", function():void {
+				drawHelp(CastleKingdom.WIDTH / 4, CastleKingdom.HEIGHT / 4, 
+					CastleKingdom.WIDTH / 2, CastleKingdom.HEIGHT / 2);
+			});
 			Util.center(_helpButton);
 			_helpButton.y += BUTTON_SEPARATION / 2;
 			add(_helpButton);
@@ -41,13 +44,13 @@ package
 						Util.log('fb user info retrieved: ' + fbInfo.id);
 						Database.getUserInfo(function(dbInfo:Array):void {
 							if (dbInfo == null || dbInfo.length == 0) {
-								Util.logObj('new user detected:', dbInfo[0]);
+								Util.logObj('New user detected:', dbInfo[0]);
 								Database.addNewUser(fbInfo.id);
-								FlxG.switchState(new ActiveState(false, map));
 							} else {
-								Util.logObj("return user detected", dbInfo[0]);
-								FlxG.switchState(new ActiveState(false, map));
+								Util.logObj("Return user detected", dbInfo[0]);
 							}
+							FlxG.switchState(new ActiveState(map));
+
 						}, fbInfo.id);
 					});
 				} else {
@@ -58,10 +61,10 @@ package
 		}
 		
 		private function start():void {
-			FlxG.switchState(new ActiveState(true, this.map));
+			FlxG.switchState(new ActiveState(this.map));
 		}
 		
-		private function drawHelp(x:Number = CastleKingdom.WIDTH / 4, y:Number = CastleKingdom.HEIGHT / 4, width:Number = CastleKingdom.WIDTH / 2, height:Number = CastleKingdom.HEIGHT / 2):void {
+		private function drawHelp(x:Number, y:Number, width:Number, height:Number):void {
 			var helpText:String = "This is CastleKingdom! Here, gold is precious and everyone wants yours. " +
 				"Defend your castle to protect your treasure. Loot other castles to make a profit.";
 			var body:FlxText = new FlxText(0, 0, width, "This is CastleKingdom!");

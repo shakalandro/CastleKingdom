@@ -16,6 +16,11 @@ package
 		public static const DEFEND_MENU:String = "defend";
 		public static const BUTTON_DIST:Number = 75;
 		
+		public static const TUTORIAL_NEW_USER:int = 0;
+		public static const TUTORIAL_FIRST_DEFEND:int = 1;
+		public static const TUTORIAL_FIRST_WAVE:int = 2;
+		public static const TUTORIAL_UPGRADE:int = 3;
+		
 		private static const HUD_BUTTON_PADDING:uint = 10;
 		
 		/**
@@ -40,6 +45,7 @@ package
 		private var _towerDisplay:FlxText;
 		private var _armyDisplay:FlxText;
 		private var _hudButtons:Array;
+		private var _tutorialLevel:int;
 		
 		/** 
 		 * An active state is a helper super class for interactive game states such as DefendState and UpgradeState. 
@@ -49,19 +55,12 @@ package
 		 * @param menusActive Whether the menu buttons are active
 		 * 
 		 */		
-		public function ActiveState(menusActive:Boolean = false, map:FlxTilemap = null, towers:FlxGroup = null, units:FlxGroup = null)
+		public function ActiveState(map:FlxTilemap = null, castle:Castle = null, towers:FlxGroup = null, units:FlxGroup = null)
 		{
-			super(menusActive, map);
-			if (towers != null) {
-				_towers = towers;
-			} else {
-				_towers = new FlxGroup();	
-			}
-			if (units != null) {
-				_units = units;
-			} else {
-				_units = new FlxGroup();
-			}
+			super(map);
+			_towers = towers || new FlxGroup();
+			_units = units || new FlxGroup();
+			_castle = castle;
 			_hudButtons = [];
 		}
 		
@@ -74,7 +73,7 @@ package
 			super.create();
 			add(_towers);
 			add(_units);
-			_castle = new Castle(0, 0, Util.assets[Assets.CASTLE]);
+			_castle = _castle || new Castle(0, 0, Util.assets[Assets.CASTLE]);
 			Util.centerX(_castle);
 			Util.placeOnGround(_castle, map);
 			add(_castle);
@@ -89,45 +88,57 @@ package
 				}, "me", false, "small");
 			
 				Database.getUserTutorialInfo(function(info:Object):void {
-					if (info == null || info.length == 0) {
-						Util.logObj("Tutorial level newb: ", info);
-						tutorial0();
-					} else if (info[0].tut2 == 1) {
-						Util.logObj("Tutorial level 2: ", info[0]);
-					} else if (info[0].tut1 == 1) {
-						Util.logObj("Tutorial level 1: ", info[0]);
-						tutorial1();
-					} else {
-						Util.logObj("Tutorial level 0: ", info[0]);
-						tutorial0();
-					}
+					setTutorialLevel(info);
+					setTutorialUI();
 				}, FaceBook.uid, true);
 			}
-		
+			
+			Util.log("Database tutorial clear button added");
+			var clear:CKButton = new CKButton(0, 0, "Clear", function():void {
+				Database.updateUserTutorialInfo(FaceBook.uid, TUTORIAL_NEW_USER);
+			});
+			clear.x = FlxG.width - clear.width - 10;
+			clear.y = FlxG.height - clear.height - 10;
+			clear.allowCollisions = FlxObject.NONE;
+			clear.immovable = true;
+			add(clear);
 		}
 		
-		protected function tutorial2():void {
-			toggleButtons(2);
-		}
-		
-		protected function tutorial1():void {
-			toggleButtons(1);
-		}
-		
-		protected function tutorial0():void {
-			add(new MessageBox(Util.assets[Assets.INITIAL_PENDING_WAVE_TEXT], "Close", function():void {
+		protected function setTutorialUI():void {
+			Util.log("Tutorial Level: " + _tutorialLevel);
+			if (_tutorialLevel == TUTORIAL_NEW_USER) {
+				add(new MessageBox(Util.assets[Assets.INITIAL_PENDING_WAVE_TEXT], "Close", function():void {
+					toggleButtons(1);
+					Database.updateUserTutorialInfo(FaceBook.uid, TUTORIAL_FIRST_DEFEND);
+					_tutorialLevel = TUTORIAL_FIRST_DEFEND;
+				}));
+				toggleButtons(0);
+			} else if (_tutorialLevel == TUTORIAL_FIRST_DEFEND) {
 				toggleButtons(1);
-				Database.updateUserTutorialInfo(FaceBook.uid, 1);
-			}));
-			toggleButtons(0);
+			} else if (_tutorialLevel == TUTORIAL_FIRST_WAVE) {
+				toggleButtons(2);
+			} else if (_tutorialLevel == TUTORIAL_UPGRADE) {
+				toggleButtons(3);
+			}
+		}
+		
+		private function setTutorialLevel(info:Object):void {
+			if (info == null || info.length == 0) {
+				Util.log("tutorial info came back bad: " + info.toString());
+				_tutorialLevel = 0;
+			} else {
+				for (var prop:String in info[0]) {
+					if (prop != "id") {
+						_tutorialLevel += parseInt(info[0][prop]);
+					}
+				}
+			}
 		}
 		
 		protected function toggleButtons(index:int):void {
-			for (var i:int = index; i < _hudButtons.length - 1; i++) {
-				_hudButtons[i].active = false;
-			}
-			for (i = 0; i < index; i++) {
-				_hudButtons[i].active = true;
+			for (var i:int = 0; i < _hudButtons.length; i++) {
+				Util.log(typeof(_hudButtons[i]));
+				_hudButtons[i].active = (i < index);
 			}
 		}
 		
@@ -201,6 +212,19 @@ package
 		}
 		
 		/**
+		 * 
+		 * @return The current tutorialLevel
+		 * 
+		 */		
+		public function get tutorialLevel():int {
+			return _tutorialLevel;
+		}
+		
+		public function set tutorialLevel(n:int):void {
+			_tutorialLevel = n;
+		}
+ 		
+		/**
 		 * Adds the given DefenseUnit to the display list at the closest tile indices (rounded down) if possible. 
 		 *  
 		 * @param tower Which tower to add to the tilemap
@@ -237,11 +261,11 @@ package
 		 */		
 		private function addUnit(group:FlxGroup, unit:Unit, snapToGround:Boolean = true):Boolean {
 			if (placeable(unit.x, unit.y)) {
-				this.castle.addGold(-100);
+				this.castle.addGold(-unit.goldCost || 0);
 				var coordinates:FlxPoint = Util.roundToNearestTile(new FlxPoint(unit.x, unit.y));
 				unit.x = coordinates.x;
 				unit.y = coordinates.y;
-				if (snapToGround) Util.placeOnGround(unit, map, false, true);
+				if (snapToGround) Util.placeOnGround(unit, map, true, true);
 				group.add(unit);
 				//add(unit);
 				return true;
@@ -296,14 +320,22 @@ package
 		override protected function createHUD():void {
 			super.createHUD();
 			var _prepare:CKButton = new CKButton(0, 0, Util.assets[Assets.PLACE_TOWER_BUTTON], function():void {
-				FlxG.switchState(new DefenseState(false, map));
+				var oldCastle:Castle = remove(_castle);
+				var defTowers:FlxGroup = remove(_towers);
+				defTowers.setAll("canDrag", true);
+				defTowers.setAll("canHighlight", true);
+				FlxG.switchState(new DefenseState(map, oldCastle, defTowers));
 			});
 			var _release:CKButton = new CKButton(0, 0, Util.assets[Assets.RELEASE_WAVE_BUTTON], function():void {
 				var defTowers:FlxGroup = remove(_towers);
-				FlxG.switchState(new AttackState(false, map, defTowers));
+				defTowers.setAll("canDrag", false);
+				defTowers.setAll("canHighlight", false);
+				FlxG.switchState(new AttackState(map, null, defTowers));
 			});
 			var _upgrade:CKButton = new CKButton(0, 0, Util.assets[Assets.UPGRADE_BUTTON], function():void {
-				//FlxG.switchState(new DefenseState(false, map));
+				var oldCastle:Castle = remove(_castle);
+				var defTowers:FlxGroup = remove(_towers);
+				FlxG.switchState(new UpgradeState(map, oldCastle, defTowers));
 			});
 			var _attack:CKButton = new CKButton(0, 0, Util.assets[Assets.ATTACK_BUTTON], function():void {
 				//FlxG.switchState(new DefenseState(false, map));

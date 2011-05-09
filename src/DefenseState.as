@@ -7,9 +7,9 @@ package
 		
 		private var _menu:ScrollMenu;
 		
-		public function DefenseState(menusActive:Boolean=false, map:FlxTilemap=null)
+		public function DefenseState(map:FlxTilemap=null, castle:Castle = null, towers:FlxGroup = null)
 		{
-			super(menusActive, map);
+			super(map, castle, towers);
 		}
 		
 		/**
@@ -18,21 +18,38 @@ package
 		 */		
 		override public function create():void {
 			super.create();
-			function setTutorial2():void {
-				Database.updateUserTutorialInfo(FaceBook.uid, 2);
-				tutorial2();
-			}
+			// create selection menu of all avaiable towers
+			var unitsUnlocked:Array = this.castle.unitsUnlocked(Castle.TOWER);
+			
+			var pages:Array = createTowers(unitsUnlocked, 2, 4, Castle.TILE_WIDTH * CastleKingdom.TILE_SIZE, Util.maxY - Util.minY - 50);
+			_menu = new ScrollMenu(castle.x, Util.minY, pages, null, Util.assets[Assets.TOWER_WINDOW_TITLE], 
+				0xffffffff, 10, Castle.TILE_WIDTH * CastleKingdom.TILE_SIZE, Util.maxY - Util.minY, 3, takeTower);
+			add(_menu);
+			/*
 			Database.getDefenseUnitInfo(function(info:Array):void {
-				Util.logObj("Defence Units retrieved:", info, info[0], info[1]);
-				var pages:Array = createTowers(info, 2, 4, Castle.TILE_WIDTH * CastleKingdom.TILE_SIZE, Util.maxY - Util.minY - 50);
-				_menu = new ScrollMenu(castle.x, Util.minY, pages, setTutorial2, Util.assets[Assets.TOWER_WINDOW_TITLE], 
-						0xffffffff, 10, Castle.TILE_WIDTH * CastleKingdom.TILE_SIZE, Util.maxY - Util.minY, 3, takeTower);
+				var padding:Number = 10;
+				var pages:Array = createTowers(info, 2, 4, Castle.TILE_WIDTH * CastleKingdom.TILE_SIZE - padding * 2, Util.maxY - Util.minY - 50 - padding * 2, 10);
+				_menu = new ScrollMenu(castle.x, Util.minY, pages, null, Util.assets[Assets.TOWER_WINDOW_TITLE], 
+						0xffffffff, padding, Castle.TILE_WIDTH * CastleKingdom.TILE_SIZE, Util.maxY - Util.minY, 3, takeTower);
 				add(_menu);
-			});
+			}); */
 		}
 		
-		override protected function tutorial2():void {
-			super.tutorial2();
+		override protected function setTutorialUI():void {
+			toggleButtons(0);
+			if (tutorialLevel == TUTORIAL_FIRST_DEFEND || tutorialLevel == TUTORIAL_FIRST_WAVE) {
+				_menu.onClose = function():void {
+					unpause();
+					add(new MessageBox(Util.assets[Assets.FIRST_DEFENSE], "Okay", function():void {
+						toggleButtons(2);
+					}));
+				};
+			} else if (tutorialLevel == TUTORIAL_UPGRADE) {
+				_menu.onClose = function():void {
+					unpause();
+					toggleButtons(3);
+				};
+			}
 		}
 		
 		/**
@@ -70,15 +87,39 @@ package
 		 * 
 		 */		
 		public function createTowers(info:Array, perRow:int = 4, perColumn:int = 2, 
-									 width:Number = CastleKingdom.WIDTH / 2, height:Number = CastleKingdom.HEIGHT / 2):Array {
+				width:Number = CastleKingdom.WIDTH / 2, height:Number = CastleKingdom.HEIGHT / 2, padding:Number = 10):Array {
 			var result:Array = [];
 			for (var i:int = 0; i < info.length / (perRow * perColumn); i++) {
 				var group:FlxGroup = new FlxGroup;
 				for (var j:int = 0; j < perColumn; j++) {
 					for (var k:int = 0; k < perRow; k++) {
-						var tower:DefenseUnit = new DefenseUnit(k * (width / perRow), j * (height / perColumn), info[i].id);
-						tower.x += tower.width / 2;
-						group.add(tower);
+						var index:Number = i * (perRow * perColumn) + j * perRow + k;
+
+						if (index < info.length) {
+							var towerGroup:FlxGroup = new FlxGroup();
+							var tower:DefenseUnit = new DefenseUnit(k * (width / perRow), j * (height / perColumn), info[index]);
+						//	tower.x += tower.width;
+							var name:FlxText = new FlxText(k * (width / perRow), j * (height / perColumn), width / perRow - padding, tower.name);
+							name.color = FlxG.BLACK;
+							
+							tower.y += name.height;
+							var description:FlxText = new FlxText(tower.x + tower.width, tower.y, 50, 
+								"Cost: " + tower.cost + 
+								"\nHP: " + tower.health +
+								"\nDmg: " + tower.damageDone +
+								"\nRange: " + tower.range +
+								"\nROF: " + tower.rate +
+								"\n");
+							description.color = FlxG.BLACK;
+							
+							towerGroup.add(description);							
+							towerGroup.add(tower);
+							towerGroup.add(name);
+							group.add(towerGroup);
+							
+							
+							
+						}
 					}
 				}
 				result[i] = group;
