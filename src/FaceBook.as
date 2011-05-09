@@ -201,6 +201,11 @@ package
 			}
 		}
 		
+		/**
+		 * Gives you the uid of the current user. Results are unspecified if !FACEBOOK_ON. 
+		 * @return The facebook uid of the currently logged in user
+		 * 
+		 */		
 		public static function get uid():Number {
 			if (_facebookReady) {
 				return parseInt(FaceBook.session().uid);

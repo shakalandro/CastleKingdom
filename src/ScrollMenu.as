@@ -4,7 +4,12 @@ package
 	import flash.display.BitmapData;
 	
 	import org.flixel.*;
-
+	
+	/**
+	 * A closable menu box that contains multiple pages.
+	 * @author royman
+	 * 
+	 */	
 	public class ScrollMenu extends FlxGroup {
 		private var _text:FlxText;
 		private var _pages:Array;
@@ -20,6 +25,27 @@ package
 		private var _y:Number;
 		private var _dragCallback:Function;
 		
+		/**
+		 * The ScrollMenu requires an Array of FlxGroups that are displayed one at a time like pages in a book.
+		 * Objects in the pageContents array should be positioned with coordinates relative to the upperleft corner of the menu. 
+		 * ex) if the scroll menu is at (50, 50) an object positioned at (0, 0) will be repositioned 
+		 * to be in the upperleft corner of the window.
+		 * This menu can respond to dragging its children by calling the given dragCallback. The callback must 
+		 * have the following signature callback(newX:Number, newY:Number, oldX:Number, oldY:Number):void
+		 * 
+		 * @param x A cartesian x coordinate
+		 * @param y A cartesian y coordinate
+		 * @param pageContents An Array of FlxGroups where each index represents a page
+		 * @param closeCallback A callback for when the menu is closed
+		 * @param title A title string for the window
+		 * @param bgColor The background color of the window
+		 * @param padding A padding to be maintained between the edge of the box and its contents
+		 * @param width The width of the menu
+		 * @param height The height of the menu
+		 * @param borderThickness The thickness of the border
+		 * @param dragCallback A callback for when a draggable item on the page is dragged off of the menu.
+		 * 
+		 */		
 		public function ScrollMenu(x:Number, y:Number, pageContents:Array, closeCallback:Function, 
 				title:String = "", bgColor:uint = FlxG.WHITE, padding:Number = 10, width:int = 100, 
 				height:int = 100, borderThickness:Number = 3, dragCallback:Function = null) {
@@ -82,6 +108,10 @@ package
 			}
 		}
 
+		/**
+		 * Scrolls the menu to the previous page if possible. 
+		 * 
+		 */		
 		public function scrollLeft():void {
 			if (_currentPage - 1 >= 0) {
 				_currentPage--;
@@ -90,6 +120,10 @@ package
 			}
 		}
 		
+		/**
+		 * Scrolls to the next page if possible. 
+		 * 
+		 */		
 		public function scrollRight():void {
 			if (_currentPage + 1 < _pages.length) {
 				_currentPage++;
@@ -98,7 +132,11 @@ package
 			}
 		}
 		
-		public function formatPages():void {
+		/**
+		 * Formats the pages by properly offsetting each of the items in the pages. 
+		 * 
+		 */		
+		private function formatPages():void {
 			for (var i:int = 0; i < _pages.length; i++) {
 				var stuff:FlxGroup = _pages[i];
 				for each (var thing:FlxBasic in stuff.members) {
@@ -107,6 +145,11 @@ package
 			}
 		}
 		
+		/**
+		 * Formats the given object so that  
+		 * @param thing
+		 * 
+		 */		
 		private function formatObject(thing:FlxBasic):void {
 			if (thing is FlxGroup) {
 				for each (var member:FlxBasic in (thing as FlxGroup).members) {
@@ -134,15 +177,35 @@ package
 			}
 		}
 		
+		/**
+		 * Checks if the given coordinates are inside of the scroll menu. 
+		 * @param x
+		 * @param y
+		 * @return Whether this scroll menu collides with (x, y).
+		 * 
+		 */		
 		private function inWindow(x:Number, y:Number):Boolean {
 			return x > _x && x < _x + _width && y > _y && y < _y + _height;
 		}
-	
+		
+		/**
+		 * Displays the given page and removes the given old page. 
+		 * @param n The new page number to display, 0 based indexing
+		 * @param old The old page that should be removed, 0 based indexing
+		 * 
+		 */		
 		public function displayPage(n:int, old:int):void {
 			remove(_pages[old]);
 			add(_pages[n]);
 		}
 		
+		/**
+		 * Adds the given FlxObject to the current page. 
+		 * @param thing An object to add
+		 * @param absoluteCoords Whether the objects coordinates should be treated as absolute or 
+		 * relative to the upperleft corner of the menu.
+		 * 
+		 */		
 		public function addToCurrentPage(thing:FlxObject, absoluteCoords:Boolean = true):void {
 			_pages[_currentPage].add(thing);
 			formatObject(thing);
@@ -152,6 +215,11 @@ package
 			}
 		}
 		
+		/**
+		 * Sets the current page number text. 
+		 * @param n The page number
+		 * 
+		 */		
 		public function set pageCount(n:int):void {
 			_pageCount.text = (n + 1) + "/" + _pages.length;
 		}

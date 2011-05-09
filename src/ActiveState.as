@@ -16,10 +16,13 @@ package
 		public static const DEFEND_MENU:String = "defend";
 		public static const BUTTON_DIST:Number = 75;
 		
+		public static const TUTORIAL_UPGRADES_NEEDED:int = 3;
+		
 		public static const TUTORIAL_NEW_USER:int = 0;
 		public static const TUTORIAL_FIRST_DEFEND:int = 1;
 		public static const TUTORIAL_FIRST_WAVE:int = 2;
 		public static const TUTORIAL_UPGRADE:int = 3;
+		public static const TUTORIAL_FIRST_ATTACK:int = 4;
 		
 		private static const HUD_BUTTON_PADDING:uint = 10;
 		
@@ -95,6 +98,7 @@ package
 			
 			Util.log("Database tutorial clear button added");
 			var clear:CKButton = new CKButton(0, 0, "Clear", function():void {
+				Util.log("Clearing the tutorial info: " + FaceBook.uid + ", " + TUTORIAL_NEW_USER);
 				Database.updateUserTutorialInfo(FaceBook.uid, TUTORIAL_NEW_USER);
 			});
 			clear.x = FlxG.width - clear.width - 10;

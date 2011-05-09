@@ -34,6 +34,13 @@ package
 		private function closeMenus():void {
 			_leftMenu.kill();
 			_rightMenu.kill();
+			if (castle.upgrades.length > TUTORIAL_UPGRADES_NEEDED) {
+				add(new MessageBox(Util.assets[Assets.FIRST_ATTACK], "Okay", function():void {
+					toggleButtons(4);
+					Database.updateUserTutorialInfo(FaceBook.uid, TUTORIAL_UPGRADE);
+					tutorialLevel = TUTORIAL_FIRST_ATTACK;
+				}));
+			}
 		}
 		
 		private function acquireUpgrade(upgrade:Upgrade):void {

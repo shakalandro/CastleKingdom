@@ -51,6 +51,8 @@ package
 					unpause();
 					toggleButtons(3);
 				};
+			} else {
+				Util.log("Unexpected tutorial level: " + tutorialLevel);
 			}
 		}
 		

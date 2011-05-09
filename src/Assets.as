@@ -97,6 +97,7 @@ package
 		public static const FIRST_LOSS:String = "first loss";
 		public static const UPGRADE_AVAILABLE:String = "upgrade available";
 		public static const FIRST_DEFENSE:String = "first defense";
+		public static const FIRST_ATTACK:String = "first attack";
 		
 		// Other resources
 		
@@ -151,6 +152,8 @@ package
 				"those enemeies. Try a different configuration and remember that you can set up to {0} tower units";
 			_normal[Assets.FIRST_DEFENSE] = "Let's see how that defensive strategy plays out, release " +
 				"the enemies to find out.";
+			_normal[Assets.FIRST_ATTACK] = "Your castle has become quite impressive. You are now ready to " +
+				"venture out and try stealing gold from your friends castles!";
 		}
 		
 		/**
