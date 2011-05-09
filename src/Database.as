@@ -339,8 +339,9 @@ package
 				getMain("http://games.cs.washington.edu/capstone/11sp/castlekd/database/getUpgradesInfo.php", function(xmlData:XML):void {
 					_upgradeInfo = processList(xmlData.upgrade, function(unit:XML):Object {
 						return {
-							id: unit.bid,
+							id: unit.id,
 							name: unit.name,
+							level: unit.level,
 							unitWorth: unit.unitWorth,
 							goldCost: unit.goldCost,
 							type: unit.type

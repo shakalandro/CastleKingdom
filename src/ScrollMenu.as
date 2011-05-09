@@ -20,8 +20,9 @@ package
 		private var _y:Number;
 		private var _dragCallback:Function;
 		
-		public function ScrollMenu(x:Number, y:Number, pageContents:Array, closeCallback:Function, title:String = "", bgColor:uint = FlxG.WHITE, 
-									padding:Number = 10, width:int = 100, height:int = 100, borderThickness:Number = 3, dragCallback:Function = null) {
+		public function ScrollMenu(x:Number, y:Number, pageContents:Array, closeCallback:Function, 
+				title:String = "", bgColor:uint = FlxG.WHITE, padding:Number = 10, width:int = 100, 
+				height:int = 100, borderThickness:Number = 3, dragCallback:Function = null) {
 			super();
 			_pages = pageContents || [];
 			_width = width;
@@ -107,10 +108,8 @@ package
 		}
 		
 		private function formatObject(thing:FlxBasic):void {
-			Util.log("Scrollmenu.formatObj: " + (thing is FlxGroup));
 			if (thing is FlxGroup) {
 				for each (var member:FlxBasic in (thing as FlxGroup).members) {
-					Util.log("recursive scrollmenu format");
 					formatObject(member);
 				}
 			} else if (thing is FlxObject) {

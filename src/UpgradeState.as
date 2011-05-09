@@ -50,7 +50,9 @@ package
 						if (index < max) {
 							Util.log("Upgrade created: " + info[index].name);
 							var bgColor:uint = FlxG.WHITE;
+							Util.log("Upgrade type: " + info[index].type);
 							if (info[index].type == "mine") bgColor = 0xFFAA4E07;
+							else if (info[index].type == "castle") bgColor = FlxG.PINK;
 							else if (info[index].type == "aviary") bgColor = FlxG.BLUE;
 							else if (info[index].type == "foundry") bgColor = 0xFF767473;
 							else if (info[index].type == "barracks") bgColor = FlxG.GREEN;

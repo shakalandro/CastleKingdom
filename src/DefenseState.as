@@ -113,12 +113,10 @@ package
 							description.color = FlxG.BLACK;
 							
 							towerGroup.add(description);							
-							towerGroup.add(tower);
+							//towerGroup.add(tower);
 							towerGroup.add(name);
 							group.add(towerGroup);
-							
-							
-							
+							group.add(tower);
 						}
 					}
 				}

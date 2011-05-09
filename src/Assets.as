@@ -126,6 +126,7 @@ package
 			_normal[Assets.RAM] = ram_normal;
 			
 			//Textual assets
+			
 			_normal[Assets.PLACE_TOWER_BUTTON] = "Defend";
 			_normal[Assets.RELEASE_WAVE_BUTTON] = "Release";
 			_normal[Assets.UPGRADE_BUTTON] = "Upgrade";
