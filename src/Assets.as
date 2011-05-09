@@ -76,6 +76,10 @@ package
 		private static var iron_tower_normal:Class;
 		public static const IRON_TOWER:String = "Iron_Tower";
 		
+		[Embed(source = "../images/sniper_tower.png")]
+		private static var sniper_tower_normal:Class;
+		public static const SNIPER_TOWER:String = "Sniper_Tower";
+		
 		[Embed(source = "../images/cursor.png")]
 		private static var cursor_img:Class;
 		public static const CURSOR:String = "cursor";
