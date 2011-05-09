@@ -100,7 +100,7 @@ package
 		public function checkDrag():Boolean {
 			if (_canDrag) {
 				var mouseCoords:FlxPoint = FlxG.mouse.getScreenPosition();
-				if (FlxG.mouse.justPressed() && checkClick()) {
+				if (FlxG.mouse.justPressed() && Util.checkClick(this)) {
 					_dragging = true;
 					_preDragCoords = new FlxPoint(x, y);
 					_dragOffset = new FlxPoint(mouseCoords.x - this.x, mouseCoords.y - this.y);
@@ -124,7 +124,7 @@ package
 		public function checkHighlight():Boolean {
 			if (_canHighlight) {
 				var mouseCoords:FlxPoint = FlxG.mouse.getScreenPosition();
-				if (checkClick()) {
+				if (Util.checkClick(this)) {
 					return true;
 				}
 			}
@@ -139,10 +139,6 @@ package
 				return true;
 			}
 			return false;
-		}
-		
-		private function checkClick():Boolean {
-			return this.overlapsPoint(FlxG.mouse.getScreenPosition(), true);
 		}
 		
 		/** This function responds to this Unit coming within range of another FlxObject

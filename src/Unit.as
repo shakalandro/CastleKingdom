@@ -211,6 +211,10 @@ package
 		 * There should be getters and setters for each of the above fields except _img
 		 * */
 		
+		public function get name():String {
+			return _unitName;
+		}
+		
 		public function get objx():Number {
 			return x;
 		}

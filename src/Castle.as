@@ -186,8 +186,8 @@ package
 		
 		/** Adds the given upgrade to the castle
 		 * */
-		public function setUpgrade(upgradeid:int):void {
-			
+		public function setUpgrade(upgrade:Upgrade):void {
+			Util.log("Castle.setUpgrade: purchased " + upgrade.name);
 		}
 		
 		/** Returns the player's unit capacity as a function of the purchased upgrades and acheivements

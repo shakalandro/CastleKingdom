@@ -117,6 +117,8 @@ package
 				toggleButtons(1);
 			} else if (_tutorialLevel == TUTORIAL_FIRST_WAVE) {
 				toggleButtons(2);
+			} else if (_tutorialLevel == TUTORIAL_UPGRADE) {
+				toggleButtons(3);
 			}
 		}
 		
@@ -320,6 +322,8 @@ package
 			var _prepare:CKButton = new CKButton(0, 0, Util.assets[Assets.PLACE_TOWER_BUTTON], function():void {
 				var oldCastle:Castle = remove(_castle);
 				var defTowers:FlxGroup = remove(_towers);
+				defTowers.setAll("canDrag", true);
+				defTowers.setAll("canHighlight", true);
 				FlxG.switchState(new DefenseState(map, oldCastle, defTowers));
 			});
 			var _release:CKButton = new CKButton(0, 0, Util.assets[Assets.RELEASE_WAVE_BUTTON], function():void {
@@ -329,7 +333,9 @@ package
 				FlxG.switchState(new AttackState(map, null, defTowers));
 			});
 			var _upgrade:CKButton = new CKButton(0, 0, Util.assets[Assets.UPGRADE_BUTTON], function():void {
-				//FlxG.switchState(new DefenseState(false, map));
+				var oldCastle:Castle = remove(_castle);
+				var defTowers:FlxGroup = remove(_towers);
+				FlxG.switchState(new UpgradeState(map, oldCastle, defTowers));
 			});
 			var _attack:CKButton = new CKButton(0, 0, Util.assets[Assets.ATTACK_BUTTON], function():void {
 				//FlxG.switchState(new DefenseState(false, map));
