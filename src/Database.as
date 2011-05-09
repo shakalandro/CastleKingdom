@@ -563,12 +563,29 @@ package
 			}
 		}
 		
+		/**
+		 * <p>
+		 * Passes an array of objects representing which ids (given to the function) are being attacked to
+		 * the callback function. The object that is passed to the callback function is of the following form:
+		 * </p>
+		 * <p>
+		 * {id}
+		 * </p>
+		 * <p>
+		 * If the user does not have any tutorial information, the the array that is passed to the callback is null.
+		 * </p>
+		 * 
+		 * @param callback a function that takes one argument, an array of objects
+		 * @param ids either a number or an array of numbers representing the user ids
+		 * @param forceRefresh
+		 * 
+		 */		
 		public static function isBeingAttacked(callback:Function, ids:Object = null, forceRefresh:Boolean = false):void {
 			if (forceRefresh || _attacked == null) {
 				getMain("http://games.cs.washington.edu/capstone/11sp/castlekd/database/getUserAttacks.php", function(xmlData:XML):void {
-					_attacked = processList(xmlData.user, function(unit:XML):Object {
+					_attacked = processList(xmlData.attack, function(unit:XML):Object {
 						return {
-							id: unit.uid
+							id: unit.aid
 						};
 					})
 					callback(_attacked);
@@ -605,7 +622,7 @@ package
 		}
 		
 		private static function processList(units:XMLList, format:Function):Array {
-			if (units != null) {
+			if (units != null && units.length() != 0) {
 				var result:Array = [];
 				for each(var xml:XML in units) {
 					result.push(format(xml));
