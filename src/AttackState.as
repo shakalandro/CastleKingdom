@@ -40,7 +40,7 @@ package
 		private var _unitDropCounter:int;
 		
 		private var _gameOver:Boolean;
-		
+		private var _waveGold:int;
 		
 		public function AttackState(map:FlxTilemap=null, castle:Castle = null, towers:FlxGroup = null, units:FlxGroup = null)
 		{
@@ -87,7 +87,12 @@ package
 
 		
 		override public function update():void {
-			
+			// hack for stupid null problem >_< 
+			for each (var obj:FlxObject in towers.members) {
+				if (obj == null) {
+					towers.remove(obj);
+				}
+			}
 			if(!_gameOver) {	
 							
 				if (_activeAttack && this.castle.isGameOver()) {		// Checks if castle has been breached
@@ -105,10 +110,11 @@ package
 					_activeAttack = false;
 					waveFinished(false);
 				} else if (_activeAttack && _placeOnLeft.length + _placeOnRight.length == 0  && deathCheck(this.units)) { // Check if peeps are still alive
-					var armyCost2:int = sumArmyCost();
-					this.castle.addGold(armyCost2);
+				//	var armyCost2:int = sumArmyCost();
+					this.castle.addGold(this._waveGold);
 					this.remove(units);
 					_gameOver = true;
+				
 					_activeAttack = false;
 					waveFinished(true);
 				}
@@ -158,6 +164,9 @@ package
 		private function deathCheck(units:FlxGroup):Boolean {
 			for each (var unit:Object in units.members) {
 				unit = unit as Unit;
+				if(unit == null) {
+					var hi:int = 2121;
+				}
 				if(unit != null && unit.health > 0) {
 					return false;
 				}
@@ -319,6 +328,10 @@ package
 			this.addEnemyUnit(dude as EnemyUnit,true);
 		//	this.add(dude);
 			dudes.shift();
+		}
+		
+		public function addWaveGold(amount:int):void {
+			_waveGold += amount;
 		}
 	}
 }

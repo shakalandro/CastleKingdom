@@ -9,7 +9,8 @@ package
 		
 		public function DefenseState(map:FlxTilemap=null, castle:Castle = null, towers:FlxGroup = null)
 		{
-			super(map, castle, towers);
+			//super(map, castle, towers);
+			super(map,castle);
 		}
 		
 		/**
@@ -18,6 +19,7 @@ package
 		 */		
 		override public function create():void {
 			super.create();
+
 			// create selection menu of all avaiable towers
 			var unitsUnlocked:Array = this.castle.unitsUnlocked(Castle.TOWER);
 			
@@ -96,7 +98,7 @@ package
 						var index:Number = i * (perRow * perColumn) + j * perRow + k;
 
 						if (index < info.length) {
-							var towerGroup:FlxGroup = new FlxGroup();
+							//var towerGroup:FlxGroup = new FlxGroup();
 							var tower:DefenseUnit = new DefenseUnit(k * (width / perRow), j * (height / perColumn), info[index]);
 						//	tower.x += tower.width;
 							var name:FlxText = new FlxText(k * (width / perRow), j * (height / perColumn), width / perRow - padding, tower.name);
@@ -111,12 +113,15 @@ package
 								"\nROF: " + tower.rate +
 								"\n");
 							description.color = FlxG.BLACK;
-							
+							/*
 							towerGroup.add(description);							
 							towerGroup.add(tower);
 							towerGroup.add(name);
 							group.add(towerGroup);
-							
+							*/
+							group.add(description);
+							group.add(tower);
+							group.add(name);
 							
 							
 						}

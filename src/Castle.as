@@ -57,15 +57,14 @@ package
 
 			UNIT_INFO[Castle.ARMY] = new Array();
 			UNIT_INFO[Castle.TOWER] = new Array();
-	
+			_unitCap = 50;
+			_towerCap = 50;
 			//_upgrades = ;
 	//		Database.getUserInfo(initUserInfo, FaceBook.uid);
 			Database.getUserUpgrades(initUpgrades,FaceBook.uid);
 			Database.getDefenseUnitInfo(initDefense); 
 			Database.getEnemyInfo(initArmy);
-			
-			_unitCap = 100;
-			_towerCap = 100;
+
 			solid = true;
 			immovable = true;
 			_upgrades = new Array();
@@ -268,8 +267,10 @@ package
 		
 		private function unitCostSum(unitList:FlxGroup):int {
 			var cost:int = 0;
-			for each (var unit:Unit in unitList) {
-				cost += unit.cost; 
+			for each (var unit:Unit in unitList.members) {
+				if (unit != null) {
+					cost += unit.cost; 
+				}
 			}
 			return cost;
 		}
@@ -359,6 +360,17 @@ package
 				
 			}
 			super.update();
+		}
+		
+		/**
+		 * 
+		 * @return Array of upgrade levesl
+		 * - can be accessed with requests upgrades["barracks"]
+		 * - also accepts "castle, "foundry", "mine", "aviary"
+		 * 
+		 */		
+		public function get upgrades():Array {
+			return _upgrades;
 		}
 	
 	}

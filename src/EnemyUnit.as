@@ -22,7 +22,7 @@ package
 	{
 		private var _target:Unit;
 		private var _type:String; 
-		private var _reward:String;
+		private var _reward:int;
 
 		public function EnemyUnit(x:Number, y:Number, towerID:int, canDrag:Boolean = false, bar:HealthBar = null) {
 			
@@ -77,9 +77,17 @@ package
 		 * 
 		 */
 		override public function update():void {
-			if(!this.alive) {
+			if(!this.alive || this.health <= 0) {
+				this.velocity.y = 2; //-this.speed;
+				this.velocity.x = 0;
+				this.color =  Math.random() * 0xffffffff; 
+				
+				this.alive = false;
 				if(this.finished) {
+					(FlxG.state as AttackState).addWaveGold(this._reward);
 					(FlxG.state as ActiveState).units.remove(this); 
+				} else {
+					this.play("die");
 				}
 			} else {
 				if (type == Unit.GROUND && this.y <= Util.castle.y ){
@@ -115,9 +123,9 @@ package
 			this._target = null;
 			hitRanged(this.getUnitsInRange((FlxG.state as ActiveState).towers)[0]);
 			if(this._unitName == "Archer") {
-				var x:int = 1;
+				var _bobbo:int = 1;
 			}
-			return (_target == null);
+			return (_target != null);
 			
 		}
 		
@@ -146,11 +154,6 @@ package
 		
 		
 		override public function kill():void {
-			this.color =  Math.random() * 0xffffffff; 
-			this.velocity.y = 2; //-this.speed;
-			this.velocity.x = 0;
-			this.play("die");
-			this.alive = false;
 			super.kill();
 		//	this.velocity.x = 0;
 		//	play("die");
