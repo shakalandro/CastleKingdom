@@ -68,6 +68,14 @@ package
 		private static var flame_tower_normal:Class;
 		public static const FLAME_TOWER:String = "Flame_Tower";
 		
+		[Embed(source = "../images/multishot_tower.png")]
+		private static var multishot_tower_normal:Class;
+		public static const MULTISHOT_TOWER:String = "Multishot_Tower";
+		
+		[Embed(source = "../images/iron_tower.png")]
+		private static var iron_tower_normal:Class;
+		public static const IRON_TOWER:String = "Iron_Tower";
+		
 		[Embed(source = "../images/cursor.png")]
 		private static var cursor_img:Class;
 		public static const CURSOR:String = "cursor";
