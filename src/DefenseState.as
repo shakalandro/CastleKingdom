@@ -98,7 +98,6 @@ package
 						if (index < info.length) {
 							var towerGroup:FlxGroup = new FlxGroup();
 							var tower:DefenseUnit = new DefenseUnit(k * (width / perRow), j * (height / perColumn), info[index]);
-						//	tower.x += tower.width;
 							var name:FlxText = new FlxText(k * (width / perRow), j * (height / perColumn), width / perRow - padding, tower.name);
 							name.color = FlxG.BLACK;
 							
@@ -113,7 +112,6 @@ package
 							description.color = FlxG.BLACK;
 							
 							towerGroup.add(description);							
-							//towerGroup.add(tower);
 							towerGroup.add(name);
 							group.add(towerGroup);
 							group.add(tower);
