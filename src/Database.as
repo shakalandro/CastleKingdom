@@ -24,6 +24,7 @@ package
 		private static var _userTutorialInfo:Array;
 		private static const _startGold:int = 0;
 		private static const _startUnits:int = 5;
+		private static var _attacked:Array;
 		
 		
 		private static function getMain(url:String, callback:Function, ids:Object = null):void
@@ -321,7 +322,7 @@ package
 		 * the callback function. The object that is passed to the callback function is of the following form:
 		 * </p>
 		 * <p>
-		 * {id, name, unitWorth, goldCost, type}
+		 * {id, name, level, unitWorth, goldCost, type}
 		 * </p>
 		 * <p>
 		 * id = the upgrade id, name is the name of the upgrade piece, unitWorth is the worth of the upgrade
@@ -334,23 +335,84 @@ package
 		 * @param forceRefresh
 		 * 
 		 */
-		public static function getUpgradesInfo(callback:Function, ids:Object = null, forceRefresh:Boolean = false):void {
+		public static function getUpgradesInfo(callback:Function, levels:Object = null, types:Object = null, forceRefresh:Boolean = false):void {
 			if (forceRefresh || _upgradeInfo == null) {
-				getMain("http://games.cs.washington.edu/capstone/11sp/castlekd/database/getUpgradesInfo.php", function(xmlData:XML):void {
+				upgradeMain("http://games.cs.washington.edu/capstone/11sp/castlekd/database/getUpgradeInfo.php", function(xmlData:XML):void {
 					_upgradeInfo = processList(xmlData.upgrade, function(unit:XML):Object {
 						return {
-							id: unit.bid,
+							id: unit.id,
 							name: unit.name,
+							level: unit.level,
 							unitWorth: unit.unitWorth,
 							goldCost: unit.goldCost,
 							type: unit.type
 						};
 					})
 					callback(_upgradeInfo);
-				}, ids);
+				}, levels, types);
 			} else {
-				callback(getAll(_upgradeInfo, ids));
+				callback(updateAll(_upgradeInfo, levels, types));
 			}
+		}
+		
+		private static function updateAll(stuff:Array, levels:Object, types:Object):Array {
+			if (stuff == null) {
+				return null;
+			}
+			var levelsArr:Array = null;
+			if (levels == null) {
+				return stuff;
+			} else if (levels is Number) {
+				levelsArr = [levels] 
+			} else if (levels is String) {
+				levelsArr = [parseInt(levels as String)];
+			} else if (levels is Array) {
+				levelsArr = levels as Array;
+			} else {
+				return null;
+			}
+			
+			var typesArr:Array = null;
+			if (types == null) {
+				return stuff;
+			} else if (types is Number) {
+				typesArr = [types] 
+			} else if (types is String) {
+				typesArr = [parseInt(types as String)];
+			} else if (types is Array) {
+				typesArr = types as Array;
+			} else {
+				return null;
+			}
+			var newStuff:Array = stuff.filter(function(item:Object, index:int, arr:Array):Boolean {
+				return levelsArr.indexOf(item.level) < 0 && typesArr.indexOf(item.type) < 0;
+			});;
+			if (newStuff.length != stuff.length) {
+				return null;
+			} else {
+				return stuff;
+			}
+		}
+		
+		private static function upgradeMain(url:String, callback:Function, levels:Object = null, types:Object = null):void
+		{
+			var request:URLRequest = new URLRequest(url);
+			request.method = URLRequestMethod.POST;
+			var variables:URLVariables = new URLVariables();
+			if (levels != null) {
+				variables.levels = levels.toString() + "";
+			}
+			if (types != null) {
+				variables.types = types.toString() + "";
+			}
+			request.data = variables;
+			FlxG.log("request.data: " + request.data.toString());
+			var loader:URLLoader = new URLLoader();
+			loader.dataFormat = URLLoaderDataFormat.TEXT;
+			loader.addEventListener(Event.COMPLETE, function(evt:Event):void {
+				callback(new XML(evt.target.data));
+			});
+			loader.load(request);
 		}
 		
 		/**
@@ -498,6 +560,21 @@ package
 				}, ids);
 			} else {
 				callback(getAll(_userTutorialInfo , ids));
+			}
+		}
+		
+		public static function isBeingAttacked(callback:Function, ids:Object = null, forceRefresh:Boolean = false):void {
+			if (forceRefresh || _attacked == null) {
+				getMain("http://games.cs.washington.edu/capstone/11sp/castlekd/database/getUserAttacks.php", function(xmlData:XML):void {
+					_attacked = processList(xmlData.user, function(unit:XML):Object {
+						return {
+							id: unit.uid
+						};
+					})
+					callback(_attacked);
+				}, ids);
+			} else {
+				callback(getAll(_attacked , ids));
 			}
 		}
 		
