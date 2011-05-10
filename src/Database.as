@@ -35,8 +35,10 @@ package
 				var variables:URLVariables = new URLVariables();
 				variables.uid = ids.toString() + "";
 				request.data = variables;
+				Util.log("request.data.toString: " + request.data.toString());
 			}
 			var loader:URLLoader = new URLLoader();
+			Util.log("request.url: " + request.url);
 			loader.dataFormat = URLLoaderDataFormat.TEXT;
 			loader.addEventListener(Event.COMPLETE, function(evt:Event):void {
 				callback(new XML(evt.target.data));
@@ -569,6 +571,7 @@ package
 			var request:URLRequest = new URLRequest(url);
 			
 			request.data = variables;
+			Util.log("request.data.toString: " + request.data.toString());
 			request.method = URLRequestMethod.POST;
 			var loader:URLLoader = new URLLoader();
 			loader.dataFormat = URLLoaderDataFormat.TEXT;
