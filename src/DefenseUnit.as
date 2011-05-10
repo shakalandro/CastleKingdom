@@ -52,7 +52,7 @@ package
 			
 			//loadGraphic(Util.assets[Assets.ARROW_TOWER], true, false, CastleKingdom.TILE_SIZE, CastleKingdom.TILE_SIZE * 3);
 			addAnimation("normal", [1,2,3,4],1,false);
-			addAnimation("die", [5, 6, 7], 1, false);
+			addAnimation("die", [5, 6, 7], 10, false);
 			addAnimation("highlight", [0], 1, true); 
 			_dragging = false;
 			_dragCallback = dragCallback;

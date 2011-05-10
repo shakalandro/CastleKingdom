@@ -57,8 +57,14 @@ package
 
 			UNIT_INFO[Castle.ARMY] = new Array();
 			UNIT_INFO[Castle.TOWER] = new Array();
-			_unitCap = 50;
-			_towerCap = 50;
+			_unitCap = 60;
+			_towerCap = 60;
+			_upgrades = new Array();
+			_upgrades["barracks"] = 2;
+			_upgrades["foundry"] = 2;
+			_upgrades["castle"] = 0;
+			_upgrades["mine"] = 0;
+			_upgrades["aviary"] = 0;
 			//_upgrades = ;
 	//		Database.getUserInfo(initUserInfo, FaceBook.uid);
 			Database.getUserUpgrades(initUpgrades,FaceBook.uid);
@@ -67,7 +73,9 @@ package
 
 			solid = true;
 			immovable = true;
-			_upgrades = new Array();
+			
+
+
 			
 		}
 		
@@ -115,6 +123,10 @@ package
 			if (_loadedInfo >= 4) {
 				
 			}
+		}
+		
+		public function resetGame():void {
+			this._gameOver = false;
 		}
 		
 		private function initDefense(info:Array):void {
@@ -184,9 +196,27 @@ package
 		
 		
 		/** Adds the given upgrade to the castle
+		 * @return true if the user has enough money to buy it, false otherwise
 		 * */
-		public function setUpgrade(upgrade:Upgrade):void {
-			_upgrades[upgrade.type] = upgrade.level;
+		public function setUpgrade(upgrade:Upgrade):Boolean {
+			upgrade.type = upgrade.type.toLowerCase();
+			if( this.gold >= upgrade.goldCost 
+					&& _upgrades[upgrade.type] == upgrade.level - 1
+					&& (upgrade.type == "castle" || _upgrades["castle"] >= upgrade.level )) {
+				this.addGold(-upgrade.goldCost);
+				if (upgrade.type == "barracks") {
+					 _unitCap += upgrade.unitWorth;
+				} else if (upgrade.type == "foundry") {
+					_towerCap += upgrade.unitWorth;
+				} else {
+					_unitCap += upgrade.unitWorth;
+					_towerCap += upgrade.unitWorth;
+	
+				}
+				_upgrades[upgrade.type] = upgrade.level;
+				return true;
+			}
+			return false;
 		}
 		
 		/** Returns the player's unit capacity as a function of the purchased upgrades and acheivements
@@ -233,11 +263,6 @@ package
 			return true;
 		}
 		
-		// Returns an array of what towerIDs are available for use 
-		// based on upgrades and achivements. This array shoud be sorted first
-		public function availableTowers():Array {
-			return null;
-		}
 		
 		// Returns whether the player is leasing units from anyone
 		public function get isLeasing():Boolean {
@@ -292,21 +317,40 @@ package
 					typeLevel = Math.max(typeLevel,_upgrades[Castle.ARMY]);
 				}
 			}
-			typeLevel = 5;
-			trace(UNIT_INFO.length);
-			trace(unitType + " " + UNIT_INFO[unitType]);
 			// Iterates over upgrade list to add all unitIDs contained
 			var unitList:Array = new Array();
-			var upgradeLevel:int = 1;
-			for (; upgradeLevel <= typeLevel ; upgradeLevel++) {
+			var upgradeLevel:int = 0
+			for ( ; upgradeLevel <= typeLevel ; upgradeLevel++) {
 				if (UNIT_INFO[unitType].byLevel != null && UNIT_INFO[unitType].byLevel[upgradeLevel] != null) {
 					for(var unitID:Object in UNIT_INFO[unitType].byLevel[upgradeLevel]) {
-						unitList.push(UNIT_INFO[unitType].byLevel[upgradeLevel][unitID].uid);	
+						if(UNIT_INFO[unitType].byLevel[upgradeLevel][unitID].clas == "ground") {
+							unitList.push(UNIT_INFO[unitType].byLevel[upgradeLevel][unitID].uid);	
+						}
 					}
 				}
 			}
-			trace("hi");
-			trace(unitList.length);
+			upgradeLevel = 0;
+			for (; upgradeLevel <= _upgrades["mine"] ; upgradeLevel++) {
+				if (UNIT_INFO[unitType].byLevel != null && UNIT_INFO[unitType].byLevel[upgradeLevel] != null) {
+					for(var unitID:Object in UNIT_INFO[unitType].byLevel[upgradeLevel]) {
+						if(UNIT_INFO[unitType].byLevel[upgradeLevel][unitID].clas = "underground") {
+							unitList.push(UNIT_INFO[unitType].byLevel[upgradeLevel][unitID].uid);	
+						}
+					}
+				}
+			}
+			upgradeLevel = 0;
+			for (; upgradeLevel <= _upgrades["aviary"] ; upgradeLevel++) {
+				if (UNIT_INFO[unitType].byLevel != null && UNIT_INFO[unitType].byLevel[upgradeLevel] != null) {
+					for(var unitID:Object in UNIT_INFO[unitType].byLevel[upgradeLevel]) {
+						if(UNIT_INFO[unitType].byLevel[upgradeLevel][unitID].clas = "air") {
+							unitList.push(UNIT_INFO[unitType].byLevel[upgradeLevel][unitID].uid);	
+						}
+					}
+				}
+			}
+			
+
 			return unitList;
 		}
 		

@@ -112,9 +112,9 @@ package
 			Util.log("Tutorial Level: " + _tutorialLevel);
 			if (_tutorialLevel == TUTORIAL_NEW_USER) {
 				add(new MessageBox(Util.assets[Assets.INITIAL_PENDING_WAVE_TEXT], "Close", function():void {
-					toggleButtons(1);
 					Database.updateUserTutorialInfo(FaceBook.uid, TUTORIAL_FIRST_DEFEND);
 					_tutorialLevel = TUTORIAL_FIRST_DEFEND;
+					toggleButtons(1);
 				}));
 				toggleButtons(0);
 			} else if (_tutorialLevel == TUTORIAL_FIRST_DEFEND) {
@@ -265,7 +265,6 @@ package
 		 */		
 		private function addUnit(group:FlxGroup, unit:Unit, snapToGround:Boolean = true):Boolean {
 			if (placeable(unit.x, unit.y)) {
-				this.castle.addGold(-unit.goldCost || 0);
 				var coordinates:FlxPoint = Util.roundToNearestTile(new FlxPoint(unit.x, unit.y));
 				unit.x = coordinates.x;
 				unit.y = coordinates.y;
@@ -334,9 +333,10 @@ package
 			});
 			var _release:CKButton = new CKButton(0, 0, Util.assets[Assets.RELEASE_WAVE_BUTTON], function():void {
 				var defTowers:FlxGroup = remove(towers);
+				var oldCastle:Castle = remove(castle);
 				defTowers.setAll("canDrag", false);
 				defTowers.setAll("canHighlight", false);
-				FlxG.switchState(new AttackState(map, null, defTowers));
+				FlxG.switchState(new AttackState(map, oldCastle, defTowers));
 			});
 			var _upgrade:CKButton = new CKButton(0, 0, Util.assets[Assets.UPGRADE_BUTTON], function():void {
 				var oldCastle:Castle = remove(castle);

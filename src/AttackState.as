@@ -47,6 +47,7 @@ package
 			super(map, castle, towers, units);
 			_activeAttack = false;
 			_unitDropCounter = 10;
+			this.castle.resetGame();
 
 		}
 		
@@ -110,7 +111,7 @@ package
 					_gameOver = true;
 					_activeAttack = false;
 					waveFinished(false);
-				} else if (_activeAttack && _placeOnLeft.length + _placeOnRight.length == 0  && deathCheck(this.units)) { // Check if peeps are still alive
+				} else if (_activeAttack && _placeOnLeft.length + _placeOnRight.length == 0  && units.length == 0) { // Check if peeps are still alive
 				//	var armyCost2:int = sumArmyCost();
 					this.castle.addGold(this._waveGold);
 					this.remove(units);
@@ -143,7 +144,7 @@ package
 				
 				_unitDropCounter--;
 				if(_unitDropCounter <= 0) {
-					_unitDropCounter = 50;
+					_unitDropCounter = 100 -  Math.sqrt(this.castle.towerCapacity);
 					placeDudes(_placeOnLeft, Util.minX);
 					placeDudes(_placeOnRight, Util.maxX - 20);
 				}

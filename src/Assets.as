@@ -78,7 +78,7 @@ package
 		
 		[Embed(source = "../images/sniper_tower.png")]
 		private static var sniper_tower_normal:Class;
-		public static const SNIPER_TOWER:String = "Sniper_Tower";
+		public static const SNIPER_TOWER:String = "Sniper Tower";
 		
 		[Embed(source = "../images/cursor.png")]
 		private static var cursor_img:Class;
@@ -133,7 +133,10 @@ package
 			_normal[Assets.CURSOR] = cursor_img;
 			_normal[Assets.BACKGROUND] = background_img;
 			_normal[Assets.ARROW_TOWER] = arrow_tower_normal;
+			_normal[Assets.SNIPER_TOWER] = sniper_tower_normal;
+			_normal[Assets.IRON_TOWER] = iron_tower_normal;
 			_normal[Assets.MULTISHOT_TOWER] = multishot_tower_normal;
+
 			_normal[Assets.WALL] = wall_normal;
 			_normal[Assets.CANNON] = cannon_normal;
 			_normal[Assets.ARCHER] = archer_normal;

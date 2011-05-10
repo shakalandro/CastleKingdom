@@ -44,7 +44,7 @@ package
 						Util.log('fb user info retrieved: ' + fbInfo.id);
 						Database.getUserInfo(function(dbInfo:Array):void {
 							if (dbInfo == null || dbInfo.length == 0) {
-								Util.logObj('New user detected:', dbInfo[0]);
+								Util.logObj('New user detected:', fbInfo.id);
 								Database.addNewUser(fbInfo.id);
 							} else {
 								Util.logObj("Return user detected", dbInfo[0]);

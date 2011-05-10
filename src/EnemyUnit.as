@@ -81,13 +81,15 @@ package
 				this.velocity.y = 2; //-this.speed;
 				this.velocity.x = 0;
 				this.color =  Math.random() * 0xffffffff; 
-				
+				if(this.alive) {
+					this.play("die");
+				}
 				this.alive = false;
 				if(this.finished) {
 					(FlxG.state as AttackState).addWaveGold(this._reward);
-					(FlxG.state as ActiveState).units.remove(this); 
+					(FlxG.state as ActiveState).units.remove(this, true); 
 				} else {
-					this.play("die");
+					//this.play("die");
 				}
 			} else {
 				if (type == Unit.GROUND && this.y <= Util.castle.y ){

@@ -92,8 +92,7 @@ package
 			
 			// Set default fields
 			health = _maxHealth;
-			_attackCounter = 1000/_rate;
-			
+			resetAttackCounter();			
 			_healthyBar = hpBar;
 			if (_healthyBar != null) {
 				trace("Starting health bar");
@@ -124,12 +123,15 @@ package
 			_attackCounter--;
 			if(_attackCounter <= 0) {				//first check if this unit's timer has expired
 				if(executeAttack()) {		// Tries to attack if possible, fails if no units in range
-					_attackCounter = 30/_rate;
+					resetAttackCounter();
 				}
 			}
 			super.update();
 		}
 		
+		private function resetAttackCounter():void {
+			_attackCounter = 250/rate;
+		}
 		
 		/** Calls hitRanged(contact, velocity) for any units in range of the current item
 		**/
