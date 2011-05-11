@@ -35,11 +35,12 @@ package
 			_leftMenu.kill();
 			_rightMenu.kill();
 			Util.log("Upgrades right now: " + castle.numUpgrades);
-			if (castle.numUpgrades > TUTORIAL_UPGRADES_NEEDED) {
+			if (castle.numUpgrades > Castle.TUTORIAL_UPGRADES_NEEDED) {
+				toggleButtons(0);
 				add(new MessageBox(Util.assets[Assets.FIRST_ATTACK], "Okay", function():void {
 					toggleButtons(4);
-					Database.updateUserTutorialInfo(FaceBook.uid, TUTORIAL_UPGRADE);
-					tutorialLevel = TUTORIAL_FIRST_ATTACK;
+					Database.updateUserTutorialInfo(FaceBook.uid, Castle.TUTORIAL_UPGRADE);
+					Castle.tutorialLevel = Castle.TUTORIAL_FIRST_ATTACK;
 				}));
 			}
 		}

@@ -527,7 +527,28 @@ package
 		 */		
 		public static function forEach(stuff:Array, f:Function):void {
 			for (var i:int = 0; i < stuff.length; i++) {
-				new Closure(stuff[i]).eval(f, i);
+				Util.log("function called with " + i);
+				(new Closure(stuff[i])).eval(f, i);
+			}
+		}
+		
+		/**
+		 * Return a function that calls a specified function with the provided arguments
+		 * APPENDED to its provided arguments.
+		 * 
+		 * For instance, function a(b,c) through closurizeAppend(a, c) becomes 
+		 * a function(b) that calls function a(b,c);
+		 */
+		public static function closurizeAppend(func:Function, ...additionalArgs):Function
+		{
+			// Create a new function...
+			return function(...localArgs):* 
+			{
+				// Combine parameter lists.
+				var argsCopy:Array = localArgs.concat(additionalArgs);
+				
+				// Call the original function.
+				return func.apply(null, argsCopy);
 			}
 		}
 		

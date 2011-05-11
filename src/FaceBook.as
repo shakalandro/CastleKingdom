@@ -112,7 +112,9 @@ package
 			if (!_facebookReady) {
 				Util.log("Util.facebookUserInfo: _facebookReady = false");
 				callback(null);
-			} else if (_facebookUserInfo[uid] && !forceRefresh) {
+			} else if (!forceRefresh && _facebookUserInfo[uid]) {
+				Util.log("Util.facebookUserInfo: cached copy returned (" + uid + "): ");
+				Util.logObj("_facebookUserInfo[uid]:", _facebookUserInfo[uid]);
 				callback(_facebookUserInfo[uid]);
 			} else {
 				Facebook.api("/" + uid, function(results:Object, fail:Object):void {
@@ -175,6 +177,7 @@ package
 		 */		
 		public static function picture(callback:Function, uid:String = "me", forceRefresh:Boolean = false, size:String = "small"):void {
 			function helper(info:String):void {
+				Util.log("Util.picture: fetching image");
 				var url:URLRequest = new URLRequest(info);
 				var context:LoaderContext = new LoaderContext(true);
 				context.securityDomain = SecurityDomain.currentDomain;
@@ -190,9 +193,10 @@ package
 				Util.log("Util.facebookPic failed: facebookReady is false");
 				callback(null);
 			} else if (_facebookPics[uid] && !forceRefresh) {
+				Util.log("Util.facebookPic failed: picture already exists: " + uid);
 				ExternalImage.setData(_facebookPics[uid].bitmapData, _facebookPics[uid].url);
 				callback(ExternalImage);
-			} else if (uid == "me"){
+			} else if (uid == "me" && !forceRefresh){
 				FaceBook.userInfo(function(result:Object):void {
 					helper(Facebook.getImageUrl(result.id, size));
 				});

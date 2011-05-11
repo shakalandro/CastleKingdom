@@ -27,32 +27,36 @@ package
 			_menu = new ScrollMenu(castle.x, Util.minY, pages, null, Util.assets[Assets.TOWER_WINDOW_TITLE], 
 				0xffffffff, 10, Castle.TILE_WIDTH * CastleKingdom.TILE_SIZE, Util.maxY - Util.minY, 3, takeTower);
 			add(_menu);
-			/*
-			Database.getDefenseUnitInfo(function(info:Array):void {
-				var padding:Number = 10;
-				var pages:Array = createTowers(info, 2, 4, Castle.TILE_WIDTH * CastleKingdom.TILE_SIZE - padding * 2, Util.maxY - Util.minY - 50 - padding * 2, 10);
-				_menu = new ScrollMenu(castle.x, Util.minY, pages, null, Util.assets[Assets.TOWER_WINDOW_TITLE], 
-						0xffffffff, padding, Castle.TILE_WIDTH * CastleKingdom.TILE_SIZE, Util.maxY - Util.minY, 3, takeTower);
-				add(_menu);
-			}); */
+			
+			setTutorialUI();
 		}
 		
-		override protected function setTutorialUI():void {
+		private function setTutorialUI():void {
 			toggleButtons(0);
-			if (tutorialLevel == TUTORIAL_FIRST_DEFEND || tutorialLevel == TUTORIAL_FIRST_WAVE) {
+			if (Castle.tutorialLevel == Castle.TUTORIAL_FIRST_DEFEND || Castle.tutorialLevel == Castle.TUTORIAL_FIRST_WAVE) {
 				_menu.onClose = function():void {
 					unpause();
 					add(new MessageBox(Util.assets[Assets.FIRST_DEFENSE], "Okay", function():void {
 						toggleButtons(2);
 					}));
 				};
-			} else if (tutorialLevel == TUTORIAL_UPGRADE) {
+			} else if (Castle.tutorialLevel == Castle.TUTORIAL_UPGRADE) {
 				_menu.onClose = function():void {
 					unpause();
 					toggleButtons(3);
 				};
+			} else if (Castle.tutorialLevel == Castle.TUTORIAL_ATTACK_FRIENDS) {
+				_menu.onClose = function():void {
+					unpause();
+					toggleButtons(4);
+				};
+			} else if (Castle.tutorialLevel == Castle.TUTORIAL_LEASE) {
+				_menu.onClose = function():void {
+					unpause();
+					toggleButtons(5);
+				};
 			} else {
-				Util.log("Unexpected tutorial level: " + tutorialLevel);
+				Util.log("Unexpected tutorial level: " + Castle.tutorialLevel);
 			}
 		}
 		

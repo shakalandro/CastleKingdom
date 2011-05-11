@@ -1,6 +1,7 @@
 package
 {
 	import com.facebook.graph.*;
+	import com.facebook.graph.data.*;
 	
 	import org.flixel.*;
 	
@@ -38,26 +39,50 @@ package
 		}
 		
 		private function login():void {
+			Util.log("called the login function");
 			FaceBook.connect(function(ready:Boolean):void {
+				Util.log("connected properly");
 				if (ready) {
 					FaceBook.userInfo(function(fbInfo:Object):void {
-						Util.log('fb user info retrieved: ' + fbInfo.id);
-						Database.getUserInfo(function(dbInfo:Array):void {
-							if (dbInfo == null || dbInfo.length == 0) {
-								Util.logObj('New user detected:', fbInfo.id);
-								Database.addNewUser(fbInfo.id);
-							} else {
-								Util.logObj("Return user detected", dbInfo[0]);
-							}
-							FlxG.switchState(new ActiveState(map));
-
-						}, fbInfo.id);
-					});
+						if (fbInfo != null) {
+							Util.log('fb user info retrieved: ' + fbInfo);
+							Database.getUserInfo(function(dbInfo:Array):void {
+								if (dbInfo == null || dbInfo.length == 0) {
+									Util.logObj('New user detected:', fbInfo.id);
+									Database.addNewUser(parseInt(fbInfo.id));
+									Castle.tutorialLevel = 0;
+									FlxG.switchState(new ActiveState(map));
+								} else {
+									Util.logObj("Return user detected", dbInfo[0]);
+									Database.getUserTutorialInfo(function(info:Object):void {
+										setTutorialLevel(info);
+										FlxG.switchState(new ActiveState(map));
+									}, FaceBook.uid, true);
+								}
+							}, FaceBook.uid);
+						} else {
+							Util.log("fbinfo is null or empty");
+						}
+					}, true);
 				} else {
 					_startButton.label.text = "Try again :(";
 					Util.log("LoginState.login failed: " + ready);
 				}
 			}, CastleKingdom.flashVars.accessToken);
+		}
+		
+		private function setTutorialLevel(info:Object):void {
+			Castle.tutorialLevel = 0;
+			if (info == null || info.length == 0) {
+				Util.log("tutorial info came back bad: " + info.toString());
+			} else {
+				Util.logObj("tutorial info came back good", info[0]);
+				for (var prop:String in info[0]) {
+					if (prop != "id") {
+						Castle.tutorialLevel = Castle.tutorialLevel + parseInt(info[0][prop]);
+					}
+				}
+			}
 		}
 		
 		private function start():void {
