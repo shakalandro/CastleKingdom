@@ -106,6 +106,8 @@ package
 				_currentPage = 0;
 				pageCount = 0;
 			}
+			scrollRight();
+			scrollLeft();
 		}
 
 		/**
@@ -114,9 +116,17 @@ package
 		 */		
 		public function scrollLeft():void {
 			if (_currentPage - 1 >= 0) {
+				if (_currentPage == _pages.length - 1) {
+					_rightButton.visible = true;
+					_rightButton.active = true;
+				}
 				_currentPage--;
 				displayPage(_currentPage, _currentPage + 1);
 				pageCount = _currentPage;
+			}
+			if (_currentPage == 0) {
+				_leftButton.active = false;
+				_leftButton.visible = false;
 			}
 		}
 		
@@ -126,9 +136,17 @@ package
 		 */		
 		public function scrollRight():void {
 			if (_currentPage + 1 < _pages.length) {
+				if (_currentPage == 0) {
+					_leftButton.active = true;
+					_leftButton.visible = true;
+				}
 				_currentPage++;
 				displayPage(_currentPage, _currentPage - 1);
 				pageCount = _currentPage;
+			}
+			if (_currentPage == _pages.length - 1) {
+				_rightButton.visible = false;
+				_rightButton.active = false;
 			}
 		}
 		

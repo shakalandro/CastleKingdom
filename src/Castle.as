@@ -23,6 +23,15 @@ package
 	
 	public class Castle extends FlxSprite
 	{
+		public static const TUTORIAL_UPGRADES_NEEDED:int = 3;
+
+		public static const TUTORIAL_NEW_USER:int = 0;
+		public static const TUTORIAL_FIRST_DEFEND:int = 1;
+		public static const TUTORIAL_FIRST_WAVE:int = 2;
+		public static const TUTORIAL_UPGRADE:int = 3;
+		public static const TUTORIAL_FIRST_ATTACK:int = 4;
+		public static const TUTORIAL_ATTACK_FRIENDS:int = 5;
+		public static const TUTORIAL_LEASE:int = 6;
 		
 		private var _gameOver:Boolean = false;
 		public static const ACID_TRIP_MODE:Boolean = false;
@@ -49,6 +58,7 @@ package
 		private var _availableTowers:Array; 		// all towerIDs unlocked up to upgrade level
 		
 		private var _loadedInfo:int = 0;
+		private static var _tutorialLevel:int;
 		
 		public function Castle(X:Number=0, Y:Number=0, SimpleGraphic:Class=null)
 		{
@@ -77,6 +87,24 @@ package
 
 
 			
+		}
+		
+		/**
+		 * Meaning can be found in the numbers through the TUTORIAL_X constants
+		 * @return The current tutorial level of the player.
+		 * 
+		 */		
+		public static function get tutorialLevel():int {
+			return _tutorialLevel;
+		}
+		
+		/**
+		 * 
+		 * @param n Sets the current tutorial level.
+		 * 
+		 */		
+		public static function set tutorialLevel(n:int):void {
+			_tutorialLevel = n;
 		}
 		
 		/** Adds the given upgrade to the castle**/
@@ -332,8 +360,8 @@ package
 			upgradeLevel = 0;
 			for (; upgradeLevel <= _upgrades["mine"] ; upgradeLevel++) {
 				if (UNIT_INFO[unitType].byLevel != null && UNIT_INFO[unitType].byLevel[upgradeLevel] != null) {
-					for(var unitID:Object in UNIT_INFO[unitType].byLevel[upgradeLevel]) {
-						if(UNIT_INFO[unitType].byLevel[upgradeLevel][unitID].clas = "underground") {
+					for(unitID in UNIT_INFO[unitType].byLevel[upgradeLevel]) {
+						if(UNIT_INFO[unitType].byLevel[upgradeLevel][unitID].clas == "underground") {
 							unitList.push(UNIT_INFO[unitType].byLevel[upgradeLevel][unitID].uid);	
 						}
 					}
@@ -342,8 +370,8 @@ package
 			upgradeLevel = 0;
 			for (; upgradeLevel <= _upgrades["aviary"] ; upgradeLevel++) {
 				if (UNIT_INFO[unitType].byLevel != null && UNIT_INFO[unitType].byLevel[upgradeLevel] != null) {
-					for(var unitID:Object in UNIT_INFO[unitType].byLevel[upgradeLevel]) {
-						if(UNIT_INFO[unitType].byLevel[upgradeLevel][unitID].clas = "air") {
+					for(unitID in UNIT_INFO[unitType].byLevel[upgradeLevel]) {
+						if(UNIT_INFO[unitType].byLevel[upgradeLevel][unitID].clas == "air") {
 							unitList.push(UNIT_INFO[unitType].byLevel[upgradeLevel][unitID].uid);	
 						}
 					}

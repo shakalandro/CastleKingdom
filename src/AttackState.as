@@ -59,30 +59,32 @@ package
 		override public function create():void {
 			super.create();
 			_gameOver = false;
+			
+			setTutorialUI();
 		}
 		
-		override protected function setTutorialUI():void {
+		private function setTutorialUI():void {
 			toggleButtons(0);
-			if (tutorialLevel == TUTORIAL_FIRST_DEFEND) {
-				Database.updateUserTutorialInfo(FaceBook.uid, TUTORIAL_FIRST_WAVE);
-				tutorialLevel = TUTORIAL_FIRST_WAVE;
+			if (Castle.tutorialLevel == Castle.TUTORIAL_FIRST_DEFEND) {
+				Database.updateUserTutorialInfo(FaceBook.uid, Castle.TUTORIAL_FIRST_WAVE);
+				Castle.tutorialLevel = Castle.TUTORIAL_FIRST_WAVE;
 			}
 		}
 		
 		private function waveFinished(win:Boolean):void {
-			Util.log("AttackState.waveFinished: " + win, tutorialLevel);
-			if (win && tutorialLevel == TUTORIAL_FIRST_WAVE) {
+			Util.log("AttackState.waveFinished: " + win, Castle.tutorialLevel);
+			if (win && Castle.tutorialLevel == Castle.TUTORIAL_FIRST_WAVE) {
 				add(new MessageBox(Util.assets[Assets.FIRST_WIN], "Okay", function():void {
 					toggleButtons(3);
-					Database.updateUserTutorialInfo(FaceBook.uid, TUTORIAL_UPGRADE);
-					tutorialLevel = TUTORIAL_UPGRADE;
+					Database.updateUserTutorialInfo(FaceBook.uid, Castle.TUTORIAL_UPGRADE);
+					Castle.tutorialLevel = Castle.TUTORIAL_UPGRADE;
 				}));
-			} else if (!win && tutorialLevel == TUTORIAL_FIRST_WAVE) {
+			} else if (!win && Castle.tutorialLevel == Castle.TUTORIAL_FIRST_WAVE) {
 				add(new MessageBox(StringUtil.substitute(Util.assets[Assets.FIRST_LOSS], castle.unitCapacity), 
 						"Okay", function():void {
 					toggleButtons(2);
 				}));
-			} else if (tutorialLevel == TUTORIAL_UPGRADE){
+			} else if (Castle.tutorialLevel == Castle.TUTORIAL_UPGRADE){
 				toggleButtons(3);
 			}
 		}

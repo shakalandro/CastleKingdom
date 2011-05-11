@@ -15,15 +15,7 @@ package
 		public static const ATTACK_MENU:String = "attack";
 		public static const DEFEND_MENU:String = "defend";
 		public static const BUTTON_DIST:Number = 75;
-		
-		public static const TUTORIAL_UPGRADES_NEEDED:int = 3;
-		
-		public static const TUTORIAL_NEW_USER:int = 0;
-		public static const TUTORIAL_FIRST_DEFEND:int = 1;
-		public static const TUTORIAL_FIRST_WAVE:int = 2;
-		public static const TUTORIAL_UPGRADE:int = 3;
-		public static const TUTORIAL_FIRST_ATTACK:int = 4;
-		
+				
 		private static const HUD_BUTTON_PADDING:uint = 10;
 		
 		/**
@@ -48,7 +40,6 @@ package
 		private var _towerDisplay:FlxText;
 		private var _armyDisplay:FlxText;
 		private var _hudButtons:Array;
-		private var _tutorialLevel:int;
 		
 		/** 
 		 * An active state is a helper super class for interactive game states such as DefendState and UpgradeState. 
@@ -89,53 +80,43 @@ package
 					profilePic.x = Util.maxX - profilePic.width;
 					hud.add(profilePic);
 				}, "me", false, "small");
-			
-				Database.getUserTutorialInfo(function(info:Object):void {
-					setTutorialLevel(info);
-					setTutorialUI();
-				}, FaceBook.uid, true);
 			}
-			
+						
 			Util.log("Database tutorial clear button added");
 			var clear:CKButton = new CKButton(0, 0, "Clear", function():void {
-				Util.log("Clearing the tutorial info: " + FaceBook.uid + ", " + TUTORIAL_NEW_USER);
-				Database.updateUserTutorialInfo(FaceBook.uid, TUTORIAL_NEW_USER);
+				Util.log("Clearing the tutorial info: " + FaceBook.uid + ", " + Castle.TUTORIAL_NEW_USER);
+				Database.updateUserTutorialInfo(FaceBook.uid, Castle.TUTORIAL_NEW_USER);
 			});
-			clear.x = FlxG.width - clear.width - 10;
-			clear.y = FlxG.height - clear.height - 10;
+			clear.x = Util.minX;
+			clear.y = Util.minY + clear.height + 10;
 			clear.allowCollisions = FlxObject.NONE;
 			clear.immovable = true;
 			add(clear);
+			
+			setTutorialUI();
 		}
 		
-		protected function setTutorialUI():void {
-			Util.log("Tutorial Level: " + _tutorialLevel);
-			if (_tutorialLevel == TUTORIAL_NEW_USER) {
+		private function setTutorialUI():void {
+			Util.log("ActiveState Tutorial Level: " + Castle.tutorialLevel);
+			if (Castle.tutorialLevel == Castle.TUTORIAL_NEW_USER) {
 				add(new MessageBox(Util.assets[Assets.INITIAL_PENDING_WAVE_TEXT], "Close", function():void {
-					Database.updateUserTutorialInfo(FaceBook.uid, TUTORIAL_FIRST_DEFEND);
-					_tutorialLevel = TUTORIAL_FIRST_DEFEND;
+					Database.updateUserTutorialInfo(FaceBook.uid, Castle.TUTORIAL_FIRST_DEFEND);
+					Castle.tutorialLevel = Castle.TUTORIAL_FIRST_DEFEND;
 					toggleButtons(1);
 				}));
 				toggleButtons(0);
-			} else if (_tutorialLevel == TUTORIAL_FIRST_DEFEND) {
+			} else if (Castle.tutorialLevel == Castle.TUTORIAL_FIRST_DEFEND) {
 				toggleButtons(1);
-			} else if (_tutorialLevel == TUTORIAL_FIRST_WAVE) {
+			} else if (Castle.tutorialLevel == Castle.TUTORIAL_FIRST_WAVE) {
 				toggleButtons(2);
-			} else if (_tutorialLevel == TUTORIAL_UPGRADE) {
+			} else if (Castle.tutorialLevel == Castle.TUTORIAL_UPGRADE) {
 				toggleButtons(3);
-			}
-		}
-		
-		private function setTutorialLevel(info:Object):void {
-			if (info == null || info.length == 0) {
-				Util.log("tutorial info came back bad: " + info.toString());
-				_tutorialLevel = 0;
+			} else if (Castle.tutorialLevel == Castle.TUTORIAL_ATTACK_FRIENDS) {
+				toggleButtons(4);
+			} else if (Castle.tutorialLevel == Castle.TUTORIAL_LEASE) {
+				toggleButtons(5);
 			} else {
-				for (var prop:String in info[0]) {
-					if (prop != "id") {
-						_tutorialLevel += parseInt(info[0][prop]);
-					}
-				}
+				Util.log("ActiveState.setTutorialUI: unexpected tutorial level " + Castle.tutorialLevel);
 			}
 		}
 		
@@ -143,6 +124,7 @@ package
 			for (var i:int = 0; i < _hudButtons.length; i++) {
 				Util.log(typeof(_hudButtons[i]));
 				_hudButtons[i].active = (i < index);
+				_hudButtons[i].visible = (i < index);
 			}
 		}
 		
@@ -213,19 +195,6 @@ package
 		 */		
 		public function get towers():FlxGroup {
 			return _towers;
-		}
-		
-		/**
-		 * 
-		 * @return The current tutorialLevel
-		 * 
-		 */		
-		public function get tutorialLevel():int {
-			return _tutorialLevel;
-		}
-		
-		public function set tutorialLevel(n:int):void {
-			_tutorialLevel = n;
 		}
  		
 		/**
