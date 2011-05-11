@@ -80,6 +80,14 @@ package
 		private static var sniper_tower_normal:Class;
 		public static const SNIPER_TOWER:String = "Sniper Tower";
 		
+		[Embed(source = "../images/spiked_wall.png")]
+		private static var spiked_wall_normal:Class;
+		public static const SPIKED_WALL:String = "Spiked Wall";
+		
+		[Embed(source = "../images/landmine.png")]
+		private static var landmine_normal:Class;
+		public static const LANDMINE:String = "Landmine";
+		
 		[Embed(source = "../images/cursor.png")]
 		private static var cursor_img:Class;
 		public static const CURSOR:String = "cursor";
