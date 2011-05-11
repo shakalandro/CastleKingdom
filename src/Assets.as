@@ -44,6 +44,10 @@ package
 		private static var cannon_normal:Class;
 		public static const CANNON:String = "Cannon";
 		
+		[Embed(source = "../images/spearman.png")]
+		private static var spearnman_normal:Class;
+		public static const SPEARMAN:String = "Spearman";
+		
 		[Embed(source = "../images/hud_header.png")]
 		private static var hud_header:Class;
 		public static const HUD_HEADER:String = "hud_header";
