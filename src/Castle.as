@@ -60,8 +60,8 @@ package
 			_unitCap = 60;
 			_towerCap = 60;
 			_upgrades = new Array();
-			_upgrades["barracks"] = 2;
-			_upgrades["foundry"] = 2;
+			_upgrades["barracks"] = 0;
+			_upgrades["foundry"] = 0;
 			_upgrades["castle"] = 0;
 			_upgrades["mine"] = 0;
 			_upgrades["aviary"] = 0;
@@ -200,9 +200,10 @@ package
 		 * */
 		public function setUpgrade(upgrade:Upgrade):Boolean {
 			upgrade.type = upgrade.type.toLowerCase();
-			if( this.gold >= upgrade.goldCost 
+			if( (this.gold >= upgrade.goldCost 
 					&& _upgrades[upgrade.type] == upgrade.level - 1
-					&& (upgrade.type == "castle" || _upgrades["castle"] >= upgrade.level )) {
+					&& (upgrade.type == "castle" || _upgrades["castle"] >= upgrade.level) )
+				|| CastleKingdom.DEBUG) {
 				this.addGold(-upgrade.goldCost);
 				if (upgrade.type == "barracks") {
 					 _unitCap += upgrade.unitWorth;
@@ -300,10 +301,11 @@ package
 			return cost;
 		}
 		
-		/** Returns the unit numbers for the units unlocked by the castle's upgrade levels
+		/** Returns the unitIDs for the units unlocked by the castle's upgrade levels
 		 * 
 		 * @param unitType Either Castle.TOWER or Castle.ARMY to search for each type
-		 * @return 
+		 * @param highest True if you want to figure out what enemies are valid to send against user
+		 * @return Array of unitIDs
 		 * 
 		 */		
 		public function unitsUnlocked(unitType:String, highest:Boolean = false):Array {
@@ -332,8 +334,8 @@ package
 			upgradeLevel = 0;
 			for (; upgradeLevel <= _upgrades["mine"] ; upgradeLevel++) {
 				if (UNIT_INFO[unitType].byLevel != null && UNIT_INFO[unitType].byLevel[upgradeLevel] != null) {
-					for(var unitID:Object in UNIT_INFO[unitType].byLevel[upgradeLevel]) {
-						if(UNIT_INFO[unitType].byLevel[upgradeLevel][unitID].clas = "underground") {
+					for(unitID in UNIT_INFO[unitType].byLevel[upgradeLevel]) {
+						if(UNIT_INFO[unitType].byLevel[upgradeLevel][unitID].clas == "underground") {
 							unitList.push(UNIT_INFO[unitType].byLevel[upgradeLevel][unitID].uid);	
 						}
 					}
@@ -342,8 +344,8 @@ package
 			upgradeLevel = 0;
 			for (; upgradeLevel <= _upgrades["aviary"] ; upgradeLevel++) {
 				if (UNIT_INFO[unitType].byLevel != null && UNIT_INFO[unitType].byLevel[upgradeLevel] != null) {
-					for(var unitID:Object in UNIT_INFO[unitType].byLevel[upgradeLevel]) {
-						if(UNIT_INFO[unitType].byLevel[upgradeLevel][unitID].clas = "air") {
+					for(unitID in UNIT_INFO[unitType].byLevel[upgradeLevel]) {
+						if(UNIT_INFO[unitType].byLevel[upgradeLevel][unitID].clas == "air") {
 							unitList.push(UNIT_INFO[unitType].byLevel[upgradeLevel][unitID].uid);	
 						}
 					}

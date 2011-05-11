@@ -1,8 +1,10 @@
 package 
 {
+	import flash.display.BitmapData;
 	import flash.geom.*;
 	
 	import org.flixel.*;
+
 
 	/** DefenseUnit class
 	 * 
@@ -27,6 +29,7 @@ package
 		private var _highlightCallback:Function;
 		private var _highlighted:Boolean;
 		
+		
 		/**
 		 * 
 		 * @param x X coord to start at
@@ -47,7 +50,6 @@ package
 			}
 			var sizer:FlxSprite = new FlxSprite(0,0,imgResource);
 			
-			trace("img dimensions = " + (imgResource).width +" by " + (imgResource).height);
 			this.loadGraphic(imgResource,true,true,	sizer.width / 8,	sizer.height, true);
 			
 			//loadGraphic(Util.assets[Assets.ARROW_TOWER], true, false, CastleKingdom.TILE_SIZE, CastleKingdom.TILE_SIZE * 3);
@@ -61,6 +63,30 @@ package
 			_highlightCallback = highlightCallback;
 			_highlighted = false;
 			_target = null;
+		
+			
+			
+			_infoDisplay = new FlxGroup();
+			var rangeSize:int = this.range*CastleKingdom.TILE_SIZE;
+			var rangeCircle:BitmapData = new BitmapData(rangeSize*2 + width, rangeSize*2 + height, true, FlxG.GREEN);
+			ExternalImage.setData(rangeCircle, "range" + this.name);
+			_infoBox = new FlxSprite(this.x - rangeSize, this.y - rangeSize, ExternalImage);
+			_infoBox.alpha = .25;
+			_description = new FlxText(this.x - rangeSize, this.y - rangeSize, 75, 
+				this.clas.toUpperCase() +
+				"\n\nCost: " + this.cost + 
+				"\nHP: " + this.health +
+				"\nDmg: " + this.damageDone +
+				"\nRange: " + this.range +
+				"\nROF: " + this.rate +
+				"\n");
+			_description.color = FlxG.BLACK;
+			_infoDisplay.add(_infoBox);
+			_infoDisplay.add(_description);
+			_infoBox.visible = false;
+			_description.visible = false;
+			
+			
 		}
 		
 		public function get canHighlight():Boolean {
@@ -95,6 +121,21 @@ package
 		override public function preUpdate():void {
 			checkDrag();
 			_highlighted = checkHighlight();
+			if (_highlighted) {
+				FlxG.state.add(_infoDisplay);
+				var rangeSize:int = this.range*CastleKingdom.TILE_SIZE;
+				_infoBox.x = this.x - rangeSize;
+				_infoBox.y = this.y - rangeSize;
+				_description.x = this.x + width + 3, 
+				_description.y = this.y;
+				_infoBox.visible = true;
+				_description.visible = true;
+			} else {
+				FlxG.state.remove(_infoDisplay);
+
+				_infoBox.visible = false;
+				_description.visible = false;
+			}
 		}
 		
 		public function checkDrag():Boolean {
@@ -133,8 +174,12 @@ package
 		
 		override public function executeAttack():Boolean {
 			if(_target != null) {
+				
 				if(_target.inflictDamage(this.damageDone)){
 					_target = null;
+				}
+				if(type == "Mine") {
+					this.health = 0;
 				}
 				return true;
 			}
@@ -168,20 +213,25 @@ package
 				}
 						
 			} else {
-				if(this._target == null) {
-					
-					//this.checkRangedCollision();
-					_target = this.getUnitsInRange((FlxG.state as ActiveState).units)[0];
-					//trace(""+_target);
-					if (this._target == null) this.color =  0xcccccccc; 
+				
+				
+				if(this.x > Util.maxX/2) {
+					// goes left
+					this.facing = LEFT;
 				} else {
-					this.color = 0xffffffff; 
+					// goes right
+					this.facing = RIGHT;
+				}
+				if(this._target == null) {
+					this.color =  0xcccccccc;  // Idle indicator
+				} else {
+					this.color = 0xffffffff;  // Attacking indicator
 				}
 				
 				if (_highlighted) {
 					frame = 0;
 				} else {
-					this.frame = 6 - Math.floor(6 * Math.sqrt((health / this.maxHealth)));
+					this.frame = 6 - Math.floor(5 * Math.sqrt((health / this.maxHealth)));
 				}
 			}
 			super.update();

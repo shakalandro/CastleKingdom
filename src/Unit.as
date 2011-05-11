@@ -7,9 +7,10 @@
 
 package 
 {	
+	import flash.display.BitmapData;
 	import flash.geom.*;
 	
-	import org.flixel.*;	
+	import org.flixel.*;
 	
 	public class Unit extends FlxSprite
 	{
@@ -43,6 +44,8 @@ package
 		private var _damageDone:int;
 		protected var _rate:Number;
 		private var _shots:int;
+		private var _shotCount:int;
+
 		
 		private var _validTargets:Array;  // stores all enemies that come into range
 		
@@ -53,9 +56,18 @@ package
 		
 		private var _healthyBar:HealthBar;
 		private var _currentlyDraggable:Boolean;
+		private var _clas:String;
 
+		protected var _infoDisplay:FlxGroup;
+		protected var _description:FlxText;
+		protected var _infoBox:FlxSprite;
+		
 		private var _creator:String;
 		protected var _unitName:String;
+		
+		
+		
+		
 		
 		/** Constructs a DefenseUnit at (x, y) with the given towerID, looking
 		// up what its stats are based on its tower ID
@@ -88,6 +100,12 @@ package
 			_range = Castle.UNIT_INFO[unitType][unitID].range;
 			_damageDone = Castle.UNIT_INFO[unitType][unitID].damage;
 			_rate = Castle.UNIT_INFO[unitType][unitID].rate;
+			_clas = Castle.UNIT_INFO[unitType][unitID].clas;
+			
+			_shots = 1;
+			
+			_shotCount = shots;
+
 			this.speed = 0;
 			
 			// Set default fields
@@ -98,6 +116,7 @@ package
 				trace("Starting health bar");
 				_healthyBar.start(x,y,this._maxHealth,this.width);
 			}
+			
 			
 			
 		}
@@ -123,7 +142,10 @@ package
 			_attackCounter--;
 			if(_attackCounter <= 0) {				//first check if this unit's timer has expired
 				if(executeAttack()) {		// Tries to attack if possible, fails if no units in range
-					resetAttackCounter();
+					this._shotCount--;
+					if(this._shotCount == 0) {
+						resetAttackCounter();
+					}
 				}
 			}
 			super.update();
@@ -131,6 +153,7 @@ package
 		
 		private function resetAttackCounter():void {
 			_attackCounter = 250/rate;
+			_shotCount = shots;
 		}
 		
 		/** Calls hitRanged(contact, velocity) for any units in range of the current item
@@ -209,6 +232,16 @@ package
 			return lowCost;
 		}
 		
+		/**
+		 * Figures out if the other unit is within attack range of this one 
+		 * @param unit unit to check if it is range or not
+		 * @return true if unit is within range, else false
+		 * 
+		 */		
+		public function inRange(unit:Unit):Boolean {
+			return unitDistance(unit) <= this.range * CastleKingdom.TILE_SIZE;
+		}
+		
 		/** Getters and setters
 		 * There should be getters and setters for each of the above fields except _img
 		 * */
@@ -231,6 +264,10 @@ package
 		
 		public function set objy(newY:Number):void {
 			y = newY;
+		}
+		
+		public function get clas():String {
+			return _clas;
 		}
 		
 		public function get maxHealth():int {

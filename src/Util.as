@@ -283,7 +283,7 @@ package
 		 * @return The y coordinate of where the object was placed with respect to the stage.
 		 * 
 		 */		
-		public static function placeOnGround(obj:FlxObject, map:FlxTilemap = null, ignoreX:Boolean = false, snapX:Boolean = false):Number {
+		public static function placeOnGroundOld(obj:FlxObject, map:FlxTilemap = null, ignoreX:Boolean = false, snapX:Boolean = false):Number {
 			if (map == null) map = Util.state.map;
 			
 			var x:Number = obj.x;// + obj.width / 2;
@@ -302,6 +302,105 @@ package
 			}
 			var coords:FlxPoint = Util.indicesToCartesian(indices, ignoreX);
 			var y:Number = coords.y - obj.height;
+			obj.y = y;
+			if (snapX)  {
+				obj.x = coords.x;
+			}
+			return y;
+		}
+		
+		/**
+		 * Sets the given objects y coordinate such that the object sits at the location in the
+		 * solid terrain that is underneath the horizontal center of the object. It is is dropped above
+		 * ground, it places it in a random spot underground.
+		 * 
+		 * @param obj The FlxObject to be placed
+		 * @param map The FlxTilemap the object is to be placed on
+		 * @return The y coordinate of where the object was placed with respect to the stage.
+		 * 
+		 */		
+		public static function placeUnderGround(obj:FlxObject, map:FlxTilemap = null, ignoreX:Boolean = false, snapX:Boolean = false):Number {
+			if (map == null) map = Util.state.map;
+			
+			var x:Number = obj.width / 2;
+			if ( x < Util.minX) {
+				x = Util.minX;
+			} else if (x > Util.maxX) {
+				x = Util.maxX - CastleKingdom.TILE_SIZE / 2;
+			} 
+			
+			var indices:FlxPoint = cartesianToIndices(new FlxPoint(x, Util.minY), ignoreX);
+			
+			var tileType:int = map.getTile(indices.x, indices.y);
+			
+			while (tileType < map.collideIndex && indices.y < map.heightInTiles) {
+				indices.y++;
+				tileType = map.getTile(indices.x, indices.y);
+			}
+			if (obj.y >= indices.y) {
+				indices.y = obj.y;
+			} else {
+				indices.y = Math.floor(indices.y + CastleKingdom.TILE_SIZE + Math.random()*(Util.maxY-indices.y));
+
+			}
+			var coords:FlxPoint = Util.indicesToCartesian(indices, ignoreX);
+			var y:Number = coords.y - obj.height;
+			obj.y = y;
+			if (snapX)  {
+				obj.x = coords.x;
+			}
+			return y;
+		}
+		
+		/**
+		 * Sets the given objects y coordinate such that the object sits on top of the 
+		 * topmost piece of solid terrain that is underneath the horizontal center of the object.
+		 * 
+		 * @param obj The FlxObject to be placed
+		 * @param map The FlxTilemap the object is to be placed on
+		 * @return The y coordinate of where the object was placed with respect to the stage.
+		 * 
+		 */		
+		public static function placeInZone(obj:FlxObject, map:FlxTilemap = null, ignoreX:Boolean = false, snapX:Boolean = false):Number {
+			if (map == null) map = Util.state.map;
+			
+			var x:Number = obj.x;// + obj.width / 2;
+			if ( x < Util.minX) {
+				x = Util.minX;
+			} else if (x > Util.maxX) {
+				x = Util.maxX - CastleKingdom.TILE_SIZE / 2;
+			} 
+			
+			var origIndices:FlxPoint = cartesianToIndices(new FlxPoint(x, Math.max(obj.y, Util.minY)), ignoreX);
+
+			var origY:int = origIndices.y + 4;
+
+			var indices:FlxPoint = cartesianToIndices(new FlxPoint(x, Util.minY), ignoreX);
+			var tileType:int = map.getTile(indices.x, indices.y);
+			while (tileType < map.collideIndex && indices.y < map.heightInTiles) {
+				indices.y++;
+				tileType = map.getTile(indices.x, indices.y);
+			}
+			if(obj is Unit && (obj as Unit).clas == "underground") { //underground
+				if (origY >= indices.y) { 
+					indices.y = origY; // they alrady dropped underground
+					
+				} else {
+					indices.y = Math.floor(indices.y + 1 + Math.random()*(Util.maxTileY-indices.y-1));
+					
+				}
+			} else if (obj is Unit &&(obj as Unit).clas == "air") { //air
+			
+				if (origY <= indices.y - 2) {
+					indices.y = origY; // they already dropped in air
+				} else {
+					indices.y = Math.floor(indices.y - 1 - Math.random()*(indices.y-3));
+					
+				}
+			}
+			var coords:FlxPoint = Util.indicesToCartesian(indices, ignoreX);
+			var y:Number = coords.y - obj.height;
+			y = Math.max(y, Util.minY);
 			obj.y = y;
 			if (snapX)  {
 				obj.x = coords.x;

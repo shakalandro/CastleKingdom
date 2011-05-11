@@ -32,6 +32,10 @@ package
 		private static var swordsman_normal:Class;
 		public static const SWORDSMAN:String = "Swordsman";
 		
+		[Embed(source = "../images/pikeman.png")]
+		private static var pikeman_normal:Class;
+		public static const PIKEMAN:String = "Spearman";
+		
 		[Embed(source = "../images/archer.png")]
 		private static var archer_normal:Class;
 		public static const ARCHER:String = "Archer";
@@ -58,7 +62,7 @@ package
 	
 		[Embed(source = "../images/wall.png")]
 		private static var wall_normal:Class;
-		public static const WALL:String = "Walls";
+		public static const WALL:String = "Wall";
 		
 		[Embed(source = "../images/arrow_tower.png")]
 		private static var arrow_tower_normal:Class;
@@ -82,11 +86,11 @@ package
 		
 		[Embed(source = "../images/spiked_wall.png")]
 		private static var spiked_wall_normal:Class;
-		public static const SPIKED_WALL:String = "Spiked Wall";
+		public static const SPIKED_WALL:String = "Spike Wall";
 		
 		[Embed(source = "../images/landmine.png")]
 		private static var landmine_normal:Class;
-		public static const LANDMINE:String = "Landmine";
+		public static const LANDMINE:String = "Land Mine";
 		
 		[Embed(source = "../images/cursor.png")]
 		private static var cursor_img:Class;
@@ -134,16 +138,22 @@ package
 			
 			_normal[Assets.MAP_TILES] = tilesImg_normal;
 			_normal[Assets.SWORDSMAN] = swordsman_normal;
+			_normal[Assets.PIKEMAN] = pikeman_normal;
+
 			_normal[Assets.TILE_LAYOUT] = tileLayout_normal;
 			_normal[Assets.HUD_HEADER] = hud_header;
 			_normal[Assets.MENU_BG] = menu_bg;
 			_normal[Assets.CASTLE] = castle_img;
 			_normal[Assets.CURSOR] = cursor_img;
 			_normal[Assets.BACKGROUND] = background_img;
+			
 			_normal[Assets.ARROW_TOWER] = arrow_tower_normal;
 			_normal[Assets.SNIPER_TOWER] = sniper_tower_normal;
 			_normal[Assets.IRON_TOWER] = iron_tower_normal;
 			_normal[Assets.MULTISHOT_TOWER] = multishot_tower_normal;
+			_normal[Assets.LANDMINE] = landmine_normal;
+			_normal[Assets.SPIKED_WALL] = spiked_wall_normal;
+
 
 			_normal[Assets.WALL] = wall_normal;
 			_normal[Assets.CANNON] = cannon_normal;

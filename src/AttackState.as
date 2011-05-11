@@ -144,13 +144,14 @@ package
 				
 				_unitDropCounter--;
 				if(_unitDropCounter <= 0) {
-					_unitDropCounter = 100 -  Math.sqrt(this.castle.towerCapacity);
+					_unitDropCounter = 50; // 100 -  Math.sqrt(this.castle.towerCapacity);
 					placeDudes(_placeOnLeft, Util.minX);
 					placeDudes(_placeOnRight, Util.maxX - 20);
 				}
 				
 			}
 			super.collide();
+			this.rangeCollideDetector(units,towers);
 			super.update();
 			
 		}
@@ -335,5 +336,29 @@ package
 		public function addWaveGold(amount:int):void {
 			_waveGold += amount;
 		}
+		
+		/**
+		 * Calls hitRanged on every unit in either group that comes into range of the other 
+		 * Does not call on any null objects or dead units. 
+		 * 
+		 * @param group1 first group to rangeCollide
+		 * @param grou2 second group to rangeCollide
+		 * 
+		 */		
+		public function rangeCollideDetector(group1:FlxGroup, group2:FlxGroup):void {
+			for each (var unit1:Unit in group1.members) {
+				for each (var unit2:Unit in group2.members) {
+					if(unit1 != null && unit2 != null && unit1.health > 0 && unit2.health > 0) {
+						if(unit1.inRange(unit2)) {
+							unit1.hitRanged(unit2);
+						}
+						if(unit2.inRange(unit1)) {
+							unit2.hitRanged(unit1);
+						}
+					}
+				} 
+			} 
+		}
+		
 	}
 }

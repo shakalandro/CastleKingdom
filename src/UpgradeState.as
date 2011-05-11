@@ -56,24 +56,48 @@ package
 					for (var k:int = 0; k < perRow; k++) {
 						var index:Number = min + i * (perRow * perColumn) + j * perRow + k;
 						if (index < max) {
-							Util.log("Upgrade created: " + info[index].name);
 							var bgColor:uint = FlxG.WHITE;
-							Util.log("Upgrade type: " + info[index].type);
+							
 							if (info[index].type == "mine") bgColor = 0xFFAA4E07;
 							else if (info[index].type == "castle") bgColor = FlxG.PINK;
 							else if (info[index].type == "aviary") bgColor = FlxG.BLUE;
 							else if (info[index].type == "foundry") bgColor = 0xFF767473;
 							else if (info[index].type == "barracks") bgColor = FlxG.GREEN;
-							var upgrade:Upgrade = new Upgrade(k * (width / perRow), j * (height / perColumn), 
-								width / perRow, height / perColumn, info[index].name, info[index].unitWorth, info[index].level,
-								info[index].goldCost, info[index].type, clickCallback, bgColor);
-							group.add(upgrade);
+							if(checkLevel(info[index])) {
+								Util.log("Upgrade created: " + info[index].name);
+								Util.log("Upgrade type: " + info[index].type);
+								var upgrade:Upgrade = new Upgrade(k * (width / perRow), j * (height / perColumn), 
+									width / perRow, height / perColumn, info[index].name, info[index].unitWorth, info[index].level,
+									info[index].goldCost, info[index].type, clickCallback, bgColor);
+								group.add(upgrade);
+							}
 						}
 					}
 				}
 				pages[i] = group;
 			}
 			return pages;
+		}
+		
+		private function checkLevel(value:Object):Boolean {
+			if( CastleKingdom.DEBUG || 
+				(this.castle.upgrades[value.type] == value.level - 1
+				&& (this.castle.upgrades["castle"] >= value.level || value.type == "castle") 
+				&& checkMineLevel(value) && checkAviaryLevel(value))) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		
+		private function checkAviaryLevel(value:Object):Boolean {
+			var stage:Array = [0,8,11,15,21];
+			return value.type != "aviary" || this.castle.upgrades["castle"] >= stage[value.level];
+		}
+		
+		private function checkMineLevel(value:Object):Boolean {
+			var stage:Array = [0,5,8,13,21];
+			return value.type != "mine" || this.castle.upgrades["castle"] >= stage[value.level];
 		}
 	}
 }

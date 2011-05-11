@@ -96,24 +96,19 @@ package
 					this.velocity.y = 0 ;
 				}
 				if(this._target == null || _target.health <= 0) {
-					_target = null;
-					var newTarget:Boolean = false;
-					if (range > 1) {
-						newTarget = setNewTarget() ;	
-					} 
-					if(!newTarget) {
-						if(this.x > Util.maxX/2) {
-							// goes left
-							this.velocity.x = -speed;
-							this.facing = LEFT;
-						} else {
-							// goes right
-							this.velocity.x = speed;
-							this.facing = RIGHT;
-						}
-						this.play("walk");
-						
+					this._target = null;
+					if(this.x > Util.maxX/2) {
+						// goes left
+						this.velocity.x = -speed;
+						this.facing = LEFT;
+					} else {
+						// goes right
+						this.velocity.x = speed;
+						this.facing = RIGHT;
 					}
+					this.play("walk");
+					
+					
 				} else {
 					
 				}
@@ -145,7 +140,8 @@ package
 		 * */
 		
 		override public function hitRanged(contact:FlxObject):void {
-			if(contact is DefenseUnit && (this._target == null || _target.health <= 0)) {
+			if(contact is DefenseUnit && (this._target == null || _target.health <= 0) 
+				&& (contact as DefenseUnit).type != "Mine") {
 				this._target = contact as Unit;
 				this.velocity.y = 0;
 				this.velocity.x = 0;

@@ -78,7 +78,7 @@ package
 			add(_units);
 			_castle = _castle || new Castle(0, 0, Util.assets[Assets.CASTLE]);
 			Util.centerX(_castle);
-			Util.placeOnGround(_castle, map);
+			Util.placeInZone(_castle, map);
 			add(_castle);
 			if (CastleKingdom.FACEBOOK_ON) {
 				FaceBook.picture(function(pic:Class):void {
@@ -268,7 +268,8 @@ package
 				var coordinates:FlxPoint = Util.roundToNearestTile(new FlxPoint(unit.x, unit.y));
 				unit.x = coordinates.x;
 				unit.y = coordinates.y;
-				if (snapToGround) Util.placeOnGround(unit, map, true, true);
+				if (unit.clas == "ground") Util.placeInZone(unit, map, true, true);
+			
 				group.add(unit);
 				//add(unit);
 				return true;
@@ -315,7 +316,8 @@ package
 			for each (var obj:FlxObject in _towers.members) {
 				var objStart:FlxPoint = Util.cartesianToIndices(new FlxPoint(obj.x, obj.y));
 				var objStop:FlxPoint = Util.cartesianToIndices(new FlxPoint(obj.x + obj.width, obj.y));
-				if (indices.x >= objStart.x && indices.x < objStop.x) {
+				if (indices.x >= objStart.x && indices.x < objStop.x && 
+					indices.y >= objStart.y && indices.y <= objStop.y) {
 					return false;
 				}
 			}

@@ -72,11 +72,13 @@ package
 			newTower.y = oldY;
 			_menu.addToCurrentPage(newTower);
 			towers.add(tower);
-			Util.placeOnGround(tower, map,false, true);
+			Util.placeInZone(tower, map,true, true);
 			tower.allowCollisions = FlxObject.ANY;
 			tower.immovable = true;
 			tower.dragCallback = function(draggable:Draggable, newX:Number, newY:Number, oldX:Number, oldY:Number):void {
-				Util.placeOnGround(draggable as DefenseUnit, map,false, true);
+			//this.addDefenseUnit(draggable,false);
+				
+				Util.placeInZone(draggable as DefenseUnit, map,true, true);
 			};
 		}
 		
@@ -106,15 +108,7 @@ package
 							name.color = FlxG.BLACK;
 							
 							tower.y += name.height;
-							var description:FlxText = new FlxText(tower.x + tower.width, tower.y, 50, 
-								"Cost: " + tower.cost + 
-								"\nHP: " + tower.health +
-								"\nDmg: " + tower.damageDone +
-								"\nRange: " + tower.range +
-								"\nROF: " + tower.rate +
-								"\n");
-							description.color = FlxG.BLACK;
-							group.add(description);
+							
 							group.add(tower);
 							group.add(name);
 						}
