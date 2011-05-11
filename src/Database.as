@@ -25,6 +25,7 @@ package
 		private static const _startGold:int = 0;
 		private static const _startUnits:int = 5;
 		private static var _attacked:Array;
+		private static var _pendingAttacks:Array;
 		
 		
 		private static function getMain(url:String, callback:Function, ids:Object = null):void
@@ -499,7 +500,7 @@ package
 		/**
 		 * <p>
 		 * Passes an array of objects representing which ids (given to the function) are being attacked to
-		 * the callback function. The object that is passed to the callback function is of the following form:
+		 * the callback function. The object that is passed to the callback function in the array is of the following form:
 		 * </p>
 		 * <p>
 		 * {id}
@@ -525,6 +526,40 @@ package
 				}, ids);
 			} else {
 				callback(getAll(_attacked , ids));
+			}
+		}
+		
+		/**
+		 * <p>
+		 * Passes an array of objects representing which ids (given to the function) are being attacked to by whom
+		 * the callback function. The object that is passed to the callback function in the array is of the following form:
+		 * </p>
+		 * <p>
+		 * {id, aid}
+		 * </p>
+		 * <p>
+		 * The id is the id of the person who is attacking the aid (one of the ids given to the function)
+		 * If the user does not have any pending information, the the array that is passed to the callback is null.
+		 * </p>
+		 * 
+		 * @param callback a function that takes one argument, an array of objects
+		 * @param ids either a number or an array of numbers representing the user ids
+		 * @param forceRefresh
+		 * 
+		 */
+		public static function pendingAttacks(callback:Function, ids:Object = null, forceRefresh:Boolean = false):void {
+			if (forceRefresh || _pendingAttacks == null) {
+				getMain("http://games.cs.washington.edu/capstone/11sp/castlekd/database/pendingUserAttacks.php", function(xmlData:XML):void {
+					_pendingAttacks = processList(xmlData.attack, function(unit:XML):Object {
+						return {
+							id: unit.uid,
+							aid: unit.aid
+						};
+					})
+					callback(_pendingAttacks);
+				}, ids);
+			} else {
+				callback(getAll(_pendingAttacks , ids));
 			}
 		}
 		
@@ -639,6 +674,7 @@ package
 		
 		/**
 		 * <p>
+		 * Should call getUserInfo first to determine how many units are allowed to be leased at one time.
 		 * Adds a new lease for the given user. Updates the user's information so that the number of units they
 		 * are leasing out is decremented from their total number of units and the person they are leasing to 
 		 * has their units increased. This is done based on the object passed in. The object should be of the 
@@ -685,6 +721,51 @@ package
 			variables.lid = "" + leaseInfo["lid"];
 			variables.numUnits = "" + leaseInfo["numUnits"];
 			update("http://games.cs.washington.edu/capstone/11sp/castlekd/database/removeUserLease.php", variables);
+		}
+		
+		/**
+		 * <p>
+		 * Inserts the given attack information into the database. Must call isBeingAttacked first to
+		 * determine if the user is already being detected. The The object passed must be of
+		 * the following format:
+		 * </p>
+		 * <p>
+		 * {id, aid, leftSide, rightSide}
+		 * </p>
+		 * 
+		 * @param attackInfo must be of the specified format and != null
+		 * 
+		 */
+		public static function updateUserAttacks(attackInfo:Object):void
+		{
+			var variables:URLVariables = new URLVariables();
+			variables.uid = "" + attackInfo["id"];
+			variables.aid = "" + attackInfo["aid"];
+			variables.leftSide = "" + attackInfo["leftSide"];
+			variables.rightSide = "" + attackInfo["rightSide"];
+			update("http://games.cs.washington.edu/capstone/11sp/castlekd/database/updateUserAttacks.php", variables);
+		}
+		
+		/**
+		 * <p>
+		 * Removes the given attack information from the database. The The object passed must be of
+		 * the following format:
+		 * </p>
+		 * <p>
+		 * {id, aid}
+		 * </p>
+		 * 
+		 * @param attackInfo must be of the specified format and != null
+		 * 
+		 */
+		public static function removeUserAttacks(attackInfo:Object):void
+		{
+			var variables:URLVariables = new URLVariables();
+			variables.uid = "" + attackInfo["id"];
+			variables.aid = "" + attackInfo["aid"];
+			variables.leftSide = "" + attackInfo["leftSide"];
+			variables.rightSide = "" + attackInfo["rightSide"];
+			update("http://games.cs.washington.edu/capstone/11sp/castlekd/database/removeUserAttacks.php", variables);
 		}
 	}
 }
