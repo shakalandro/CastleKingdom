@@ -29,9 +29,8 @@ package
 		public static const TUTORIAL_FIRST_DEFEND:int = 1;
 		public static const TUTORIAL_FIRST_WAVE:int = 2;
 		public static const TUTORIAL_UPGRADE:int = 3;
-		public static const TUTORIAL_FIRST_ATTACK:int = 4;
-		public static const TUTORIAL_ATTACK_FRIENDS:int = 5;
-		public static const TUTORIAL_LEASE:int = 6;
+		public static const TUTORIAL_ATTACK_FRIENDS:int = 4;
+		public static const TUTORIAL_LEASE:int = 5;
 		
 		private var _gameOver:Boolean = false;
 		public static const ACID_TRIP_MODE:Boolean = false;
@@ -439,6 +438,17 @@ package
 		 */		
 		public function get upgrades():Array {
 			return _upgrades;
+		}
+		
+		/**
+		 * Appraises the current user and returns a number.
+		 *  
+		 * @param person A userinfo object derived from the database or a valid castle object
+		 * @return The worth of the user.
+		 * 
+		 */		
+		public static function computeValue(person:Object):Number {
+			return person.gold;
 		}
 		
 		/**

@@ -22,23 +22,24 @@ package
 	 * 
 	 * @author Justin
 	 **/
-	public class EnemyUnit extends Unit
+	public class EnemyUnit extends Unit implements Draggable
 	{
 		private var _target:Unit;
 		private var _type:String; 
 		private var _reward:int;
+		private var _active:Boolean;
+		private var _canDrag:Boolean;
 
-		public function EnemyUnit(x:Number, y:Number, towerID:int, canDrag:Boolean = false, bar:HealthBar = null) {
+		public function EnemyUnit(x:Number, y:Number, towerID:int, canDrag:Boolean = false, bar:HealthBar = null, active:Boolean = true) {
 			
 			super (x,y,towerID, "barracks", canDrag, bar);
 			this.speed = Castle.UNIT_INFO["barracks"][unitID].move;
 			this.goldCost = Castle.UNIT_INFO["barracks"][unitID].goldCost;
 			_reward = Castle.UNIT_INFO["barracks"][unitID].reward;
+			this._active = active;
+			_canDrag = canDrag;
 			
-			this._type = Unit.GROUND;
-			this.speed *= 2;
-			this.velocity.x = speed;
-			this.velocity.y = 1;
+				
 			//var unitName:String = Castle.UNIT_INFO["barracks"][towerID].name;
 			var imgResource:Class = Util.assets[_unitName];
 			if (imgResource == null) {
@@ -53,16 +54,23 @@ package
 			this.addAnimation("attack",[4,5,6,7],_rate,true);
 			this.addAnimation("die",[8,9,10,11],_rate, false);
 			this.play("walk");
-			if(this.x > Util.maxX/2) {
-				// goes left
-				this.velocity.x = -speed;
-				this.facing = LEFT;
-			} else {
-				// goes right
-				this.velocity.x = speed;
-				this.facing = RIGHT;
-			}
+			
+			if (this._active) {
 
+				this._type = Unit.GROUND;
+				this.speed *= 2;
+				this.velocity.x = speed;
+				this.velocity.y = 1;
+				if(this.x > Util.maxX/2) {
+					// goes left
+					this.velocity.x = -speed;
+					this.facing = LEFT;
+				} else {
+					// goes right
+					this.velocity.x = speed;
+					this.facing = RIGHT;
+				}
+			}
 			
 			
 			//this.allowCollisions = FlxObject.ANY;
@@ -81,43 +89,45 @@ package
 		 * 
 		 */
 		override public function update():void {
-			if(!this.alive || this.health <= 0) {
-				this.velocity.y = 2; //-this.speed;
-				this.velocity.x = 0;
-				this.color =  Math.random() * 0xffffffff; 
-				if(this.alive) {
-					this.play("die");
-				}
-				this.alive = false;
-				if(this.finished) {
-					(FlxG.state as AttackState).addWaveGold(this._reward);
-					(FlxG.state as ActiveState).units.remove(this, true); 
-				} else {
-					//this.play("die");
-				}
-			} else {
-				if (type == Unit.GROUND && this.y <= Util.castle.y ){
-					this.velocity.y = 0 ;
-				}
-				if(this._target == null || _target.health <= 0) {
-					this._target = null;
-					if(this.x > Util.maxX/2) {
-						// goes left
-						this.velocity.x = -speed;
-						this.facing = LEFT;
-					} else {
-						// goes right
-						this.velocity.x = speed;
-						this.facing = RIGHT;
+			if (this._active) {
+				if(!this.alive || this.health <= 0) {
+					this.velocity.y = 2; //-this.speed;
+					this.velocity.x = 0;
+					this.color =  Math.random() * 0xffffffff; 
+					if(this.alive) {
+						this.play("die");
 					}
-					this.play("walk");
-					
-					
+					this.alive = false;
+					if(this.finished) {
+						(FlxG.state as AttackState).addWaveGold(this._reward);
+						(FlxG.state as ActiveState).units.remove(this, true); 
+					} else {
+						//this.play("die");
+					}
 				} else {
-					
+					if (type == Unit.GROUND && this.y <= Util.castle.y ){
+						this.velocity.y = 0 ;
+					}
+					if(this._target == null || _target.health <= 0) {
+						this._target = null;
+						if(this.x > Util.maxX/2) {
+							// goes left
+							this.velocity.x = -speed;
+							this.facing = LEFT;
+						} else {
+							// goes right
+							this.velocity.x = speed;
+							this.facing = RIGHT;
+						}
+						this.play("walk");
+						
+						
+					} else {
+						
+					}
 				}
+				super.update();
 			}
-			super.update();
 		}
 		
 		public function setNewTarget():Boolean {
@@ -133,6 +143,9 @@ package
 		
 		override public function executeAttack():Boolean {
 			if(_target != null) {
+				if(this.range > 0) {
+					new AttackAnimation(this.x,this.y,_target);
+				}
 				_target.inflictDamage(this.damageDone);
 				return true;
 			}
@@ -145,12 +158,16 @@ package
 		
 		override public function hitRanged(contact:FlxObject):void {
 			if(contact is DefenseUnit && (this._target == null || _target.health <= 0) 
-				&& (contact as DefenseUnit).type != "Mine") {
+					&& ((contact as DefenseUnit).type as String).indexOf("Mine") < 0) {
 				this._target = contact as Unit;
 				this.velocity.y = 0;
 				this.velocity.x = 0;
 				this.play("attack");
 			}	
+		}
+		
+		override public function clone():Unit {
+			return new EnemyUnit(x, y, unitID, canDrag, null, _active);
 		}
 		
 		

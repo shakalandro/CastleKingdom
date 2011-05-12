@@ -12,17 +12,25 @@ package
 	
 	import org.flixel.*;
 	
-	public class Unit extends FlxSprite
+	public class Unit extends FlxSprite implements Draggable, Highlightable
 	{
 		
-		public static const AIR:String = "fly"; 
-		public static const GROUND:String = "land"; 
-		public static const UNDERGROUND:String = "mole"; 
+		public static const AIR:String = "air"; 
+		public static const GROUND:String = "ground"; 
+		public static const UNDERGROUND:String = "underground"; 
 		
 		public static const WALL:String = "wall";
 		public static const TOWER:String = "tower";
 		
+		private var _dragging:Boolean;
+		private var _dragCallback:Function;
+		private var _preDragCoords:FlxPoint;
+		private var _dragOffset:FlxPoint;
+		private var _canDrag:Boolean;
 		
+		private var _canHighlight:Boolean;
+		private var _highlightCallback:Function;
+		private var _highlighted:Boolean;
 		
 		// Whatever fields exist for all units
 		// Associated getters/setters should also be in place
@@ -80,7 +88,9 @@ package
 		 * @param hpBar - optional HealthBar to keep track of unit's health
 		 * 
 		 */		
-		public function Unit(x:Number, y:Number, unitID:int, unitType:String, canDrag:Boolean = false, hpBar:HealthBar = null) {
+		public function Unit(x:Number, y:Number, unitID:int, unitType:String, ignoreMePlease:Boolean = false, hpBar:HealthBar = null, 
+				canDrag:Boolean = true, dragCallback:Function = null, 
+				canHighlight:Boolean = true, highlightCallback:Function = null) {
 			super (x,y,null);
 			if (this.x < Util.castle.x) {
 				velocity.x = FlxG.timeScale * _speed;
@@ -88,6 +98,13 @@ package
 				velocity.x = FlxG.timeScale * - _speed;
 			}
 			//this.immovable = true;
+			
+			_dragging = false;
+			_dragCallback = dragCallback;
+			_canDrag = canDrag;
+			_canHighlight = canHighlight;
+			_highlightCallback = highlightCallback;
+			_highlighted = false;
 			
 			// look up unit info, set fields
 			// {cost, goldCost, maxHealth,speed,range,damage,rate)
@@ -101,6 +118,8 @@ package
 			_damageDone = Castle.UNIT_INFO[unitType][unitID].damage;
 			_rate = Math.max(1,Castle.UNIT_INFO[unitType][unitID].rate);
 			_clas = Castle.UNIT_INFO[unitType][unitID].clas;
+			_type = Castle.UNIT_INFO[unitType][unitID].type;
+
 			
 			_shots = 1;
 			
@@ -119,6 +138,82 @@ package
 			
 			
 			
+		}
+		
+		public function get canHighlight():Boolean {
+			return _canHighlight;
+		}
+		
+		public function set canHighlight(t:Boolean):void {
+			_canHighlight = t;
+		}
+		
+		public function get highlightCallback():Function {
+			return _highlightCallback
+		}
+		
+		public function set highlightCallback(callback:Function):void {
+			_highlightCallback = callback;
+		}
+		
+		public function get highlighted():Boolean {
+			return _highlighted;
+		}
+		
+		public function get canDrag():Boolean {
+			return _canDrag;
+		}
+		
+		public function set canDrag(t:Boolean):void {
+			_canDrag = t;
+		}
+		
+		public function get dragCallback():Function {
+			return _dragCallback;
+		}
+		
+		public function set dragCallback(callback:Function):void {
+			_dragCallback = callback;
+		}
+		
+		override public function preUpdate():void {
+			checkDrag();
+			
+		}
+		
+		
+		public function checkDrag():Boolean {
+			if (_canDrag) {
+				var mouseCoords:FlxPoint = FlxG.mouse.getScreenPosition();
+				if (FlxG.mouse.justPressed() && Util.checkClick(this)) {
+					_dragging = true;
+					_preDragCoords = new FlxPoint(x, y);
+					_dragOffset = new FlxPoint(mouseCoords.x - this.x, mouseCoords.y - this.y);
+				} else if (_dragging && FlxG.mouse.justReleased()) {
+					_dragging = false;
+					this.x = mouseCoords.x - _dragOffset.x;
+					this.y = mouseCoords.y - _dragOffset.y;
+					_dragOffset = null;
+					if (_dragCallback != null) _dragCallback(this, x, y, _preDragCoords.x, _preDragCoords.y);
+					_preDragCoords = null;
+				}
+				if (_dragging) {
+					this.x = mouseCoords.x - _dragOffset.x;
+					this.y = mouseCoords.y - _dragOffset.y;
+					return true;
+				}
+			}
+			return false;
+		}
+		
+		public function checkHighlight():Boolean {
+			if (_canHighlight) {
+				var mouseCoords:FlxPoint = FlxG.mouse.getScreenPosition();
+				if (Util.checkClick(this)) {
+					return true;
+				}
+			}
+			return false;
 		}
 		
 		/** Initiates check for all units in range
@@ -314,6 +409,10 @@ package
 			return _type;
 		}
 		
+		public function set type(s:String):void {
+			_type = s;
+		}
+		
 		public function get goldCapacity():int {
 			return _goldCapacity;
 		}
@@ -437,7 +536,7 @@ package
 			}
 		}
 		
-		public function clone():FlxBasic {
+		public function clone():Unit {
 			var yuri:Unit = new Unit(x,y,this._unitID, _creator, true, new HealthBar());
 			return yuri;
 		}

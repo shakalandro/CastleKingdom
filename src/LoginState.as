@@ -36,12 +36,12 @@ package
 			Util.center(_helpButton);
 			_helpButton.y += BUTTON_SEPARATION / 2;
 			add(_helpButton);
+			
+			Database.load();
 		}
 		
 		private function login():void {
-			Util.log("called the login function");
 			FaceBook.connect(function(ready:Boolean):void {
-				Util.log("connected properly");
 				if (ready) {
 					FaceBook.userInfo(function(fbInfo:Object):void {
 						if (fbInfo != null) {
@@ -76,7 +76,7 @@ package
 			if (info == null || info.length == 0) {
 				Util.log("tutorial info came back bad: " + info.toString());
 			} else {
-				Util.logObj("tutorial info came back good", info[0]);
+				Util.logObj("tutorial info came back good: ", info[0]);
 				for (var prop:String in info[0]) {
 					if (prop != "id") {
 						Castle.tutorialLevel = Castle.tutorialLevel + parseInt(info[0][prop]);

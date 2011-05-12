@@ -426,8 +426,8 @@ package
 		public static function window(x:Number, y:Number, contents:FlxBasic, closeCallback:Function, title:String = "", bgColor:uint = FlxG.WHITE, 
 					padding:Number = 10, width:int = 100, height:int = 100, borderThickness:Number = 3):FlxBasic {
 			var window:FlxGroup = new FlxGroup();
-			ExternalImage.setData(new BitmapData(width, height, true, bgColor), title);
-			var box:FlxSprite = new FlxSprite(x, y, ExternalImage);
+			var box:FlxSprite = new FlxSprite(x, y);
+			box.makeGraphic(width, height, bgColor);
 			var right:Number = box.width - borderThickness + 1;
 			var bottom:Number = box.height - borderThickness + 1;
 			box.drawLine(0, 0, right, 0, FlxG.BLACK, borderThickness);
@@ -527,7 +527,6 @@ package
 		 */		
 		public static function forEach(stuff:Array, f:Function):void {
 			for (var i:int = 0; i < stuff.length; i++) {
-				Util.log("function called with " + i);
 				(new Closure(stuff[i])).eval(f, i);
 			}
 		}
@@ -561,13 +560,49 @@ package
 		public static function getKnownFriends(callback:Function):void {
 			FaceBook.friends(function(friends:Array):void {
 				var ids:Array = [];
+				var lookup:Dictionary = new Dictionary();
 				for each (var friend:Object in friends) {
 					ids.push(friend.id);
+					lookup[friend.id + ""] = friend.name;
 				}
+				Util.logObj("Lookup:", lookup);
 				Database.getUserInfo(function(knownFriends:Array):void {
-					if (callback != null) callback(knownFriends);
+					var result:Array = [];
+					for each (var person:Object in knownFriends) {
+						person.name = lookup[person.id + ""];
+						result.push(person);
+						Util.logObj("Known Friend:", person);
+					}
+					if (callback != null) callback(result);
 				}, ids, true); 
 			}, false);
+		}
+		
+		/**
+		 * Returns a list of known friends who are in your level range to the provided callback.
+		 * 
+		 * @param level The user's level
+		 * @param threshhold A level range threshhold
+		 * @param callback A function with the signature callback(friends:Array):void
+		 * @param appraisal A function used to computer a friend's level
+		 * 
+		 */		
+		public static function getFriendsInRange(level:Number, threshhold:Number, callback:Function, appraisal:Function):void {
+			Util.getKnownFriends(function(friends:Array):void {
+				callback(friends.filter(function(friend:Object, index:int, arr:Array):Boolean {
+					return Math.abs(level - appraisal(friend)) <= threshhold;
+				}));
+			});
+		}
+		
+		public static function drawBorder(sprite:FlxSprite, borderColor:uint = FlxG.BLACK, borderThickness:Number = 3):FlxSprite {
+			var right:Number = sprite.width - borderThickness + 1;
+			var bottom:Number = sprite.height - borderThickness + 1;
+			sprite.drawLine(1, 1, right, 1, borderColor, borderThickness);
+			sprite.drawLine(right, 1, right, bottom, borderColor, borderThickness);
+			sprite.drawLine(right, bottom, 1, bottom, borderColor, borderThickness);
+			sprite.drawLine(1, bottom, 1, 1, borderColor, borderThickness);
+			return sprite;
 		}
 	}
 }

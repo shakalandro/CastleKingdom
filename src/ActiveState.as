@@ -1,5 +1,9 @@
 package
 {
+	import flash.utils.Timer;
+	
+	import mx.utils.StringUtil;
+	
 	import org.flixel.*;
 	import org.flixel.system.FlxWindow;
 	
@@ -15,6 +19,9 @@ package
 		public static const ATTACK_MENU:String = "attack";
 		public static const DEFEND_MENU:String = "defend";
 		public static const BUTTON_DIST:Number = 75;
+		
+		// Five minute interval between lookups about pending attack status
+		public static const ATTACK_DETECTION_INTERVAL:Number = 60000 * 5;
 				
 		private static const HUD_BUTTON_PADDING:uint = 10;
 		
@@ -40,6 +47,8 @@ package
 		private var _towerDisplay:FlxText;
 		private var _armyDisplay:FlxText;
 		private var _hudButtons:Array;
+		private var _attackTimer:Timer;
+		private var _attackAnims:FlxGroup;
 		
 		/** 
 		 * An active state is a helper super class for interactive game states such as DefendState and UpgradeState. 
@@ -54,8 +63,11 @@ package
 			super(map);
 			_towers = towers || new FlxGroup();
 			_units = units || new FlxGroup();
+			_attackAnims = new FlxGroup();
 			_castle = castle;
 			_hudButtons = [];
+			_attackTimer = new Timer(ATTACK_DETECTION_INTERVAL, 1);
+			_attackTimer.start();
 		}
 		
 		/**
@@ -67,6 +79,7 @@ package
 			super.create();
 			add(_towers);
 			add(_units);
+			add(_attackAnims);
 			_castle = _castle || new Castle(0, 0, Util.assets[Assets.CASTLE]);
 			Util.centerX(_castle);
 			Util.placeInZone(_castle, map);
@@ -79,16 +92,15 @@ package
 					Util.center(profilePic, header);
 					profilePic.x = Util.maxX - profilePic.width;
 					hud.add(profilePic);
-				}, "me", false, "small");
+				}, "me", false);
 			}
 						
-			Util.log("Database tutorial clear button added");
 			var clear:CKButton = new CKButton(0, 0, "Clear", function():void {
 				Util.log("Clearing the tutorial info: " + FaceBook.uid + ", " + Castle.TUTORIAL_NEW_USER);
 				Database.updateUserTutorialInfo(FaceBook.uid, Castle.TUTORIAL_NEW_USER);
 			});
-			clear.x = Util.minX;
-			clear.y = Util.minY + clear.height + 10;
+			clear.x = Util.minX + 10;
+			clear.y = Util.minY + 10;
 			clear.allowCollisions = FlxObject.NONE;
 			clear.immovable = true;
 			add(clear);
@@ -96,15 +108,19 @@ package
 			setTutorialUI();
 		}
 		
+		/**
+		 * Handles what buttons and other ui should be displayed based on the tutorial level. 
+		 * 
+		 */		
 		private function setTutorialUI():void {
 			Util.log("ActiveState Tutorial Level: " + Castle.tutorialLevel);
 			if (Castle.tutorialLevel == Castle.TUTORIAL_NEW_USER) {
+				toggleButtons(0);
 				add(new MessageBox(Util.assets[Assets.INITIAL_PENDING_WAVE_TEXT], "Close", function():void {
 					Database.updateUserTutorialInfo(FaceBook.uid, Castle.TUTORIAL_FIRST_DEFEND);
 					Castle.tutorialLevel = Castle.TUTORIAL_FIRST_DEFEND;
 					toggleButtons(1);
 				}));
-				toggleButtons(0);
 			} else if (Castle.tutorialLevel == Castle.TUTORIAL_FIRST_DEFEND) {
 				toggleButtons(1);
 			} else if (Castle.tutorialLevel == Castle.TUTORIAL_FIRST_WAVE) {
@@ -120,9 +136,37 @@ package
 			}
 		}
 		
+		override public function update():void {
+			super.update();
+			if (!_attackTimer.running) {
+				Database.pendingAttacks(function(attacks:Array):void {
+					if (attacks == null || attacks.length == 0) {
+						Util.log("ActiveState.update, no pending attack");
+					} else {
+						FaceBook.getNameByID(attacks[0].id, function(name:String):void {
+							if (name != null) {
+								add(new MessageBox(StringUtil.substitute(Util.assets[Assets.INCOMING_WAVE], name), "Okay", function():void {
+									FlxG.switchState(new DefenseState(map, remove(castle) as Castle, remove(towers) as FlxGroup, true));
+								}));
+							} else {
+								Util.log("ActiveState.update pending attack, but user unknown " + attacks[0].id);
+							}
+						});
+					}
+				});
+				_attackTimer.reset();
+				_attackTimer.start();
+			}
+			drawStats();
+		}
+		
+		/**
+		 * Sets the first index buttons to active and visible and the rest to inactive and invisible. 
+		 * @param index 
+		 * 
+		 */		
 		protected function toggleButtons(index:int):void {
 			for (var i:int = 0; i < _hudButtons.length; i++) {
-				Util.log(typeof(_hudButtons[i]));
 				_hudButtons[i].active = (i < index);
 				_hudButtons[i].visible = (i < index);
 			}
@@ -142,12 +186,28 @@ package
 			FlxG.collide(units, towers, fightCollide);
 			FlxG.collide(units, this.castle, endGameCollide);
 			FlxG.collide(units, this.map);
+			//FlxG.collide(units, attackAnims, animCollide);
+			//FlxG.collide(towers, attackAnims, animCollide);
 		}
 		
 		private function fightCollide(unit1:FlxSprite, unit2:FlxSprite):void {
 			(unit1 as Unit).hitRanged(unit2);
 			(unit2 as Unit).hitRanged(unit1);
 		}
+		
+		/**
+		 * Initiates procedure for units hitting the arrows
+		 * */
+		private function animCollide(unit1:FlxSprite, unit2:FlxSprite):void {
+			if(unit1 is AttackAnimation) {
+				(unit1 as AttackAnimation).hitLeft(unit2);
+				
+			} else {
+				(unit2 as AttackAnimation).hitLeft(unit1);	
+			}
+		}
+		
+		
 		
 		/**
 		 * Initiates procedure for units hitting the castle
@@ -195,6 +255,10 @@ package
 		 */		
 		public function get towers():FlxGroup {
 			return _towers;
+		}
+		
+		public function get attackAnims():FlxGroup {
+			return _attackAnims;
 		}
  		
 		/**
@@ -274,6 +338,13 @@ package
 			return true;
 		}
 		
+		/**
+		 * 
+		 * @param x A cartesian x coordinate
+		 * @param y A cartesian y coordinate
+		 * @return 
+		 * 
+		 */		
 		public function droppable(x:int, y:int):Boolean {
 			if (!Util.inBounds(x, y)) return false;
 			var indices:FlxPoint = Util.cartesianToIndices(new FlxPoint(x, y));
@@ -282,12 +353,21 @@ package
 			if (indices.x >= castleStart && indices.x < castleStop) {
 				return false;
 			}
-			for each (var obj:FlxObject in _towers.members) {
+			for each (var obj:FlxObject in towers.members) {
 				var objStart:FlxPoint = Util.cartesianToIndices(new FlxPoint(obj.x, obj.y));
 				var objStop:FlxPoint = Util.cartesianToIndices(new FlxPoint(obj.x + obj.width, obj.y));
-				if (indices.x >= objStart.x && indices.x < objStop.x && 
-					indices.y >= objStart.y && indices.y <= objStop.y) {
-					return false;
+				if (obj is DefenseUnit) {
+					var tower:DefenseUnit = obj as DefenseUnit;
+					if (tower.clas == Unit.GROUND) {
+						if (indices.x >= objStart.x && indices.x < objStop.x) {
+							return false;
+						}
+					} else {
+						if (indices.x >= objStart.x && indices.x < objStop.x && 
+							indices.y >= objStart.y && indices.y <= objStop.y) {
+							return false;
+						}
+					}
 				}
 			}
 			return true;
@@ -360,11 +440,6 @@ package
 		private function spreadPosition(thing:FlxObject, peices:Number, place:int):void {
 			var width:Number = (FlxG.width - BUTTON_DIST * 2) / (peices + 1);
 			thing.x = place * width + BUTTON_DIST - thing.width / 2;
-		}
-		
-		override public function update():void {
-			super.update();
-			drawStats();
 		}
 		
 		public function drawStats(startX:int = 0, startY:int = 0):void {

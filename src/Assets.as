@@ -32,7 +32,7 @@ package
 		private static var swordsman_normal:Class;
 		public static const SWORDSMAN:String = "Swordsman";
 		
-		[Embed(source = "../images/pikeman.png")]
+		[Embed(source = "../images/Spearman.png")]
 		private static var pikeman_normal:Class;
 		public static const PIKEMAN:String = "Spearman";
 		
@@ -75,6 +75,11 @@ package
 		[Embed(source = "../images/blob.png")]
 		private static var blob:Class;
 		public static const BLOB:String = "Blob";
+		
+		[Embed(source = "../images/arrow.png")]
+		private static var arrow_normal:Class;
+		public static const ARROW:String = "Arrow";
+		
 		
 		[Embed(source = "../images/flame_tower.png")]
 		private static var flame_tower_normal:Class;
@@ -127,6 +132,8 @@ package
 		public static const UPGRADE_AVAILABLE:String = "upgrade available";
 		public static const FIRST_DEFENSE:String = "first defense";
 		public static const FIRST_ATTACK:String = "first attack";
+		public static const SENT_WAVE:String = "sent wave";
+		public static const INCOMING_WAVE:String = "incoming wave";
 		
 		// Other resources
 		
@@ -148,6 +155,9 @@ package
 			
 			_assets[SKIN_BUNNY] = _bunny;
 			_assets[SKIN_NORMAL] = _normal;
+			
+			_normal[Assets.ARROW] = arrow_normal;
+
 			
 			_normal[Assets.MAP_TILES] = tilesImg_normal;
 			_normal[Assets.SWORDSMAN] = swordsman_normal;
@@ -195,6 +205,10 @@ package
 				"the enemies to find out.";
 			_normal[Assets.FIRST_ATTACK] = "Your castle has become quite impressive. You are now ready to " +
 				"venture out and try stealing gold from your friends castles!";
+			_normal[Assets.SENT_WAVE] = "Now that you can attack friends, they can also attack you. Try asking " +
+				"your friends to lease some of their resources to help you in battle.";
+			_normal[Assets.INCOMING_WAVE] = "OMG, your friend {0} has sent a wave of enemies at you. Don't let " +
+				"him steal your gold! Set the defenses.";
 		}
 		
 		/**

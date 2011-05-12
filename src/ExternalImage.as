@@ -21,7 +21,7 @@ package {
 		
 		public static function setData(newData:BitmapData, newUrl:String):void {
 			data = newData.clone();
-			url = newUrl;
+			url = newUrl.toString();
 		}
 		
 		public static function toString():String {
