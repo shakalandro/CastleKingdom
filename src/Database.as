@@ -8,12 +8,12 @@ package
 	public class Database
 	{
 		
+		private static const START_GOLD:int = 0;
+		private static const START_UNITS:int = 5;
 		private static var _userInfo:Array;
 		private static var _userUps:Array;
 		private static var _enemyInfo:Array;
 		private static var _defUnitInfo:Array;
-		private static const START_GOLD:int = 0;
-		private static const START_UNITS:int = 5;
 		private static var _mineInfo:Array;
 		private static var _foundryInfo:Array;
 		private static var _aviaryInfo:Array;
@@ -22,8 +22,6 @@ package
 		private static var _castleInfo:Array;
 		private static var _userLeaseInfo:Array;
 		private static var _userTutorialInfo:Array;
-		private static const _startGold:int = 0;
-		private static const _startUnits:int = 5;
 		private static var _attacked:Array;
 		private static var _pendingAttacks:Array;
 		
@@ -121,305 +119,6 @@ package
 			} else {
 				callback(getAll(_userUps, ids));
 			}
-		}
-		
-		/**
-		 * <p>
-		 * Passes an array of objects representing the given defence (based on the given ids) information to
-		 * the callback function. The object that is passed to the callback function is of the following form:
-		 * </p>
-		 * <p>
-		 * {id, name, level, unitCost, maxHealth, range, damage, rate, type, clas}
-		 * </p>
-		 * <p>
-		 * If the defence does not have any defence information, the the array that is passed to the callback is null.
-		 * </p>
-		 * 
-		 * @param callback a function that takes one argument, an array of objects
-		 * @param ids either a number or an array of numbers representing the user ids
-		 * @param forceRefresh
-		 * 
-		 */
-		public static function getDefenseUnitInfo(callback:Function, ids:Object = null, forceRefresh:Boolean = false):void {
-			if (forceRefresh || _defUnitInfo == null) {
-				getMain("http://games.cs.washington.edu/capstone/11sp/castlekd/database/getDefInfo.php", function(xmlData:XML):void {
-					_defUnitInfo = processList(xmlData.def, function(unit:XML):Object {
-						return {
-							id: unit.did,
-							name: unit.name,
-							level: unit.level,
-							unitCost: unit.unitCost,
-							maxHealth: unit.maxHealth,
-							range: unit.range,
-							damage: unit.damage,
-							rate: unit.rate,
-							type: unit.type,
-							clas: unit.clas
-						};
-					});
-					callback(_defUnitInfo);
-				}, ids);
-			} else {
-				callback(getAll(_defUnitInfo, ids));
-			}
-		}
-		
-		/**
-		 * <p>
-		 * Passes an array of objects representing the given enemies (based on the given ids) information to
-		 * the callback function. The object that is passed to the callback function is of the following form:
-		 * </p>
-		 * <p>
-		 * {id, name, level, unitCost, goldCost, maxHealth, range, damage, rate, reward, move, type, clas}
-		 * </p>
-		 * <p>
-		 * If the enemy does not have any information, the the array that is passed to the callback is null.
-		 * </p>
-		 * 
-		 * @param callback a function that takes one argument, an array of objects
-		 * @param ids either a number or an array of numbers representing the user ids
-		 * @param forceRefresh
-		 * 
-		 */
-		public static function getEnemyInfo(callback:Function, ids:Object = null, forceRefresh:Boolean = false):void {
-			if (forceRefresh || _enemyInfo == null) {
-				getMain("http://games.cs.washington.edu/capstone/11sp/castlekd/database/getArmyInfo.php", function(xmlData:XML):void {
-					_enemyInfo = processList(xmlData.army, function(unit:XML):Object {
-						return {
-							id: unit.aid,
-							name: unit.name,
-							level: unit.level,
-							unitCost: unit.unitCost,
-							goldCost: unit.goldCost,
-							maxHealth: unit.maxHealth,
-							range: unit.range,
-							damage: unit.damage,
-							rate: unit.rate,
-							reward: unit.reward,
-							move: unit.move,
-							type: unit.type,
-							clas: unit.clas
-						};
-					});
-					callback(_enemyInfo);
-				}, ids);
-			} else {
-				callback(getAll(_enemyInfo, ids));
-			}
-		}
-		
-		/**
-		 * <p>
-		 * Passes an array of objects representing the given mine (based on the given ids) information to
-		 * the callback function. The object that is passed to the callback function is of the following form:
-		 * </p>
-		 * <p>
-		 * {id, name, unitWorth, goldCost}
-		 * </p>
-		 * <p>
-		 * id = the mine mid, name is the name of the mine piece, unitWorth is the worth of the mine
-		 * piece, and goldCost is the cost to "build" the new mine piece.
-		 * If the mine does not have any information, the the array that is passed to the callback is null.
-		 * </p>
-		 * 
-		 * @param callback a function that takes one argument, an array of objects
-		 * @param ids either a number or an array of numbers representing the user ids
-		 * @param forceRefresh
-		 * 
-		 */
-		public static function getMineInfo(callback:Function, levels:Object = null, forceRefresh:Boolean = false):void {
-			getUpgradesInfo(callback, levels, "mine", forceRefresh);
-		}
-		
-		/**
-		 * <p>
-		 * Passes an array of objects representing the given foundry (based on the given ids) information to
-		 * the callback function. The object that is passed to the callback function is of the following form:
-		 * </p>
-		 * <p>
-		 * {id, name, unitWorth, goldCost}
-		 * </p>
-		 * <p>
-		 * id = the foundry fid, name is the name of the foundry piece, unitWorth is the worth of the foundry
-		 * piece, and goldCost is the cost to "build" the new foundry piece.
-		 * If the foundry does not have any information, the the array that is passed to the callback is null.
-		 * </p>
-		 * 
-		 * @param callback a function that takes one argument, an array of objects
-		 * @param ids either a number or an array of numbers representing the user ids
-		 * @param forceRefresh
-		 * 
-		 */
-		public static function getFoundryInfo(callback:Function, levels:Object = null, forceRefresh:Boolean = false):void {
-			getUpgradesInfo(callback, levels, "foundry", forceRefresh);
-		}
-		
-		/**
-		 * <p>
-		 * Passes an array of objects representing the given aviary (based on the given ids) information to
-		 * the callback function. The object that is passed to the callback function is of the following form:
-		 * </p>
-		 * <p>
-		 * {id, name, unitWorth, goldCost}
-		 * </p>
-		 * <p>
-		 * id = the aviary aid, name is the name of the aviary piece, unitWorth is the worth of the aviary
-		 * piece, and goldCost is the cost to "build" the new aviary piece.
-		 * If the aviary does not have any information, the the array that is passed to the callback is null.
-		 * </p>
-		 * 
-		 * @param callback a function that takes one argument, an array of objects
-		 * @param ids either a number or an array of numbers representing the user ids
-		 * @param forceRefresh
-		 * 
-		 */
-		public static function getAviaryInfo(callback:Function, levels:Object = null, forceRefresh:Boolean = false):void {
-			getUpgradesInfo(callback, levels, "aviary", forceRefresh);
-		}
-		
-		/**
-		 * <p>
-		 * Passes an array of objects representing the given barrack (based on the given ids) information to
-		 * the callback function. The object that is passed to the callback function is of the following form:
-		 * </p>
-		 * <p>
-		 * {id, name, unitWorth, goldCost}
-		 * </p>
-		 * <p>
-		 * id = the barrack bid, name is the name of the barrack piece, unitWorth is the worth of the barrack
-		 * piece, and goldCost is the cost to "build" the new barrack piece.
-		 * If the barrack does not have any information, the the array that is passed to the callback is null.
-		 * </p>
-		 * 
-		 * @param callback a function that takes one argument, an array of objects
-		 * @param ids either a number or an array of numbers representing the user ids
-		 * @param forceRefresh
-		 * 
-		 */
-		public static function getBarracksInfo(callback:Function, levels:Object = null, forceRefresh:Boolean = false):void {
-			getUpgradesInfo(callback, levels, "barracks", forceRefresh);
-		}
-		
-		/**
-		 * <p>
-		 * Passes an array of objects representing the given castles (based on the given ids) information to
-		 * the callback function. The object that is passed to the callback function is of the following form:
-		 * </p>
-		 * <p>
-		 * {id, name, unitWorth, goldCost}
-		 * </p>
-		 * <p>
-		 * id = the castle cid, name is the name of the castle piece, unitWorth is the worth of the castle
-		 * piece, and goldCost is the cost to "build" the new castle piece.
-		 * If the castle does not have any information, the the array that is passed to the callback is null.
-		 * </p>
-		 * 
-		 * @param callback a function that takes one argument, an array of objects
-		 * @param ids either a number or an array of numbers representing the user ids
-		 * @param forceRefresh
-		 * 
-		 */
-		public static function getCastleInfo(callback:Function, levels:Object = null, forceRefresh:Boolean = false):void {
-			getUpgradesInfo(callback, levels, "castle", forceRefresh);
-		}
-		
-		/**
-		 * <p>
-		 * Passes an array of objects representing the given upgrade (based on the given ids) information to
-		 * the callback function. The object that is passed to the callback function is of the following form:
-		 * </p>
-		 * <p>
-		 * {id, name, level, unitWorth, goldCost, type}
-		 * </p>
-		 * <p>
-		 * id = the upgrade id, name is the name of the upgrade piece, unitWorth is the worth of the upgrade
-		 * piece, goldCost is the cost to "build" the new upgrade piece and type is what type the upgrade is.
-		 * If the upgrade does not have any information, the the array that is passed to the callback is null.
-		 * </p>
-		 * 
-		 * @param callback a function that takes one argument, an array of objects
-		 * @param ids either a number or an array of numbers representing the user ids
-		 * @param forceRefresh
-		 * 
-		 */
-		public static function getUpgradesInfo(callback:Function, levels:Object = null, types:Object = null, forceRefresh:Boolean = false):void {
-			if (forceRefresh || _upgradeInfo == null) {
-				upgradeMain("http://games.cs.washington.edu/capstone/11sp/castlekd/database/getUpgradeInfo.php", function(xmlData:XML):void {
-					_upgradeInfo = processList(xmlData.upgrade, function(unit:XML):Object {
-						return {
-							id: unit.id,
-							name: unit.name,
-							level: unit.level,
-							unitWorth: unit.unitWorth,
-							goldCost: unit.goldCost,
-							type: unit.type
-						};
-					})
-					callback(_upgradeInfo);
-				}, levels, types);
-			} else {
-				callback(updateAll(_upgradeInfo, levels, types));
-			}
-		}
-		
-		private static function updateAll(stuff:Array, levels:Object, types:Object):Array {
-			if (stuff == null) {
-				return null;
-			}
-			var levelsArr:Array = null;
-			if (levels == null) {
-				return stuff;
-			} else if (levels is Number) {
-				levelsArr = [levels] 
-			} else if (levels is String) {
-				levelsArr = [parseInt(levels as String)];
-			} else if (levels is Array) {
-				levelsArr = levels as Array;
-			} else {
-				return null;
-			}
-			
-			var typesArr:Array = null;
-			if (types == null) {
-				return stuff;
-			} else if (types is Number) {
-				typesArr = [types] 
-			} else if (types is String) {
-				typesArr = [parseInt(types as String)];
-			} else if (types is Array) {
-				typesArr = types as Array;
-			} else {
-				return null;
-			}
-			var newStuff:Array = stuff.filter(function(item:Object, index:int, arr:Array):Boolean {
-				return levelsArr.indexOf(item.level) < 0 && typesArr.indexOf(item.type) < 0;
-			});;
-			if (newStuff.length != stuff.length) {
-				return null;
-			} else {
-				return stuff;
-			}
-		}
-		
-		private static function upgradeMain(url:String, callback:Function, levels:Object = null, types:Object = null):void
-		{
-			var request:URLRequest = new URLRequest(url);
-			request.method = URLRequestMethod.POST;
-			var variables:URLVariables = new URLVariables();
-			if (levels != null) {
-				variables.levels = levels.toString() + "";
-			}
-			if (types != null) {
-				variables.types = types.toString() + "";
-			}
-			request.data = variables;
-			FlxG.log("request.data: " + request.data.toString());
-			var loader:URLLoader = new URLLoader();
-			loader.dataFormat = URLLoaderDataFormat.TEXT;
-			loader.addEventListener(Event.COMPLETE, function(evt:Event):void {
-				callback(new XML(evt.target.data));
-			});
-			loader.load(request);
 		}
 		
 		/**
@@ -561,6 +260,305 @@ package
 			} else {
 				callback(getAll(_pendingAttacks , ids));
 			}
+		}
+		
+		/**
+		 * <p>
+		 * Passes an array of objects representing the given defence (based on the given ids) information to
+		 * the callback function. The object that is passed to the callback function is of the following form:
+		 * </p>
+		 * <p>
+		 * {id, name, level, unitCost, maxHealth, range, damage, rate, type, clas}
+		 * </p>
+		 * <p>
+		 * If the defence does not have any defence information, the the array that is passed to the callback is null.
+		 * </p>
+		 * 
+		 * @param callback a function that takes one argument, an array of objects
+		 * @param ids either a number or an array of numbers representing the user ids
+		 * @param forceRefresh
+		 * 
+		 */
+		public static function getDefenseUnitInfo(callback:Function, ids:Object = null, forceRefresh:Boolean = false):void {
+			if (forceRefresh || _defUnitInfo == null) {
+				getMain("http://games.cs.washington.edu/capstone/11sp/castlekd/database/getDefInfo.php", function(xmlData:XML):void {
+					_defUnitInfo = processList(xmlData.def, function(unit:XML):Object {
+						return {
+							id: unit.did,
+							name: unit.name,
+							level: unit.level,
+							unitCost: unit.unitCost,
+							maxHealth: unit.maxHealth,
+							range: unit.range,
+							damage: unit.damage,
+							rate: unit.rate,
+							type: unit.type,
+							clas: unit.clas
+						};
+					});
+					callback(_defUnitInfo);
+				}, ids);
+			} else {
+				callback(getAll(_defUnitInfo, ids));
+			}
+		}
+		
+		/**
+		 * <p>
+		 * Passes an array of objects representing the given enemies (based on the given ids) information to
+		 * the callback function. The object that is passed to the callback function is of the following form:
+		 * </p>
+		 * <p>
+		 * {id, name, level, unitCost, goldCost, maxHealth, range, damage, rate, reward, move, type, clas}
+		 * </p>
+		 * <p>
+		 * If the enemy does not have any information, the the array that is passed to the callback is null.
+		 * </p>
+		 * 
+		 * @param callback a function that takes one argument, an array of objects
+		 * @param ids either a number or an array of numbers representing the user ids
+		 * @param forceRefresh
+		 * 
+		 */
+		public static function getEnemyInfo(callback:Function, ids:Object = null, forceRefresh:Boolean = false):void {
+			if (forceRefresh || _enemyInfo == null) {
+				getMain("http://games.cs.washington.edu/capstone/11sp/castlekd/database/getArmyInfo.php", function(xmlData:XML):void {
+					_enemyInfo = processList(xmlData.army, function(unit:XML):Object {
+						return {
+							id: unit.aid,
+							name: unit.name,
+							level: unit.level,
+							unitCost: unit.unitCost,
+							goldCost: unit.goldCost,
+							maxHealth: unit.maxHealth,
+							range: unit.range,
+							damage: unit.damage,
+							rate: unit.rate,
+							reward: unit.reward,
+							move: unit.move,
+							type: unit.type,
+							clas: unit.clas
+						};
+					});
+					callback(_enemyInfo);
+				}, ids);
+			} else {
+				callback(getAll(_enemyInfo, ids));
+			}
+		}
+		
+		/**
+		 * <p>
+		 * Passes an array of objects representing the given upgrade (based on the given ids) information to
+		 * the callback function. The object that is passed to the callback function is of the following form:
+		 * </p>
+		 * <p>
+		 * {id, name, level, unitWorth, goldCost, type}
+		 * </p>
+		 * <p>
+		 * id = the upgrade id, name is the name of the upgrade piece, unitWorth is the worth of the upgrade
+		 * piece, goldCost is the cost to "build" the new upgrade piece and type is what type the upgrade is.
+		 * If the upgrade does not have any information, the the array that is passed to the callback is null.
+		 * </p>
+		 * 
+		 * @param callback a function that takes one argument, an array of objects
+		 * @param ids either a number or an array of numbers representing the user ids
+		 * @param forceRefresh
+		 * 
+		 */
+		public static function getUpgradesInfo(callback:Function, levels:Object = null, types:Object = null, forceRefresh:Boolean = false):void {
+			if (forceRefresh || _upgradeInfo == null) {
+				upgradeMain("http://games.cs.washington.edu/capstone/11sp/castlekd/database/getUpgradeInfo.php", function(xmlData:XML):void {
+					_upgradeInfo = processList(xmlData.upgrade, function(unit:XML):Object {
+						return {
+							id: unit.id,
+							name: unit.name,
+							level: unit.level,
+							unitWorth: unit.unitWorth,
+							goldCost: unit.goldCost,
+							type: unit.type
+						};
+					})
+					callback(_upgradeInfo);
+				}, levels, types);
+			} else {
+				callback(updateAll(_upgradeInfo, levels, types));
+			}
+		}
+		
+		/**
+		 * <p>
+		 * Passes an array of objects representing the given mine (based on the given ids) information to
+		 * the callback function. The object that is passed to the callback function is of the following form:
+		 * </p>
+		 * <p>
+		 * {id, name, unitWorth, goldCost}
+		 * </p>
+		 * <p>
+		 * id = the mine mid, name is the name of the mine piece, unitWorth is the worth of the mine
+		 * piece, and goldCost is the cost to "build" the new mine piece.
+		 * If the mine does not have any information, the the array that is passed to the callback is null.
+		 * </p>
+		 * 
+		 * @param callback a function that takes one argument, an array of objects
+		 * @param ids either a number or an array of numbers representing the user ids
+		 * @param forceRefresh
+		 * 
+		 */
+		public static function getMineInfo(callback:Function, levels:Object = null, forceRefresh:Boolean = false):void {
+			getUpgradesInfo(callback, levels, "mine", forceRefresh);
+		}
+		
+		/**
+		 * <p>
+		 * Passes an array of objects representing the given foundry (based on the given ids) information to
+		 * the callback function. The object that is passed to the callback function is of the following form:
+		 * </p>
+		 * <p>
+		 * {id, name, unitWorth, goldCost}
+		 * </p>
+		 * <p>
+		 * id = the foundry fid, name is the name of the foundry piece, unitWorth is the worth of the foundry
+		 * piece, and goldCost is the cost to "build" the new foundry piece.
+		 * If the foundry does not have any information, the the array that is passed to the callback is null.
+		 * </p>
+		 * 
+		 * @param callback a function that takes one argument, an array of objects
+		 * @param ids either a number or an array of numbers representing the user ids
+		 * @param forceRefresh
+		 * 
+		 */
+		public static function getFoundryInfo(callback:Function, levels:Object = null, forceRefresh:Boolean = false):void {
+			getUpgradesInfo(callback, levels, "foundry", forceRefresh);
+		}
+		
+		/**
+		 * <p>
+		 * Passes an array of objects representing the given aviary (based on the given ids) information to
+		 * the callback function. The object that is passed to the callback function is of the following form:
+		 * </p>
+		 * <p>
+		 * {id, name, unitWorth, goldCost}
+		 * </p>
+		 * <p>
+		 * id = the aviary aid, name is the name of the aviary piece, unitWorth is the worth of the aviary
+		 * piece, and goldCost is the cost to "build" the new aviary piece.
+		 * If the aviary does not have any information, the the array that is passed to the callback is null.
+		 * </p>
+		 * 
+		 * @param callback a function that takes one argument, an array of objects
+		 * @param ids either a number or an array of numbers representing the user ids
+		 * @param forceRefresh
+		 * 
+		 */
+		public static function getAviaryInfo(callback:Function, levels:Object = null, forceRefresh:Boolean = false):void {
+			getUpgradesInfo(callback, levels, "aviary", forceRefresh);
+		}
+		
+		/**
+		 * <p>
+		 * Passes an array of objects representing the given barrack (based on the given ids) information to
+		 * the callback function. The object that is passed to the callback function is of the following form:
+		 * </p>
+		 * <p>
+		 * {id, name, unitWorth, goldCost}
+		 * </p>
+		 * <p>
+		 * id = the barrack bid, name is the name of the barrack piece, unitWorth is the worth of the barrack
+		 * piece, and goldCost is the cost to "build" the new barrack piece.
+		 * If the barrack does not have any information, the the array that is passed to the callback is null.
+		 * </p>
+		 * 
+		 * @param callback a function that takes one argument, an array of objects
+		 * @param ids either a number or an array of numbers representing the user ids
+		 * @param forceRefresh
+		 * 
+		 */
+		public static function getBarracksInfo(callback:Function, levels:Object = null, forceRefresh:Boolean = false):void {
+			getUpgradesInfo(callback, levels, "barracks", forceRefresh);
+		}
+		
+		/**
+		 * <p>
+		 * Passes an array of objects representing the given castles (based on the given ids) information to
+		 * the callback function. The object that is passed to the callback function is of the following form:
+		 * </p>
+		 * <p>
+		 * {id, name, unitWorth, goldCost}
+		 * </p>
+		 * <p>
+		 * id = the castle cid, name is the name of the castle piece, unitWorth is the worth of the castle
+		 * piece, and goldCost is the cost to "build" the new castle piece.
+		 * If the castle does not have any information, the the array that is passed to the callback is null.
+		 * </p>
+		 * 
+		 * @param callback a function that takes one argument, an array of objects
+		 * @param ids either a number or an array of numbers representing the user ids
+		 * @param forceRefresh
+		 * 
+		 */
+		public static function getCastleInfo(callback:Function, levels:Object = null, forceRefresh:Boolean = false):void {
+			getUpgradesInfo(callback, levels, "castle", forceRefresh);
+		}
+		
+		private static function updateAll(stuff:Array, levels:Object, types:Object):Array {
+			if (stuff == null) {
+				return null;
+			}
+			var levelsArr:Array = null;
+			if (levels == null) {
+				return stuff;
+			} else if (levels is Number) {
+				levelsArr = [levels] 
+			} else if (levels is String) {
+				levelsArr = [parseInt(levels as String)];
+			} else if (levels is Array) {
+				levelsArr = levels as Array;
+			} else {
+				return null;
+			}
+			
+			var typesArr:Array = null;
+			if (types == null) {
+				return stuff;
+			} else if (types is Number) {
+				typesArr = [types] 
+			} else if (types is String) {
+				typesArr = [parseInt(types as String)];
+			} else if (types is Array) {
+				typesArr = types as Array;
+			} else {
+				return null;
+			}
+			var newStuff:Array = stuff.filter(function(item:Object, index:int, arr:Array):Boolean {
+				return levelsArr.indexOf(item.level) < 0 && typesArr.indexOf(item.type) < 0;
+			});;
+			if (newStuff.length != stuff.length) {
+				return null;
+			} else {
+				return stuff;
+			}
+		}
+		
+		private static function upgradeMain(url:String, callback:Function, levels:Object = null, types:Object = null):void
+		{
+			var request:URLRequest = new URLRequest(url);
+			request.method = URLRequestMethod.POST;
+			var variables:URLVariables = new URLVariables();
+			if (levels != null) {
+				variables.levels = levels.toString() + "";
+			}
+			if (types != null) {
+				variables.types = types.toString() + "";
+			}
+			request.data = variables;
+			FlxG.log("request.data: " + request.data.toString());
+			var loader:URLLoader = new URLLoader();
+			loader.dataFormat = URLLoaderDataFormat.TEXT;
+			loader.addEventListener(Event.COMPLETE, function(evt:Event):void {
+				callback(new XML(evt.target.data));
+			});
+			loader.load(request);
 		}
 		
 		private static function getAll(stuff:Array, ids:Object):Array {
