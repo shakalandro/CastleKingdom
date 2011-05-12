@@ -87,8 +87,8 @@ package
 				Util.log("Clearing the tutorial info: " + FaceBook.uid + ", " + Castle.TUTORIAL_NEW_USER);
 				Database.updateUserTutorialInfo(FaceBook.uid, Castle.TUTORIAL_NEW_USER);
 			});
-			clear.x = Util.minX;
-			clear.y = Util.minY + clear.height + 10;
+			clear.x = Util.minX + 10;
+			clear.y = Util.minY + 10;
 			clear.allowCollisions = FlxObject.NONE;
 			clear.immovable = true;
 			add(clear);
@@ -274,6 +274,13 @@ package
 			return true;
 		}
 		
+		/**
+		 * 
+		 * @param x A cartesian x coordinate
+		 * @param y A cartesian y coordinate
+		 * @return 
+		 * 
+		 */		
 		public function droppable(x:int, y:int):Boolean {
 			if (!Util.inBounds(x, y)) return false;
 			var indices:FlxPoint = Util.cartesianToIndices(new FlxPoint(x, y));
@@ -282,12 +289,23 @@ package
 			if (indices.x >= castleStart && indices.x < castleStop) {
 				return false;
 			}
-			for each (var obj:FlxObject in _towers.members) {
+			Util.log("number of towers: " + towers.length);
+			for each (var obj:FlxObject in towers.members) {
 				var objStart:FlxPoint = Util.cartesianToIndices(new FlxPoint(obj.x, obj.y));
 				var objStop:FlxPoint = Util.cartesianToIndices(new FlxPoint(obj.x + obj.width, obj.y));
-				if (indices.x >= objStart.x && indices.x < objStop.x && 
-					indices.y >= objStart.y && indices.y <= objStop.y) {
-					return false;
+				Util.log(objStart.x, objStop.x, indices.x, (obj as DefenseUnit).clas);
+				if (obj is DefenseUnit) {
+					var tower:DefenseUnit = obj as DefenseUnit;
+					if (tower.clas == Unit.GROUND) {
+						if (indices.x >= objStart.x && indices.x < objStop.x) {
+							return false;
+						}
+					} else {
+						if (indices.x >= objStart.x && indices.x < objStop.x && 
+							indices.y >= objStart.y && indices.y <= objStop.y) {
+							return false;
+						}
+					}
 				}
 			}
 			return true;

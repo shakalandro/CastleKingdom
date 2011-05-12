@@ -58,12 +58,7 @@ package
 			
 			ExternalImage.setData(new BitmapData(FlxG.width, _text.height + _padding * 2, true, 0xffffffff), "message box text");
 			var box:FlxSprite = new FlxSprite(Util.minX, Util.minY, ExternalImage);
-			var right:Number = box.width - _borderThickness + 1;
-			var bottom:Number = box.height - _borderThickness + 1;
-			box.drawLine(0, 0, right, 0, _borderColor, borderThickness);
-			box.drawLine(right, 0, right, bottom, _borderColor, borderThickness);
-			box.drawLine(right, bottom, 0, bottom, _borderColor, borderThickness);
-			box.drawLine(0, bottom, 0, 0, _borderColor, borderThickness);
+			Util.drawBorder(box, FlxG.BLACK, borderThickness);
 			box.allowCollisions = FlxObject.NONE;
 			box.immovable = true;
 			add(box);

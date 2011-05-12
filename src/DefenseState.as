@@ -71,19 +71,33 @@ package
 		 */		
 		public function takeTower(draggable:Draggable, newX:Number, newY:Number, oldX:Number, oldY:Number):void {
 			var tower:DefenseUnit = (draggable as DefenseUnit);
-			var newTower:DefenseUnit = tower.clone() as DefenseUnit;
-			newTower.x = oldX;
-			newTower.y = oldY;
-			_menu.addToCurrentPage(newTower);
-			towers.add(tower);
-			Util.placeInZone(tower, map,true, true);
-			tower.allowCollisions = FlxObject.ANY;
-			tower.immovable = true;
-			tower.dragCallback = function(draggable:Draggable, newX:Number, newY:Number, oldX:Number, oldY:Number):void {
-			//this.addDefenseUnit(draggable,false);
-				
-				Util.placeInZone(draggable as DefenseUnit, map,true, true);
-			};
+			if (!droppable(newX, newY) || tower.cost > (FlxG.state as ActiveState).castle.towerUnitsAvailable) {
+				Util.log("thing given back");
+				tower.x = oldX;
+				tower.y = oldY;
+				_menu.addToCurrentPage(tower.clone());
+			} else {
+				Util.log("thing cloned: droppable=" + droppable(newX, newY));
+				tower = (draggable as DefenseUnit);
+				var newTower:DefenseUnit = tower.clone() as DefenseUnit;
+				newTower.x = oldX;
+				newTower.y = oldY;
+				_menu.addToCurrentPage(newTower);
+				towers.add(tower);
+				Util.placeInZone(tower, map,true, true);
+				tower.allowCollisions = FlxObject.ANY;
+				tower.immovable = true;
+				tower.dragCallback = function(draggable:Draggable, newX:Number, newY:Number, oldX:Number, oldY:Number):void {
+					(draggable as Unit).x = oldX;
+					(draggable as Unit).y = oldY;
+					if (droppable(newX, newY)) {
+						(draggable as Unit).x = newX;
+						(draggable as Unit).y = newY;
+						//Util.placeInZone(towerUnit, map,true, true);
+						Util.placeOnGroundOld(tower, map, false, true);
+					}
+				};
+			}
 		}
 		
 		/**

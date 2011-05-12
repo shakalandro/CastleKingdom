@@ -29,12 +29,7 @@ package
 			var worthText:FlxText = new FlxText(x + padding, nameText.y + nameText.height + padding, width - padding * 2, "\t" + "unitWorth: " + unitWorth);
 			var costText:FlxText = new FlxText(x + padding, worthText.y + worthText.height + padding, width - padding * 2, "\t" + "goldCost: " + goldCost);
 			
-			var right:Number = _box.width - borderThickness + 1;
-			var bottom:Number = _box.height - borderThickness + 1;
-			_box.drawLine(0, 0, right, 0, borderColor, borderThickness);
-			_box.drawLine(right, 0, right, bottom, borderColor, borderThickness);
-			_box.drawLine(right, bottom, 0, bottom, borderColor, borderThickness);
-			_box.drawLine(0, bottom, 0, 0, borderColor, borderThickness);
+			Util.drawBorder(_box, borderColor, borderThickness);
 			
 			_box.allowCollisions = FlxObject.NONE;
 			nameText.allowCollisions = FlxObject.NONE;

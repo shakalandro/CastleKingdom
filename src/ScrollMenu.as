@@ -31,7 +31,7 @@ package
 		 * ex) if the scroll menu is at (50, 50) an object positioned at (0, 0) will be repositioned 
 		 * to be in the upperleft corner of the window.
 		 * This menu can respond to dragging its children by calling the given dragCallback. The callback must 
-		 * have the following signature callback(newX:Number, newY:Number, oldX:Number, oldY:Number):void
+		 * have the following signature callback(thing:FlxBasic, newX:Number, newY:Number, oldX:Number, oldY:Number):void
 		 * 
 		 * @param x A cartesian x coordinate
 		 * @param y A cartesian y coordinate
@@ -82,12 +82,7 @@ package
 			ExternalImage.setData(new BitmapData(width, height, true, bgColor), title);
 			var box:FlxSprite = new FlxSprite(x, y, ExternalImage);
 			box.alpha = .65;
-			var right:Number = box.width - borderThickness + 1;
-			var bottom:Number = box.height - borderThickness + 1;
-			box.drawLine(0, 0, right, 0, FlxG.BLACK, borderThickness);
-			box.drawLine(right, 0, right, bottom, FlxG.BLACK, borderThickness);
-			box.drawLine(right, bottom, 0, bottom, FlxG.BLACK, borderThickness);
-			box.drawLine(0, bottom, 0, 0, FlxG.BLACK, borderThickness);
+			Util.drawBorder(box, FlxG.BLACK, borderThickness);
 			box.x = x;
 			box.y = y;
 
@@ -116,7 +111,7 @@ package
 		 */		
 		public function scrollLeft():void {
 			if (_currentPage - 1 >= 0) {
-				if (_currentPage == _pages.length - 1) {
+				if (_currentPage <= _pages.length - 1) {
 					_rightButton.visible = true;
 					_rightButton.active = true;
 				}
@@ -136,7 +131,7 @@ package
 		 */		
 		public function scrollRight():void {
 			if (_currentPage + 1 < _pages.length) {
-				if (_currentPage == 0) {
+				if (_currentPage >= 0) {
 					_leftButton.active = true;
 					_leftButton.visible = true;
 				}
@@ -180,10 +175,10 @@ package
 				obj.allowCollisions = FlxObject.NONE;
 				obj.immovable = true;
 			}
+			Util.log(_text.text + " " + (thing is Draggable) + " " + (_dragCallback == null));
 			if (thing is Draggable) {
 				(thing as Draggable).dragCallback = function(tower:Draggable, newX:Number, newY:Number, oldX:Number, oldY:Number):void {
-					if (inWindow(newX, newY) || !(FlxG.state as ActiveState).droppable(newX, newY) 
-						|| (tower as Unit).cost > (FlxG.state as ActiveState).castle.towerUnitsAvailable) {
+					if (inWindow(newX, newY)) {
 						tower.objx = oldX;
 						tower.objy = oldY;
 					} else {
@@ -213,7 +208,7 @@ package
 		 * 
 		 */		
 		public function displayPage(n:int, old:int):void {
-			remove(_pages[old]);
+			remove(_pages[old], true);
 			add(_pages[n]);
 		}
 		
@@ -225,12 +220,16 @@ package
 		 * 
 		 */		
 		public function addToCurrentPage(thing:FlxObject, absoluteCoords:Boolean = true):void {
+			Util.log("length before: " + _pages[_currentPage].members.length);
 			_pages[_currentPage].add(thing);
 			formatObject(thing);
 			if (absoluteCoords) {
 				thing.x -= _x + _padding;
 				thing.y -= _y + _padding + _text.height;
 			}
+			Util.log(thing.x, thing.y);
+			Util.log("length after: " + _pages[_currentPage].members.length);
+			displayPage(_currentPage, _currentPage);
 		}
 		
 		/**
@@ -239,7 +238,11 @@ package
 		 * 
 		 */		
 		public function set pageCount(n:int):void {
-			_pageCount.text = (n + 1) + "/" + _pages.length;
+			if (n < 1) {
+				_pageCount.text = "";
+			} else {
+				_pageCount.text = (n + 1) + "/" + _pages.length;
+			}
 		}
 		
 		public function get x():Number {

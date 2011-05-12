@@ -569,6 +569,16 @@ package
 				}, ids, true); 
 			}, false);
 		}
+		
+		public static function drawBorder(sprite:FlxSprite, borderColor:uint = FlxG.BLACK, borderThickness:Number = 3):FlxSprite {
+			var right:Number = sprite.width - borderThickness + 1;
+			var bottom:Number = sprite.height - borderThickness + 1;
+			sprite.drawLine(0, 0, right, 0, borderColor, borderThickness);
+			sprite.drawLine(right, 0, right, bottom, borderColor, borderThickness);
+			sprite.drawLine(right, bottom, 0, bottom, borderColor, borderThickness);
+			sprite.drawLine(0, bottom, 0, 0, borderColor, borderThickness);
+			return sprite;
+		}
 	}
 }
 

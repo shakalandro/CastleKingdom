@@ -15,19 +15,9 @@ package
 	 * @author Justin
 	 * 
 	 */	
-	public class DefenseUnit extends Unit implements Draggable, Highlightable {
+	public class DefenseUnit extends Unit implements Draggable {
 		
 		private var _target:Unit;
-		
-		private var _dragging:Boolean;
-		private var _dragCallback:Function;
-		private var _preDragCoords:FlxPoint;
-		private var _dragOffset:FlxPoint;
-		private var _canDrag:Boolean;
-		
-		private var _canHighlight:Boolean;
-		private var _highlightCallback:Function;
-		private var _highlighted:Boolean;
 		
 		
 		/**
@@ -56,12 +46,6 @@ package
 			addAnimation("normal", [1,2,3,4],1,false);
 			addAnimation("die", [5, 6, 7], 10, false);
 			addAnimation("highlight", [0], 1, true); 
-			_dragging = false;
-			_dragCallback = dragCallback;
-			_canDrag = canDrag;
-			_canHighlight = canHighlight;
-			_highlightCallback = highlightCallback;
-			_highlighted = false;
 			_target = null;
 		
 			
@@ -85,92 +69,8 @@ package
 			_infoDisplay.add(_description);
 			_infoBox.visible = false;
 			_description.visible = false;
-			
-			
 		}
 		
-		public function get canHighlight():Boolean {
-			return _canHighlight;
-		}
-		
-		public function set canHighlight(t:Boolean):void {
-			_canHighlight = t;
-		}
-		
-		public function set highlightCallback(callback:Function):void {
-			_highlightCallback = callback;
-		}
-		
-		public function get highlighted():Boolean {
-			return _highlighted;
-		}
-		
-		public function get canDrag():Boolean {
-			return _canDrag;
-		}
-		
-		public function set canDrag(t:Boolean):void {
-			_canDrag = t;
-			
-		}
-		
-		public function set dragCallback(callback:Function):void {
-			_dragCallback = callback;
-		}
-		
-		override public function preUpdate():void {
-			checkDrag();
-			_highlighted = checkHighlight();
-			if (_highlighted) {
-				FlxG.state.add(_infoDisplay);
-				var rangeSize:int = this.range*CastleKingdom.TILE_SIZE;
-				_infoBox.x = this.x - rangeSize;
-				_infoBox.y = this.y - rangeSize;
-				_description.x = this.x + width + 3, 
-				_description.y = this.y;
-				_infoBox.visible = true;
-				_description.visible = true;
-			} else {
-				FlxG.state.remove(_infoDisplay);
-
-				_infoBox.visible = false;
-				_description.visible = false;
-			}
-		}
-		
-		public function checkDrag():Boolean {
-			if (_canDrag) {
-				var mouseCoords:FlxPoint = FlxG.mouse.getScreenPosition();
-				if (FlxG.mouse.justPressed() && Util.checkClick(this)) {
-					_dragging = true;
-					_preDragCoords = new FlxPoint(x, y);
-					_dragOffset = new FlxPoint(mouseCoords.x - this.x, mouseCoords.y - this.y);
-				} else if (_dragging && FlxG.mouse.justReleased()) {
-					_dragging = false;
-					this.x = mouseCoords.x - _dragOffset.x;
-					this.y = mouseCoords.y - _dragOffset.y;
-					_dragOffset = null;
-					if (_dragCallback != null) _dragCallback(this, x, y, _preDragCoords.x, _preDragCoords.y);
-					_preDragCoords = null;
-				}
-				if (_dragging) {
-					this.x = mouseCoords.x - _dragOffset.x;
-					this.y = mouseCoords.y - _dragOffset.y;
-					return true;
-				}
-			}
-			return false;
-		}
-		
-		public function checkHighlight():Boolean {
-			if (_canHighlight) {
-				var mouseCoords:FlxPoint = FlxG.mouse.getScreenPosition();
-				if (Util.checkClick(this)) {
-					return true;
-				}
-			}
-			return false;
-		}
 		
 		override public function executeAttack():Boolean {
 			if(_target != null) {
@@ -228,7 +128,7 @@ package
 					this.color = 0xffffffff;  // Attacking indicator
 				}
 				
-				if (_highlighted) {
+				if (highlighted) {
 					frame = 0;
 				} else {
 					this.frame = 6 - Math.floor(5 * Math.sqrt((health / this.maxHealth)));
@@ -264,8 +164,8 @@ package
 			}
 		}
 		
-		override public function clone():FlxBasic {
-			return new DefenseUnit(x, y, unitID, _canDrag, _dragCallback, _canHighlight, _highlightCallback);
+		override public function clone():Unit {
+			return new DefenseUnit(x, y, unitID, canDrag, dragCallback, canHighlight, highlightCallback);
 		}
 	}
 }

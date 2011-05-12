@@ -177,14 +177,13 @@ package
 		 */		
 		public static function picture(callback:Function, uid:String = "me", forceRefresh:Boolean = false, size:String = "small"):void {
 			function helper(info:String):void {
-				Util.log("Util.picture: fetching image");
 				var url:URLRequest = new URLRequest(info);
 				var context:LoaderContext = new LoaderContext(true);
 				context.securityDomain = SecurityDomain.currentDomain;
 				var loader:Loader = new Loader();
 				loader.contentLoaderInfo.addEventListener(Event.COMPLETE, function(e:Event):void {
-					ExternalImage.setData(e.target.content.bitmapData, e.target.url);
-					_facebookPics[uid] = new ExternalImage();
+					_facebookPics[uid] = e.target.content.bitmapData;
+					ExternalImage.setData(_facebookPics[uid], uid);
 					callback(ExternalImage);
 				});
 				loader.load(url, context);
@@ -193,8 +192,8 @@ package
 				Util.log("Util.facebookPic failed: facebookReady is false");
 				callback(null);
 			} else if (_facebookPics[uid] && !forceRefresh) {
-				Util.log("Util.facebookPic failed: picture already exists: " + uid);
-				ExternalImage.setData(_facebookPics[uid].bitmapData, _facebookPics[uid].url);
+				ExternalImage.setData(_facebookPics[uid], uid);
+				var ext:ExternalImage = new ExternalImage();
 				callback(ExternalImage);
 			} else if (uid == "me" && !forceRefresh){
 				FaceBook.userInfo(function(result:Object):void {
@@ -202,6 +201,32 @@ package
 				});
 			} else {
 				helper(Facebook.getImageUrl(uid, size));
+			}
+		}
+		
+		/**
+		 * Calls the callback with an array of prefilled FlxSprite objects at coordinate (0, 0). 
+		 * @param ids A list of facebook ids to get the pictures of
+		 * @param callback A callback with teh signature callback(sprites:Array):void
+		 * @param border Whether to draw on a border to the image
+		 * 
+		 */		
+		public static function getAllPictures(ids:Array, callback:Function, border:Boolean = true):void {
+			getAllPicturesHelper(ids, callback, [], border);
+		}
+		
+		private static function getAllPicturesHelper(ids:Array, callback:Function, result:Array, border:Boolean, borderThickness:Number = 3):void {
+			if (ids.length == 0) {
+				callback(result);
+			} else {
+				var id:String = ids[0].id || ids[0];
+				Util.log(id);
+				FaceBook.picture(function(pic:Class):void {
+					var picSprite:FlxSprite = new FlxSprite(0, 0, pic);
+					Util.drawBorder(picSprite);
+					result.push(picSprite);
+					FaceBook.getAllPicturesHelper(ids.slice(1, ids.length), callback, result, border);
+				}, id);
 			}
 		}
 		
