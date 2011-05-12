@@ -10,6 +10,8 @@ package
 		
 		private static const START_GOLD:int = 0;
 		private static const START_UNITS:int = 5;
+		private static var _save:FlxSave;
+		private static var _loaded:Boolean;
 		private static var _userInfo:Array;
 		private static var _userUps:Array;
 		private static var _enemyInfo:Array;
@@ -640,6 +642,8 @@ package
 			variables.gold = "" + START_GOLD;
 			variables.units = "" + START_UNITS;
 			update("http://games.cs.washington.edu/capstone/11sp/castlekd/database/addNewUser.php", variables);
+			_save.data.users[uid] = {info: {}, tut: {}, leases: [], attacks: []};
+			_save.data.users[uid].info = {id: uid, gold: 0, units: 5};
 		}
 		
 		/**
@@ -662,6 +666,7 @@ package
 			variables.units = "" + userInfo["units"];
 			update("http://games.cs.washington.edu/capstone/11sp/castlekd/database/updateUserInfo.php", variables);
 			updateCache(userInfo, _userInfo);
+			_save.data.users[userInfo.id].info = userInfo;
 		}
 		
 		/**
@@ -684,6 +689,7 @@ package
 				userTut["tut" + i] = 1; 
 			}
 			updateCache(userTut, _userTutorialInfo);
+			_save.data.users[uid].tut = userTut;
 		}
 		
 		/**
@@ -713,6 +719,7 @@ package
 			variables.numUnits = "" + leaseInfo["numUnits"];
 			update("http://games.cs.washington.edu/capstone/11sp/castlekd/database/addUserLease.php", variables);
 			_userLeaseInfo.push(leaseInfo);
+			_save.data.users[leaseInfo.id].leases.push(leaseInfo);
 		}
 		
 		/**
@@ -743,6 +750,15 @@ package
 					break;
 				}
 			}
+			var userLeases:Array = _save.data.users[leaseInfo.id].leases;
+			for (i = 0; i < userLeases.length; i++) {
+				if (userLeases[i].id == leaseInfo["id"] && userLeases[i].lid == leaseInfo["lid"] 
+					&& userLeases[i].numUnits == leaseInfo["numUnits"]) {
+					userLeases.splice(i, 1);
+					_save.data.users[leaseInfo.id].leases = userLeases;
+					break;
+				}
+			}
 		}
 		
 		/**
@@ -766,6 +782,7 @@ package
 			variables.leftSide = "" + attackInfo["leftSide"];
 			variables.rightSide = "" + attackInfo["rightSide"];
 			update("http://games.cs.washington.edu/capstone/11sp/castlekd/database/updateUserAttacks.php", variables);
+			_save.data.users[attackInfo.id].attacks.push(attackInfo);
 		}
 		
 		/**
@@ -793,6 +810,23 @@ package
 					_pendingAttacks.splice(i, 1);
 					break;
 				}
+			}
+			var userAttacks:Array = _save.data.users[attackInfo.id].attacks;
+			for (i = 0; i < userAttacks.length; i++) {
+				if (userAttacks[i].id == attackInfo["id"] && userAttacks[i].aid == attackInfo["aid"]) {
+					userAttacks.splice(i, 1);
+					_save.data.users[attackInfo.id].attacks = userAttacks;
+					break;
+				}
+			}
+		}
+		
+		public static function load():void
+		{
+			_save = new FlxSave();
+			_loaded = _save.bind("users");
+			if (_loaded && _save.data.users == null) {
+				_save.data.users = [];
 			}
 		}
 	}
