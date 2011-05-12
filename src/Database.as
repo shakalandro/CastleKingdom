@@ -611,6 +611,16 @@ package
 			loader.load(request);
 		}
 		
+		private static function updateCache(newInfo:Object, oldInfo:Array):void
+		{
+			for (var i:int = 0; i < oldInfo.length; i++) {
+				if (oldInfo[i].id == newInfo["id"]) {
+					oldInfo[i] = newInfo;
+					break;
+				}
+			}
+		}
+		
 		/**
 		 * <p>
 		 * Adds a new user with the given uid to the database with the basic gold and 
@@ -652,16 +662,6 @@ package
 			variables.units = "" + userInfo["units"];
 			update("http://games.cs.washington.edu/capstone/11sp/castlekd/database/updateUserInfo.php", variables);
 			updateCache(userInfo, _userInfo);
-		}
-		
-		private static function updateCache(newInfo:Object, oldInfo:Array):void
-		{
-			for (var i:int = 0; i < oldInfo.length; i++) {
-				if (oldInfo[i].id == newInfo["id"]) {
-					oldInfo[i] = newInfo;
-					break;
-				}
-			}
 		}
 		
 		/**
