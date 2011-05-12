@@ -651,6 +651,17 @@ package
 			variables.gold = "" + userInfo["gold"];
 			variables.units = "" + userInfo["units"];
 			update("http://games.cs.washington.edu/capstone/11sp/castlekd/database/updateUserInfo.php", variables);
+			updateCache(userInfo, _userInfo);
+		}
+		
+		private static function updateCache(newInfo:Object, oldInfo:Array):void
+		{
+			for (var i:int = 0; i < oldInfo.length; i++) {
+				if (oldInfo[i].id == newInfo["id"]) {
+					oldInfo[i] = newInfo;
+					break;
+				}
+			}
 		}
 		
 		/**
@@ -668,6 +679,11 @@ package
 			variables.uid = "" + uid;
 			variables.tutNum = "" + tutLevelComp;
 			update("http://games.cs.washington.edu/capstone/11sp/castlekd/database/updateUserTutorialInfo.php", variables);
+			var userTut:Object = {id: uid, tut1: 0, tut2: 0, tut3: 0, tut4: 0, tut5: 0, tut6: 0};
+			for (var i:int = 1; i < tutLevelComp; i++) {
+				userTut["tut" + i] = 1; 
+			}
+			updateCache(userTut, _userTutorialInfo);
 		}
 		
 		/**
@@ -696,6 +712,7 @@ package
 			variables.lid = "" + leaseInfo["lid"];
 			variables.numUnits = "" + leaseInfo["numUnits"];
 			update("http://games.cs.washington.edu/capstone/11sp/castlekd/database/addUserLease.php", variables);
+			_userLeaseInfo.push(leaseInfo);
 		}
 		
 		/**
@@ -719,6 +736,13 @@ package
 			variables.lid = "" + leaseInfo["lid"];
 			variables.numUnits = "" + leaseInfo["numUnits"];
 			update("http://games.cs.washington.edu/capstone/11sp/castlekd/database/removeUserLease.php", variables);
+			for (var i:int = 0; i < _userLeaseInfo.length; i++) {
+				if (_userLeaseInfo[i].id == leaseInfo["id"] && _userLeaseInfo[i].lid == leaseInfo["lid"] 
+					&& _userLeaseInfo[i].numUnits == leaseInfo["numUnits"]) {
+					_userLeaseInfo.splice(i, 1);
+					break;
+				}
+			}
 		}
 		
 		/**
@@ -764,6 +788,12 @@ package
 			variables.leftSide = "" + attackInfo["leftSide"];
 			variables.rightSide = "" + attackInfo["rightSide"];
 			update("http://games.cs.washington.edu/capstone/11sp/castlekd/database/removeUserAttacks.php", variables);
+			for (var i:int = 0; i < _pendingAttacks.length; i++) {
+				if (_pendingAttacks[i].id == attackInfo["id"] && _pendingAttacks[i].aid == attackInfo["aid"]) {
+					_pendingAttacks.splice(i, 1);
+					break;
+				}
+			}
 		}
 	}
 }
