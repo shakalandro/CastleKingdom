@@ -19,6 +19,10 @@ package
 		
 		override public function create():void {
 			super.create();
+			
+			towers.setAll("canDrag", true);
+			towers.setAll("canHighlight", true);
+			
 			Database.getUpgradesInfo(function(info:Array):void {
 				var padding:Number = 10;
 				var upgrades:Array = createUpgrades(info, 0, info.length / 2, castle.x - Util.minX - padding * 2, 
@@ -38,7 +42,7 @@ package
 		private function closeMenus():void {
 			_leftMenu.kill();
 			_rightMenu.kill();
-			if (castle.numUpgrades > Castle.TUTORIAL_UPGRADES_NEEDED) {
+			if (Castle.tutorialLevel == Castle.TUTORIAL_UPGRADE && castle.numUpgrades > Castle.TUTORIAL_UPGRADES_NEEDED) {
 				toggleButtons(0);
 				add(new MessageBox(Util.assets[Assets.FIRST_ATTACK], "Okay", function():void {
 					toggleButtons(4);

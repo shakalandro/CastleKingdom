@@ -29,6 +29,9 @@ package
 			_dropboxes = [];
 			var padding:Number = 10;
 			
+			towers.setAll("canDrag", false);
+			towers.setAll("canHighlight", false);
+			
 			var sides:Array = ["Left Side Units", "Right Side Units"];
 			var page:Array = formatDropBoxes(castle.width - padding * 2, Util.maxY - Util.minY - 75, 1, 2, sides, _dropboxes, padding);
 			
