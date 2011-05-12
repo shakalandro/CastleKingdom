@@ -51,10 +51,16 @@ package
 			add(costText);
 		}
 		
+		public function xOut():void {
+			_box.drawLine(0, 0, _box.width, _box.height, FlxG.RED, 5);
+			_box.drawLine(0, _box.height, _box.width, 0, FlxG.RED, 5);
+		}
+		
 		override public function update():void {
 			var mouseCoords:FlxPoint = FlxG.mouse.getScreenPosition();
 			if (Util.mouse.justPressed() && Util.checkClick(_box)) {
 				if (_onClick != null) _onClick(this);
+				xOut();
 			}
 		}
 		
