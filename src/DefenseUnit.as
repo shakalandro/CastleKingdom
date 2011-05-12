@@ -46,7 +46,7 @@ package
 			//imgResource.bitMapData.height; 
 			if (imgResource == null) {
 				// set to default image
-				imgResource = Util.assets[Assets.ARROW_TOWER];
+				imgResource = Util.assets[Assets.SPACENEEDLE];
 			}
 			var sizer:FlxSprite = new FlxSprite(0,0,imgResource);
 			

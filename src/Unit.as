@@ -99,7 +99,7 @@ package
 			_maxHealth = Castle.UNIT_INFO[unitType][unitID].maxHealth;
 			_range = Castle.UNIT_INFO[unitType][unitID].range;
 			_damageDone = Castle.UNIT_INFO[unitType][unitID].damage;
-			_rate = Castle.UNIT_INFO[unitType][unitID].rate;
+			_rate = Math.max(1,Castle.UNIT_INFO[unitType][unitID].rate);
 			_clas = Castle.UNIT_INFO[unitType][unitID].clas;
 			
 			_shots = 1;

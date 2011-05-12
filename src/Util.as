@@ -382,7 +382,7 @@ package
 				tileType = map.getTile(indices.x, indices.y);
 			}
 			if(obj is Unit && (obj as Unit).clas == "underground") { //underground
-				if (origY >= indices.y) { 
+				if (origY >= indices.y && !(obj is EnemyUnit)) { 
 					indices.y = origY; // they alrady dropped underground
 					
 				} else {
@@ -391,7 +391,7 @@ package
 				}
 			} else if (obj is Unit &&(obj as Unit).clas == "air") { //air
 			
-				if (origY <= indices.y - 2) {
+				if (origY <= indices.y - 2 && !(obj is EnemyUnit)) { 
 					indices.y = origY; // they already dropped in air
 				} else {
 					indices.y = Math.floor(indices.y - 1 - Math.random()*(indices.y-3));

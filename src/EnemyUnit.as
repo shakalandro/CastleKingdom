@@ -8,6 +8,8 @@
  *  Ensure underground units follow correct pattern \__/ 
  * 	Ensure game ends when unit comes in proximity to castle
  * 
+ * 
+ * 
  * */
 
 package
@@ -16,7 +18,9 @@ package
 
 	/** Unit default behavior:  
 	 * 	Moves at default velocity until reaches a target, then stops. 
-	 *  When stopped, attacks single target until it dies
+	 *  When stopped, attacks single target until target dies
+	 * 
+	 * @author Justin
 	 **/
 	public class EnemyUnit extends Unit
 	{
@@ -39,7 +43,7 @@ package
 			var imgResource:Class = Util.assets[_unitName];
 			if (imgResource == null) {
 				// set to default image
-				imgResource = Util.assets[Assets.WALL];
+				imgResource = Util.assets[Assets.BLOB];
 			}
 			var sizer:FlxSprite = new FlxSprite(0,0,imgResource);
 			this.loadGraphic(imgResource,true,true,

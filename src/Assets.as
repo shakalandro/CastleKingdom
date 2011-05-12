@@ -42,7 +42,7 @@ package
 		
 		[Embed(source = "../images/ram.png")]
 		private static var ram_normal:Class;
-		public static const RAM:String = "Ram";
+		public static const RAM:String = "Battering Ram";
 		
 		[Embed(source = "../images/cannon.png")]
 		private static var cannon_normal:Class;
@@ -72,6 +72,10 @@ package
 		private static var arrow_tower_normal:Class;
 		public static const ARROW_TOWER:String = "Arrow Tower";
 		
+		[Embed(source = "../images/blob.png")]
+		private static var blob:Class;
+		public static const BLOB:String = "Blob";
+		
 		[Embed(source = "../images/flame_tower.png")]
 		private static var flame_tower_normal:Class;
 		public static const FLAME_TOWER:String = "Flame Tower";
@@ -95,6 +99,11 @@ package
 		[Embed(source = "../images/landmine.png")]
 		private static var landmine_normal:Class;
 		public static const LANDMINE:String = "Land Mine";
+		
+		[Embed(source = "../images/space_needle.png")]
+		private static var space_needle:Class;
+		public static const SPACENEEDLE:String = "Space Needle";
+		
 		
 		[Embed(source = "../images/cursor.png")]
 		private static var cursor_img:Class;
@@ -143,6 +152,8 @@ package
 			_normal[Assets.MAP_TILES] = tilesImg_normal;
 			_normal[Assets.SWORDSMAN] = swordsman_normal;
 			_normal[Assets.PIKEMAN] = pikeman_normal;
+			_normal[Assets.BLOB] = blob;
+			_normal[Assets.SPACENEEDLE] = space_needle;
 
 			_normal[Assets.TILE_LAYOUT] = tileLayout_normal;
 			_normal[Assets.HUD_HEADER] = hud_header;

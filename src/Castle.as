@@ -1,26 +1,26 @@
-/** Team AWESOME, 4/19/2011
- * 
- * Castle class
- * 
- * Information: 	User's gold and upgrade levels
- * Functionality:	Get gold balance, 
- * 					get upgrade levels, 
- * 					get army /tower cap, 
- * 					get remaining available army/ tower units, 
- * 					get current leased ammount 	
- * Display:			Shows a predetermined castle image based on upgrade levels to each item 
- * 
- * @field _upgrades:Array 	List of all upgrades user has bought, should be integers. 
- * @field _gold:int 		Balance of gold user has, must be &gt;= 0
- * @field _unitCap:int		Total army unit number supported
- * @field _towerCap:int 	Total tower unit number supported
- * @field
- */
-
 package
 {
 	import org.flixel.*;
 	
+	/** Team AWESOME, 4/19/2011
+	 * 
+	 * Castle class
+	 * 
+	 * Information: 	User's gold and upgrade levels
+	 * Functionality:	Get gold balance, 
+	 * 					get upgrade levels, 
+	 * 					get army /tower cap, 
+	 * 					get remaining available army/ tower units, 
+	 * 					get current leased ammount 	
+	 * Display:			Shows a predetermined castle image based on upgrade levels to each item 
+	 * 
+	 * @field _upgrades:Array 	List of all upgrades user has bought, should be integers. 
+	 * @field _gold:int 		Balance of gold user has, must be &gt;= 0
+	 * @field _unitCap:int		Total army unit number supported
+	 * @field _towerCap:int 	Total tower unit number supported
+	 * @field
+	 * @author Justin
+	 */
 	public class Castle extends FlxSprite
 	{
 		public static const TUTORIAL_UPGRADES_NEEDED:int = 3;
@@ -78,8 +78,9 @@ package
 			//_upgrades = ;
 	//		Database.getUserInfo(initUserInfo, FaceBook.uid);
 			Database.getUserUpgrades(initUpgrades,FaceBook.uid);
-			Database.getDefenseUnitInfo(initDefense); 
+			Database.getDefenseUnitInfo(initDefense);  // stores into UNIT_INFO
 			Database.getEnemyInfo(initArmy);
+			Database.getUpgradesInfo(function(info:Array):void {});  // caches data (in theory)
 
 			solid = true;
 			immovable = true;
@@ -243,6 +244,7 @@ package
 	
 				}
 				_upgrades[upgrade.type] = upgrade.level;
+				//TODO: call database function (upgrade);
 				return true;
 			}
 			return false;
@@ -288,7 +290,9 @@ package
 			if (_gold + amount < 0) {
 				return false;
 			}
+			
 			_gold += amount;
+			Database.updateUserInfo([FaceBook.uid, _gold, this.unitCapacity + this.towerCapacity]);
 			return true;
 		}
 		
@@ -347,41 +351,32 @@ package
 					typeLevel = Math.max(typeLevel,_upgrades[Castle.ARMY]);
 				}
 			}
-			// Iterates over upgrade list to add all unitIDs contained
 			var unitList:Array = new Array();
-			var upgradeLevel:int = 0
-			for ( ; upgradeLevel <= typeLevel ; upgradeLevel++) {
+			unitsFromUpgradeType(unitList, typeLevel, unitType, "ground");
+			unitsFromUpgradeType(unitList, _upgrades["mine"], unitType, "underground");
+			unitsFromUpgradeType(unitList, _upgrades["aviary"], unitType, "air");
+			
+			return unitList;
+		}
+		
+		/**
+		 * Appends units unlocked of unitType by given upgrade level 
+		 * @param unitList
+		 * @param upgradeLevel level of mine, aviary, foundry, barracks
+		 * @param unitType "air", "ground", "underground" corr. to aviary, bar/found, mine levels
+		 * 
+		 */		
+		private function unitsFromUpgradeType(unitList:Array, upgradeLevelMax:int, unitType:String, strata:String):void {
+			// Iterates over upgrade list to add all unitIDs contained
+			for ( var upgradeLevel:int = 0; upgradeLevel <= upgradeLevelMax ; upgradeLevel++) {
 				if (UNIT_INFO[unitType].byLevel != null && UNIT_INFO[unitType].byLevel[upgradeLevel] != null) {
 					for(var unitID:Object in UNIT_INFO[unitType].byLevel[upgradeLevel]) {
-						if(UNIT_INFO[unitType].byLevel[upgradeLevel][unitID].clas == "ground") {
+						if(UNIT_INFO[unitType].byLevel[upgradeLevel][unitID].clas == strata) {
 							unitList.push(UNIT_INFO[unitType].byLevel[upgradeLevel][unitID].uid);	
 						}
 					}
 				}
 			}
-			upgradeLevel = 0;
-			for (; upgradeLevel <= _upgrades["mine"] ; upgradeLevel++) {
-				if (UNIT_INFO[unitType].byLevel != null && UNIT_INFO[unitType].byLevel[upgradeLevel] != null) {
-					for(unitID in UNIT_INFO[unitType].byLevel[upgradeLevel]) {
-						if(UNIT_INFO[unitType].byLevel[upgradeLevel][unitID].clas == "underground") {
-							unitList.push(UNIT_INFO[unitType].byLevel[upgradeLevel][unitID].uid);	
-						}
-					}
-				}
-			}
-			upgradeLevel = 0;
-			for (; upgradeLevel <= _upgrades["aviary"] ; upgradeLevel++) {
-				if (UNIT_INFO[unitType].byLevel != null && UNIT_INFO[unitType].byLevel[upgradeLevel] != null) {
-					for(unitID in UNIT_INFO[unitType].byLevel[upgradeLevel]) {
-						if(UNIT_INFO[unitType].byLevel[upgradeLevel][unitID].clas == "air") {
-							unitList.push(UNIT_INFO[unitType].byLevel[upgradeLevel][unitID].uid);	
-						}
-					}
-				}
-			}
-			
-
-			return unitList;
 		}
 		
 		public function isGameOver():Boolean {
@@ -422,7 +417,6 @@ package
 		
 		
 		public function contactWithEnemy():void {
-			
 			_gameOver = true;
 		}
 		

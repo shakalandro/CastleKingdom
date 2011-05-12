@@ -222,7 +222,7 @@ package
 				maxIndex = highestUnit(possibleUnits, remaining, maxIndex);
 				if (maxIndex >= 0 ) {
 					// random index in range of array, of valid cost elements. +2 adds preference for strong units
-					var randIndex:int = Math.min(maxIndex, Math.round(Math.random()*(maxIndex + 2))); 
+					var randIndex:int = Math.min(maxIndex, Math.round(Math.random()*(maxIndex))); 
 					var unitNum:int = possibleUnits[randIndex];
 					var side:int = Math.round(Math.random());
 					if (side == 0) {

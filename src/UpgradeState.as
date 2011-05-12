@@ -53,6 +53,7 @@ package
 			var pages:Array = [];
 			for (var i:int = 0; i < (max - min) / (perRow * perColumn); i++) {
 				var group:FlxGroup = new FlxGroup;
+				var upgradeShown:int = 0;
 				for (var j:int = 0; j < perColumn; j++) {
 					for (var k:int = 0; k < perRow; k++) {
 						var index:Number = min + i * (perRow * perColumn) + j * perRow + k;
@@ -67,10 +68,12 @@ package
 							if(checkLevel(info[index])) {
 								Util.log("Upgrade created: " + info[index].name);
 								Util.log("Upgrade type: " + info[index].type);
-								var upgrade:Upgrade = new Upgrade(k * (width / perRow), j * (height / perColumn), 
+								//k * (width / perRow), j * (height / perColumn)
+								var upgrade:Upgrade = new Upgrade(upgradeShown%perRow * (width / perRow), upgradeShown/perColumn * (height / perColumn), 
 									width / perRow, height / perColumn, info[index].name, info[index].unitWorth, info[index].level,
 									info[index].goldCost, info[index].type, clickCallback, bgColor);
 								group.add(upgrade);
+								upgradeShown++;
 							}
 						}
 					}
