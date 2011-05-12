@@ -31,7 +31,6 @@ package
 					canHighlight:Boolean = true, highlightCallback:Function = null) {
 			super (x,y,towerID, "foundry");
 			var unitName:String = Castle.UNIT_INFO["foundry"][towerID].name;
-			Util.log("Loaded Unit Name: <" + unitName + ">");
 			var imgResource:Class = Util.assets[unitName];
 			//imgResource.bitMapData.height; 
 			if (imgResource == null) {
@@ -53,8 +52,8 @@ package
 			_infoDisplay = new FlxGroup();
 			var rangeSize:int = this.range*CastleKingdom.TILE_SIZE;
 			var rangeCircle:BitmapData = new BitmapData(rangeSize*2 + width, rangeSize*2 + height, true, FlxG.GREEN);
-			ExternalImage.setData(rangeCircle, "range" + this.name);
-			_infoBox = new FlxSprite(this.x - rangeSize, this.y - rangeSize, ExternalImage);
+			_infoBox = new FlxSprite(this.x - rangeSize, this.y - rangeSize);
+			_infoBox.makeGraphic(rangeSize*2 + width, rangeSize*2 + height, FlxG.GREEN);
 			_infoBox.alpha = .25;
 			_description = new FlxText(this.x - rangeSize, this.y - rangeSize, 75, 
 				this.clas.toUpperCase() +

@@ -1,14 +1,23 @@
 package
 {	
 	import flash.display.BitmapData;
+	import flash.utils.Dictionary;
 	
 	import org.flixel.*;
 	
+	/**
+	 * Handles atacking friends. 
+	 * @author royman
+	 * 
+	 */	
 	public class AttackFriendsState extends ActiveState
-	{
+	{		
+		public static const LEVEL_THRESHHOLD:Number = 75;
+		
 		private var _leftMenu:ScrollMenu;
 		private var _rightMenu:ScrollMenu;
 		private var _middleMenu:ScrollMenu;
+		private var _dropboxes:Array;
 		
 		public function AttackFriendsState(map:FlxTilemap=null, castle:Castle=null, towers:FlxGroup=null, units:FlxGroup=null)
 		{
@@ -17,19 +26,21 @@ package
 		
 		override public function create():void {
 			super.create();
+			_dropboxes = [];
 			var padding:Number = 10;
 			
-			var page:Array = formatDropBoxes(castle.width - padding * 2, Util.maxY - Util.minY - 50, 2, 3, padding);
+			var sides:Array = ["Left Side Units", "Right Side Units"];
+			var page:Array = formatDropBoxes(castle.width - padding * 2, Util.maxY - Util.minY - 75, 1, 2, sides, _dropboxes, padding);
+			
 			_middleMenu = new ScrollMenu(castle.x, Util.minY, page, closeMenus, "Place Here", FlxG.WHITE, padding, castle.width, Util.maxY - Util.minY, 3);
 			add(_middleMenu);
-			
-			FaceBook.friends(function(friends:Array):void {
-				formatFriends(friends.slice(0, 30), castle.x - Util.minX, Util.maxY - Util.minY - 50, 5, function(pages:Array):void {
+			Util.getFriendsInRange(Castle.computeValue(castle), LEVEL_THRESHHOLD, function(friends:Array):void {
+				formatFriends(friends, castle.x - Util.minX - padding * 2, Util.maxY - Util.minY - 50, 5, function(pages:Array):void {
 					_rightMenu = new ScrollMenu(castle.x + castle.width, Util.minY, pages, closeMenus, "Attack Friends", FlxG.WHITE, 
 						padding, Util.maxX - castle.x - castle.width, Util.maxY - Util.minY);
 					add(_rightMenu);
 				});
-			});
+			}, Castle.computeValue);
 			
 			Database.getEnemyInfo(function(units:Array):void {
 				var pages:Array = formatUnits(units, castle.x - Util.minX, Util.maxY - Util.minY - 50, 2, 4);
@@ -37,23 +48,27 @@ package
 					castle.x - Util.minX, Util.maxY - Util.minY, 3, moveUnit);
 				add(_leftMenu);
 			});
-			
-			setTutorialUI();
 		}
 		
-		private function setTutorialUI():void {
-			
-		}
-		
+		/**
+		 * Determines if the given unit is allowed to be dragged to the given location. 
+		 * If so then the unit is added to the middle menu otherwise it is put back.
+		 * 
+		 * @param draggable The object being dragged
+		 * @param newX
+		 * @param newY
+		 * @param oldX
+		 * @param oldY
+		 * 
+		 */		
 		public function moveUnit(draggable:Draggable, newX:Number, newY:Number, oldX:Number, oldY:Number):void {
 			var enemy:EnemyUnit = (draggable as EnemyUnit);
-			if (newX > castle.x && newX < castle.x + castle.width) {
+			if (newX > castle.x && newX < castle.x + castle.width && _middleMenu.dropOnto(draggable as FlxObject, oldX, oldY)) {
 				var newEnemy:EnemyUnit = enemy.clone() as EnemyUnit;
 				newEnemy.x = oldX;
 				newEnemy.y = oldY;
 				_leftMenu.addToCurrentPage(newEnemy);
 				_middleMenu.addToCurrentPage(enemy);
-				Util.log("should have dropped a clone: " + (enemy == newEnemy));
 			} else {
 				enemy.x = oldX;
 				enemy.y = oldY;
@@ -61,9 +76,17 @@ package
 			}
 		}
 		
+		/**
+		 * Closes all menus when a single menu is closed and also handles any ui that needs to be drawn as a result. 
+		 * 
+		 */		
 		private function closeMenus():void {
 			if (Castle.tutorialLevel == Castle.TUTORIAL_ATTACK_FRIENDS) {
-				toggleButtons(4);
+				Database.updateUserTutorialInfo(FaceBook.uid, Castle.TUTORIAL_LEASE);
+				Castle.tutorialLevel = Castle.TUTORIAL_LEASE;
+				add(new MessageBox(Util.assets[Assets.SENT_WAVE], "Okay", function():void {
+					toggleButtons(5);
+				}));
 			} else if (Castle.tutorialLevel == Castle.TUTORIAL_LEASE) {
 				toggleButtons(5);
 			} else {
@@ -72,30 +95,54 @@ package
 			_rightMenu.kill();
 			_leftMenu.kill();
 			_middleMenu.kill();
-		}
-		
-		private function formatDropBoxes(width:Number, height:Number, perRow:int, perColumn:int, padding:Number = 10, bgColor:uint = 0xffffffff):Array {
-			var boxWidth:Number = width / perRow - padding * (perRow - 1);
-			var boxHeight:Number = height / perColumn - padding * (perColumn - 1);
-			var page:Array = [];
-			var boxes:FlxGroup = new FlxGroup();
-			for (var i:int = 0; i < perRow; i++) {
-				for (var j:int = 0; j < perColumn; j++) {
-					var x:Number = boxWidth * i + i * padding;
-					var y:Number = boxHeight * j + j * padding;
-					var bmd:BitmapData = new BitmapData(boxWidth, boxHeight, true, bgColor);
-					ExternalImage.setData(bmd, "attackfriendsdropbox" + i + j);
-					var box:FlxSprite = new FlxSprite(x, y, ExternalImage); 
-					Util.drawBorder(box, bgColor);
-					boxes.add(box);
-					Util.log("box: ",box.x, box.y);
-					add(box);
+			
+			// Register an attack in the database if one was made by the user.
+			if (FriendBox.selected != null) {
+				var leftUnits:String = getAttackingUnits(_dropboxes[0]);
+				var rightUnits:String = getAttackingUnits(_dropboxes[1]);
+				if (leftUnits.length > 0 || rightUnits.length > 0) {
+					var attack:Object = {
+						uid: FaceBook.uid + "",
+						aid: FriendBox.selected.uid,
+						leftSide: leftUnits,
+						rightSide: rightUnits
+					};
+					Util.logObj("Attack:", attack);
+					Database.updateUserAttacks(attack);
 				}
 			}
-			page.push(boxes);
-			return page;
 		}
 		
+		/**
+		 * Builds a comma seperated string of the ids of the attackng units for the given dropbox
+		 *  
+		 * @param dropbox A Droppable object presumably filled with EnemyUnits
+		 * @return A valid attack string of unit ids
+		 * 
+		 */		
+		private function getAttackingUnits(dropbox:FlxGroup):String {
+			var units:String = "";
+			for each (var thing:FlxBasic in dropbox.members) {
+				if (thing is EnemyUnit) {
+					var enemy:EnemyUnit = thing as EnemyUnit;
+					units += enemy.unitID + ",";
+				}
+			}
+			return units.substr(0, units.length - 1);
+		}
+		
+		/**
+		 * Creates and positions units in an array of FlxGroups suitable for a ScrollMenu
+		 *  
+		 * @param units An array of unit info, presumably from the Database
+		 * @param width
+		 * @param height
+		 * @param perRow
+		 * @param perColumn
+		 * @param padding
+		 * @return An array of FlxGroups containing EnemUnits
+		 * 
+		 */		
 		private function formatUnits(units:Array, width:Number, height:Number, perRow:int, perColumn:int, padding:Number = 10):Array {
 			var result:Array = [];
 			for (var i:int = 0; i < units.length / (perRow * perColumn); i++) {
@@ -121,36 +168,84 @@ package
 			}
 			return result;
 		}
-				
+		
+		/**
+		 * Creates an array of FlxGroups filled with FriendBoxes for use in a ScrollMenu. 
+		 * Due to the asynchrony of fetching profile pics, a callback is taken and provided 
+		 * with the Array when the work is done.
+		 * 
+		 * @param friends An array of friend info from FaceBook
+		 * @param width
+		 * @param height
+		 * @param numPer A desired maximum number of FriendBoxes per page
+		 * @param callback A callback with teh signature callback(friends:Array):void
+		 * 
+		 */		
 		private function formatFriends(friends:Array, width:Number, height:Number, numPer:int, callback:Function):void {
 			FaceBook.getAllPictures(friends, function(sprites:Array):void {
 				var pages:Array = [];
 				var page:FlxGroup = new FlxGroup();
 				var i:int = 0;
 				var y:Number = 0;
-				var leftOffset:Number = 20;
+				var padding:Number = 10;
 				while (i < sprites.length) {
-					Util.log(y);
-					var pic:FlxSprite = sprites[i];
-					if (y + pic.height + 10 > height) {
-						Util.log("new page made");
+					if (y + sprites[i].height + 2 * padding > height || page.members.length >= numPer) {
 						y = 0;
 						pages.push(page);
 						page = new FlxGroup();
 					}
-					pic.x = leftOffset;
-					pic.y = y;
-					page.add(pic);
-					var text:FlxText = new FlxText(leftOffset + pic.width + 10, y + 10, width - leftOffset - pic.width,friends[i].name);
-					text.color = FlxG.BLACK;
-					page.add(text);
-					y += pic.height + 10;
+					var friendBox:FriendBox = new FriendBox(0, y, width, sprites[i], friends[i].name, friends[i].id, function(uid:String, setCallback:Function):void {
+						Database.isBeingAttacked(function(attacks:Array):void {
+							setCallback(attacks == null || attacks.length == 0);
+						}, uid, true);
+					});
+					page.add(friendBox);
+					
+					y += friendBox.height + padding / 2;
 					i++;
 				}
 				pages.push(page);
-				Util.log("pages length: " + pages.length);
 				callback(pages);
 			});
+		}
+		
+		/**
+		 * Creates an Array of FlxGroups suitable for use in a ScrollMenu. Creates perRow * perColumn AttackBoxes with accompanying lables pulled from 'titles'.
+		 * Also fills the given array with dropboxes for use elsewhere if desired.
+		 *  
+		 * @param width
+		 * @param height
+		 * @param perRow
+		 * @param perColumn
+		 * @param titles An array of strings to be used as dropbox labels. Must have length >= perRow * perColumn
+		 * @param dropboxes An array to fill with the dropboxes.
+		 * @param padding
+		 * @param bgColor
+		 * @return An array of FlxGroups filled with AttackBoxes for use in a ScrollMenu
+		 * 
+		 */		
+		private function formatDropBoxes(width:Number, height:Number, perRow:int, perColumn:int, titles:Array, dropboxes:Array = null, padding:Number = 10, bgColor:uint = 0xff777777):Array {
+			var boxWidth:Number = (width - padding * (perRow - 1)) / perRow;
+			var boxHeight:Number = (height - padding * (perColumn - 1)) / perColumn;
+			var page:Array = [];
+			var boxes:FlxGroup = new FlxGroup();
+			for (var i:int = 0; i < perRow; i++) {
+				for (var j:int = 0; j < perColumn; j++) {
+					var x:Number = boxWidth * i + i * padding;
+					var y:Number = boxHeight * j + j * padding;
+					
+					var text:FlxText = new FlxText(x, y, boxWidth, titles[i * perColumn + j]);
+					text.y -= text.height - 3;
+					text.color = FlxG.BLACK;
+					var box:AttackBox = new AttackBox(x, y, boxWidth, boxHeight, titles[i * perColumn + j]);
+					if (dropboxes != null) dropboxes.push(box);
+					boxes.add(box);
+					boxes.add(text);
+					add(box);
+				}
+			}
+			page.push(boxes);
+			return page;
 		}
 	}
 }

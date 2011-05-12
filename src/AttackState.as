@@ -86,6 +86,12 @@ package
 				}));
 			} else if (Castle.tutorialLevel == Castle.TUTORIAL_UPGRADE){
 				toggleButtons(3);
+			} else if (Castle.tutorialLevel == Castle.TUTORIAL_ATTACK_FRIENDS) {
+				toggleButtons(4);
+			} else if (Castle.tutorialLevel == Castle.TUTORIAL_LEASE) {
+				toggleButtons(5);
+			} else {
+				Util.log("AttackState.waveFinished: unknown tutorial level " + Castle.tutorialLevel);
 			}
 		}
 

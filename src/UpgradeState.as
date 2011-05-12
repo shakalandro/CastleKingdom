@@ -2,6 +2,11 @@ package
 {
 	import org.flixel.*;
 	
+	/**
+	 * Handles buying upgrades. 
+	 * @author royman
+	 * 
+	 */	
 	public class UpgradeState extends ActiveState
 	{
 		private var _leftMenu:ScrollMenu;
@@ -14,7 +19,6 @@ package
 		
 		override public function create():void {
 			super.create();
-			Util.log("Upgrade state entered");
 			Database.getUpgradesInfo(function(info:Array):void {
 				var padding:Number = 10;
 				var upgrades:Array = createUpgrades(info, 0, info.length / 2, castle.x - Util.minX - padding * 2, 
@@ -34,13 +38,12 @@ package
 		private function closeMenus():void {
 			_leftMenu.kill();
 			_rightMenu.kill();
-			Util.log("Upgrades right now: " + castle.numUpgrades);
 			if (castle.numUpgrades > Castle.TUTORIAL_UPGRADES_NEEDED) {
 				toggleButtons(0);
 				add(new MessageBox(Util.assets[Assets.FIRST_ATTACK], "Okay", function():void {
 					toggleButtons(4);
-					Database.updateUserTutorialInfo(FaceBook.uid, Castle.TUTORIAL_UPGRADE);
-					Castle.tutorialLevel = Castle.TUTORIAL_FIRST_ATTACK;
+					Database.updateUserTutorialInfo(FaceBook.uid, Castle.TUTORIAL_ATTACK_FRIENDS);
+					Castle.tutorialLevel = Castle.TUTORIAL_ATTACK_FRIENDS;
 				}));
 			}
 		}
@@ -65,8 +68,6 @@ package
 							else if (info[index].type == "foundry") bgColor = 0xFF767473;
 							else if (info[index].type == "barracks") bgColor = FlxG.GREEN;
 							if(checkLevel(info[index])) {
-								Util.log("Upgrade created: " + info[index].name);
-								Util.log("Upgrade type: " + info[index].type);
 								var upgrade:Upgrade = new Upgrade(k * (width / perRow), j * (height / perColumn), 
 									width / perRow, height / perColumn, info[index].name, info[index].unitWorth, info[index].level,
 									info[index].goldCost, info[index].type, clickCallback, bgColor);

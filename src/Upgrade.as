@@ -23,8 +23,8 @@ package
 			this.level = level;
 			_onClick = onClick;
 			
-			ExternalImage.setData(new BitmapData(width - margin * 2, height - margin * 2, true, bgColor), name);
-			_box = new FlxSprite(x + margin, y + margin, ExternalImage);
+			_box = new FlxSprite(x + margin, y + margin);
+			_box.makeGraphic(width - margin * 2, height - margin * 2, bgColor);
 			var nameText:FlxText = new FlxText(x + padding, y + padding, width - padding * 4, name + "");
 			var worthText:FlxText = new FlxText(x + padding, nameText.y + nameText.height + padding, width - padding * 2, "\t" + "unitWorth: " + unitWorth);
 			var costText:FlxText = new FlxText(x + padding, worthText.y + worthText.height + padding, width - padding * 2, "\t" + "goldCost: " + goldCost);

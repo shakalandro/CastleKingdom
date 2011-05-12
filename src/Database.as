@@ -666,6 +666,9 @@ package
 			variables.units = "" + userInfo["units"];
 			update("http://games.cs.washington.edu/capstone/11sp/castlekd/database/updateUserInfo.php", variables);
 			updateCache(userInfo, _userInfo);
+			if (_save.data.users[userInfo.id] == undefined || _save.data.users[userInfo.id] == null) {
+				_save.data.users[userInfo.id] = {}
+			}
 			_save.data.users[userInfo.id].info = userInfo;
 		}
 		
@@ -689,6 +692,9 @@ package
 				userTut["tut" + i] = 1; 
 			}
 			updateCache(userTut, _userTutorialInfo);
+			if (_save.data.users[uid] == undefined || _save.data.users[uid] == null) {
+				_save.data.users[uid] = {}
+			}
 			_save.data.users[uid].tut = userTut;
 		}
 		
@@ -719,6 +725,11 @@ package
 			variables.numUnits = "" + leaseInfo["numUnits"];
 			update("http://games.cs.washington.edu/capstone/11sp/castlekd/database/addUserLease.php", variables);
 			_userLeaseInfo.push(leaseInfo);
+			if (_save.data.users[leaseInfo.id] == undefined || _save.data.users[leaseInfo.id] == null) {
+				_save.data.users[leaseInfo.id] = {
+					leases: []
+				}
+			}
 			_save.data.users[leaseInfo.id].leases.push(leaseInfo);
 		}
 		
@@ -764,11 +775,11 @@ package
 		/**
 		 * <p>
 		 * Inserts the given attack information into the database. Must call isBeingAttacked first to
-		 * determine if the user is already being detected. The The object passed must be of
+		 * determine if the user is already being detected. The object passed must be of
 		 * the following format:
 		 * </p>
 		 * <p>
-		 * {id, aid, leftSide, rightSide}
+		 * {uid, aid, leftSide, rightSide}
 		 * </p>
 		 * 
 		 * @param attackInfo must be of the specified format and != null
@@ -777,11 +788,16 @@ package
 		public static function updateUserAttacks(attackInfo:Object):void
 		{
 			var variables:URLVariables = new URLVariables();
-			variables.uid = "" + attackInfo["id"];
+			variables.uid = "" + attackInfo["uid"];
 			variables.aid = "" + attackInfo["aid"];
 			variables.leftSide = "" + attackInfo["leftSide"];
 			variables.rightSide = "" + attackInfo["rightSide"];
 			update("http://games.cs.washington.edu/capstone/11sp/castlekd/database/updateUserAttacks.php", variables);
+			if (_save.data.users[attackInfo.id] == null) {
+				_save.data.users[attackInfo.id] = {
+					attacks: []
+				};
+			}
 			_save.data.users[attackInfo.id].attacks.push(attackInfo);
 		}
 		

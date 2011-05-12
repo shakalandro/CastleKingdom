@@ -56,9 +56,9 @@ package
 			_text.allowCollisions = FlxObject.NONE;
 			_text.immovable = true;
 			
-			ExternalImage.setData(new BitmapData(FlxG.width, _text.height + _padding * 2, true, 0xffffffff), "message box text");
-			var box:FlxSprite = new FlxSprite(Util.minX, Util.minY, ExternalImage);
-			Util.drawBorder(box, FlxG.BLACK, borderThickness);
+			var box:FlxSprite = new FlxSprite(Util.minX, Util.minY);
+			box.makeGraphic(FlxG.width, _text.height + _padding * 2, 0xffffffff);
+			Util.drawBorder(box, borderColor, borderThickness);
 			box.allowCollisions = FlxObject.NONE;
 			box.immovable = true;
 			add(box);

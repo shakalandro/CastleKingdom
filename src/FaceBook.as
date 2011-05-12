@@ -172,10 +172,10 @@ package
 		 * @param callback A callback with the following signature callback(img:Class):void
 		 * @param uid The facebook uid of the desired person
 		 * @param forceRefresh Whether to gather the picture from facebook again or use the cached version
-		 * @param The size of the image to gather. ['small' | 'normal' | 'large']
+		 * @param The size of the image to gather. ['square' | 'small' | 'normal' | 'large']
 		 * 
 		 */		
-		public static function picture(callback:Function, uid:String = "me", forceRefresh:Boolean = false, size:String = "small"):void {
+		public static function picture(callback:Function, uid:String = "me", forceRefresh:Boolean = false, size:String = "square"):void {
 			function helper(info:String):void {
 				var url:URLRequest = new URLRequest(info);
 				var context:LoaderContext = new LoaderContext(true);
@@ -201,6 +201,30 @@ package
 				});
 			} else {
 				helper(Facebook.getImageUrl(uid, size));
+			}
+		}
+		
+		/**
+		 * Returns the name of the person with the id of id. Returns null if the id does not belong 
+		 * to the user or anyone in the user's friend's list. 
+		 * 
+		 * @param id An id to look up
+		 * @param callback A function with the signature callback(name:String):void.
+		 * 
+		 */		
+		public static function getNameByID(id:String, callback:Function):void {
+			if (id == FaceBook.uid + "") {
+				callback(FaceBook.session().user.name);
+			} else {
+				FaceBook.friends(function(friends:Array):void {
+					for (var friend:Object in friends) {
+						if (friend.id == id) {
+							callback(friend.name);
+							break;
+						}
+					}
+					callback(null);
+				}, false);
 			}
 		}
 		

@@ -6,11 +6,13 @@ package
 	{		
 		
 		private var _menu:ScrollMenu;
+		private var _forcedAttack:Boolean;
 		
-		public function DefenseState(map:FlxTilemap=null, castle:Castle = null, towers:FlxGroup = null)
+		public function DefenseState(map:FlxTilemap=null, castle:Castle = null, towers:FlxGroup = null, forcedAttack:Boolean = false)
 		{
 			//super(map, castle, towers);
 			super(map,castle);
+			_forcedAttack = forcedAttack;
 		}
 		
 		/**
@@ -24,11 +26,17 @@ package
 			var unitsUnlocked:Array = this.castle.unitsUnlocked(Castle.TOWER);
 			
 			var pages:Array = createTowers(unitsUnlocked, 2, 4, Castle.TILE_WIDTH * CastleKingdom.TILE_SIZE, Util.maxY - Util.minY - 50);
-			_menu = new ScrollMenu(castle.x, Util.minY, pages, null, Util.assets[Assets.TOWER_WINDOW_TITLE], 
+			_menu = new ScrollMenu(castle.x, Util.minY, pages, closeHandler, Util.assets[Assets.TOWER_WINDOW_TITLE], 
 				0xffffffff, 10, Castle.TILE_WIDTH * CastleKingdom.TILE_SIZE, Util.maxY - Util.minY, 3, takeTower);
 			add(_menu);
 			
 			setTutorialUI();
+		}
+		
+		private function closeHandler():void {
+			if (_forcedAttack) {
+				FlxG.switchState(new AttackState(map, remove(castle) as Castle, remove(towers) as FlxGroup));
+			}
 		}
 		
 		private function setTutorialUI():void {
@@ -72,12 +80,10 @@ package
 		public function takeTower(draggable:Draggable, newX:Number, newY:Number, oldX:Number, oldY:Number):void {
 			var tower:DefenseUnit = (draggable as DefenseUnit);
 			if (!droppable(newX, newY) || tower.cost > (FlxG.state as ActiveState).castle.towerUnitsAvailable) {
-				Util.log("thing given back");
 				tower.x = oldX;
 				tower.y = oldY;
 				_menu.addToCurrentPage(tower.clone());
 			} else {
-				Util.log("thing cloned: droppable=" + droppable(newX, newY));
 				tower = (draggable as DefenseUnit);
 				var newTower:DefenseUnit = tower.clone() as DefenseUnit;
 				newTower.x = oldX;

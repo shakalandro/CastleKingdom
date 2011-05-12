@@ -10,7 +10,7 @@ package
 	 * @author royman
 	 * 
 	 */	
-	public class ScrollMenu extends FlxGroup {
+	public class ScrollMenu extends FlxGroup implements Droppable {
 		private var _text:FlxText;
 		private var _pages:Array;
 		private var _currentPage:int;
@@ -24,6 +24,8 @@ package
 		private var _x:Number;
 		private var _y:Number;
 		private var _dragCallback:Function;
+		private var _canDrop:Boolean;
+		private var _box:FlxSprite;
 		
 		/**
 		 * The ScrollMenu requires an Array of FlxGroups that are displayed one at a time like pages in a book.
@@ -58,6 +60,7 @@ package
 			_y = y;
 			_dragCallback = dragCallback;
 			_closeCallback = closeCallback;
+			_canDrop = true;
 			
 			//Set the title text and pageText;
 			_text = new FlxText(_x, _y, width - padding * 2, title);
@@ -79,15 +82,15 @@ package
 			_rightButton.y -= _rightButton.height / 2;	
 			
 			//Set up window box
-			ExternalImage.setData(new BitmapData(width, height, true, bgColor), title);
-			var box:FlxSprite = new FlxSprite(x, y, ExternalImage);
-			box.alpha = .65;
-			Util.drawBorder(box, FlxG.BLACK, borderThickness);
-			box.x = x;
-			box.y = y;
+			_box = new FlxSprite(x, y);
+			_box.makeGraphic(width, height, bgColor);
+			_box.alpha = .65;
+			Util.drawBorder(_box, FlxG.BLACK, borderThickness);
+			_box.x = x;
+			_box.y = y;
 
 			//Add everything
-			add(box);
+			add(_box);
 			add(_text);
 			add(_pageCount);
 			add(_leftButton);
@@ -101,8 +104,7 @@ package
 				_currentPage = 0;
 				pageCount = 0;
 			}
-			scrollRight();
-			scrollLeft();
+			checkButtons();
 		}
 
 		/**
@@ -111,18 +113,11 @@ package
 		 */		
 		public function scrollLeft():void {
 			if (_currentPage - 1 >= 0) {
-				if (_currentPage <= _pages.length - 1) {
-					_rightButton.visible = true;
-					_rightButton.active = true;
-				}
 				_currentPage--;
 				displayPage(_currentPage, _currentPage + 1);
 				pageCount = _currentPage;
 			}
-			if (_currentPage == 0) {
-				_leftButton.active = false;
-				_leftButton.visible = false;
-			}
+			checkButtons();
 		}
 		
 		/**
@@ -131,17 +126,27 @@ package
 		 */		
 		public function scrollRight():void {
 			if (_currentPage + 1 < _pages.length) {
-				if (_currentPage >= 0) {
-					_leftButton.active = true;
-					_leftButton.visible = true;
-				}
 				_currentPage++;
 				displayPage(_currentPage, _currentPage - 1);
 				pageCount = _currentPage;
 			}
+			checkButtons();
+		}
+		
+		/**
+		 * Checks to see if buttons should be activated or deactivated. 
+		 * 
+		 */		
+		private function checkButtons():void {
+			if (_currentPage == 0) {
+				_leftButton.visible = false;
+			} else {
+				_leftButton.visible = true;
+			}
 			if (_currentPage == _pages.length - 1) {
 				_rightButton.visible = false;
-				_rightButton.active = false;
+			} else {
+				_rightButton.visible = true;
 			}
 		}
 		
@@ -175,7 +180,6 @@ package
 				obj.allowCollisions = FlxObject.NONE;
 				obj.immovable = true;
 			}
-			Util.log(_text.text + " " + (thing is Draggable) + " " + (_dragCallback == null));
 			if (thing is Draggable) {
 				(thing as Draggable).dragCallback = function(tower:Draggable, newX:Number, newY:Number, oldX:Number, oldY:Number):void {
 					if (inWindow(newX, newY)) {
@@ -220,16 +224,37 @@ package
 		 * 
 		 */		
 		public function addToCurrentPage(thing:FlxObject, absoluteCoords:Boolean = true):void {
-			Util.log("length before: " + _pages[_currentPage].members.length);
 			_pages[_currentPage].add(thing);
 			formatObject(thing);
 			if (absoluteCoords) {
 				thing.x -= _x + _padding;
 				thing.y -= _y + _padding + _text.height;
 			}
-			Util.log(thing.x, thing.y);
-			Util.log("length after: " + _pages[_currentPage].members.length);
 			displayPage(_currentPage, _currentPage);
+		}
+		
+		/**
+		 * Passes the buck to any Droppable children that interesect with the drop location 
+		 * Drops to the first child in the members array for which draopOnto returns true.
+		 * 
+		 * @param obj The droppable object
+		 * @param oldX The object's old x coordinate
+		 * @param oldY The object's old y coordinate
+		 * @return Whether the drop was successful or not
+		 * 
+		 */		
+		public function dropOnto(obj:FlxObject, oldX:Number, oldY:Number):Boolean {
+			if (!_canDrop) {
+				return false;
+			}
+			Util.log("ScrollMenu.dropOnto called:");
+			for each (var thing:FlxBasic in _pages[_currentPage].members) {
+				if ((thing is Droppable) && obj.overlaps((thing as Droppable).boundingSprite) && (thing as Droppable).dropOnto(obj, oldX, oldY)) {
+					displayPage(_currentPage, _currentPage);
+					return true;
+				}
+			}
+			return false;
 		}
 		
 		/**
@@ -238,7 +263,7 @@ package
 		 * 
 		 */		
 		public function set pageCount(n:int):void {
-			if (n < 1) {
+			if (_pages.length <= 1) {
 				_pageCount.text = "";
 			} else {
 				_pageCount.text = (n + 1) + "/" + _pages.length;
@@ -261,12 +286,24 @@ package
 			return _height;
 		}
 		
+		public function get canDrop():Boolean {
+			return _canDrop;
+		}
+		
+		public function set canDrop(t:Boolean):void {
+			_canDrop = t;
+		}
+		
 		public function get currentPage():FlxGroup {
 			return _pages[_currentPage];
 		}
 		
 		public function set onClose(callback:Function):void {
 			_closeCallback = callback;
+		}
+		
+		public function get boundingSprite():FlxSprite {
+			return _box;
 		}
 		
 		public function get onClose():Function {

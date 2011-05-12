@@ -118,6 +118,8 @@ package
 		public static const UPGRADE_AVAILABLE:String = "upgrade available";
 		public static const FIRST_DEFENSE:String = "first defense";
 		public static const FIRST_ATTACK:String = "first attack";
+		public static const SENT_WAVE:String = "sent wave";
+		public static const INCOMING_WAVE:String = "incoming wave";
 		
 		// Other resources
 		
@@ -184,6 +186,10 @@ package
 				"the enemies to find out.";
 			_normal[Assets.FIRST_ATTACK] = "Your castle has become quite impressive. You are now ready to " +
 				"venture out and try stealing gold from your friends castles!";
+			_normal[Assets.SENT_WAVE] = "Now that you can attack friends, they can also attack you. Try asking " +
+				"your friends to lease some of their resources to help you in battle.";
+			_normal[Assets.INCOMING_WAVE] = "OMG, your friend {0} has sent a wave of enemies at you. Don't let " +
+				"him steal your gold! Set the defenses.";
 		}
 		
 		/**
