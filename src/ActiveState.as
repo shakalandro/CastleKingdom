@@ -407,7 +407,7 @@ package
 				FlxG.switchState(new AttackFriendsState(map, oldCastle, defTowers));
 			});
 			var _lease:CKButton = new CKButton(0, 0, Util.assets[Assets.LEASE_BUTTON], function():void {
-				//FlxG.switchState(new DefenseState(false, map));
+				FlxG.switchState(new LeaseState(map, remove(castle) as Castle, remove(towers) as FlxGroup));
 			});
 			
 			_hudButtons.push(_prepare);
