@@ -62,7 +62,6 @@ package
 			_towers = towers || new FlxGroup();
 			_units = units || new FlxGroup();
 			_attackAnims = new FlxGroup();
-			_castle = castle;
 			_hudButtons = [];
 		}
 		
@@ -73,15 +72,15 @@ package
 		 */		
 		override public function create():void {
 			super.create();
+			add(_towers);
+			add(_units);
+			add(_attackAnims);
+			_castle = _castle || new Castle(0, 0, Util.assets[Assets.CASTLE]);
+			Util.centerX(_castle);
+			Util.placeInZone(_castle, map);
+			add(_castle);
 			
 			this.checkForPendingAttacks(function():void {
-				add(_towers);
-				add(_units);
-				add(_attackAnims);
-				_castle = _castle || new Castle(0, 0, Util.assets[Assets.CASTLE]);
-				Util.centerX(_castle);
-				Util.placeInZone(_castle, map);
-				add(_castle);
 				if (CastleKingdom.FACEBOOK_ON) {
 					FaceBook.picture(function(pic:Class):void {
 						var profilePic:FlxSprite = new FlxSprite(0, 0, pic);

@@ -78,7 +78,7 @@ package
 				_infoBox.x = this.x - rangeSize;
 				_infoBox.y = this.y - rangeSize;
 				_description.x = this.x + width + 3, 
-					_description.y = this.y;
+				_description.y = this.y;
 				_infoBox.visible = true;
 				_description.visible = true;
 			} else {

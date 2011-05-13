@@ -12,6 +12,7 @@ package
 		private var _rightMenu:ScrollMenu;
 		private var _leftMenu:ScrollMenu;
 		private var _middleMenu:ScrollMenu;
+		private var _slider:Slider;
 		
 		public function LeaseState(map:FlxTilemap=null, castle:Castle=null, towers:FlxGroup=null, units:FlxGroup=null)
 		{
@@ -46,16 +47,26 @@ package
 			var text:FlxText = new FlxText(0, 0, width - padding * 2, "How many units of tower capacity would you like to lease?");
 			text.alignment = "center";
 			text.color = FlxG.BLACK;
-			var slider:Slider = new Slider(0, 0, width - padding * 2, 100);
+			_slider = new Slider(0, text.height, width - padding * 2, 100, 10, castle.unitCapacity);
 			group.add(text);
-			group.add(slider);
+			group.add(_slider);
 			page.push(group);
 			return page;
 		}
 		
 		private function closeMenus():void {
+			if (FriendBox.selected != null) {
+				Database.addUserLease({
+					id: FriendBox.selected.uid,
+					lid: FaceBook.uid,
+					numUnits: _slider.value
+				});
+				Util.log("Leasing " + _slider.value + " units from " + FriendBox.selected.name);
+				FriendBox.resetSelected();
+			}
 			_rightMenu.kill();
 			_leftMenu.kill();
+			_middleMenu.kill();
 		}
 		
 		/**

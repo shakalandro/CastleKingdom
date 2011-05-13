@@ -115,6 +115,7 @@ package
 					Util.logObj("Attack:", attack);
 					Database.updateUserAttacks(attack);
 				}
+				FriendBox.resetSelected();
 			}
 		}
 		
