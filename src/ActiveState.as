@@ -124,19 +124,14 @@ package
 					toggleButtons(1);
 				}));
 			} else if (Castle.tutorialLevel == Castle.TUTORIAL_FIRST_DEFEND) {
-				Util.logging.startDquest(Castle.TUTORIAL_FIRST_DEFEND);
 				toggleButtons(1);
 			} else if (Castle.tutorialLevel == Castle.TUTORIAL_FIRST_WAVE) {
-				Util.logging.startDquest(Castle.TUTORIAL_FIRST_WAVE);
 				toggleButtons(2);
 			} else if (Castle.tutorialLevel == Castle.TUTORIAL_UPGRADE) {
-				Util.logging.startDquest(Castle.TUTORIAL_UPGRADE);
 				toggleButtons(3);
 			} else if (Castle.tutorialLevel == Castle.TUTORIAL_ATTACK_FRIENDS) {
-				Util.logging.startDquest(Castle.TUTORIAL_ATTACK_FRIENDS);
 				toggleButtons(4);
 			} else if (Castle.tutorialLevel == Castle.TUTORIAL_LEASE) {
-				Util.logging.startDquest(Castle.TUTORIAL_LEASE);
 				toggleButtons(5);
 			} else {
 				Util.log("ActiveState.setTutorialUI: unexpected tutorial level " + Castle.tutorialLevel);
@@ -385,24 +380,29 @@ package
 			var _prepare:CKButton = new CKButton(0, 0, Util.assets[Assets.PLACE_TOWER_BUTTON], function():void {
 				var oldCastle:Castle = remove(castle);
 				var defTowers:FlxGroup = remove(towers);
+				Util.logging.startDquest(Castle.TUTORIAL_FIRST_DEFEND);
 				FlxG.switchState(new DefenseState(map, oldCastle, defTowers));
 			});
 			var _release:CKButton = new CKButton(0, 0, Util.assets[Assets.RELEASE_WAVE_BUTTON], function():void {
 				var defTowers:FlxGroup = remove(towers);
 				var oldCastle:Castle = remove(castle);
+				Util.logging.startDquest(Castle.TUTORIAL_FIRST_WAVE);
 				FlxG.switchState(new AttackState(map, oldCastle, defTowers));
 			});
 			var _upgrade:CKButton = new CKButton(0, 0, Util.assets[Assets.UPGRADE_BUTTON], function():void {
 				var oldCastle:Castle = remove(castle);
 				var defTowers:FlxGroup = remove(towers);
+				Util.logging.startDquest(Castle.TUTORIAL_UPGRADE);
 				FlxG.switchState(new UpgradeState(map, oldCastle, defTowers));
 			});
 			var _attack:CKButton = new CKButton(0, 0, Util.assets[Assets.ATTACK_BUTTON], function():void {
 				var oldCastle:Castle = remove(castle);
 				var defTowers:FlxGroup = remove(towers);
+				Util.logging.startDquest(Castle.TUTORIAL_ATTACK_FRIENDS);
 				FlxG.switchState(new AttackFriendsState(map, oldCastle, defTowers));
 			});
 			var _lease:CKButton = new CKButton(0, 0, Util.assets[Assets.LEASE_BUTTON], function():void {
+				Util.logging.startDquest(Castle.TUTORIAL_LEASE);
 				//FlxG.switchState(new DefenseState(false, map));
 			});
 			
