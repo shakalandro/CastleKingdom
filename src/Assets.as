@@ -117,7 +117,6 @@ package
 		private static var space_needle:Class;
 		public static const SPACENEEDLE:String = "Space Needle";
 		
-		
 		[Embed(source = "../images/cursor.png")]
 		private static var cursor_img:Class;
 		public static const CURSOR:String = "cursor";
@@ -125,6 +124,14 @@ package
 		[Embed(source = "../images/wholemap.png")]
 		private static var background_img:Class;
 		public static const BACKGROUND:String = "background";
+		
+		[Embed(source = "../images/button_small.png")]
+		private static var button_small_img:Class;
+		public static const BUTTON_SMALL:String = "Small Button";
+		
+		[Embed(source = "../images/loader.png")]
+		private static var loader_img:Class;
+		public static const LOADER:String = "Loader";
 	
 		// Text resources
 		

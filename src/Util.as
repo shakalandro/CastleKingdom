@@ -580,7 +580,7 @@ package
 					}
 					if (callback != null) callback(result);
 				}, ids, true); 
-			}, false);
+			});
 		}
 		
 		/**

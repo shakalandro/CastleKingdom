@@ -1,5 +1,6 @@
 package
 {
+	import flash.events.TimerEvent;
 	import flash.utils.Timer;
 	
 	import mx.utils.StringUtil;
@@ -21,7 +22,7 @@ package
 		public static const BUTTON_DIST:Number = 75;
 		
 		// Five minute interval between lookups about pending attack status
-		public static const ATTACK_DETECTION_INTERVAL:Number = 60000 * 5;
+		public static const ATTACK_DETECTION_INTERVAL:Number = 10000;
 				
 		private static const HUD_BUTTON_PADDING:uint = 10;
 		
@@ -67,6 +68,7 @@ package
 			_castle = castle;
 			_hudButtons = [];
 			_attackTimer = new Timer(ATTACK_DETECTION_INTERVAL, 1);
+			_attackTimer.addEventListener(TimerEvent.TIMER_COMPLETE, checkForPendingAttacks);
 			_attackTimer.start();
 		}
 		
@@ -124,46 +126,43 @@ package
 					toggleButtons(1);
 				}));
 			} else if (Castle.tutorialLevel == Castle.TUTORIAL_FIRST_DEFEND) {
-				Util.logging.startDquest(Castle.TUTORIAL_FIRST_DEFEND);
 				toggleButtons(1);
 			} else if (Castle.tutorialLevel == Castle.TUTORIAL_FIRST_WAVE) {
-				Util.logging.startDquest(Castle.TUTORIAL_FIRST_WAVE);
 				toggleButtons(2);
 			} else if (Castle.tutorialLevel == Castle.TUTORIAL_UPGRADE) {
-				Util.logging.startDquest(Castle.TUTORIAL_UPGRADE);
 				toggleButtons(3);
 			} else if (Castle.tutorialLevel == Castle.TUTORIAL_ATTACK_FRIENDS) {
-				Util.logging.startDquest(Castle.TUTORIAL_ATTACK_FRIENDS);
 				toggleButtons(4);
 			} else if (Castle.tutorialLevel == Castle.TUTORIAL_LEASE) {
-				Util.logging.startDquest(Castle.TUTORIAL_LEASE);
 				toggleButtons(5);
 			} else {
 				Util.log("ActiveState.setTutorialUI: unexpected tutorial level " + Castle.tutorialLevel);
 			}
 		}
 		
+		private function checkForPendingAttacks(e:TimerEvent):void {
+			Util.log("looking for pending attack");
+			Database.pendingAttacks(function(attacks:Array):void {
+				if (attacks == null || attacks.length == 0) {
+					Util.log("ActiveState.update, no pending attack");
+				} else {
+					FaceBook.getNameByID(attacks[0].id, function(name:String):void {
+						if (name != null) {
+							add(new MessageBox(StringUtil.substitute(Util.assets[Assets.INCOMING_WAVE], name), "Okay", function():void {
+								FlxG.switchState(new DefenseState(map, remove(castle) as Castle, remove(towers) as FlxGroup, true));
+							}));
+						} else {
+							Util.log("ActiveState.update pending attack, but user unknown " + attacks[0].id);
+						}
+					});
+				}
+			}, FaceBook.uid);
+			_attackTimer.reset();
+			_attackTimer.start();
+		}
+		
 		override public function update():void {
 			super.update();
-			if (!_attackTimer.running) {
-				Database.pendingAttacks(function(attacks:Array):void {
-					if (attacks == null || attacks.length == 0) {
-						Util.log("ActiveState.update, no pending attack");
-					} else {
-						FaceBook.getNameByID(attacks[0].id, function(name:String):void {
-							if (name != null) {
-								add(new MessageBox(StringUtil.substitute(Util.assets[Assets.INCOMING_WAVE], name), "Okay", function():void {
-									FlxG.switchState(new DefenseState(map, remove(castle) as Castle, remove(towers) as FlxGroup, true));
-								}));
-							} else {
-								Util.log("ActiveState.update pending attack, but user unknown " + attacks[0].id);
-							}
-						});
-					}
-				});
-				_attackTimer.reset();
-				_attackTimer.start();
-			}
 			drawStats();
 		}
 		
@@ -385,27 +384,43 @@ package
 			var _prepare:CKButton = new CKButton(0, 0, Util.assets[Assets.PLACE_TOWER_BUTTON], function():void {
 				var oldCastle:Castle = remove(castle);
 				var defTowers:FlxGroup = remove(towers);
+
+				Util.logging.startDquest(Castle.TUTORIAL_FIRST_DEFEND);
+
 				FlxG.switchState(new DefenseState(map, oldCastle, defTowers));
 			});
 			var _release:CKButton = new CKButton(0, 0, Util.assets[Assets.RELEASE_WAVE_BUTTON], function():void {
 				var defTowers:FlxGroup = remove(towers);
 				var oldCastle:Castle = remove(castle);
+
+				Util.logging.startDquest(Castle.TUTORIAL_FIRST_WAVE);
+
 				FlxG.switchState(new AttackState(map, oldCastle, defTowers));
 			});
 			var _upgrade:CKButton = new CKButton(0, 0, Util.assets[Assets.UPGRADE_BUTTON], function():void {
 				var oldCastle:Castle = remove(castle);
 				var defTowers:FlxGroup = remove(towers);
+
+				Util.logging.startDquest(Castle.TUTORIAL_UPGRADE);
+
 				FlxG.switchState(new UpgradeState(map, oldCastle, defTowers));
 			});
 			var _attack:CKButton = new CKButton(0, 0, Util.assets[Assets.ATTACK_BUTTON], function():void {
 				var oldCastle:Castle = remove(castle);
 				var defTowers:FlxGroup = remove(towers);
+
+				Util.logging.startDquest(Castle.TUTORIAL_ATTACK_FRIENDS);
+
 				FlxG.switchState(new AttackFriendsState(map, oldCastle, defTowers));
 			});
 			var _lease:CKButton = new CKButton(0, 0, Util.assets[Assets.LEASE_BUTTON], function():void {
+
+				Util.logging.startDquest(Castle.TUTORIAL_LEASE);
+				//FlxG.switchState(new DefenseState(false, map));
 				var oldCastle:Castle = remove(castle);
 				var defTowers:FlxGroup = remove(towers);
 				FlxG.switchState(new LeaseState(map, oldCastle, defTowers));
+
 			});
 			
 			_hudButtons.push(_prepare);

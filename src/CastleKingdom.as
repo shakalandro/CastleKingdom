@@ -18,7 +18,7 @@ package
 	 */	
 	public class CastleKingdom extends FlxGame
 	{
-		public static const DEBUG:Boolean = true;
+		public static const DEBUG:Boolean = false;
 		public static const FACEBOOK_ON:Boolean = true;
 
 		public static const FACEBOOK_APP_ID:String = "197220693652461";
@@ -93,7 +93,7 @@ package
 			if (t) {
 				numWaiting++;
 			} else {
-				numWaiting--;
+				numWaiting = Math.min(numWaiting - 1, 0);
 			}
 			Util.log("Loading count: ", numWaiting, _loading != null);
 		}
