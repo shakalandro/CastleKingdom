@@ -88,7 +88,7 @@ package
 		 * function is of the form: 
 		 * </p>
 		 * <p>
-		 * {id, cid, bid, fid, mid, aid, xpos, ypos}
+		 * {id, upid, xpos, ypos}
 		 * </p>
 		 * <p>
 		 * There will only be one of cid, bid, fid, mid, or aid filled in since an upgrade is only
@@ -107,11 +107,7 @@ package
 					_userInfo = processList(xmlData.user, function(unit:XML):Object {
 						return {
 							id: unit.uid,
-							cid: unit.cid,
-							bid: unit.bid,
-							fid: unit.fid,
-							mid: unit.mid,
-							aid: unit.aid,
+							upid: unit.upid,
 							xpos: unit.xpos,
 							ypos: unit.ypos
 						};
@@ -647,7 +643,7 @@ package
 			variables.gold = "" + START_GOLD;
 			variables.units = "" + START_UNITS;
 			update("http://games.cs.washington.edu/capstone/11sp/castlekd/database/addNewUser.php", variables);
-			_save.data.users[uid] = {info: {}, tut: {}, leases: [], attacks: []};
+			_save.data.users[uid] = {info: {}, tut: {}, leases: [], attacks: [], upgrades: []};
 			_save.data.users[uid].info = {id: uid, gold: 0, units: 5};
 		}
 		
@@ -672,7 +668,9 @@ package
 			update("http://games.cs.washington.edu/capstone/11sp/castlekd/database/updateUserInfo.php", variables);
 			updateCache(userInfo, _userInfo);
 			if (_save.data.users[userInfo.id] == undefined || _save.data.users[userInfo.id] == null) {
-				_save.data.users[userInfo.id] = {}
+				_save.data.users[userInfo.id] = {info: {}, 
+					tut: {id: userInfo.id, tut1: 0, tut2: 0, tut3: 0, tut4: 0, tut5: 0, tut6: 0}, 
+					leases: [], attacks: [], upgrades: []};
 			}
 			_save.data.users[userInfo.id].info = userInfo;
 		}
@@ -698,7 +696,7 @@ package
 			}
 			updateCache(userTut, _userTutorialInfo);
 			if (_save.data.users[uid] == undefined || _save.data.users[uid] == null) {
-				_save.data.users[uid] = {}
+				_save.data.users[uid] = {info: {}, tut: {}, leases: [], attacks: [], upgrades: []};
 			}
 			_save.data.users[uid].tut = userTut;
 		}
@@ -737,9 +735,7 @@ package
 			}
 				
 			if (_save.data.users[leaseInfo.id] == undefined || _save.data.users[leaseInfo.id] == null) {
-				_save.data.users[leaseInfo.id] = {
-					leases: []
-				}
+				_save.data.users[leaseInfo.id] = {info: {}, tut: {}, leases: [], attacks: [], upgrades: []};
 			}
 			_save.data.users[leaseInfo.id].leases.push(leaseInfo);
 		}
@@ -777,7 +773,8 @@ package
 				if (userLeases[i].id == leaseInfo["id"] && userLeases[i].lid == leaseInfo["lid"] 
 					&& userLeases[i].numUnits == leaseInfo["numUnits"]) {
 					userLeases.splice(i, 1);
-					_save.data.users[leaseInfo.id].leases = userLeases;
+					if (_save.data.users[leaseInfo.id] != undefined || _save.data.users[leaseInfo.id] != null)
+						_save.data.users[leaseInfo.id].leases = userLeases;
 					break;
 				}
 			}
@@ -805,9 +802,7 @@ package
 			variables.rightSide = "" + attackInfo["rightSide"];
 			update("http://games.cs.washington.edu/capstone/11sp/castlekd/database/updateUserAttacks.php", variables);
 			if (_save.data.users[attackInfo.id] == null) {
-				_save.data.users[attackInfo.id] = {
-					attacks: []
-				};
+				_save.data.users[attackInfo.id] = {info: {}, tut: {}, leases: [], attacks: [], upgrades: []};
 			}
 			_save.data.users[attackInfo.id].attacks.push(attackInfo);
 		}
@@ -842,10 +837,38 @@ package
 			for (i = 0; i < userAttacks.length; i++) {
 				if (userAttacks[i].id == attackInfo["id"] && userAttacks[i].aid == attackInfo["aid"]) {
 					userAttacks.splice(i, 1);
-					_save.data.users[attackInfo.id].attacks = userAttacks;
+					if (_save.data.users[attackInfo.id] != undefined || _save.data.users[attackInfo.id] != null)
+						_save.data.users[attackInfo.id].attacks = userAttacks;
 					break;
 				}
 			}
+		}
+		
+		/**
+		 * <p>
+		 * Inserts the given attack information into the database. Must call isBeingAttacked first to
+		 * determine if the user is already being detected. The object passed must be of
+		 * the following format:
+		 * </p>
+		 * <p>
+		 * {uid, upid, xpos, ypos}
+		 * </p>
+		 * 
+		 * @param attackInfo must be of the specified format and != null
+		 * 
+		 */
+		public static function insertUserUpgrade(userUpgrades:Object):void
+		{
+			var variables:URLVariables = new URLVariables();
+			variables.uid = "" + userUpgrades["id"];
+			variables.upid = "" + userUpgrades["upid"];
+			variables.xpos = "" + userUpgrades["xpos"];
+			variables.ypos = "" + userUpgrades["ypos"];
+			update("http://games.cs.washington.edu/capstone/11sp/castlekd/database/insertUserUpgrades.php", variables);
+			if (_save.data.users[userUpgrades.id] == null) {
+				_save.data.users[userUpgrades.id].upgrades = {info: {}, tut: {}, leases: [], attacks: [], upgrades: []};
+			}
+			_save.data.users[userUpgrades.id].upgrades.push(userUpgrades);
 		}
 		
 		public static function load():void
