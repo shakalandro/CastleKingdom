@@ -124,14 +124,19 @@ package
 					toggleButtons(1);
 				}));
 			} else if (Castle.tutorialLevel == Castle.TUTORIAL_FIRST_DEFEND) {
+				Util.logging.startDquest(Castle.TUTORIAL_FIRST_DEFEND);
 				toggleButtons(1);
 			} else if (Castle.tutorialLevel == Castle.TUTORIAL_FIRST_WAVE) {
+				Util.logging.startDquest(Castle.TUTORIAL_FIRST_WAVE);
 				toggleButtons(2);
 			} else if (Castle.tutorialLevel == Castle.TUTORIAL_UPGRADE) {
+				Util.logging.startDquest(Castle.TUTORIAL_UPGRADE);
 				toggleButtons(3);
 			} else if (Castle.tutorialLevel == Castle.TUTORIAL_ATTACK_FRIENDS) {
+				Util.logging.startDquest(Castle.TUTORIAL_ATTACK_FRIENDS);
 				toggleButtons(4);
 			} else if (Castle.tutorialLevel == Castle.TUTORIAL_LEASE) {
+				Util.logging.startDquest(Castle.TUTORIAL_LEASE);
 				toggleButtons(5);
 			} else {
 				Util.log("ActiveState.setTutorialUI: unexpected tutorial level " + Castle.tutorialLevel);

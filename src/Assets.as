@@ -52,6 +52,14 @@ package
 		private static var spearnman_normal:Class;
 		public static const SPEARMAN:String = "Spearman";
 		
+		[Embed(source = "../images/tank.png")]
+		private static var tank_normal:Class;
+		public static const TANK:String = "Tank";
+		
+		[Embed(source = "../images/leprechaun.png")]
+		private static var leprechaun_normal:Class;
+		public static const LEPRECHAUN:String = "Leprechaun";
+		
 		[Embed(source = "../images/hud_header.png")]
 		private static var hud_header:Class;
 		public static const HUD_HEADER:String = "hud_header";
@@ -184,6 +192,8 @@ package
 			_normal[Assets.CANNON] = cannon_normal;
 			_normal[Assets.ARCHER] = archer_normal;
 			_normal[Assets.RAM] = ram_normal;
+			_normal[Assets.TANK] = tank_normal;
+			_normal[Assets.LEPRECHAUN] = leprechaun_normal;
 			
 			//Textual assets
 			
