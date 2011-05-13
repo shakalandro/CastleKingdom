@@ -614,13 +614,18 @@ package
 		}
 		
 		private static function updateCache(newInfo:Object, oldInfo:Array):void
-		{	
-			if(oldInfo == null) return; // justin's fix
-			for (var i:int = 0; i < oldInfo.length; i++) {
-				if (oldInfo[i].id == newInfo["id"]) {
-					oldInfo[i] = newInfo;
-					break;
+
+		{
+			if (oldInfo != null) {
+				for (var i:int = 0; i < oldInfo.length; i++) {
+					if (oldInfo[i].id == newInfo["id"]) {
+						oldInfo[i] = newInfo;
+						break;
+					}
 				}
+			} else {
+				oldInfo = [];
+				oldInfo.push(newInfo);
 			}
 		}
 		
@@ -725,7 +730,13 @@ package
 			variables.lid = "" + leaseInfo["lid"];
 			variables.numUnits = "" + leaseInfo["numUnits"];
 			update("http://games.cs.washington.edu/capstone/11sp/castlekd/database/addUserLease.php", variables);
-			_userLeaseInfo.push(leaseInfo);
+			if (_userLeaseInfo != null)
+				_userLeaseInfo.push(leaseInfo);
+			else {
+				_userLeaseInfo = [];
+				_userLeaseInfo.push(leaseInfo);
+			}
+				
 			if (_save.data.users[leaseInfo.id] == undefined || _save.data.users[leaseInfo.id] == null) {
 				_save.data.users[leaseInfo.id] = {
 					leases: []

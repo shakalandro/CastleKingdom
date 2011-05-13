@@ -178,8 +178,26 @@ package
 		
 		override public function preUpdate():void {
 			checkDrag();
-			
-		}
+/*
+			if (checkHighlight()) {
+				FlxG.state.add(_infoDisplay);
+				var rangeSize:int = this.range*CastleKingdom.TILE_SIZE;
+				if (_infoBox != null) {
+					_infoBox.x = this.x - rangeSize;
+					_infoBox.y = this.y - rangeSize;
+					_infoBox.visible = true;
+				}
+				if (_description != null) {
+					_description.x = this.x + width + 3, 
+					_description.y = this.y;
+					_description.visible = true;
+				}
+			} else {
+				FlxG.state.remove(_infoDisplay);
+				if (_infoBox != null) _infoBox.visible = false;
+				if (_description != null) _description.visible = false;
+			}
+*/		}
 		
 		
 		public function checkDrag():Boolean {
@@ -194,7 +212,7 @@ package
 					this.x = mouseCoords.x - _dragOffset.x;
 					this.y = mouseCoords.y - _dragOffset.y;
 					_dragOffset = null;
-					if (_dragCallback != null) _dragCallback(this, x, y, _preDragCoords.x, _preDragCoords.y);
+					if (_dragCallback != null) _dragCallback(this, mouseCoords.x, mouseCoords.y, _preDragCoords.x, _preDragCoords.y);
 					_preDragCoords = null;
 				}
 				if (_dragging) {

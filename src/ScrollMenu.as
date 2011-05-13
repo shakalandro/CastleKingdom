@@ -99,11 +99,12 @@ package
 			
 			//set the page contents
 			formatPages();
-			if (_pages.length > 0) {
-				add(_pages[0]);
-				_currentPage = 0;
-				pageCount = 0;
+			if (_pages.length == 0) {
+				_pages.push(new FlxGroup());
 			}
+			add(_pages[0]);
+			_currentPage = 0;
+			pageCount = 0;
 			checkButtons();
 		}
 

@@ -4,8 +4,8 @@ package
 	import flash.geom.*;
 	
 	import org.flixel.*;
-
-
+	
+	
 	/** DefenseUnit class
 	 * 
 	 * Class for tower type units, controls targeting of EnemyUnits and actual execution of attack
@@ -28,7 +28,7 @@ package
 		 * 
 		 */		
 		public function DefenseUnit(x:Number, y:Number, towerID:int, canDrag:Boolean = true, dragCallback:Function = null, 
-					canHighlight:Boolean = true, highlightCallback:Function = null) {
+									canHighlight:Boolean = true, highlightCallback:Function = null) {
 			super (x,y,towerID, "foundry");
 			var unitName:String = Castle.UNIT_INFO["foundry"][towerID].name;
 			var imgResource:Class = Util.assets[unitName];
@@ -46,7 +46,7 @@ package
 			addAnimation("die", [5, 6, 7], 10, false);
 			addAnimation("highlight", [0], 1, true); 
 			_target = null;
-		
+			
 			
 			
 			_infoDisplay = new FlxGroup();
@@ -95,7 +95,7 @@ package
 			if(_target != null) {
 				if(type == "Mine") {
 					this.health = 0;
-				} else {
+				} else if (this.range > 0) {
 					new AttackAnimation(this.x,this.y,_target);
 				}
 				if(_target.inflictDamage(this.damageDone)){
@@ -114,7 +114,7 @@ package
 		 * 
 		 */
 		override public function hitRanged(contact:FlxObject):void {
-		//	super.hitRanged(contact);
+			//	super.hitRanged(contact);
 			if (contact is EnemyUnit) {
 				if (_target == null || _target.health <= 0) {
 					_target = contact as Unit;
@@ -128,11 +128,11 @@ package
 				if(this.finished) {
 					(FlxG.state as ActiveState).towers.remove(this, true); 
 					this.kill();
-				//	this.kill();
+					//	this.kill();
 				} else {
 					this.play("die");
 				}
-						
+				
 			} else {
 				
 				
@@ -160,7 +160,7 @@ package
 		
 		override public function kill():void {
 			super.kill();
-			 
+			
 		}
 		
 		
@@ -176,7 +176,7 @@ package
 		 */		
 		public function betterTarget(target1:Unit, target2:Unit):Unit {
 			if (target1 != null && target1.health > 0 
-					&& compareDistance(target1, target2) <= 0 ) {
+				&& compareDistance(target1, target2) <= 0 ) {
 				return target1;
 			} else if (target2 != null && target2.health > 0 ) {
 				return target2;
