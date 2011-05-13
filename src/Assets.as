@@ -113,6 +113,10 @@ package
 		private static var landmine_normal:Class;
 		public static const LANDMINE:String = "Land Mine";
 		
+		[Embed(source = "../images/fast_tower.png")]
+		private static var fast_tower_normal:Class;
+		public static const FAST_TOWER:String = "Fast Tower";
+		
 		[Embed(source = "../images/space_needle.png")]
 		private static var space_needle:Class;
 		public static const SPACENEEDLE:String = "Space Needle";
@@ -186,6 +190,7 @@ package
 			_normal[Assets.MULTISHOT_TOWER] = multishot_tower_normal;
 			_normal[Assets.LANDMINE] = landmine_normal;
 			_normal[Assets.SPIKED_WALL] = spiked_wall_normal;
+			_normal[Assets.FAST_TOWER] = fast_tower_normal;
 
 
 			_normal[Assets.WALL] = wall_normal;
