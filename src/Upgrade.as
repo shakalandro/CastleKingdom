@@ -11,13 +11,12 @@ package
 		public var goldCost:Number;
 		public var type:String;
 		public var level:Number;
-		public var upgradeID:String;
 		private var _onClick:Function;
 		private var _box:FlxSprite;
 		private var _nameText:FlxText;
 		
 		public function Upgrade(x:Number, y:Number, width:Number, height:Number, name:String, unitWorth:Number, level:Number,
-				goldCost:Number, type:String, upgradeID:String, onClick:Function, bgColor:uint = FlxG.WHITE, borderThickness:Number = 3, 
+				goldCost:Number, type:String, onClick:Function, bgColor:uint = FlxG.WHITE, borderThickness:Number = 3, 
 				padding:Number = 10, margin:Number = 5, borderColor:uint = FlxG.BLACK) {
 			this.name = name;
 			this.unitWorth = unitWorth;
@@ -25,7 +24,6 @@ package
 			this.type = type;
 			this.level = level;
 			_onClick = onClick;
-			this.upgradeID = upgradeID;
 			
 			_box = new FlxSprite(x + margin, y + margin);
 			_box.makeGraphic(width - margin * 2, height - margin * 2, bgColor, true);
