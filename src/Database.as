@@ -8,8 +8,8 @@ package
 	public class Database
 	{
 		
-		private static const START_GOLD:int = 0;
-		private static const START_UNITS:int = 5;
+		private static const START_GOLD:int = Castle.START_GOLD;
+		private static const START_UNITS:int = Castle.START_TOWER_CAPACITY;
 		private static var _save:FlxSave;
 		private static var _loaded:Boolean;
 		private static var _userInfo:Array;
