@@ -124,14 +124,19 @@ package
 					toggleButtons(1);
 				}));
 			} else if (Castle.tutorialLevel == Castle.TUTORIAL_FIRST_DEFEND) {
+				Util.logging.startDquest(Castle.TUTORIAL_FIRST_DEFEND);
 				toggleButtons(1);
 			} else if (Castle.tutorialLevel == Castle.TUTORIAL_FIRST_WAVE) {
+				Util.logging.startDquest(Castle.TUTORIAL_FIRST_WAVE);
 				toggleButtons(2);
 			} else if (Castle.tutorialLevel == Castle.TUTORIAL_UPGRADE) {
+				Util.logging.startDquest(Castle.TUTORIAL_UPGRADE);
 				toggleButtons(3);
 			} else if (Castle.tutorialLevel == Castle.TUTORIAL_ATTACK_FRIENDS) {
+				Util.logging.startDquest(Castle.TUTORIAL_ATTACK_FRIENDS);
 				toggleButtons(4);
 			} else if (Castle.tutorialLevel == Castle.TUTORIAL_LEASE) {
+				Util.logging.startDquest(Castle.TUTORIAL_LEASE);
 				toggleButtons(5);
 			} else {
 				Util.log("ActiveState.setTutorialUI: unexpected tutorial level " + Castle.tutorialLevel);
@@ -398,7 +403,9 @@ package
 				FlxG.switchState(new AttackFriendsState(map, oldCastle, defTowers));
 			});
 			var _lease:CKButton = new CKButton(0, 0, Util.assets[Assets.LEASE_BUTTON], function():void {
-				//FlxG.switchState(new DefenseState(false, map));
+				var oldCastle:Castle = remove(castle);
+				var defTowers:FlxGroup = remove(towers);
+				FlxG.switchState(new LeaseState(map, oldCastle, defTowers));
 			});
 			
 			_hudButtons.push(_prepare);

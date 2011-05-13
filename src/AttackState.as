@@ -63,7 +63,7 @@ package
 			_gameOver = false;
 			
 			towers.setAll("canDrag", false);
-			towers.setAll("canHighlight", true);
+			towers.setAll("canHighlight", false);
 			
 			setTutorialUI();
 		}

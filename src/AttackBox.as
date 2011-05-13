@@ -66,6 +66,9 @@ package
 				obj.x = maxX + x;
 				obj.y = maxY + y;
 				maxX += obj.width;
+				if (obj is Draggable) {
+					(obj as Draggable).canDrag = false;
+				}
 				add(obj);
 				return true;
 			}

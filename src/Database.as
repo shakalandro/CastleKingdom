@@ -244,7 +244,7 @@ package
 		 * the callback function. The object that is passed to the callback function in the array is of the following form:
 		 * </p>
 		 * <p>
-		 * {id, aid}
+		 * {id, aid, leftSide, rightSide}
 		 * </p>
 		 * <p>
 		 * The id is the id of the person who is attacking the aid (one of the ids given to the function)
@@ -263,7 +263,9 @@ package
 					_pendingAttacks = processList(xmlData.attack, function(unit:XML):Object {
 						return {
 							id: unit.uid,
-							aid: unit.aid
+							aid: unit.aid,
+							leftSide: unit.leftSide,
+							rightSide: unit.rightSide
 						};
 					});
 					CastleKingdom.loading = false;

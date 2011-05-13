@@ -16,6 +16,7 @@ package
 	public class Util extends FlxU
 	{		
 		private static const _assets:Assets = new Assets();
+		private static const _logger:Logging = new Logging();
 		
 		private var _data:Database;
 		
@@ -27,6 +28,10 @@ package
 		 */		
 		public static function get assets():Dictionary {
 			return _assets.assets[CastleKingdom.SKIN];
+		}
+		
+		public static function get logging():Logging {
+			return _logger;
 		}
 		
 		public static function get state():GameState {
