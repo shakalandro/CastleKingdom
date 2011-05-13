@@ -846,8 +846,7 @@ package
 		
 		/**
 		 * <p>
-		 * Inserts the given attack information into the database. Must call isBeingAttacked first to
-		 * determine if the user is already being detected. The object passed must be of
+		 * Inserts the given upgrade information into the database. The object passed must be of
 		 * the following format:
 		 * </p>
 		 * <p>
