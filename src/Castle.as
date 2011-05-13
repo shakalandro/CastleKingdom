@@ -249,7 +249,8 @@ package
 				_upgrades[upgrade.type] = upgrade.level;
 				//TODO: call database function (upgrade);
 				//upgrade.
-				//Database.insertUserUpgrade(upgrade.
+			
+				Database.insertUserUpgrade({id:FaceBook.uid, upid:upgrade.upgradeID,xpos:0,ypos:0});
 				return true;
 			}
 			return false;
