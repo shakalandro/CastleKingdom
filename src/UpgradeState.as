@@ -95,7 +95,7 @@ package
 */
 							var upgrade:Upgrade = new Upgrade(k * (width / perRow), j * (height / perColumn), 
 								width / perRow, height / perColumn, info[index].name, info[index].unitWorth, info[index].level,
-								info[index].goldCost, info[index].type, clickCallback, bgColor);
+								info[index].goldCost, info[index].type, info[index].upid, clickCallback, bgColor);
 							group.add(upgrade);
 //
 						}

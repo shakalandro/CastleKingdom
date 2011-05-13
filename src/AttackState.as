@@ -42,9 +42,11 @@ package
 		private var _gameOver:Boolean;
 		private var _waveGold:int;
 		
-		public function AttackState(map:FlxTilemap=null, castle:Castle = null, towers:FlxGroup = null, units:FlxGroup = null)
+		public function AttackState(map:FlxTilemap=null, castle:Castle = null, towers:FlxGroup = null, units:FlxGroup = null, leftSideArmy:Array = null, rightSideArmy:Array = null)
 		{
 			super(map, castle, towers, units);
+			_placeOnLeft = leftSideArmy;
+			_placeOnRight = rightSideArmy;
 			_activeAttack = false;
 			_unitDropCounter = 10;
 			this.castle.resetGame();
@@ -94,7 +96,6 @@ package
 			} else if (Castle.tutorialLevel == Castle.TUTORIAL_LEASE) {
 				toggleButtons(5);
 			} else {
-				toggleButtons(5);
 				Util.log("AttackState.waveFinished: unknown tutorial level " + Castle.tutorialLevel);
 			}
 		}
@@ -140,16 +141,19 @@ package
 					// if none, check for automated
 					
 					// else if is, lock menus and drop dudes
-					var leftSide:Array = new Array();
-					var rightSide:Array = new Array();
+					
 					var type:String = getAttackType();
-					if (type == AttackState.REQUESTED){
+					if (leftSide != null || rightSide != null) {
+
+					} else { //if (type == AttackState.REQUESTED){
+						var leftSide:Array = new Array();
+						var rightSide:Array = new Array();
 						generateArmy(leftSide, rightSide, 10, 10);
-					} else if ( type == AttackState.TIDAL ) {
+					} /*else if ( type == AttackState.TIDAL ) {
 						generateArmy(leftSide, rightSide, 0, 15);
 					} else {  //== AttackState.REQUESTED
-						getFriendWave(leftSide, rightSide);
-					}
+						
+					} */
 					placeArmy(leftSide, rightSide);
 					
 				}

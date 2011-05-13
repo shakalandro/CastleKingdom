@@ -248,6 +248,9 @@ package
 				}
 				_upgrades[upgrade.type] = upgrade.level;
 				//TODO: call database function (upgrade);
+				//upgrade.
+			
+				Database.insertUserUpgrade({id:FaceBook.uid, upid:upgrade.upgradeID,xpos:0,ypos:0});
 				return true;
 			}
 			return false;
@@ -295,7 +298,7 @@ package
 			}
 			
 			_gold += amount;
-			Database.updateUserInfo([FaceBook.uid, _gold, this.unitCapacity + this.towerCapacity]);
+			Database.updateUserInfo({id:(FaceBook.uid), gold: _gold, units:this.unitCapacity + this.towerCapacity});
 			return true;
 		}
 		
