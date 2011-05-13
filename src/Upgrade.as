@@ -27,11 +27,8 @@ package
 			
 			_box = new FlxSprite(x + margin, y + margin);
 			_box.makeGraphic(width - margin * 2, height - margin * 2, bgColor, true);
-			//_nameText = new FlxText(x + padding, y + padding, width - padding * 4, name + "");
 			_nameText = new FlxText(x, y + (2 * padding), width, name + "");
 			_nameText.alignment = "center";
-			//var worthText:FlxText = new FlxText(x + padding, _nameText.y + _nameText.height + padding, width - padding * 2, "\t" + "unitWorth: " + unitWorth);
-			//var costText:FlxText = new FlxText(x + padding, worthText.y + worthText.height + padding, width - padding * 2, "\t" + "goldCost: " + goldCost);
 			var costText:FlxText = new FlxText(x + (2 * padding), _nameText.y + _nameText.height, width - padding * 2, "Cost: " + goldCost);
 			var towerText:FlxText = new FlxText(x + (2 * padding), costText.y + costText.height + padding, width - padding * 2, "Towers: +" + unitWorth);
 			var armyText:FlxText = new FlxText(x + (2 * padding), towerText.y + towerText.height + padding, width - padding * 2, "Armies: +" + unitWorth);
