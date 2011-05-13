@@ -326,7 +326,7 @@ package
 			}
 			var bar:HealthBar = new HealthBar();
 			bar = null;
-			var dude:Unit = new EnemyUnit(xVal, Util.minY, dudes[0],false, bar);
+			var dude:Unit = new EnemyUnit(xVal, Util.minY, dudes[0], false, bar);
 			if (dude.type == Unit.UNDERGROUND) {
 				// set dude on ground dude 
 			} else if (dude.type == Unit.AIR) {

@@ -34,10 +34,27 @@ package
 		public static const FRAMERATE_PAUSED:uint = 10;
 		
 		private static var _debug:FlxDebugger;
+		
+		private static var _loading:FlxGroup;
+		private static var numWaiting:int;
 						
 		public function CastleKingdom()
 		{
 			super(WIDTH, HEIGHT, LoginState, 1);
+			
+			_loading = new FlxGroup();
+			var loadText:FlxText = new FlxText(0, 0, 200, "Loading...");
+			loadText.color = FlxG.RED;
+			loadText.size = 32;
+			var bg:FlxSprite = new FlxSprite(0, 0);
+			bg.makeGraphic(loadText.width * 1.5, loadText.height * 1.5, 0x44ffffff);
+			Util.center(bg);
+			Util.center(loadText);
+			_loading.add(loadText);
+			_loading.visible = false;
+			numWaiting = 0;
+			
+			
 			FlxG.mouse.show(Util.assets[Assets.CURSOR]);
 			FlxG.framerate = FRAMERATE;
 			
@@ -45,6 +62,8 @@ package
 				_debug = new FlxDebugger(CastleKingdom.WIDTH, CastleKingdom.HEIGHT);
 				_debug.setLayout(FlxG.DEBUGGER_BIG);
 			}
+			
+			
 		}
 		
 		public static function get flashVars():Object {
@@ -53,6 +72,30 @@ package
 		
 		public static function get debug():FlxDebugger {
 			return _debug;
+		}
+		
+		public static function get loading():Boolean {
+			return _loading != null && _loading.visible;
+		}
+		
+		public static function set loading(t:Boolean):void {
+			if (t && _loading != null && !_loading.visible && numWaiting == 0) {
+				Util.log("Loading image added");
+				_loading.visible = true;
+				FlxG.state.add(_loading);
+			} else if (!t && _loading != null && _loading.visible && numWaiting == 0) {
+				Util.log("Loading image removed");
+				_loading.visible = false;
+				FlxG.state.remove(_loading);
+			} else {
+				FlxG.state.add(FlxG.state.remove(_loading));
+			}
+			if (t) {
+				numWaiting++;
+			} else {
+				numWaiting--;
+			}
+			Util.log("Loading count: ", numWaiting, _loading != null);
 		}
 		
 		// Disable automatic pausing

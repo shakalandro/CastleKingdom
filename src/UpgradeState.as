@@ -32,7 +32,6 @@ package
 				
 				var upgrades:Array = createUpgrades(info.slice(0, (info.length + 1) / 2), castle.x - Util.minX - padding * 2, 
 						Util.maxY - Util.minY - 50 - padding * 2, 2, 4, acquireUpgrade);
-				
 				_leftMenu = new ScrollMenu(Util.minX, Util.minY, upgrades, closeMenus, "Castle Upgrades", 
 					FlxG.WHITE, padding, castle.x - Util.minX, Util.maxY - Util.minY);
 				
@@ -58,8 +57,8 @@ package
 			}
 		}
 		
-		private function acquireUpgrade(upgrade:Upgrade):void {
-			castle.setUpgrade(upgrade);
+		private function acquireUpgrade(upgrade:Upgrade):Boolean {
+			return castle.setUpgrade(upgrade);
 		}
 		
 		private function createUpgrades(info:Array, width:Number, height:Number, perRow:int, perColumn:int, clickCallback:Function):Array {
