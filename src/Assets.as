@@ -128,6 +128,10 @@ package
 		[Embed(source = "../images/button_small.png")]
 		private static var button_small_img:Class;
 		public static const BUTTON_SMALL:String = "Small Button";
+		
+		[Embed(source = "../images/loader.png")]
+		private static var loader_img:Class;
+		public static const LOADER:String = "Loader";
 	
 		// Text resources
 		
