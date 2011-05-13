@@ -51,6 +51,10 @@ package
 			_box.makeGraphic(width, pic.height + padding * 2, bgColor);
 			Util.drawBorder(_box);
 			
+			Database.isBeingAttacked(function(t:Boolean):void {
+				_beingAttacked = t;
+			}, uid, true);
+			
 			add(_box);
 			add(_pic);
 			add(_text);

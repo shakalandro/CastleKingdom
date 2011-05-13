@@ -258,7 +258,6 @@ package
 		 */
 		public static function pendingAttacks(callback:Function, ids:Object = null, forceRefresh:Boolean = false):void {
 			if (forceRefresh || _pendingAttacks == null) {
-				CastleKingdom.loading = true;
 				getMain("http://games.cs.washington.edu/capstone/11sp/castlekd/database/pendingUserAttacks.php", function(xmlData:XML):void {
 					_pendingAttacks = processList(xmlData.attack, function(unit:XML):Object {
 						return {
@@ -268,7 +267,6 @@ package
 							rightSide: unit.rightSide
 						};
 					});
-					CastleKingdom.loading = false;
 					callback(_pendingAttacks);
 				}, ids);
 			} else {

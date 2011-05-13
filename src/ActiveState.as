@@ -1,5 +1,6 @@
 package
 {
+	import flash.events.TimerEvent;
 	import flash.utils.Timer;
 	
 	import mx.utils.StringUtil;
@@ -21,7 +22,7 @@ package
 		public static const BUTTON_DIST:Number = 75;
 		
 		// Five minute interval between lookups about pending attack status
-		public static const ATTACK_DETECTION_INTERVAL:Number = 60000 * 5;
+		public static const ATTACK_DETECTION_INTERVAL:Number = 10000;
 				
 		private static const HUD_BUTTON_PADDING:uint = 10;
 		
@@ -67,6 +68,7 @@ package
 			_castle = castle;
 			_hudButtons = [];
 			_attackTimer = new Timer(ATTACK_DETECTION_INTERVAL, 1);
+			_attackTimer.addEventListener(TimerEvent.TIMER_COMPLETE, checkForPendingAttacks);
 			_attackTimer.start();
 		}
 		
@@ -143,27 +145,29 @@ package
 			}
 		}
 		
+		private function checkForPendingAttacks(e:TimerEvent):void {
+			Util.log("looking for pending attack");
+			Database.pendingAttacks(function(attacks:Array):void {
+				if (attacks == null || attacks.length == 0) {
+					Util.log("ActiveState.update, no pending attack");
+				} else {
+					FaceBook.getNameByID(attacks[0].id, function(name:String):void {
+						if (name != null) {
+							add(new MessageBox(StringUtil.substitute(Util.assets[Assets.INCOMING_WAVE], name), "Okay", function():void {
+								FlxG.switchState(new DefenseState(map, remove(castle) as Castle, remove(towers) as FlxGroup, true));
+							}));
+						} else {
+							Util.log("ActiveState.update pending attack, but user unknown " + attacks[0].id);
+						}
+					});
+				}
+			}, FaceBook.uid);
+			_attackTimer.reset();
+			_attackTimer.start();
+		}
+		
 		override public function update():void {
 			super.update();
-			if (!_attackTimer.running) {
-				Database.pendingAttacks(function(attacks:Array):void {
-					if (attacks == null || attacks.length == 0) {
-						Util.log("ActiveState.update, no pending attack");
-					} else {
-						FaceBook.getNameByID(attacks[0].id, function(name:String):void {
-							if (name != null) {
-								add(new MessageBox(StringUtil.substitute(Util.assets[Assets.INCOMING_WAVE], name), "Okay", function():void {
-									FlxG.switchState(new DefenseState(map, remove(castle) as Castle, remove(towers) as FlxGroup, true));
-								}));
-							} else {
-								Util.log("ActiveState.update pending attack, but user unknown " + attacks[0].id);
-							}
-						});
-					}
-				});
-				_attackTimer.reset();
-				_attackTimer.start();
-			}
 			drawStats();
 		}
 		
