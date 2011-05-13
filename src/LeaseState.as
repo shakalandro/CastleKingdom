@@ -1,6 +1,9 @@
 package
 {
+	import flash.text.*;
+	
 	import org.flixel.*;
+	import org.flixel.system.input.Input;
 	
 	public class LeaseState extends ActiveState
 	{
@@ -31,12 +34,22 @@ package
 					add(_leftMenu);
 				});
 				
-				_middleMenu = new ScrollMenu(castle.x, Util.minY, makeLeasePage(), closeMenus, "Close", FlxG.WHITE, padding, castle.width, Util.maxY - Util.minY); 
+				var page:Array = makeLeasePage(castle.x, Util.minY, castle.width, Util.maxY - Util.minY, padding);
+				_middleMenu = new ScrollMenu(castle.x, Util.minY, page, closeMenus, "Close", FlxG.WHITE, padding, castle.width, Util.maxY - Util.minY); 
+				add(_middleMenu);
 			}, Castle.computeValue);
 		}
 		
-		private function makeLeasePage():Array {
+		private function makeLeasePage(x:Number, y:Number, width:Number, height:Number, padding:Number = 10):Array {
 			var page:Array = [];
+			var group:FlxGroup = new FlxGroup();
+			var text:FlxText = new FlxText(0, 0, width - padding * 2, "How many units of tower capacity would you like to lease?");
+			text.alignment = "center";
+			text.color = FlxG.BLACK;
+			var slider:Slider = new Slider(0, 0, width - padding * 2, 100);
+			group.add(text);
+			group.add(slider);
+			page.push(group);
 			return page;
 		}
 		

@@ -132,6 +132,10 @@ package
 		[Embed(source = "../images/loader.png")]
 		private static var loader_img:Class;
 		public static const LOADER:String = "Loader";
+		
+		[Embed(source = "../images/startpage_background.png")]
+		private static var startpage_background:Class;
+		public static const LOGIN_BACKGROUND:String = "Login Background";
 	
 		// Text resources
 		
@@ -186,6 +190,7 @@ package
 			_normal[Assets.CASTLE] = castle_img;
 			_normal[Assets.CURSOR] = cursor_img;
 			_normal[Assets.BACKGROUND] = background_img;
+			_normal[Assets.LOGIN_BACKGROUND] = startpage_background;
 			
 			_normal[Assets.ARROW_TOWER] = arrow_tower_normal;
 			_normal[Assets.SNIPER_TOWER] = sniper_tower_normal;

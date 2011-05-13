@@ -48,11 +48,10 @@ package
 					_leftMenu = new ScrollMenu(Util.minX, Util.minY, pages, closeMenus, "Attack Friends", FlxG.WHITE, padding, 
 						castle.x - Util.minX, Util.maxY - Util.minY, 3, moveUnit);
 					add(_leftMenu);
+					
+					_middleMenu = new ScrollMenu(castle.x, Util.minY, page, closeMenus, "Place Here", FlxG.WHITE, padding, castle.width, Util.maxY - Util.minY, 3);
+					add(_middleMenu);
 				});
-				
-				_middleMenu = new ScrollMenu(castle.x, Util.minY, page, closeMenus, "Place Here", FlxG.WHITE, padding, castle.width, Util.maxY - Util.minY, 3);
-				add(_middleMenu);
-				
 			}, Castle.computeValue);
 		}
 		

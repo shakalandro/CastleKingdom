@@ -221,7 +221,7 @@ package
 				FaceBook.friends(function(friends:Array):void {
 					CastleKingdom.loading = false;
 					for each(var friend:Object in friends) {
-						if (friend.id + "" == id) {
+						if (friend.id + "" == id + "") {
 							callback(friend.name);
 							break;
 						}

@@ -20,10 +20,7 @@ package
 		public static const ATTACK_MENU:String = "attack";
 		public static const DEFEND_MENU:String = "defend";
 		public static const BUTTON_DIST:Number = 75;
-		
-		// Five minute interval between lookups about pending attack status
-		public static const ATTACK_DETECTION_INTERVAL:Number = 10000;
-				
+						
 		private static const HUD_BUTTON_PADDING:uint = 10;
 		
 		/**
@@ -67,9 +64,6 @@ package
 			_attackAnims = new FlxGroup();
 			_castle = castle;
 			_hudButtons = [];
-			_attackTimer = new Timer(ATTACK_DETECTION_INTERVAL, 1);
-			_attackTimer.addEventListener(TimerEvent.TIMER_COMPLETE, checkForPendingAttacks);
-			_attackTimer.start();
 		}
 		
 		/**
@@ -79,37 +73,40 @@ package
 		 */		
 		override public function create():void {
 			super.create();
-			add(_towers);
-			add(_units);
-			add(_attackAnims);
-			_castle = _castle || new Castle(0, 0, Util.assets[Assets.CASTLE]);
-			Util.centerX(_castle);
-			Util.placeInZone(_castle, map);
-			add(_castle);
-			if (CastleKingdom.FACEBOOK_ON) {
-				FaceBook.picture(function(pic:Class):void {
-					var profilePic:FlxSprite = new FlxSprite(0, 0, pic);
-					profilePic.allowCollisions = FlxObject.NONE;
-					profilePic.immovable = true;
-					Util.center(profilePic, header);
-					profilePic.x = Util.maxX - profilePic.width;
-					hud.add(profilePic);
-				}, "me", false);
-			}
-			/*
-			if (CastleKingdom.DEBUG) {
-				var clear:CKButton = new CKButton(0, 0, "Clear", function():void {
-					Util.log("Clearing the tutorial info: " + FaceBook.uid + ", " + Castle.TUTORIAL_NEW_USER);
-					Database.updateUserTutorialInfo(FaceBook.uid, Castle.TUTORIAL_NEW_USER);
-				});
-				clear.x = _hudButtons[0].x + _hudButtons[0].width + 20;
-				Util.centerY(clear, header);
-				clear.allowCollisions = FlxObject.NONE;
-				clear.immovable = true;
-				add(clear);
-			}
-			*/ 
-			setTutorialUI();
+			
+			this.checkForPendingAttacks(function():void {
+				add(_towers);
+				add(_units);
+				add(_attackAnims);
+				_castle = _castle || new Castle(0, 0, Util.assets[Assets.CASTLE]);
+				Util.centerX(_castle);
+				Util.placeInZone(_castle, map);
+				add(_castle);
+				if (CastleKingdom.FACEBOOK_ON) {
+					FaceBook.picture(function(pic:Class):void {
+						var profilePic:FlxSprite = new FlxSprite(0, 0, pic);
+						profilePic.allowCollisions = FlxObject.NONE;
+						profilePic.immovable = true;
+						Util.center(profilePic, header);
+						profilePic.x = Util.maxX - profilePic.width;
+						hud.add(profilePic);
+					}, "me", false);
+				}
+				/*
+				if (CastleKingdom.DEBUG) {
+					var clear:CKButton = new CKButton(0, 0, "Clear", function():void {
+						Util.log("Clearing the tutorial info: " + FaceBook.uid + ", " + Castle.TUTORIAL_NEW_USER);
+						Database.updateUserTutorialInfo(FaceBook.uid, Castle.TUTORIAL_NEW_USER);
+					});
+					clear.x = _hudButtons[0].x + _hudButtons[0].width + 20;
+					Util.centerY(clear, header);
+					clear.allowCollisions = FlxObject.NONE;
+					clear.immovable = true;
+					add(clear);
+				}
+				*/ 
+				setTutorialUI();
+			});
 		}
 		
 		/**
@@ -140,25 +137,32 @@ package
 			}
 		}
 		
-		private function checkForPendingAttacks(e:TimerEvent):void {
+		/**
+		 * Checks if there is an attack pending and if so the attack is started, 
+		 * otherwise the callback is executed which presumably establishes other ui 
+		 * @param callback A callback with the signature callback():void
+		 * 
+		 */		
+		private function checkForPendingAttacks(callback:Function):void {
 			Util.log("looking for pending attack");
 			Database.pendingAttacks(function(attacks:Array):void {
 				if (attacks == null || attacks.length == 0) {
+					callback();
 					Util.log("ActiveState.update, no pending attack");
 				} else {
 					FaceBook.getNameByID(attacks[0].id, function(name:String):void {
 						if (name != null) {
-							add(new MessageBox(StringUtil.substitute(Util.assets[Assets.INCOMING_WAVE], name), "Okay", function():void {
+							toggleButtons(0);
+							FlxG.state.add(new MessageBox(StringUtil.substitute(Util.assets[Assets.INCOMING_WAVE], name), "Okay", function():void {
 								FlxG.switchState(new DefenseState(map, remove(castle) as Castle, remove(towers) as FlxGroup, true));
 							}));
 						} else {
-							Util.log("ActiveState.update pending attack, but user unknown " + attacks[0].id);
+							callback();
+							Util.logObj("ActiveState.update pending attack, but user unknown ", attacks[0]);
 						}
 					});
 				}
 			}, FaceBook.uid);
-			_attackTimer.reset();
-			_attackTimer.start();
 		}
 		
 		override public function update():void {
@@ -384,39 +388,29 @@ package
 			var _prepare:CKButton = new CKButton(0, 0, Util.assets[Assets.PLACE_TOWER_BUTTON], function():void {
 				var oldCastle:Castle = remove(castle);
 				var defTowers:FlxGroup = remove(towers);
-
 				Util.logging.startDquest(Castle.TUTORIAL_FIRST_DEFEND);
-
 				FlxG.switchState(new DefenseState(map, oldCastle, defTowers));
 			});
 			var _release:CKButton = new CKButton(0, 0, Util.assets[Assets.RELEASE_WAVE_BUTTON], function():void {
 				var defTowers:FlxGroup = remove(towers);
 				var oldCastle:Castle = remove(castle);
-
 				Util.logging.startDquest(Castle.TUTORIAL_FIRST_WAVE);
-
 				FlxG.switchState(new AttackState(map, oldCastle, defTowers));
 			});
 			var _upgrade:CKButton = new CKButton(0, 0, Util.assets[Assets.UPGRADE_BUTTON], function():void {
 				var oldCastle:Castle = remove(castle);
 				var defTowers:FlxGroup = remove(towers);
-
 				Util.logging.startDquest(Castle.TUTORIAL_UPGRADE);
-
 				FlxG.switchState(new UpgradeState(map, oldCastle, defTowers));
 			});
 			var _attack:CKButton = new CKButton(0, 0, Util.assets[Assets.ATTACK_BUTTON], function():void {
 				var oldCastle:Castle = remove(castle);
 				var defTowers:FlxGroup = remove(towers);
-
 				Util.logging.startDquest(Castle.TUTORIAL_ATTACK_FRIENDS);
-
 				FlxG.switchState(new AttackFriendsState(map, oldCastle, defTowers));
 			});
 			var _lease:CKButton = new CKButton(0, 0, Util.assets[Assets.LEASE_BUTTON], function():void {
-
 				Util.logging.startDquest(Castle.TUTORIAL_LEASE);
-				//FlxG.switchState(new DefenseState(false, map));
 				var oldCastle:Castle = remove(castle);
 				var defTowers:FlxGroup = remove(towers);
 				FlxG.switchState(new LeaseState(map, oldCastle, defTowers));

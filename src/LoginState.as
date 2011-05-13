@@ -19,22 +19,28 @@ package
 		
 		override public function create():void {
 			super.create();
-			
+			add(new FlxSprite(0, 0, Util.assets[Assets.LOGIN_BACKGROUND]));
+
 			if (CastleKingdom.FACEBOOK_ON) {
 				_startButton = new FlxButton(0, 0, "Play", login);
 			} else {
 				_startButton = new FlxButton(0, 0, "Play", start);
 			}
-			Util.center(_startButton);
-			_startButton.y -= BUTTON_SEPARATION / 2;
+			
+			_startButton.makeGraphic(250, 100, 0x00000000, true);
+			_startButton.y = 325;
+			_startButton.x = 50;
+			_startButton.width = 250;
+			_startButton.height = 100;
 			add(_startButton);
+			
 			
 			_helpButton = new FlxButton(0, 0, "Help", function():void {
 				drawHelp(CastleKingdom.WIDTH / 4, CastleKingdom.HEIGHT / 4, 
 					CastleKingdom.WIDTH / 2, CastleKingdom.HEIGHT / 2);
 			});
-			Util.center(_helpButton);
-			_helpButton.y += BUTTON_SEPARATION / 2;
+			_helpButton.x = Util.maxX - _helpButton.width - 10;
+			_helpButton.y = Util.maxY - _helpButton.height - 10;
 			add(_helpButton);
 			
 			Database.load();
