@@ -41,17 +41,18 @@ package
 					_rightMenu = new ScrollMenu(castle.x + castle.width, Util.minY, pages, closeMenus, "Attack Friends", FlxG.WHITE, 
 						padding, Util.maxX - castle.x - castle.width, Util.maxY - Util.minY);
 					add(_rightMenu);
-					
-					Database.getEnemyInfo(function(units:Array):void {
-						var pages:Array = formatUnits(units, castle.x - Util.minX, Util.maxY - Util.minY - 50, 2, 4);
-						_leftMenu = new ScrollMenu(Util.minX, Util.minY, pages, closeMenus, "Attack Friends", FlxG.WHITE, padding, 
-							castle.x - Util.minX, Util.maxY - Util.minY, 3, moveUnit);
-						add(_leftMenu);
-					});
-					
-					_middleMenu = new ScrollMenu(castle.x, Util.minY, page, closeMenus, "Place Here", FlxG.WHITE, padding, castle.width, Util.maxY - Util.minY, 3);
-					add(_middleMenu);
 				});
+				
+				Database.getEnemyInfo(function(units:Array):void {
+					var pages:Array = formatUnits(units, castle.x - Util.minX, Util.maxY - Util.minY - 50, 2, 4);
+					_leftMenu = new ScrollMenu(Util.minX, Util.minY, pages, closeMenus, "Attack Friends", FlxG.WHITE, padding, 
+						castle.x - Util.minX, Util.maxY - Util.minY, 3, moveUnit);
+					add(_leftMenu);
+				});
+				
+				_middleMenu = new ScrollMenu(castle.x, Util.minY, page, closeMenus, "Place Here", FlxG.WHITE, padding, castle.width, Util.maxY - Util.minY, 3);
+				add(_middleMenu);
+				
 			}, Castle.computeValue);
 		}
 		

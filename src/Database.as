@@ -30,7 +30,6 @@ package
 		
 		private static function getMain(url:String, callback:Function, ids:Object = null):void
 		{
-			CastleKingdom.loading = true;
 			var request:URLRequest = new URLRequest(url);
 			request.method = URLRequestMethod.POST;
 			if (ids != null) {
@@ -42,6 +41,7 @@ package
 			var loader:URLLoader = new URLLoader();
 			Util.log("request.url: " + request.url);
 			loader.dataFormat = URLLoaderDataFormat.TEXT;
+			CastleKingdom.loading = true;
 			loader.addEventListener(Event.COMPLETE, function(evt:Event):void {
 				CastleKingdom.loading = false;
 				callback(new XML(evt.target.data));
@@ -70,6 +70,7 @@ package
 			if (forceRefresh || _userInfo == null) {
 				CastleKingdom.loading = true;
 				getMain("http://games.cs.washington.edu/capstone/11sp/castlekd/database/getUserInfo.php", function(xmlData:XML):void {
+					CastleKingdom.loading = false;
 					_userInfo = processList(xmlData.user, function(unit:XML):Object {
 						return {
 							id: unit.uid,
@@ -77,7 +78,6 @@ package
 							units: unit.units
 						};
 					});
-					CastleKingdom.loading = false;
 					callback(_userInfo);
 				}, ids);
 			} else {
@@ -109,6 +109,7 @@ package
 			if (forceRefresh || _userUps == null) {
 				CastleKingdom.loading = true;
 				getMain("http://games.cs.washington.edu/capstone/11sp/castlekd/database/getUserUpgrades.php", function(xmlData:XML):void {
+					CastleKingdom.loading = false;
 					_userInfo = processList(xmlData.user, function(unit:XML):Object {
 						return {
 							id: unit.uid,
@@ -117,7 +118,6 @@ package
 							ypos: unit.ypos
 						};
 					});
-					CastleKingdom.loading = false;
 					callback(_userUps);			
 				}, ids);
 			} else {
@@ -148,6 +148,7 @@ package
 			if (forceRefresh || _userLeaseInfo == null) {
 				CastleKingdom.loading = true;
 				getMain("http://games.cs.washington.edu/capstone/11sp/castlekd/database/getUserLeases.php", function(xmlData:XML):void {
+					CastleKingdom.loading = false;
 					_userLeaseInfo = processList(xmlData.user, function(unit:XML):Object {
 						return {
 							id: unit.uid,
@@ -155,7 +156,6 @@ package
 							numUnits: unit.numUnits
 						};
 					});
-					CastleKingdom.loading = false;
 					callback(_userLeaseInfo);
 				}, ids);
 			} else {
@@ -185,6 +185,7 @@ package
 			if (forceRefresh || _userTutorialInfo == null) {
 				CastleKingdom.loading = true;
 				getMain("http://games.cs.washington.edu/capstone/11sp/castlekd/database/getUserTutorial.php", function(xmlData:XML):void {
+					CastleKingdom.loading = false;
 					_userTutorialInfo = processList(xmlData.user, function(unit:XML):Object {
 						return {
 							id: unit.uid,
@@ -196,7 +197,6 @@ package
 							tut6: unit.tut6
 						};
 					});
-					CastleKingdom.loading = false;
 					callback(_userTutorialInfo);
 				}, ids);
 			} else {
@@ -225,12 +225,12 @@ package
 			if (forceRefresh || _attacked == null) {
 				CastleKingdom.loading = true;
 				getMain("http://games.cs.washington.edu/capstone/11sp/castlekd/database/getUserAttacks.php", function(xmlData:XML):void {
+					CastleKingdom.loading = false;
 					_attacked = processList(xmlData.attack, function(unit:XML):Object {
 						return {
 							id: unit.aid
 						};
 					});
-					CastleKingdom.loading = false;
 					callback(_attacked);
 				}, ids);
 			} else {
@@ -260,6 +260,7 @@ package
 			if (forceRefresh || _pendingAttacks == null) {
 				CastleKingdom.loading = true;
 				getMain("http://games.cs.washington.edu/capstone/11sp/castlekd/database/pendingUserAttacks.php", function(xmlData:XML):void {
+					CastleKingdom.loading = false;
 					_pendingAttacks = processList(xmlData.attack, function(unit:XML):Object {
 						return {
 							id: unit.uid,
@@ -268,7 +269,6 @@ package
 							rightSide: unit.rightSide
 						};
 					});
-					CastleKingdom.loading = false;
 					callback(_pendingAttacks);
 				}, ids);
 			} else {
@@ -297,6 +297,7 @@ package
 			if (forceRefresh || _defUnitInfo == null) {
 				CastleKingdom.loading = true;
 				getMain("http://games.cs.washington.edu/capstone/11sp/castlekd/database/getDefInfo.php", function(xmlData:XML):void {
+					CastleKingdom.loading = false;
 					_defUnitInfo = processList(xmlData.def, function(unit:XML):Object {
 						return {
 							id: unit.did,
@@ -311,7 +312,6 @@ package
 							clas: unit.clas
 						};
 					});
-					CastleKingdom.loading = false;
 					callback(_defUnitInfo);
 				}, ids);
 			} else {
@@ -340,6 +340,7 @@ package
 			if (forceRefresh || _enemyInfo == null) {
 				CastleKingdom.loading = true;
 				getMain("http://games.cs.washington.edu/capstone/11sp/castlekd/database/getArmyInfo.php", function(xmlData:XML):void {
+					CastleKingdom.loading = false;
 					_enemyInfo = processList(xmlData.army, function(unit:XML):Object {
 						return {
 							id: unit.aid,
@@ -357,7 +358,6 @@ package
 							clas: unit.clas
 						};
 					});
-					CastleKingdom.loading = false;
 					callback(_enemyInfo);
 				}, ids);
 			} else {
@@ -386,7 +386,9 @@ package
 		 */
 		public static function getUpgradesInfo(callback:Function, levels:Object = null, types:Object = null, forceRefresh:Boolean = false):void {
 			if (forceRefresh || _upgradeInfo == null) {
+				CastleKingdom.loading = true;
 				upgradeMain("http://games.cs.washington.edu/capstone/11sp/castlekd/database/getUpgradeInfo.php", function(xmlData:XML):void {
+					CastleKingdom.loading = false;
 					_upgradeInfo = processList(xmlData.upgrade, function(unit:XML):Object {
 						return {
 							id: unit.id,
@@ -560,7 +562,6 @@ package
 		
 		private static function upgradeMain(url:String, callback:Function, levels:Object = null, types:Object = null):void
 		{
-			CastleKingdom.loading = true;
 			var request:URLRequest = new URLRequest(url);
 			request.method = URLRequestMethod.POST;
 			var variables:URLVariables = new URLVariables();
@@ -574,9 +575,10 @@ package
 			FlxG.log("request.data: " + request.data.toString());
 			var loader:URLLoader = new URLLoader();
 			loader.dataFormat = URLLoaderDataFormat.TEXT;
+			CastleKingdom.loading = true;
 			loader.addEventListener(Event.COMPLETE, function(evt:Event):void {
-				callback(new XML(evt.target.data));
 				CastleKingdom.loading = false;
+				callback(new XML(evt.target.data));
 			});
 			loader.load(request);
 		}

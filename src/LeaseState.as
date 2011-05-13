@@ -8,6 +8,7 @@ package
 		
 		private var _rightMenu:ScrollMenu;
 		private var _leftMenu:ScrollMenu;
+		private var _middleMenu:ScrollMenu;
 		
 		public function LeaseState(map:FlxTilemap=null, castle:Castle=null, towers:FlxGroup=null, units:FlxGroup=null)
 		{
@@ -29,7 +30,14 @@ package
 						padding, Util.maxX - castle.x - castle.width, Util.maxY - Util.minY);
 					add(_leftMenu);
 				});
+				
+				_middleMenu = new ScrollMenu(castle.x, Util.minY, makeLeasePage(), closeMenus, "Close", FlxG.WHITE, padding, castle.width, Util.maxY - Util.minY); 
 			}, Castle.computeValue);
+		}
+		
+		private function makeLeasePage():Array {
+			var page:Array = [];
+			return page;
 		}
 		
 		private function closeMenus():void {
