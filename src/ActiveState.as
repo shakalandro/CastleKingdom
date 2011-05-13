@@ -372,8 +372,7 @@ package
 			var _attack:CKButton = new CKButton(0, 0, Util.assets[Assets.ATTACK_BUTTON], function():void {
 				var oldCastle:Castle = remove(castle);
 				var defTowers:FlxGroup = remove(towers);
-				var oldUnits:FlxGroup = remove(units);
-				FlxG.switchState(new AttackFriendsState(map, oldCastle, defTowers, units));
+				FlxG.switchState(new AttackFriendsState(map, oldCastle, defTowers));
 			});
 			var _lease:CKButton = new CKButton(0, 0, Util.assets[Assets.LEASE_BUTTON], function():void {
 				//FlxG.switchState(new DefenseState(false, map));

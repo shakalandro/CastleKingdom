@@ -42,6 +42,7 @@ package
 		 * 
 		 */		
 		public static function connect(callback:Function, accessToken:String = null):void {
+			CastleKingdom.loading = true;
 			Facebook.init(CastleKingdom.FACEBOOK_APP_ID, function(success:Object, fail:Object):void {
 				if (!success) {
 					Util.log("Facebook.init failed: " + success + ", " + fail);
@@ -53,11 +54,13 @@ package
 							Util.log("" + success);
 							_facebookReady = true;
 						}
+						CastleKingdom.loading = false;
 						callback(_facebookReady);
 					});
 				} else {
 					Util.log("Facebook.init successful: logged in already");
 					_facebookReady = true;
+					CastleKingdom.loading = false;
 					callback(_facebookReady);
 				}
 			}, null, accessToken);
@@ -76,8 +79,9 @@ package
 				if (result.status == "connected") {
 					_facebookReady = true;
 					Util.log("Facebook.getLoginStatus successful: " + result);
-					callback(_facebookReady);
+					CastleKingdom.loading = false
 					Facebook.removeJSEventListener("auth.sessionChange", this);
+					callback(_facebookReady);
 				} else {
 					Util.log("Facebook.getLoginStatus failed: " + result.status);
 				}
@@ -117,9 +121,11 @@ package
 				Util.logObj("_facebookUserInfo[uid]:", _facebookUserInfo[uid]);
 				callback(_facebookUserInfo[uid]);
 			} else {
+				CastleKingdom.loading = true;
 				Facebook.api("/" + uid, function(results:Object, fail:Object):void {
 					if (results) {
 						_facebookUserInfo[uid] = results;
+						CastleKingdom.loading = false;
 						callback(results);
 					} else {
 						Util.log("Util.facebookUserInfo: failed /" + uid + " " + fail);
@@ -152,11 +158,14 @@ package
 			} else if (_facebookFriends && !forceRefresh) {
 				callback(helper(_facebookFriends, justNames));	
 			} else {
+				CastleKingdom.loading = true;
 				Facebook.api("/me/friends", function(result:Object, fail:Object):void {
 					if (result) {
 						_facebookFriends = result;
+						CastleKingdom.loading = false;
 						callback(helper(_facebookFriends, justNames));
 					} else {
+						CastleKingdom.loading = false;
 						callback(result);
 					}
 				});
@@ -177,6 +186,7 @@ package
 		 */		
 		public static function picture(callback:Function, uid:String = "me", forceRefresh:Boolean = false, size:String = "square"):void {
 			function helper(info:String):void {
+				CastleKingdom.loading = true;
 				var url:URLRequest = new URLRequest(info);
 				var context:LoaderContext = new LoaderContext(true);
 				context.securityDomain = SecurityDomain.currentDomain;
@@ -184,6 +194,7 @@ package
 				loader.contentLoaderInfo.addEventListener(Event.COMPLETE, function(e:Event):void {
 					_facebookPics[uid] = e.target.content.bitmapData;
 					ExternalImage.setData(_facebookPics[uid], uid);
+					CastleKingdom.loading = false;
 					callback(ExternalImage);
 				});
 				loader.load(url, context);
@@ -213,16 +224,19 @@ package
 		 * 
 		 */		
 		public static function getNameByID(id:String, callback:Function):void {
-			if (id == FaceBook.uid + "") {
+			if (id == FaceBook.uid + "" || id == "me") {
 				callback(FaceBook.session().user.name);
 			} else {
+				CastleKingdom.loading = true;
 				FaceBook.friends(function(friends:Array):void {
 					for (var friend:Object in friends) {
 						if (friend.id == id) {
+							CastleKingdom.loading = false;
 							callback(friend.name);
 							break;
 						}
 					}
+					CastleKingdom.loading = false;
 					callback(null);
 				}, false);
 			}
@@ -236,11 +250,13 @@ package
 		 * 
 		 */		
 		public static function getAllPictures(ids:Array, callback:Function, border:Boolean = true):void {
+			CastleKingdom.loading = true;
 			getAllPicturesHelper(ids, callback, [], border);
 		}
 		
 		private static function getAllPicturesHelper(ids:Array, callback:Function, result:Array, border:Boolean, borderThickness:Number = 3):void {
 			if (ids.length == 0) {
+				CastleKingdom.loading = false;
 				callback(result);
 			} else {
 				var id:String = ids[0].id || ids[0];

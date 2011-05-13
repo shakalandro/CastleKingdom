@@ -88,7 +88,7 @@ package
 		 * @param hpBar - optional HealthBar to keep track of unit's health
 		 * 
 		 */		
-		public function Unit(x:Number, y:Number, unitID:int, unitType:String, ignoreMePlease:Boolean = false, hpBar:HealthBar = null, 
+		public function Unit(x:Number, y:Number, unitID:int, unitType:String, hpBar:HealthBar = null, 
 				canDrag:Boolean = true, dragCallback:Function = null, 
 				canHighlight:Boolean = true, highlightCallback:Function = null) {
 			super (x,y,null);
@@ -552,7 +552,7 @@ package
 		}
 		
 		public function clone():Unit {
-			var yuri:Unit = new Unit(x,y,this._unitID, _creator, true, new HealthBar());
+			var yuri:Unit = new Unit(x,y,this._unitID, _creator, new HealthBar(), _canDrag, _dragCallback, _canHighlight, _highlightCallback);
 			return yuri;
 		}
 		
