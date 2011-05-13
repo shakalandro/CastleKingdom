@@ -1,10 +1,11 @@
 package
 {
-	import org.flixel.FlxGroup;
-	import org.flixel.FlxTilemap;
+	import org.flixel.*;
 	
 	public class LeaseState extends ActiveState
 	{
+		public static const LEVEL_THRESHHOLD:Number = 75;
+		
 		private var _rightMenu:ScrollMenu;
 		private var _leftMenu:ScrollMenu;
 		
@@ -14,18 +15,26 @@ package
 		}
 		
 		override public function create():void {
+			super.create();
+			var padding:Number = 10;
+			
 			Util.getFriendsInRange(Castle.computeValue(castle), LEVEL_THRESHHOLD, function(friends:Array):void {
 				formatFriends(friends.slice(0, (friends.length + 1) / 2), castle.x - Util.minX - padding * 2, Util.maxY - Util.minY - 50, 5, function(pages:Array):void {
-					_rightMenu = new ScrollMenu(castle.x + castle.width, Util.minY, pages, closeMenus, "Attack Friends", FlxG.WHITE, 
+					_rightMenu = new ScrollMenu(Util.minX, Util.minY, pages, closeMenus, "Attack Friends", FlxG.WHITE, 
 						padding, Util.maxX - castle.x - castle.width, Util.maxY - Util.minY);
 					add(_rightMenu);
 				});
 				formatFriends(friends.slice((friends.length + 1) / 2, friends.length), castle.x - Util.minX - padding * 2, Util.maxY - Util.minY - 50, 5, function(pages:Array):void {
 					_leftMenu = new ScrollMenu(castle.x + castle.width, Util.minY, pages, closeMenus, "Attack Friends", FlxG.WHITE, 
 						padding, Util.maxX - castle.x - castle.width, Util.maxY - Util.minY);
-					add(_rightMenu);
+					add(_leftMenu);
 				});
-			});
+			}, Castle.computeValue);
+		}
+		
+		private function closeMenus():void {
+			_rightMenu.kill();
+			_leftMenu.kill();
 		}
 		
 		/**
