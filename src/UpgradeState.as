@@ -19,14 +19,24 @@ package
 		
 		override public function create():void {
 			super.create();
+			
+			towers.setAll("canDrag", true);
+			towers.setAll("canHighlight", true);
+			
 			Database.getUpgradesInfo(function(info:Array):void {
 				var padding:Number = 10;
-				var upgrades:Array = createUpgrades(info, 0, info.length / 2, castle.x - Util.minX - padding * 2, 
+				
+				info = info.filter(function(obj:Object, index:int, arr:Array):Boolean {
+					return checkLevel(obj);
+				});
+				
+				var upgrades:Array = createUpgrades(info.slice(0, (info.length + 1) / 2), castle.x - Util.minX - padding * 2, 
 						Util.maxY - Util.minY - 50 - padding * 2, 2, 4, acquireUpgrade);
+				
 				_leftMenu = new ScrollMenu(Util.minX, Util.minY, upgrades, closeMenus, "Castle Upgrades", 
 					FlxG.WHITE, padding, castle.x - Util.minX, Util.maxY - Util.minY);
 				
-				upgrades = createUpgrades(info, info.length / 2 + 1, info.length, Util.maxX - (castle.x + castle.width) - padding * 2, 
+				upgrades = createUpgrades(info.slice((info.length + 1) / 2, info.length), Util.maxX - (castle.x + castle.width) - padding * 2, 
 					Util.maxY - Util.minY - 50 - padding * 2, 2, 4, acquireUpgrade);
 				_rightMenu = new ScrollMenu(castle.x + castle.width, Util.minY, upgrades, closeMenus, "Castle Upgrades", 
 					FlxG.WHITE, padding, Util.maxX - (castle.x + castle.width), Util.maxY - Util.minY);
@@ -38,7 +48,7 @@ package
 		private function closeMenus():void {
 			_leftMenu.kill();
 			_rightMenu.kill();
-			if (castle.numUpgrades > Castle.TUTORIAL_UPGRADES_NEEDED) {
+			if (Castle.tutorialLevel == Castle.TUTORIAL_UPGRADE && castle.numUpgrades > Castle.TUTORIAL_UPGRADES_NEEDED) {
 				toggleButtons(0);
 				add(new MessageBox(Util.assets[Assets.FIRST_ATTACK], "Okay", function():void {
 					toggleButtons(4);
@@ -52,14 +62,14 @@ package
 			castle.setUpgrade(upgrade);
 		}
 		
-		private function createUpgrades(info:Array, min:int, max:int, width:Number, height:Number, perRow:int, perColumn:int, clickCallback:Function):Array {
+		private function createUpgrades(info:Array, width:Number, height:Number, perRow:int, perColumn:int, clickCallback:Function):Array {
 			var pages:Array = [];
-			for (var i:int = 0; i < (max - min) / (perRow * perColumn); i++) {
-				var group:FlxGroup = new FlxGroup;
+			for (var i:int = 0; i < info.length / (perRow * perColumn); i++) {
+				var group:FlxGroup = new FlxGroup();
 				for (var j:int = 0; j < perColumn; j++) {
 					for (var k:int = 0; k < perRow; k++) {
-						var index:Number = min + i * (perRow * perColumn) + j * perRow + k;
-						if (index < max) {
+						var index:Number =  i * (perRow * perColumn) + j * perRow + k;
+						if (index < info.length) {
 							var bgColor:uint = FlxG.WHITE;
 							
 							if (info[index].type == "mine") bgColor = 0xFFAA4E07;
@@ -67,12 +77,10 @@ package
 							else if (info[index].type == "aviary") bgColor = FlxG.BLUE;
 							else if (info[index].type == "foundry") bgColor = 0xFF767473;
 							else if (info[index].type == "barracks") bgColor = FlxG.GREEN;
-							if(checkLevel(info[index])) {
-								var upgrade:Upgrade = new Upgrade(k * (width / perRow), j * (height / perColumn), 
-									width / perRow, height / perColumn, info[index].name, info[index].unitWorth, info[index].level,
-									info[index].goldCost, info[index].type, clickCallback, bgColor);
-								group.add(upgrade);
-							}
+							var upgrade:Upgrade = new Upgrade(k * (width / perRow), j * (height / perColumn), 
+								width / perRow, height / perColumn, info[index].name, info[index].unitWorth, info[index].level,
+								info[index].goldCost, info[index].type, clickCallback, bgColor);
+							group.add(upgrade);
 						}
 					}
 				}

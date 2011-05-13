@@ -91,17 +91,19 @@ package
 					hud.add(profilePic);
 				}, "me", false);
 			}
-						
-			var clear:CKButton = new CKButton(0, 0, "Clear", function():void {
-				Util.log("Clearing the tutorial info: " + FaceBook.uid + ", " + Castle.TUTORIAL_NEW_USER);
-				Database.updateUserTutorialInfo(FaceBook.uid, Castle.TUTORIAL_NEW_USER);
-			});
-			clear.x = Util.minX + 10;
-			clear.y = Util.minY + 10;
-			clear.allowCollisions = FlxObject.NONE;
-			clear.immovable = true;
-			add(clear);
-			
+			/*
+			if (CastleKingdom.DEBUG) {
+				var clear:CKButton = new CKButton(0, 0, "Clear", function():void {
+					Util.log("Clearing the tutorial info: " + FaceBook.uid + ", " + Castle.TUTORIAL_NEW_USER);
+					Database.updateUserTutorialInfo(FaceBook.uid, Castle.TUTORIAL_NEW_USER);
+				});
+				clear.x = _hudButtons[0].x + _hudButtons[0].width + 20;
+				Util.centerY(clear, header);
+				clear.allowCollisions = FlxObject.NONE;
+				clear.immovable = true;
+				add(clear);
+			}
+			*/ 
 			setTutorialUI();
 		}
 		
@@ -137,7 +139,7 @@ package
 			super.update();
 			if (!_attackTimer.running) {
 				Database.pendingAttacks(function(attacks:Array):void {
-					if (attacks.length == 0) {
+					if (attacks == null || attacks.length == 0) {
 						Util.log("ActiveState.update, no pending attack");
 					} else {
 						FaceBook.getNameByID(attacks[0].id, function(name:String):void {
@@ -355,15 +357,11 @@ package
 			var _prepare:CKButton = new CKButton(0, 0, Util.assets[Assets.PLACE_TOWER_BUTTON], function():void {
 				var oldCastle:Castle = remove(castle);
 				var defTowers:FlxGroup = remove(towers);
-				defTowers.setAll("canDrag", true);
-				defTowers.setAll("canHighlight", true);
 				FlxG.switchState(new DefenseState(map, oldCastle, defTowers));
 			});
 			var _release:CKButton = new CKButton(0, 0, Util.assets[Assets.RELEASE_WAVE_BUTTON], function():void {
 				var defTowers:FlxGroup = remove(towers);
 				var oldCastle:Castle = remove(castle);
-				defTowers.setAll("canDrag", false);
-				defTowers.setAll("canHighlight", false);
 				FlxG.switchState(new AttackState(map, oldCastle, defTowers));
 			});
 			var _upgrade:CKButton = new CKButton(0, 0, Util.assets[Assets.UPGRADE_BUTTON], function():void {
@@ -375,8 +373,6 @@ package
 				var oldCastle:Castle = remove(castle);
 				var defTowers:FlxGroup = remove(towers);
 				var oldUnits:FlxGroup = remove(units);
-				defTowers.setAll("canDrag", false);
-				defTowers.setAll("canHighlight", false);
 				FlxG.switchState(new AttackFriendsState(map, oldCastle, defTowers, units));
 			});
 			var _lease:CKButton = new CKButton(0, 0, Util.assets[Assets.LEASE_BUTTON], function():void {

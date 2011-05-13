@@ -21,6 +21,10 @@ package
 		 */		
 		override public function create():void {
 			super.create();
+			
+			towers.setAll("canDrag", true);
+			towers.setAll("canHighlight", true);
+			towers.setAll("dragCallback", handleMapTowerDrag);
 
 			// create selection menu of all avaiable towers
 			var unitsUnlocked:Array = this.castle.unitsUnlocked(Castle.TOWER);
@@ -90,20 +94,28 @@ package
 				newTower.y = oldY;
 				_menu.addToCurrentPage(newTower);
 				towers.add(tower);
-				Util.placeInZone(tower, map,true, true);
+				var tileCoords:FlxPoint = Util.roundToNearestTile(new FlxPoint(newX, newY));
+				tower.x = tileCoords.x;
+				tower.y = tileCoords.y;
+				Util.placeInZone(tower, map, true, true);
 				tower.allowCollisions = FlxObject.ANY;
 				tower.immovable = true;
-				tower.dragCallback = function(draggable:Draggable, newX:Number, newY:Number, oldX:Number, oldY:Number):void {
-					(draggable as Unit).x = oldX;
-					(draggable as Unit).y = oldY;
-					if (droppable(newX, newY)) {
-						(draggable as Unit).x = newX;
-						(draggable as Unit).y = newY;
-						//Util.placeInZone(towerUnit, map,true, true);
-						Util.placeOnGroundOld(tower, map, false, true);
-					}
-				};
+				tower.dragCallback = handleMapTowerDrag;
 			}
+		}
+		
+		private function handleMapTowerDrag(draggable:Draggable, newX:Number, newY:Number, oldX:Number, oldY:Number):void {
+			var tower:DefenseUnit = draggable as DefenseUnit;
+			tower.x = oldX;
+			tower.y = oldY;
+			if (droppable(newX, newY)) {
+				tower.x = newX;
+				tower.y = newY;
+				//Util.placeInZone(towerUnit, map,true, true);
+				Util.placeOnGroundOld(tower, map, false, true);
+			} else if (newX > castle.x && newX < castle.x + castle.width) {
+				towers.remove(tower, true);
+			}			
 		}
 		
 		/**

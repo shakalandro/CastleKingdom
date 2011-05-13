@@ -60,6 +60,9 @@ package
 			super.create();
 			_gameOver = false;
 			
+			towers.setAll("canDrag", false);
+			towers.setAll("canHighlight", false);
+			
 			setTutorialUI();
 		}
 		
