@@ -891,6 +891,11 @@ package
 			_save.data.users[userUpgrades.id].upgrades.push(userUpgrades);
 		}
 		
+		/**
+		 * Starts the saving feature implemented by Flixel. This function must be called at the beginning of
+		 * the game to ensure that the save object is instantiated so save users data to the cache.  
+		 * 
+		 */		
 		public static function load():void
 		{
 			_save = new FlxSave();
