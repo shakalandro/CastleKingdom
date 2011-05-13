@@ -32,7 +32,7 @@ package
 
 		public function EnemyUnit(x:Number, y:Number, towerID:int, canDrag:Boolean = false, bar:HealthBar = null, active:Boolean = true) {
 			
-			super (x,y,towerID, "barracks", canDrag, bar);
+			super (x,y,towerID, "barracks", bar, canDrag);
 			this.speed = Castle.UNIT_INFO["barracks"][unitID].move;
 			this.goldCost = Castle.UNIT_INFO["barracks"][unitID].goldCost;
 			_reward = Castle.UNIT_INFO["barracks"][unitID].reward;

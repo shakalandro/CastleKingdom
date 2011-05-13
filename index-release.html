@@ -1,0 +1,32 @@
+<html>
+	<head>
+		<title>Castle Kingdom</title>
+		<!-- <link rel=StyleSheet href="index.css" type="text/css" /> -->
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
+		<script type="text/javascript" src="http://connect.facebook.net/en_US/all.js"></script>
+		<script type="text/javascript">
+			var appId = "197220693652461";
+			$(document).ready(function() {
+				if(window.location.hash.length == 0) {
+					url = "https://www.facebook.com/dialog/oauth?client_id=" + 
+							appId  + "&redirect_uri=" + window.location +
+							"&response_type=token";
+					window.location = url;
+				} else {
+					accessToken = window.location.hash.substring(1).split("&")[0];
+					embedGame(accessToken.split("=")[1]);
+				}
+			});
+			
+			function embedGame(token) {
+				swfobject.embedSWF("bin-release/CastleKingdom.swf", "flashContent", "736", "460", "10.0", 
+						null, {accessToken: token}, {allownetworking: "all", allowscriptaccess: "sameDomain"}, {name:"flashContent"}); 
+			}
+		</script>
+	</head>
+	<body>
+		<div id="fb-root"></div>
+		<div id="flashContent"></div>
+	</body>
+</html>

@@ -41,6 +41,10 @@ package
 			super.create();
 			createHUD();
 			
+			//Seems useless, but this get sthe loading image added back to the current state
+			CastleKingdom.loading = CastleKingdom.loading;
+			CastleKingdom.loading = !CastleKingdom.loading;
+			
 			_map = new FlxTilemap();
 			_map.loadMap(new Util.assets[Assets.TILE_LAYOUT], Util.assets[Assets.MAP_TILES],CastleKingdom.TILE_SIZE, CastleKingdom.TILE_SIZE, FlxTilemap.OFF, 0, 0, 1);
 			_map.y = _header.height;
