@@ -131,6 +131,7 @@ package
 					//	this.kill();
 				} else {
 					this.play("die");
+					(FlxG.state as ActiveState).remove(this._infoBox); 
 				}
 				
 			} else {
@@ -152,7 +153,7 @@ package
 				if (highlighted) {
 					frame = 0;
 				} else {
-					this.frame = 6 - Math.floor(5 * Math.sqrt((health / this.maxHealth)));
+					this.frame = 4 - Math.floor(4 * Math.sqrt((health / this.maxHealth)));
 				}
 			}
 			super.update();
