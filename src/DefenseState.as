@@ -10,8 +10,7 @@ package
 		
 		public function DefenseState(map:FlxTilemap=null, castle:Castle = null, towers:FlxGroup = null, forcedAttack:Boolean = false)
 		{
-			//super(map, castle, towers);
-			super(map,castle);
+			super(map,castle, towers);
 			_forcedAttack = forcedAttack;
 		}
 		
@@ -113,7 +112,7 @@ package
 				tower.y = newY;
 				//Util.placeInZone(towerUnit, map,true, true);
 				Util.placeOnGroundOld(tower, map, false, true);
-			} else if (newX > castle.x && newX < castle.x + castle.width) {
+			} else if (newX > castle.x && newX < castle.x + castle.width && _menu.visible) {
 				towers.remove(tower, true);
 			}			
 		}

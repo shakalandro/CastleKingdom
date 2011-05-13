@@ -41,6 +41,9 @@ package
 				// Tower/Unit --> ID --> info
 
 		public static const TILE_WIDTH:int = 8;
+		public static const START_GOLD:Number = 0;
+		public static const START_TOWER_CAPACITY:Number = 60;
+		public static const START_UNIT_CAPACITY:Number = 60;
 		
 		private var _upgrades:Array;  // should be:  {Castle level, Barracks level, foundry level, Smith level?}
 		private var _gold:int;	
@@ -66,8 +69,9 @@ package
 
 			UNIT_INFO[Castle.ARMY] = new Array();
 			UNIT_INFO[Castle.TOWER] = new Array();
-			_unitCap = 60;
-			_towerCap = 60;
+			_unitCap = START_UNIT_CAPACITY;
+			_towerCap = START_TOWER_CAPACITY;
+			_gold = START_GOLD;
 			_upgrades = new Array();
 			_upgrades["barracks"] = 0;
 			_upgrades["foundry"] = 0;
