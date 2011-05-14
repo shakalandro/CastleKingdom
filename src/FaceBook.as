@@ -220,13 +220,14 @@ package
 				CastleKingdom.loading = true;
 				FaceBook.friends(function(friends:Array):void {
 					CastleKingdom.loading = false;
+					var found:String = null;
 					for each(var friend:Object in friends) {
 						if (friend.id + "" == id + "") {
-							callback(friend.name);
+							found = friend.name;
 							break;
 						}
 					}
-					callback(null);
+					callback(friend.name);
 				}, false);
 			}
 		}

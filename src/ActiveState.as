@@ -48,6 +48,8 @@ package
 		private var _attackTimer:Timer;
 		private var _attackAnims:FlxGroup;
 		
+		public var attackPending:Boolean;
+		
 		/** 
 		 * An active state is a helper super class for interactive game states such as DefendState and UpgradeState. 
 		 * Maintains the tilemap and a reference to the castle object. Performs ranged collision calculation.
@@ -63,6 +65,7 @@ package
 			_units = units || new FlxGroup();
 			_attackAnims = new FlxGroup();
 			_hudButtons = [];
+			attackPending = false;
 		}
 		
 		/**
@@ -80,32 +83,37 @@ package
 			Util.placeInZone(_castle, map);
 			add(_castle);
 			
-			this.checkForPendingAttacks(function():void {
-				if (CastleKingdom.FACEBOOK_ON) {
-					FaceBook.picture(function(pic:Class):void {
-						var profilePic:FlxSprite = new FlxSprite(0, 0, pic);
-						profilePic.allowCollisions = FlxObject.NONE;
-						profilePic.immovable = true;
-						Util.center(profilePic, header);
-						profilePic.x = Util.maxX - profilePic.width;
-						hud.add(profilePic);
-					}, "me", false);
-				}
-				/*
-				if (CastleKingdom.DEBUG) {
-					var clear:CKButton = new CKButton(0, 0, "Clear", function():void {
-						Util.log("Clearing the tutorial info: " + FaceBook.uid + ", " + Castle.TUTORIAL_NEW_USER);
-						Database.updateUserTutorialInfo(FaceBook.uid, Castle.TUTORIAL_NEW_USER);
-					});
-					clear.x = _hudButtons[0].x + _hudButtons[0].width + 20;
-					Util.centerY(clear, header);
-					clear.allowCollisions = FlxObject.NONE;
-					clear.immovable = true;
-					add(clear);
-				}
-				*/ 
+			if (CastleKingdom.FACEBOOK_ON) {
+				FaceBook.picture(function(pic:Class):void {
+					var profilePic:FlxSprite = new FlxSprite(0, 0, pic);
+					profilePic.allowCollisions = FlxObject.NONE;
+					profilePic.immovable = true;
+					Util.center(profilePic, header);
+					profilePic.x = Util.maxX - profilePic.width;
+					hud.add(profilePic);
+				}, "me", false);
+			}
+			
+			if (!attackPending) {
+				checkForPendingAttacks(function():void {
+					/*
+					if (CastleKingdom.DEBUG) {
+						var clear:CKButton = new CKButton(0, 0, "Clear", function():void {
+							Util.log("Clearing the tutorial info: " + FaceBook.uid + ", " + Castle.TUTORIAL_NEW_USER);
+							Database.updateUserTutorialInfo(FaceBook.uid, Castle.TUTORIAL_NEW_USER);
+						});
+						clear.x = _hudButtons[0].x + _hudButtons[0].width + 20;
+						Util.centerY(clear, header);
+						clear.allowCollisions = FlxObject.NONE;
+						clear.immovable = true;
+						add(clear);
+					}
+					*/ 
+					setTutorialUI();
+				});
+			} else {
 				setTutorialUI();
-			});
+			}
 		}
 		
 		/**
@@ -143,22 +151,32 @@ package
 		 * 
 		 */		
 		private function checkForPendingAttacks(callback:Function):void {
-			Util.log("looking for pending attack");
+			Util.log("ActiveState.checkForPendingAttacks looking for pending attack");
 			Database.pendingAttacks(function(attacks:Array):void {
 				if (attacks == null || attacks.length == 0) {
+					Util.log("ActiveState.checkForPendingAttacks, no pending attack");
 					callback();
-					Util.log("ActiveState.update, no pending attack");
 				} else {
 					FaceBook.getNameByID(attacks[0].id, function(name:String):void {
 						if (name != null) {
+							Util.log("ActiveState.checkForPendingAttacks attack found: " + name);
 							toggleButtons(0);
 							attacks[0].name = name;
-							FlxG.state.add(new MessageBox(StringUtil.substitute(Util.assets[Assets.INCOMING_WAVE], name), "Okay", function():void {
+							var box:MessageBox = new MessageBox(StringUtil.substitute(Util.assets[Assets.INCOMING_WAVE], name, castle.surrenderCost()), "Defend", function():void {
 								FlxG.switchState(new DefenseState(map, remove(castle) as Castle, remove(towers) as FlxGroup, true, attacks[0]));
-							}));
+							}, "Surrender", function():void {
+								castle.addGold(-castle.surrenderCost());
+								setTutorialUI();
+								Database.removeUserAttacks({
+									id: attacks[0].id, 
+									aid: attacks[0].aid
+								});
+								box.close();
+							});
+							FlxG.state.add(box);
 						} else {
 							callback();
-							Util.logObj("ActiveState.update pending attack, but user unknown ", attacks[0]);
+							Util.logObj("ActiveState.checkForPendingAttacks pending attack, but user unknown ", attacks[0]);
 						}
 					});
 				}

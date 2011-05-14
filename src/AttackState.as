@@ -48,6 +48,7 @@ package
 			super(map, castle, towers, units);
 			_pendingAttack = pendingAttack;
 			if (_pendingAttack != null) {
+				attackPending = true;
 				_placeOnLeft = _pendingAttack.leftSide.split(",");
 				_placeOnRight = _pendingAttack.rightSide.split(",");
 			}
@@ -73,6 +74,7 @@ package
 		}
 		
 		private function setTutorialUI():void {
+			toggleButtons(0);
 			if (Castle.tutorialLevel == Castle.TUTORIAL_FIRST_DEFEND) {
 				Database.updateUserTutorialInfo(FaceBook.uid, Castle.TUTORIAL_FIRST_WAVE);
 				Castle.tutorialLevel = Castle.TUTORIAL_FIRST_WAVE;
@@ -97,6 +99,10 @@ package
 				} else {
 					add(new MessageBox(StringUtil.substitute(Util.assets[Assets.FRIEND_WAVE_LOSS], _pendingAttack.name), "Okay", null));
 				}
+				Database.removeUserAttacks({
+					id: _pendingAttack.id, 
+					aid: _pendingAttack.aid
+				});
 			} else if (win && Castle.tutorialLevel == Castle.TUTORIAL_FIRST_WAVE) {
 				add(new MessageBox(Util.assets[Assets.FIRST_WIN], "Okay", function():void {
 					toggleButtons(3);

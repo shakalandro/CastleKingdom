@@ -111,6 +111,19 @@ package
 			_tutorialLevel = n;
 		}
 		
+		/**
+		 * 
+		 * @return How much gold it would take to surrender.
+		 * 
+		 */		
+		public function surrenderCost():int {
+			return gold / 3;
+		}
+		
+		public function sendWaveCost():int {
+			return 100;
+		}
+		
 		/** Adds the given upgrade to the castle**/
 		private function initUserInfo(info:Array):void {
 			 _gold = info[0].gold;
@@ -308,7 +321,7 @@ package
 			return _leasedInNumber > 0;
 		}
 		
-		// Returns whether the player is leasing units from anyone
+		// Returns whether the player is leasing units to anyone
 		public function get isLeased():Boolean {
 			return _leasedOutNumber > 0;
 		}

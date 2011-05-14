@@ -40,7 +40,7 @@ package
 			_btn1.allowCollisions = FlxObject.NONE;
 			_btn1.immovable = true;
 			if (button2Text != null) {
-				_btn2 = new FlxButton(0, 0, button1Text, function():void {
+				_btn2 = new FlxButton(0, 0, button2Text, function():void {
 					close(button2Callback);
 				});
 				_btn2.x = _btn1.x - _btn2.width - _padding;
@@ -79,7 +79,7 @@ package
 		 * @param callback
 		 * 
 		 */		
-		public function close(callback:Function):void {
+		public function close(callback:Function = null):void {
 			if (callback != null) callback();
 			this.kill();
 		}

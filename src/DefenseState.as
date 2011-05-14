@@ -14,6 +14,9 @@ package
 			super(map, castle, towers);
 			_forcedAttack = forcedAttack;
 			_pendingAttack = pendingAttack;
+			if (_pendingAttack != null) {
+				attackPending = true;
+			}
 		}
 		
 		/**
