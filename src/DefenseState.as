@@ -7,12 +7,13 @@ package
 		
 		private var _menu:ScrollMenu;
 		private var _forcedAttack:Boolean;
+		private var _pendingAttack:Object;
 		
-		public function DefenseState(map:FlxTilemap=null, castle:Castle = null, towers:FlxGroup = null, forcedAttack:Boolean = false)
+		public function DefenseState(map:FlxTilemap=null, castle:Castle = null, towers:FlxGroup = null, forcedAttack:Boolean = false, pendingAttack:Object = null)
 		{
-			super(map,castle, towers);
-		
+			super(map, castle, towers);
 			_forcedAttack = forcedAttack;
+			_pendingAttack = pendingAttack;
 		}
 		
 		/**
@@ -39,36 +40,41 @@ package
 		
 		private function closeHandler():void {
 			if (_forcedAttack) {
-				FlxG.switchState(new AttackState(map, remove(castle) as Castle, remove(towers) as FlxGroup));
+				FlxG.switchState(new AttackState(map, remove(castle) as Castle, remove(towers) as FlxGroup, null, _pendingAttack));
 			}
 		}
 		
 		private function setTutorialUI():void {
 			toggleButtons(0);
-			if (Castle.tutorialLevel == Castle.TUTORIAL_FIRST_DEFEND || Castle.tutorialLevel == Castle.TUTORIAL_FIRST_WAVE) {
-				_menu.onClose = function():void {
-					unpause();
-					add(new MessageBox(Util.assets[Assets.FIRST_DEFENSE], "Okay", function():void {
-						toggleButtons(2);
-					}));
-				};
-			} else if (Castle.tutorialLevel == Castle.TUTORIAL_UPGRADE) {
-				_menu.onClose = function():void {
-					unpause();
-					toggleButtons(3);
-				};
-			} else if (Castle.tutorialLevel == Castle.TUTORIAL_ATTACK_FRIENDS) {
-				_menu.onClose = function():void {
-					unpause();
-					toggleButtons(4);
-				};
-			} else if (Castle.tutorialLevel == Castle.TUTORIAL_LEASE) {
-				_menu.onClose = function():void {
-					unpause();
-					toggleButtons(5);
-				};
+			if (_forcedAttack) {
+				_menu.onClose = closeHandler;
 			} else {
-				Util.log("Unexpected tutorial level: " + Castle.tutorialLevel);
+				Util.log("Got into the tutorial if tree");
+				if (Castle.tutorialLevel == Castle.TUTORIAL_FIRST_DEFEND || Castle.tutorialLevel == Castle.TUTORIAL_FIRST_WAVE) {
+					_menu.onClose = function():void {
+						unpause();
+						add(new MessageBox(Util.assets[Assets.FIRST_DEFENSE], "Okay", function():void {
+							toggleButtons(2);
+						}));
+					};
+				} else if (Castle.tutorialLevel == Castle.TUTORIAL_UPGRADE) {
+					_menu.onClose = function():void {
+						unpause();
+						toggleButtons(3);
+					};
+				} else if (Castle.tutorialLevel == Castle.TUTORIAL_ATTACK_FRIENDS) {
+					_menu.onClose = function():void {
+						unpause();
+						toggleButtons(4);
+					};
+				} else if (Castle.tutorialLevel == Castle.TUTORIAL_LEASE) {
+					_menu.onClose = function():void {
+						unpause();
+						toggleButtons(5);
+					};
+				} else {
+					Util.log("Unexpected tutorial level: " + Castle.tutorialLevel);
+				}
 			}
 		}
 		

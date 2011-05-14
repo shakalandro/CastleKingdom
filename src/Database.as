@@ -272,7 +272,7 @@ package
 					callback(_pendingAttacks);
 				}, ids);
 			} else {
-				callback(getAll(_pendingAttacks , ids));
+				callback(getAll(_pendingAttacks, ids));
 			}
 		}
 		
@@ -599,13 +599,13 @@ package
 			} else {
 				return null;
 			}
-			stuff = stuff.filter(function(item:Object, index:int, arr:Array):Boolean {
+			var newStuff:Array = stuff.filter(function(item:Object, index:int, arr:Array):Boolean {
 				return idsArr.indexOf(item.id) >= 0;
 			});
-			if (stuff.length != idsArr.length) {
+			if (newStuff.length != idsArr.length) {
 				return null;
 			} else {
-				return stuff;
+				return newStuff;
 			}
 		}
 		

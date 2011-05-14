@@ -152,8 +152,9 @@ package
 					FaceBook.getNameByID(attacks[0].id, function(name:String):void {
 						if (name != null) {
 							toggleButtons(0);
+							attacks[0].name = name;
 							FlxG.state.add(new MessageBox(StringUtil.substitute(Util.assets[Assets.INCOMING_WAVE], name), "Okay", function():void {
-								FlxG.switchState(new DefenseState(map, remove(castle) as Castle, remove(towers) as FlxGroup, true));
+								FlxG.switchState(new DefenseState(map, remove(castle) as Castle, remove(towers) as FlxGroup, true, attacks[0]));
 							}));
 						} else {
 							callback();

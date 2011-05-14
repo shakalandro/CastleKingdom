@@ -153,6 +153,8 @@ package
 		public static const FIRST_ATTACK:String = "first attack";
 		public static const SENT_WAVE:String = "sent wave";
 		public static const INCOMING_WAVE:String = "incoming wave";
+		public static const FRIEND_WAVE_LOSS:String = "friend wave loss";
+		public static const FRIEND_WAVE_WIN:String = "friend wave win";
 		
 		// Other resources
 		
@@ -230,7 +232,9 @@ package
 			_normal[Assets.SENT_WAVE] = "Now that you can attack friends, they can also attack you. Try asking " +
 				"your friends to lease some of their resources to help you in battle.";
 			_normal[Assets.INCOMING_WAVE] = "OMG, your friend {0} has sent a wave of enemies at you. Don't let " +
-				"him steal your gold! Set the defenses.";
+				"him/her steal your gold! Set the defenses.";
+			_normal[Assets.FRIEND_WAVE_WIN] = "Good job, way to fight off {0}, they won't be messing with you again soon.";
+			_normal[Assets.FRIEND_WAVE_LOSS] = "Shoot {0} got away with some of your gold.";
 		}
 		
 		/**
