@@ -46,6 +46,7 @@ package
 		public function AttackState(map:FlxTilemap=null, castle:Castle = null, towers:FlxGroup = null, units:FlxGroup = null, pendingAttack:Object = null)
 		{
 			super(map, castle, towers, units);
+			_pendingAttack = pendingAttack;
 			if (_pendingAttack != null) {
 				_placeOnLeft = _pendingAttack.leftSide.split(",");
 				_placeOnRight = _pendingAttack.rightSide.split(",");
