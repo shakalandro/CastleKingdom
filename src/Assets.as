@@ -145,7 +145,21 @@ package
 		public static const ATTACK_BUTTON:String = "attack button";
 		public static const LEASE_BUTTON:String = "lease button";
 		public static const INITIAL_PENDING_WAVE_TEXT:String = "initial pending wave text";
-		public static const TOWER_WINDOW_TITLE:String = "tower window title"
+		public static const DEFEND_MENU_BUTTON:String = "defend menu button";
+		public static const DEFEND_MENU_TITLE:String = "defend menu title";
+		public static const BUTTON_CANCEL:String = "button close";
+		public static const BUTTON_DONE:String = "button done";
+		public static const ATTACK_FRIENDS_BUTTON:String = "attack friends button";
+		public static const ATTACK_FRIENDS_LEFT_TITLE:String = "attack friends left title";
+		public static const ATTACK_FRIENDS_RIGHT_TITLE:String = "attack friends right title";
+		public static const ATTACK_FRIENDS_MIDDLE_TITLE:String = "attack friends middle menu";
+		public static const LEASE_RIGHT_TITLE:String = "lease right title";
+		public static const LEASE_LEFT_TITLE:String = "lease left title";
+		public static const LEASE_MIDDLE_TITLE:String = "lease middle title";
+		public static const LEASE_MIDDLE_BUTTON:String = "lease middle button";
+		public static const UPGRADE_LEFT_TITLE:String = "upgrade left title";
+		public static const UPGRADE_RIGHT_TITLE:String = "upgrade right title";
+		
 		public static const FIRST_WIN:String = "first win";
 		public static const FIRST_LOSS:String = "first loss";
 		public static const UPGRADE_AVAILABLE:String = "upgrade available";
@@ -213,12 +227,25 @@ package
 			
 			//Textual assets
 			
+			_normal[Assets.BUTTON_CANCEL] = "Cancel";
+			_normal[Assets.BUTTON_DONE] = "Cancel";
 			_normal[Assets.PLACE_TOWER_BUTTON] = "Defend";
 			_normal[Assets.RELEASE_WAVE_BUTTON] = "Release";
 			_normal[Assets.UPGRADE_BUTTON] = "Upgrade";
 			_normal[Assets.ATTACK_BUTTON] = "Attack";
 			_normal[Assets.LEASE_BUTTON] = "Lease";
-			_normal[Assets.TOWER_WINDOW_TITLE] = "Okay";
+			_normal[Assets.DEFEND_MENU_BUTTON] = "Done";
+			_normal[Assets.DEFEND_MENU_TITLE] = "Drag And Drop";
+			_normal[Assets.ATTACK_FRIENDS_BUTTON] = "Send";
+			_normal[Assets.ATTACK_FRIENDS_LEFT_TITLE] = "";
+			_normal[Assets.ATTACK_FRIENDS_RIGHT_TITLE] = "";
+			_normal[Assets.ATTACK_FRIENDS_MIDDLE_TITLE] = "";
+			_normal[Assets.LEASE_RIGHT_TITLE] = "";
+			_normal[Assets.LEASE_LEFT_TITLE] = "";
+			_normal[Assets.LEASE_MIDDLE_TITLE] = "";
+			_normal[Assets.LEASE_MIDDLE_BUTTON] = "Request";
+			_normal[Assets.UPGRADE_LEFT_TITLE] = "Castle Upgrades";
+			_normal[Assets.UPGRADE_RIGHT_TITLE] = "Castle Upgrades";
 			_normal[Assets.INITIAL_PENDING_WAVE_TEXT] = "Welcome to the cutthroat world of Castle Kingdom. " +
 				"Your castle is your life and the gold within is your means to glory. But right now a band of" +
 				" enemies is on their way to steal your gold. You must defend yourself.";

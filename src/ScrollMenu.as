@@ -49,7 +49,7 @@ package
 		 * 
 		 */		
 		public function ScrollMenu(x:Number, y:Number, pageContents:Array, closeCallback:Function, 
-				title:String = "", bgColor:uint = FlxG.WHITE, padding:Number = 10, width:int = 100, 
+				title:String = "", buttonText:String = "Cancel", bgColor:uint = FlxG.WHITE, padding:Number = 10, width:int = 100, 
 				height:int = 100, borderThickness:Number = 3, dragCallback:Function = null) {
 			super();
 			_pages = pageContents || [];
@@ -72,7 +72,7 @@ package
 			
 			//Set the button
 			var me:ScrollMenu = this;
-			var close:FlxButton = new FlxButton(x + width / 2, y + height - padding	* 2, title, this.onClose);
+			var close:FlxButton = new FlxButton(x + width / 2, y + height - padding	* 2, buttonText, this.onClose);
 			close.x -= close.width / 2;
 			close.y -= close.height / 2;
 			_leftButton = new FlxButton(x + padding, y + height - padding * 2, "<<", scrollLeft);
