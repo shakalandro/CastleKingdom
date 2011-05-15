@@ -194,6 +194,7 @@ package
 			_normal[Assets.CURSOR] = cursor_img;
 			_normal[Assets.BACKGROUND] = background_img;
 			_normal[Assets.LOGIN_BACKGROUND] = startpage_background;
+			_normal[Assets.BUTTON_SMALL] = button_small_img;
 			
 			_normal[Assets.ARROW_TOWER] = arrow_tower_normal;
 			_normal[Assets.SNIPER_TOWER] = sniper_tower_normal;
@@ -217,7 +218,7 @@ package
 			_normal[Assets.UPGRADE_BUTTON] = "Upgrade";
 			_normal[Assets.ATTACK_BUTTON] = "Attack";
 			_normal[Assets.LEASE_BUTTON] = "Lease";
-			_normal[Assets.TOWER_WINDOW_TITLE] = "Available Towers";
+			_normal[Assets.TOWER_WINDOW_TITLE] = "Okay";
 			_normal[Assets.INITIAL_PENDING_WAVE_TEXT] = "Welcome to the cutthroat world of Castle Kingdom. " +
 				"Your castle is your life and the gold within is your means to glory. But right now a band of" +
 				" enemies is on their way to steal your gold. You must defend yourself.";

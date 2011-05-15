@@ -65,6 +65,7 @@ package
 			_units = units || new FlxGroup();
 			_attackAnims = new FlxGroup();
 			_hudButtons = [];
+			_castle = castle;
 			attackPending = false;
 		}
 		
@@ -96,7 +97,7 @@ package
 			
 			if (!attackPending) {
 				checkForPendingAttacks(function():void {
-					/*
+					
 					if (CastleKingdom.DEBUG) {
 						var clear:CKButton = new CKButton(0, 0, "Clear", function():void {
 							Util.log("Clearing the tutorial info: " + FaceBook.uid + ", " + Castle.TUTORIAL_NEW_USER);
@@ -108,7 +109,7 @@ package
 						clear.immovable = true;
 						add(clear);
 					}
-					*/ 
+					 
 					setTutorialUI();
 				});
 			} else {
@@ -381,7 +382,13 @@ package
 			if (indices.x >= castleStart && indices.x < castleStop) {
 				return false;
 			}
+			//fix weird null bug
 			for each (var obj:FlxObject in towers.members) {
+				if (obj == null) {
+					towers.remove(obj);
+				}
+			}
+			for each (obj in towers.members) {
 				var objStart:FlxPoint = Util.cartesianToIndices(new FlxPoint(obj.x, obj.y));
 				var objStop:FlxPoint = Util.cartesianToIndices(new FlxPoint(obj.x + obj.width, obj.y));
 				if (obj is DefenseUnit) {

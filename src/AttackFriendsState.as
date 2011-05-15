@@ -42,18 +42,18 @@ package
 				
 				Util.getFriendsInRange(Castle.computeValue(castle), LEVEL_THRESHHOLD, function(friends:Array):void {
 					formatFriends(friends, castle.x - Util.minX - padding * 2, Util.maxY - Util.minY - 50, 5, function(pages:Array):void {
-						_rightMenu = new ScrollMenu(castle.x + castle.width, Util.minY, pages, closeMenus, "Attack Friends", FlxG.WHITE, 
+						_rightMenu = new ScrollMenu(castle.x + castle.width, Util.minY, pages, closeMenus, "Cancel", FlxG.WHITE, 
 							padding, Util.maxX - castle.x - castle.width, Util.maxY - Util.minY);
 						add(_rightMenu);
 					});
 					
 					Database.getEnemyInfo(function(units:Array):void {
 						var pages:Array = formatUnits(units, castle.x - Util.minX, Util.maxY - Util.minY - 50, 2, 4);
-						_leftMenu = new ScrollMenu(Util.minX, Util.minY, pages, closeMenus, "Attack Friends", FlxG.WHITE, padding, 
+						_leftMenu = new ScrollMenu(Util.minX, Util.minY, pages, closeMenus, "Cancel", FlxG.WHITE, padding, 
 							castle.x - Util.minX, Util.maxY - Util.minY, 3, moveUnit);
 						add(_leftMenu);
 						
-						_middleMenu = new ScrollMenu(castle.x, Util.minY, page, closeMenus, "Place Here", FlxG.WHITE, padding, castle.width, Util.maxY - Util.minY, 3);
+						_middleMenu = new ScrollMenu(castle.x, Util.minY, page, closeMenusAndSend, "Okay", FlxG.WHITE, padding, castle.width, Util.maxY - Util.minY, 3);
 						add(_middleMenu);
 					});
 				}, Castle.computeValue);
@@ -90,22 +90,7 @@ package
 		 * Closes all menus when a single menu is closed and also handles any ui that needs to be drawn as a result. 
 		 * 
 		 */		
-		private function closeMenus():void {
-			if (Castle.tutorialLevel == Castle.TUTORIAL_ATTACK_FRIENDS) {
-				Database.updateUserTutorialInfo(FaceBook.uid, Castle.TUTORIAL_LEASE);
-				Castle.tutorialLevel = Castle.TUTORIAL_LEASE;
-				add(new MessageBox(Util.assets[Assets.SENT_WAVE], "Okay", function():void {
-					toggleButtons(5);
-				}));
-			} else if (Castle.tutorialLevel == Castle.TUTORIAL_LEASE) {
-				toggleButtons(5);
-			} else {
-				Util.log("Unknown tutorial leval: " + Castle.tutorialLevel);
-			}
-			_rightMenu.kill();
-			_leftMenu.kill();
-			_middleMenu.kill();
-			
+		private function closeMenusAndSend():void {
 			// Register an attack in the database if one was made by the user.
 			if (FriendBox.selected != null) {
 				var leftUnits:String = getAttackingUnits(_dropboxes[0]);
@@ -123,6 +108,24 @@ package
 				castle.addGold(-castle.sendWaveCost());
 				FriendBox.resetSelected();
 			}
+			closeMenus();
+		}
+		
+		public function closeMenus():void {
+			if (Castle.tutorialLevel == Castle.TUTORIAL_ATTACK_FRIENDS) {
+				Database.updateUserTutorialInfo(FaceBook.uid, Castle.TUTORIAL_LEASE);
+				Castle.tutorialLevel = Castle.TUTORIAL_LEASE;
+				add(new MessageBox(Util.assets[Assets.SENT_WAVE], "Okay", function():void {
+					toggleButtons(5);
+				}));
+			} else if (Castle.tutorialLevel == Castle.TUTORIAL_LEASE) {
+				toggleButtons(5);
+			} else {
+				Util.log("Unknown tutorial leval: " + Castle.tutorialLevel);
+			}
+			_rightMenu.kill();
+			_leftMenu.kill();
+			_middleMenu.kill();
 		}
 		
 		/**
