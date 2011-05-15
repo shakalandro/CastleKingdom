@@ -112,7 +112,7 @@ package
 				CastleKingdom.loading = true;
 				getMain("http://games.cs.washington.edu/capstone/11sp/castlekd/database/getUserUpgrades.php", function(xmlData:XML):void {
 					CastleKingdom.loading = false;
-					_userInfo = processList(xmlData.user, function(unit:XML):Object {
+					_userUps = processList(xmlData.user, function(unit:XML):Object {
 						return {
 							id: unit.uid,
 							upid: unit.upid,
