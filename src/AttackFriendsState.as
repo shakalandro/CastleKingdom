@@ -150,6 +150,7 @@ package
 		 * 
 		 */		
 		private function formatUnits(units:Array, width:Number, height:Number, perRow:int, perColumn:int, padding:Number = 10):Array {
+			//perRow = 3;
 			var result:Array = [];
 			for (var i:int = 0; i < units.length / (perRow * perColumn); i++) {
 				var group:FlxGroup = new FlxGroup;
