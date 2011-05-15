@@ -93,7 +93,7 @@ package
 			if (t) {
 				numWaiting++;
 			} else {
-				numWaiting = Math.min(numWaiting - 1, 0);
+				numWaiting = Math.max(numWaiting - 1, 0);
 			}
 			Util.log("Loading count: ", numWaiting, _loading != null);
 		}

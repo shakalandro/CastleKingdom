@@ -1,6 +1,9 @@
 package
 {
+	import flash.text.*;
+	
 	import org.flixel.*;
+	import org.flixel.system.input.Input;
 	
 	public class LeaseState extends ActiveState
 	{
@@ -9,6 +12,7 @@ package
 		private var _rightMenu:ScrollMenu;
 		private var _leftMenu:ScrollMenu;
 		private var _middleMenu:ScrollMenu;
+		private var _slider:Slider;
 		
 		public function LeaseState(map:FlxTilemap=null, castle:Castle=null, towers:FlxGroup=null, units:FlxGroup=null)
 		{
@@ -31,18 +35,38 @@ package
 					add(_leftMenu);
 				});
 				
-				_middleMenu = new ScrollMenu(castle.x, Util.minY, makeLeasePage(), closeMenus, "Close", FlxG.WHITE, padding, castle.width, Util.maxY - Util.minY); 
+				var page:Array = makeLeasePage(castle.x, Util.minY, castle.width, Util.maxY - Util.minY, padding);
+				_middleMenu = new ScrollMenu(castle.x, Util.minY, page, closeMenus, "Close", FlxG.WHITE, padding, castle.width, Util.maxY - Util.minY); 
+				add(_middleMenu);
 			}, Castle.computeValue);
 		}
 		
-		private function makeLeasePage():Array {
+		private function makeLeasePage(x:Number, y:Number, width:Number, height:Number, padding:Number = 10):Array {
 			var page:Array = [];
+			var group:FlxGroup = new FlxGroup();
+			var text:FlxText = new FlxText(0, 0, width - padding * 2, "How many units of tower capacity would you like to lease?");
+			text.alignment = "center";
+			text.color = FlxG.BLACK;
+			_slider = new Slider(0, text.height, width - padding * 2, 100, 10, castle.unitCapacity);
+			group.add(text);
+			group.add(_slider);
+			page.push(group);
 			return page;
 		}
 		
 		private function closeMenus():void {
+			if (FriendBox.selected != null) {
+				Database.addUserLease({
+					id: FriendBox.selected.uid,
+					lid: FaceBook.uid,
+					numUnits: _slider.value
+				});
+				Util.log("Leasing " + _slider.value + " units from " + FriendBox.selected.name);
+				FriendBox.resetSelected();
+			}
 			_rightMenu.kill();
 			_leftMenu.kill();
+			_middleMenu.kill();
 		}
 		
 		/**

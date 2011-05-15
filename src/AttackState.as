@@ -41,14 +41,19 @@ package
 		
 		private var _gameOver:Boolean;
 		private var _waveGold:int;
+		private var _pendingAttack:Object;
 		
-		public function AttackState(map:FlxTilemap=null, castle:Castle = null, towers:FlxGroup = null, units:FlxGroup = null)
+		public function AttackState(map:FlxTilemap=null, castle:Castle = null, towers:FlxGroup = null, units:FlxGroup = null, pendingAttack:Object = null)
 		{
 			super(map, castle, towers, units);
+			_pendingAttack = pendingAttack;
+			if (_pendingAttack != null) {
+				attackPending = true;
+				_placeOnLeft = _pendingAttack.leftSide.split(",");
+				_placeOnRight = _pendingAttack.rightSide.split(",");
+			}
 			_activeAttack = false;
 			_unitDropCounter = 10;
-			this.castle.resetGame();
-
 		}
 		
 		/**
@@ -58,6 +63,8 @@ package
 		 */
 		override public function create():void {
 			super.create();
+			this.castle.resetGame();
+
 			_gameOver = false;
 			
 			towers.setAll("canDrag", false);
@@ -76,7 +83,27 @@ package
 		
 		private function waveFinished(win:Boolean):void {
 			Util.log("AttackState.waveFinished: " + win, Castle.tutorialLevel);
-			if (win && Castle.tutorialLevel == Castle.TUTORIAL_FIRST_WAVE) {
+			var winText:String = Util.assets[Assets.FIRST_WIN];
+			var loseText:String = Util.assets[Assets.FIRST_LOSS];
+
+			if (_pendingAttack != null) {
+				if (Castle.tutorialLevel == Castle.TUTORIAL_ATTACK_FRIENDS) {
+					toggleButtons(4);
+				} else if (Castle.tutorialLevel == Castle.TUTORIAL_LEASE) {
+					toggleButtons(5);
+				} else {
+					Util.log("AttackState.waveFinished: win=" + win + ", unexpected tutorial level for pending attack");
+				}
+				if (win) {
+					add(new MessageBox(StringUtil.substitute(Util.assets[Assets.FRIEND_WAVE_WIN], _pendingAttack.name), "Okay", null));
+				} else {
+					add(new MessageBox(StringUtil.substitute(Util.assets[Assets.FRIEND_WAVE_LOSS], _pendingAttack.name), "Okay", null));
+				}
+				Database.removeUserAttacks({
+					id: _pendingAttack.id, 
+					aid: _pendingAttack.aid
+				});
+			} else if (win && Castle.tutorialLevel == Castle.TUTORIAL_FIRST_WAVE) {
 				add(new MessageBox(Util.assets[Assets.FIRST_WIN], "Okay", function():void {
 					toggleButtons(3);
 					Database.updateUserTutorialInfo(FaceBook.uid, Castle.TUTORIAL_UPGRADE);
@@ -94,7 +121,6 @@ package
 			} else if (Castle.tutorialLevel == Castle.TUTORIAL_LEASE) {
 				toggleButtons(5);
 			} else {
-				toggleButtons(5);
 				Util.log("AttackState.waveFinished: unknown tutorial level " + Castle.tutorialLevel);
 			}
 		}
@@ -140,16 +166,19 @@ package
 					// if none, check for automated
 					
 					// else if is, lock menus and drop dudes
-					var leftSide:Array = new Array();
-					var rightSide:Array = new Array();
+					
 					var type:String = getAttackType();
-					if (type == AttackState.REQUESTED){
+					if (leftSide != null || rightSide != null) {
+
+					} else { //if (type == AttackState.REQUESTED){
+						var leftSide:Array = new Array();
+						var rightSide:Array = new Array();
 						generateArmy(leftSide, rightSide, 10, 10);
-					} else if ( type == AttackState.TIDAL ) {
+					} /*else if ( type == AttackState.TIDAL ) {
 						generateArmy(leftSide, rightSide, 0, 15);
 					} else {  //== AttackState.REQUESTED
-						getFriendWave(leftSide, rightSide);
-					}
+						
+					} */
 					placeArmy(leftSide, rightSide);
 					
 				}

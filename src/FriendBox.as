@@ -18,6 +18,7 @@ package
 		private var _uid:String;
 		private var _clickCallback:Function;
 		private var _beingAttacked:Boolean;
+		private var _name:String;
 		
 		private static var _selected:FriendBox;
 		
@@ -40,6 +41,7 @@ package
 			_uid = uid;
 			_clickCallback = clickCallback;
 			_beingAttacked = beingAttacked;
+			_name = name;
 			pic.x = x + padding;
 			pic.y = y + padding;
 			pic.height = Math.min(pic.height, 50);
@@ -116,8 +118,14 @@ package
 		public function get uid():String {
 			return _uid;
 		}
+		public function get name():String {
+			return _name;
+		}
 		public static function get selected():FriendBox {
 			return _selected;
+		}
+		public static function resetSelected():void {
+			_selected = null;
 		}
 	}
 }

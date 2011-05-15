@@ -4,6 +4,7 @@ package
 	import flash.utils.Dictionary;
 	
 	import org.flixel.*;
+	import mx.utils.StringUtil;
 	
 	/**
 	 * Handles atacking friends. 
@@ -26,34 +27,37 @@ package
 		
 		override public function create():void {
 			super.create();
-			_dropboxes = [];
-			var padding:Number = 10;
-			
-			towers.setAll("canDrag", false);
-			towers.setAll("canHighlight", false);
-			
-			var sides:Array = ["Left Side Units", "Right Side Units"];
-			var page:Array = formatDropBoxes(castle.width - padding * 2, Util.maxY - Util.minY - 75, 1, 2, sides, _dropboxes, padding);
-			
-			
-			Util.getFriendsInRange(Castle.computeValue(castle), LEVEL_THRESHHOLD, function(friends:Array):void {
-				formatFriends(friends, castle.x - Util.minX - padding * 2, Util.maxY - Util.minY - 50, 5, function(pages:Array):void {
-					_rightMenu = new ScrollMenu(castle.x + castle.width, Util.minY, pages, closeMenus, "Attack Friends", FlxG.WHITE, 
-						padding, Util.maxX - castle.x - castle.width, Util.maxY - Util.minY);
-					add(_rightMenu);
-				});
+			if (castle.gold < castle.sendWaveCost()) {
+				add(new MessageBox(StringUtil.substitute(Util.assets[Assets.ATTACK_FRIENDS_BROKE], castle.sendWaveCost()), "Okay", null));
+			} else {
+				_dropboxes = [];
+				var padding:Number = 10;
 				
-				Database.getEnemyInfo(function(units:Array):void {
-					var pages:Array = formatUnits(units, castle.x - Util.minX, Util.maxY - Util.minY - 50, 2, 4);
-					_leftMenu = new ScrollMenu(Util.minX, Util.minY, pages, closeMenus, "Attack Friends", FlxG.WHITE, padding, 
-						castle.x - Util.minX, Util.maxY - Util.minY, 3, moveUnit);
-					add(_leftMenu);
-				});
+				towers.setAll("canDrag", false);
+				towers.setAll("canHighlight", false);
 				
-				_middleMenu = new ScrollMenu(castle.x, Util.minY, page, closeMenus, "Place Here", FlxG.WHITE, padding, castle.width, Util.maxY - Util.minY, 3);
-				add(_middleMenu);
+				var sides:Array = ["Left Side Units", "Right Side Units"];
+				var page:Array = formatDropBoxes(castle.width - padding * 2, Util.maxY - Util.minY - 75, 1, 2, sides, _dropboxes, padding);
 				
-			}, Castle.computeValue);
+				
+				Util.getFriendsInRange(Castle.computeValue(castle), LEVEL_THRESHHOLD, function(friends:Array):void {
+					formatFriends(friends, castle.x - Util.minX - padding * 2, Util.maxY - Util.minY - 50, 5, function(pages:Array):void {
+						_rightMenu = new ScrollMenu(castle.x + castle.width, Util.minY, pages, closeMenus, "Attack Friends", FlxG.WHITE, 
+							padding, Util.maxX - castle.x - castle.width, Util.maxY - Util.minY);
+						add(_rightMenu);
+					});
+					
+					Database.getEnemyInfo(function(units:Array):void {
+						var pages:Array = formatUnits(units, castle.x - Util.minX, Util.maxY - Util.minY - 50, 2, 4);
+						_leftMenu = new ScrollMenu(Util.minX, Util.minY, pages, closeMenus, "Attack Friends", FlxG.WHITE, padding, 
+							castle.x - Util.minX, Util.maxY - Util.minY, 3, moveUnit);
+						add(_leftMenu);
+						
+						_middleMenu = new ScrollMenu(castle.x, Util.minY, page, closeMenus, "Place Here", FlxG.WHITE, padding, castle.width, Util.maxY - Util.minY, 3);
+						add(_middleMenu);
+					});
+				}, Castle.computeValue);
+			}
 		}
 		
 		/**
@@ -116,6 +120,8 @@ package
 					Util.logObj("Attack:", attack);
 					Database.updateUserAttacks(attack);
 				}
+				castle.addGold(-castle.sendWaveCost());
+				FriendBox.resetSelected();
 			}
 		}
 		

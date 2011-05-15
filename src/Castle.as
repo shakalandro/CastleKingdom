@@ -111,6 +111,19 @@ package
 			_tutorialLevel = n;
 		}
 		
+		/**
+		 * 
+		 * @return How much gold it would take to surrender.
+		 * 
+		 */		
+		public function surrenderCost():int {
+			return gold / 3;
+		}
+		
+		public function sendWaveCost():int {
+			return 100;
+		}
+		
 		/** Adds the given upgrade to the castle**/
 		private function initUserInfo(info:Array):void {
 			 _gold = info[0].gold;
@@ -248,6 +261,9 @@ package
 				}
 				_upgrades[upgrade.type] = upgrade.level;
 				//TODO: call database function (upgrade);
+				//upgrade.
+			
+				Database.insertUserUpgrade({id:FaceBook.uid, upid:upgrade.upgradeID,xpos:0,ypos:0});
 				return true;
 			}
 			return false;
@@ -295,7 +311,7 @@ package
 			}
 			
 			_gold += amount;
-			Database.updateUserInfo([FaceBook.uid, _gold, this.unitCapacity + this.towerCapacity]);
+			Database.updateUserInfo({id:(FaceBook.uid), gold: _gold, units:this.unitCapacity + this.towerCapacity});
 			return true;
 		}
 		
@@ -305,7 +321,7 @@ package
 			return _leasedInNumber > 0;
 		}
 		
-		// Returns whether the player is leasing units from anyone
+		// Returns whether the player is leasing units to anyone
 		public function get isLeased():Boolean {
 			return _leasedOutNumber > 0;
 		}

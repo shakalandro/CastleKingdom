@@ -132,6 +132,10 @@ package
 		[Embed(source = "../images/loader.png")]
 		private static var loader_img:Class;
 		public static const LOADER:String = "Loader";
+		
+		[Embed(source = "../images/startpage_background.png")]
+		private static var startpage_background:Class;
+		public static const LOGIN_BACKGROUND:String = "Login Background";
 	
 		// Text resources
 		
@@ -149,6 +153,9 @@ package
 		public static const FIRST_ATTACK:String = "first attack";
 		public static const SENT_WAVE:String = "sent wave";
 		public static const INCOMING_WAVE:String = "incoming wave";
+		public static const FRIEND_WAVE_LOSS:String = "friend wave loss";
+		public static const FRIEND_WAVE_WIN:String = "friend wave win";
+		public static const ATTACK_FRIENDS_BROKE:String = "attack friends broke";
 		
 		// Other resources
 		
@@ -186,6 +193,7 @@ package
 			_normal[Assets.CASTLE] = castle_img;
 			_normal[Assets.CURSOR] = cursor_img;
 			_normal[Assets.BACKGROUND] = background_img;
+			_normal[Assets.LOGIN_BACKGROUND] = startpage_background;
 			
 			_normal[Assets.ARROW_TOWER] = arrow_tower_normal;
 			_normal[Assets.SNIPER_TOWER] = sniper_tower_normal;
@@ -221,11 +229,14 @@ package
 			_normal[Assets.FIRST_DEFENSE] = "Let's see how that defensive strategy plays out, release " +
 				"the enemies to find out.";
 			_normal[Assets.FIRST_ATTACK] = "Your castle has become quite impressive. You are now ready to " +
-				"venture out and try stealing gold from your friends castles!";
+				"venture out and try stealing gold from your friends castles! But don't go nuts, an attack comes with an initial investment.";
 			_normal[Assets.SENT_WAVE] = "Now that you can attack friends, they can also attack you. Try asking " +
 				"your friends to lease some of their resources to help you in battle.";
-			_normal[Assets.INCOMING_WAVE] = "OMG, your friend {0} has sent a wave of enemies at you. Don't let " +
-				"him steal your gold! Set the defenses.";
+			_normal[Assets.INCOMING_WAVE] = "OMG, your friend {0} has sent a wave of enemies at you. Would you " +
+				"like to defend yourself or simply surrender {1} gold?";
+			_normal[Assets.FRIEND_WAVE_WIN] = "Good job, way to fight off the enemies from {0}, they won't be messing with you again soon.";
+			_normal[Assets.FRIEND_WAVE_LOSS] = "Shoot {0} got away with some of your gold.";
+			_normal[Assets.ATTACK_FRIENDS_BROKE] = "Dang, you don't have enough money to attack an enemy yet, save up {0} gold and try again";
 		}
 		
 		/**

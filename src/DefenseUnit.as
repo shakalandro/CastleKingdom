@@ -78,7 +78,7 @@ package
 				_infoBox.x = this.x - rangeSize;
 				_infoBox.y = this.y - rangeSize;
 				_description.x = this.x + width + 3, 
-					_description.y = this.y;
+				_description.y = this.y;
 				_infoBox.visible = true;
 				_description.visible = true;
 			} else {
@@ -126,11 +126,13 @@ package
 			if (health <= 0) {
 				
 				if(this.finished) {
+					(FlxG.state as ActiveState).remove(this._infoBox); 
 					(FlxG.state as ActiveState).towers.remove(this, true); 
-					this.kill();
+				//	this.kill();
 					//	this.kill();
 				} else {
 					this.play("die");
+					
 				}
 				
 			} else {
@@ -152,7 +154,7 @@ package
 				if (highlighted) {
 					frame = 0;
 				} else {
-					this.frame = 6 - Math.floor(5 * Math.sqrt((health / this.maxHealth)));
+					this.frame = 4 - Math.floor(3 * Math.sqrt((health / this.maxHealth)));
 				}
 			}
 			super.update();
