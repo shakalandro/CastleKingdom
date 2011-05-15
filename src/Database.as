@@ -26,6 +26,7 @@ package
 		private static var _userTutorialInfo:Array;
 		private static var _attacked:Array;
 		private static var _pendingAttacks:Array;
+		private static var _pendingUserLeaseInfo:Array;
 		
 		
 		private static function getMain(url:String, callback:Function, ids:Object = null):void
@@ -127,11 +128,50 @@ package
 		
 		/**
 		 * <p>
-		 * Passes an array of objects representing the given users (based on the given ids) lease information to
+		 * Passes an array of objects representing the given users (based on the given ids) pending lease information to
 		 * the callback function. The object that is passed to the callback function is of the following form:
 		 * </p>
 		 * <p>
 		 * {id, lid, numUnits}
+		 * </p>
+		 * <p>
+		 * id = the user uid, lid = the uid of the person you are leasing to, and numUnits is the number of units
+		 * they are leasing to lid.
+		 * If the user does not have any lease information, the the array that is passed to the callback is null.
+		 * </p>
+		 * 
+		 * @param callback a function that takes one argument, an array of objects
+		 * @param ids either a number or an array of numbers representing the user ids
+		 * @param forceRefresh
+		 * 
+		 */
+		public static function getPendingUserLeases(callback:Function, ids:Object = null, forceRefresh:Boolean = false):void
+		{
+			if (forceRefresh || _pendingUserLeaseInfo == null) {
+				CastleKingdom.loading = true;
+				getMain("http://games.cs.washington.edu/capstone/11sp/castlekd/database/getPendingUserLeases.php", function(xmlData:XML):void {
+					CastleKingdom.loading = false;
+					_pendingUserLeaseInfo = processList(xmlData.user, function(unit:XML):Object {
+						return {
+							id: unit.uid,
+							lid: unit.lid,
+							numUnits: unit.numUnits
+						};
+					});
+					callback(_pendingUserLeaseInfo);
+				}, ids);
+			} else {
+				callback(getAll(_pendingUserLeaseInfo, ids));
+			}
+		}
+		
+		/**
+		 * <p>
+		 * Passes an array of objects representing the given users (based on the given ids) lease information to
+		 * the callback function. The object that is passed to the callback function is of the following form:
+		 * </p>
+		 * <p>
+		 * {id, lid, numUnits, pending}
 		 * </p>
 		 * <p>
 		 * id = the user uid, lid = the uid of the person you are leasing to, and numUnits is the number of units
@@ -153,7 +193,8 @@ package
 						return {
 							id: unit.uid,
 							lid: unit.lid,
-							numUnits: unit.numUnits
+							numUnits: unit.numUnits,
+							pending: unit.pending
 						};
 					});
 					callback(_userLeaseInfo);
@@ -272,7 +313,33 @@ package
 					callback(_pendingAttacks);
 				}, ids);
 			} else {
-				callback(getAll(_pendingAttacks, ids));
+				callback(getAllPendingAttacks(_pendingAttacks, ids));
+			}
+		}
+		
+		private static function getAllPendingAttacks(stuff:Array, ids:Object):Array {
+			if (stuff == null) {
+				return null;
+			}
+			var idsArr:Array = null;
+			if (ids == null) {
+				return stuff;
+			} else if (ids is Number) {
+				idsArr = [ids] 
+			} else if (ids is String) {
+				idsArr = [parseInt(ids as String)];
+			} else if (ids is Array) {
+				idsArr = ids as Array;
+			} else {
+				return null;
+			}
+			var newStuff:Array = stuff.filter(function(item:Object, index:int, arr:Array):Boolean {
+				return idsArr.indexOf(item.aid) >= 0;
+			});
+			if (newStuff.length != idsArr.length) {
+				return null;
+			} else {
+				return newStuff;
 			}
 		}
 		
@@ -729,17 +796,16 @@ package
 		/**
 		 * <p>
 		 * Should call getUserInfo first to determine how many units are allowed to be leased at one time.
-		 * Adds a new lease for the given user. Updates the user's information so that the number of units they
-		 * are leasing out is decremented from their total number of units and the person they are leasing to 
-		 * has their units increased. This is done based on the object passed in. The object should be of the 
-		 * following form:
+		 * Adds a new pending lease for the given user. This is done based on the object passed in. 
+		 * The object should be of the following form:
 		 * </p>
 		 * <p>
 		 * {id, lid, numUnits}
 		 * </p>
 		 * <p>
 		 * id is the uid of the person doing the leasing, lid is the uid of the person who is getting the leased
-		 * units and numUnits is the number of units being leased. 
+		 * units and numUnits is the number of units being leased. Must call
+		 * confirmUserLease to actually confirm the lease. 
 		 * </p>
 		 *  
 		 * @param leaseInfo must be of the specified format and != null
@@ -763,6 +829,46 @@ package
 				_save.data.users[leaseInfo.id] = {info: {}, tut: {}, leases: [], attacks: [], upgrades: []};
 			}
 			_save.data.users[leaseInfo.id].leases.push(leaseInfo);
+		}
+		
+		/**
+		 * <p>
+		 * Confirms the lease between the users given in the leaseInfo object passed in. Updates the user's 
+		 * information so that the number of units they are leasing out is decremented from their total 
+		 * number of units and the person they are leasing to has their units increased. This method must be called
+		 * only after addUserLease has been called. The object passed in must be of the form: 
+		 * </p>
+		 * <p>
+		 * 	{id, lid, numUnits}
+		 * </p>
+		 * 
+		 * @param leaseInfo The ids of the two parties that wish to confirm their lease
+		 * 
+		 */		
+		public static function confirmUserLease(leaseInfo:Object):void
+		{
+			var variables:URLVariables = new URLVariables();
+			variables.uid = "" + leaseInfo["id"];
+			variables.lid = "" + leaseInfo["lid"];
+			variables.numUnits = "" + leaseInfo["numUnits"];
+			update("http://games.cs.washington.edu/capstone/11sp/castlekd/database/confirmUserLease.php", variables);
+			if (_userLeaseInfo != null) {
+				for (var i:int = 0; i < _userLeaseInfo.length; i++) {
+					if (_userLeaseInfo[i].id == leaseInfo.id && _userLeaseInfo[i].lid == leaseInfo.lid) {
+						_userLeaseInfo[i].pending = 0;
+					}
+				}
+			}
+			
+			if (_save.data.users[leaseInfo.id] == undefined || _save.data.users[leaseInfo.id] == null) {
+				_save.data.users[leaseInfo.id] = {info: {}, tut: {}, leases: [], attacks: [], upgrades: []};
+			} else {
+				for (i = 0; i < _save.data.users[leaseInfo.id].leases.length; i++) {
+					if (_save.data.users[leaseInfo.id].leases[i].id == leaseInfo.id && _save.data.users[leaseInfo.id].leases[i].lid == leaseInfo.lid) {
+						_save.data.users[leaseInfo.id].leases[i].pending = 0;
+					}
+				}
+			}
 		}
 		
 		/**
@@ -793,6 +899,8 @@ package
 					break;
 				}
 			}
+			if (_save.data.users[leaseInfo.id] == undefined || _save.data.users[leaseInfo.id] == null)
+				_save.data.users[leaseInfo.id] = {info: {}, tut: {}, leases: [], attacks: [], upgrades: []};
 			var userLeases:Array = _save.data.users[leaseInfo.id].leases;
 			for (i = 0; i < userLeases.length; i++) {
 				if (userLeases[i].id == leaseInfo["id"] && userLeases[i].lid == leaseInfo["lid"] 
@@ -858,6 +966,8 @@ package
 					break;
 				}
 			}
+			if (_save.data.users[attackInfo.id] == undefined || _save.data.users[attackInfo.id] == null)
+				_save.data.users[attackInfo.id] = {info: {}, tut: {}, leases: [], attacks: [], upgrades: []};
 			var userAttacks:Array = _save.data.users[attackInfo.id].attacks;
 			for (i = 0; i < userAttacks.length; i++) {
 				if (userAttacks[i].id == attackInfo["id"] && userAttacks[i].aid == attackInfo["aid"]) {
