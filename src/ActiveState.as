@@ -63,6 +63,7 @@ package
 			super(map);
 			_towers = towers || new FlxGroup();
 			_units = units || new FlxGroup();
+			_castle = _castle || new Castle(0, 0, Util.assets[Assets.CASTLE]);
 			_attackAnims = new FlxGroup();
 			_hudButtons = [];
 			attackPending = false;
@@ -78,7 +79,6 @@ package
 			add(_towers);
 			add(_units);
 			add(_attackAnims);
-			_castle = _castle || new Castle(0, 0, Util.assets[Assets.CASTLE]);
 			Util.centerX(_castle);
 			Util.placeInZone(_castle, map);
 			add(_castle);
@@ -382,18 +382,20 @@ package
 				return false;
 			}
 			for each (var obj:FlxObject in towers.members) {
-				var objStart:FlxPoint = Util.cartesianToIndices(new FlxPoint(obj.x, obj.y));
-				var objStop:FlxPoint = Util.cartesianToIndices(new FlxPoint(obj.x + obj.width, obj.y));
-				if (obj is DefenseUnit) {
-					var tower:DefenseUnit = obj as DefenseUnit;
-					if (tower.clas == Unit.GROUND) {
-						if (indices.x >= objStart.x && indices.x < objStop.x) {
-							return false;
-						}
-					} else {
-						if (indices.x >= objStart.x && indices.x < objStop.x && 
-							indices.y >= objStart.y && indices.y <= objStop.y) {
-							return false;
+				if(obj != null) {
+					var objStart:FlxPoint = Util.cartesianToIndices(new FlxPoint(obj.x, obj.y));
+					var objStop:FlxPoint = Util.cartesianToIndices(new FlxPoint(obj.x + obj.width, obj.y));
+					if (obj is DefenseUnit) {
+						var tower:DefenseUnit = obj as DefenseUnit;
+						if (tower.clas == Unit.GROUND) {
+							if (indices.x >= objStart.x && indices.x < objStop.x) {
+								return false;
+							}
+						} else {
+							if (indices.x >= objStart.x && indices.x < objStop.x && 
+								indices.y >= objStart.y && indices.y <= objStop.y) {
+								return false;
+							}
 						}
 					}
 				}

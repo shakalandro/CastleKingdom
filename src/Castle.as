@@ -66,7 +66,7 @@ package
 		{
 			//TODO: implement function
 			super(X, Y, SimpleGraphic);
-
+			trace("CREATING NEW CASTLE");
 			UNIT_INFO[Castle.ARMY] = new Array();
 			UNIT_INFO[Castle.TOWER] = new Array();
 			_unitCap = START_UNIT_CAPACITY;
@@ -88,6 +88,10 @@ package
 			solid = true;
 			immovable = true;
 			
+			
+			// test
+			this.color =  Math.random() * 0xffffffff;
+
 
 
 			
@@ -117,7 +121,7 @@ package
 		 * 
 		 */		
 		public function surrenderCost():int {
-			return gold / 3;
+			return Math.round(gold * .6) ;
 		}
 		
 		public function sendWaveCost():int {
