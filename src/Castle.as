@@ -79,7 +79,7 @@ package
 			_upgrades["mine"] = 0;
 			_upgrades["aviary"] = 0;
 			//_upgrades = ;
-	//		Database.getUserInfo(initUserInfo, FaceBook.uid);
+			Database.getUserInfo(initUserInfo, FaceBook.uid);
 			Database.getUserUpgrades(initUpgrades,FaceBook.uid);
 			Database.getDefenseUnitInfo(initDefense);  // stores into UNIT_INFO
 			Database.getEnemyInfo(initArmy);
@@ -252,7 +252,7 @@ package
 			if( (this.gold >= upgrade.goldCost 
 					&& _upgrades[upgrade.type] == upgrade.level - 1
 					&& (upgrade.type == "castle" || _upgrades["castle"] >= upgrade.level) )
-				|| CastleKingdom.DEBUG) {
+					|| CastleKingdom.DEBUG) {
 				this.addGold(-upgrade.goldCost);
 				if (upgrade.type == "barracks") {
 					 _unitCap += upgrade.unitWorth;
@@ -472,7 +472,7 @@ package
 		 * 
 		 */		
 		public static function computeValue(person:Object):Number {
-			return person.gold;
+			return person.units;
 		}
 		
 		/**

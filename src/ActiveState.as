@@ -63,9 +63,9 @@ package
 			super(map);
 			_towers = towers || new FlxGroup();
 			_units = units || new FlxGroup();
-			_castle = _castle || new Castle(0, 0, Util.assets[Assets.CASTLE]);
 			_attackAnims = new FlxGroup();
 			_hudButtons = [];
+			_castle = castle;
 			attackPending = false;
 		}
 		
@@ -79,6 +79,7 @@ package
 			add(_towers);
 			add(_units);
 			add(_attackAnims);
+			_castle = _castle || new Castle(0, 0, Util.assets[Assets.CASTLE]);
 			Util.centerX(_castle);
 			Util.placeInZone(_castle, map);
 			add(_castle);
@@ -96,7 +97,7 @@ package
 			
 			if (!attackPending) {
 				checkForPendingAttacks(function():void {
-					/*
+					
 					if (CastleKingdom.DEBUG) {
 						var clear:CKButton = new CKButton(0, 0, "Clear", function():void {
 							Util.log("Clearing the tutorial info: " + FaceBook.uid + ", " + Castle.TUTORIAL_NEW_USER);
@@ -108,7 +109,7 @@ package
 						clear.immovable = true;
 						add(clear);
 					}
-					*/ 
+					 
 					setTutorialUI();
 				});
 			} else {
@@ -381,21 +382,26 @@ package
 			if (indices.x >= castleStart && indices.x < castleStop) {
 				return false;
 			}
+			//fix weird null bug
 			for each (var obj:FlxObject in towers.members) {
-				if(obj != null) {
-					var objStart:FlxPoint = Util.cartesianToIndices(new FlxPoint(obj.x, obj.y));
-					var objStop:FlxPoint = Util.cartesianToIndices(new FlxPoint(obj.x + obj.width, obj.y));
-					if (obj is DefenseUnit) {
-						var tower:DefenseUnit = obj as DefenseUnit;
-						if (tower.clas == Unit.GROUND) {
-							if (indices.x >= objStart.x && indices.x < objStop.x) {
-								return false;
-							}
-						} else {
-							if (indices.x >= objStart.x && indices.x < objStop.x && 
-								indices.y >= objStart.y && indices.y <= objStop.y) {
-								return false;
-							}
+
+				if (obj == null) {
+					towers.remove(obj);
+				}
+			}
+			for each (obj in towers.members) {
+				var objStart:FlxPoint = Util.cartesianToIndices(new FlxPoint(obj.x, obj.y));
+				var objStop:FlxPoint = Util.cartesianToIndices(new FlxPoint(obj.x + obj.width, obj.y));
+				if (obj is DefenseUnit) {
+					var tower:DefenseUnit = obj as DefenseUnit;
+					if (tower.clas == Unit.GROUND) {
+						if (indices.x >= objStart.x && indices.x < objStop.x) {
+							return false;
+						}
+					} else {
+						if (indices.x >= objStart.x && indices.x < objStop.x && 
+							indices.y >= objStart.y && indices.y <= objStop.y) {
+							return false;
 						}
 					}
 				}

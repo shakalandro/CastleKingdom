@@ -51,7 +51,6 @@ package
 			} else if (_dragging && FlxG.mouse.justReleased()) {
 				_dragging = false;
 			}
-			Util.log("dragging: " + _dragging);
 			if (_dragging) {
 				_ball.x = xPos - _dragOffset;
 			}

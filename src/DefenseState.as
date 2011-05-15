@@ -17,6 +17,11 @@ package
 			if (_pendingAttack != null) {
 				attackPending = true;
 			}
+			for each (var tower:Unit in towers.members) {
+				if(tower != null ) {
+					tower.health = tower.maxHealth;
+				}
+			}
 		}
 		
 		/**
