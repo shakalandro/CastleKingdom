@@ -153,7 +153,8 @@ package
 						return {
 							id: unit.uid,
 							lid: unit.lid,
-							numUnits: unit.numUnits
+							numUnits: unit.numUnits,
+							pending: unit.pending
 						};
 					});
 					callback(_userLeaseInfo);
@@ -272,7 +273,33 @@ package
 					callback(_pendingAttacks);
 				}, ids);
 			} else {
-				callback(getAll(_pendingAttacks, ids));
+				callback(getAllPendingAttacks(_pendingAttacks, ids));
+			}
+		}
+		
+		private static function getAllPendingAttacks(stuff:Array, ids:Object):Array {
+			if (stuff == null) {
+				return null;
+			}
+			var idsArr:Array = null;
+			if (ids == null) {
+				return stuff;
+			} else if (ids is Number) {
+				idsArr = [ids] 
+			} else if (ids is String) {
+				idsArr = [parseInt(ids as String)];
+			} else if (ids is Array) {
+				idsArr = ids as Array;
+			} else {
+				return null;
+			}
+			var newStuff:Array = stuff.filter(function(item:Object, index:int, arr:Array):Boolean {
+				return idsArr.indexOf(item.aid) >= 0;
+			});
+			if (newStuff.length != idsArr.length) {
+				return null;
+			} else {
+				return newStuff;
 			}
 		}
 		
@@ -793,6 +820,8 @@ package
 					break;
 				}
 			}
+			if (_save.data.users[leaseInfo.id] == undefined || _save.data.users[leaseInfo.id] == null)
+				_save.data.users[leaseInfo.id] = {info: {}, tut: {}, leases: [], attacks: [], upgrades: []};
 			var userLeases:Array = _save.data.users[leaseInfo.id].leases;
 			for (i = 0; i < userLeases.length; i++) {
 				if (userLeases[i].id == leaseInfo["id"] && userLeases[i].lid == leaseInfo["lid"] 
@@ -858,6 +887,8 @@ package
 					break;
 				}
 			}
+			if (_save.data.users[attackInfo.id] == undefined || _save.data.users[attackInfo.id] == null)
+				_save.data.users[attackInfo.id] = {info: {}, tut: {}, leases: [], attacks: [], upgrades: []};
 			var userAttacks:Array = _save.data.users[attackInfo.id].attacks;
 			for (i = 0; i < userAttacks.length; i++) {
 				if (userAttacks[i].id == attackInfo["id"] && userAttacks[i].aid == attackInfo["aid"]) {
