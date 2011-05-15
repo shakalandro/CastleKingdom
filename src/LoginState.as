@@ -55,7 +55,7 @@ package
 							Util.log('fb user info retrieved: ' + fbInfo);
 							Database.getUserInfo(function(dbInfo:Array):void {
 								if (dbInfo == null || dbInfo.length == 0) {
-									Util.logObj('New user detected:', fbInfo.id);
+									Util.logObj('New user detected:', fbInfo);
 									Database.addNewUser(parseInt(fbInfo.id));
 									Castle.tutorialLevel = 0;
 									FlxG.switchState(new ActiveState(map));
