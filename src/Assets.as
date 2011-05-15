@@ -76,6 +76,14 @@ package
 		private static var hornet_normal:Class;
 		public static const HORNET:String = "Hornet";
 		
+		[Embed(source = "../images/warrior_angel.png")]
+		private static var warrior_angel_normal:Class;
+		public static const WARRIOR_ANGEL:String = "Warrior Angel";
+		
+		[Embed(source = "../images/zeppelin.png")]
+		private static var zeppelin_normal:Class;
+		public static const ZEPPELIN:String = "Zeppelin";
+		
 		[Embed(source = "../images/hud_header.png")]
 		private static var hud_header:Class;
 		public static const HUD_HEADER:String = "hud_header";
@@ -244,6 +252,8 @@ package
 			_normal[Assets.DRAGON] = dragon_normal;
 			_normal[Assets.AIRPLANE] = airplane_normal;
 			_normal[Assets.HORNET] = hornet_normal;
+			_normal[Assets.WARRIOR_ANGEL] = warrior_angel_normal;
+			_normal[Assets.ZEPPELIN] = zeppelin_normal;
 			
 			//Textual assets
 			
