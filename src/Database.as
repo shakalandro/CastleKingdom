@@ -27,6 +27,7 @@ package
 		private static var _attacked:Array;
 		private static var _pendingAttacks:Array;
 		private static var _pendingUserLeaseInfo:Array;
+		private static var _pendingLeases:Array;
 		
 		
 		private static function getMain(url:String, callback:Function, ids:Object = null):void
@@ -276,6 +277,41 @@ package
 				}, ids);
 			} else {
 				callback(getAll(_attacked , ids));
+			}
+		}
+		
+		/**
+		 * <p>
+		 * Passes an array of objects representing which ids (given to the function) have pending leases from whom
+		 * the callback function. The object that is passed to the callback function in the array is of the following form:
+		 * </p>
+		 * <p>
+		 * {id}
+		 * </p>
+		 * <p>
+		 * The id is the id of the person who has the lease (one of the ids given to the function)
+		 * If the user does not have any pending information, the the array that is passed to the callback is null.
+		 * </p>
+		 * 
+		 * @param callback a function that takes one argument, an array of objects
+		 * @param ids either a number or an array of numbers representing the user ids
+		 * @param forceRefresh
+		 * 
+		 */
+		public static function hasPendingLeases(callback:Function, ids:Object = null, forceRefresh:Boolean = false):void {
+			if (forceRefresh || _pendingLeases == null) {
+				CastleKingdom.loading = true;
+				getMain("http://games.cs.washington.edu/capstone/11sp/castlekd/database/pendingUserLeases.php", function(xmlData:XML):void {
+					CastleKingdom.loading = false;
+					_pendingLeases = processList(xmlData.lease, function(unit:XML):Object {
+						return {
+							id: unit.lid
+						};
+					});
+					callback(_pendingLeases);
+				}, ids);
+			} else {
+				callback(getAll(_pendingLeases , ids));
 			}
 		}
 		

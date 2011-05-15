@@ -60,6 +60,22 @@ package
 		private static var leprechaun_normal:Class;
 		public static const LEPRECHAUN:String = "Leprechaun";
 		
+		[Embed(source = "../images/airplane.png")]
+		private static var airplane_normal:Class;
+		public static const AIRPLANE:String = "Airplane";
+		
+		[Embed(source = "../images/gryffin.png")]
+		private static var gryffin_normal:Class;
+		public static const GRYFFIN:String = "Gryffin";
+		
+		[Embed(source = "../images/dragon.png")]
+		private static var dragon_normal:Class;
+		public static const DRAGON:String = "Dragon";
+		
+		[Embed(source = "../images/hornet.png")]
+		private static var hornet_normal:Class;
+		public static const HORNET:String = "Hornet";
+		
 		[Embed(source = "../images/hud_header.png")]
 		private static var hud_header:Class;
 		public static const HUD_HEADER:String = "hud_header";
@@ -224,6 +240,10 @@ package
 			_normal[Assets.RAM] = ram_normal;
 			_normal[Assets.TANK] = tank_normal;
 			_normal[Assets.LEPRECHAUN] = leprechaun_normal;
+			_normal[Assets.GRYFFIN] = gryffin_normal;
+			_normal[Assets.DRAGON] = dragon_normal;
+			_normal[Assets.AIRPLANE] = airplane_normal;
+			_normal[Assets.HORNET] = hornet_normal;
 			
 			//Textual assets
 			
