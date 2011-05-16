@@ -152,6 +152,10 @@ package
 		private static var grapple_normal:Class;
 		public static const GRAPPLE:String = "Grapple";
 		
+		[Embed(source = "../images/sawblade.png")]
+		private static var sawblade_normal:Class;
+		public static const SAWBLADE:String = "Sawblade";
+		
 		[Embed(source = "../images/flame_tower.png")]
 		private static var flame_tower_normal:Class;
 		public static const FLAME_TOWER:String = "Flame Tower";
@@ -211,6 +215,10 @@ package
 		[Embed(source = "../images/quake_machine.png")]
 		private static var quake_machine_normal:Class;
 		public static const QUAKE_MACHINE:String = "Quake Machine";
+		
+		[Embed(source = "../images/traps.png")]
+		private static var traps_normal:Class;
+		public static const TRAPS:String = "Traps";
 		
 		[Embed(source = "../images/space_needle.png")]
 		private static var space_needle:Class;
@@ -324,6 +332,7 @@ package
 			_normal[Assets.ROCKET] = rocket_normal;
 			_normal[Assets.SHOCKWAVE] = shockwave_normal;
 			_normal[Assets.GRAPPLE] = grapple_normal;
+			_normal[Assets.SAWBLADE] = sawblade_normal;
 
 			
 			_normal[Assets.MAP_TILES] = tilesImg_normal;
@@ -360,6 +369,7 @@ package
 			_normal[Assets.MAGIC_WALL] = magic_wall_normal;
 			_normal[Assets.UNDERGROUND_WALL] = underground_wall_normal;
 			_normal[Assets.QUAKE_MACHINE] = quake_machine_normal;
+			_normal[Assets.TRAPS] = traps_normal;
 
 
 			_normal[Assets.WALL] = wall_normal;
