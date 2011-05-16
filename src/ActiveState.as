@@ -26,17 +26,17 @@ package
 		/**
 		 * A reference to the singleton castle object.
 		 */		
-		protected var _castle:Castle;
+		private var _castle:Castle;
 		
 		/**
 		 * A group of DefenseUnits 
 		 */		
-		protected var _towers:FlxGroup;
+		private var _towers:FlxGroup;
 		
 		/**
 		 * A group of EnemyUnits 
 		 */		
-		protected var _units:FlxGroup;
+		private var _units:FlxGroup;
 		
 		/** FlxSprites for unit caps/gold;
 		 * 

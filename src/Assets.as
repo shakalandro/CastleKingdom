@@ -140,7 +140,6 @@ package
 		private static var bullet_normal:Class;
 		public static const BULLET:String = "Bullet";
 		
-		
 		[Embed(source = "../images/flame_tower.png")]
 		private static var flame_tower_normal:Class;
 		public static const FLAME_TOWER:String = "Flame Tower";
@@ -243,6 +242,9 @@ package
 		public static const LEASE_MIDDLE_BUTTON:String = "lease middle button";
 		public static const UPGRADE_LEFT_TITLE:String = "upgrade left title";
 		public static const UPGRADE_RIGHT_TITLE:String = "upgrade right title";
+		public static const LEASE_REQUEST_TEXT:String = "lease request text";
+		public static const LEASE_REQUEST_ACCEPT:String = "lease request accept";
+		public static const LEASE_REQUEST_REJECT:String = "lease request reject";
 		
 		public static const FIRST_WIN:String = "first win";
 		public static const FIRST_LOSS:String = "first loss";
@@ -337,7 +339,7 @@ package
 				"you battle your friends for treasure.\n\nAuthors: Gabe Groen, Justin Harding, Robert Johnson, Roy McElmurry, Kim Nguyen" +
 				"\n\nSpring 2011";
 			_normal[Assets.BUTTON_CANCEL] = "Cancel";
-			_normal[Assets.BUTTON_DONE] = "Cancel";
+			_normal[Assets.BUTTON_DONE] = "Done";
 			_normal[Assets.PLACE_TOWER_BUTTON] = "Defend";
 			_normal[Assets.RELEASE_WAVE_BUTTON] = "Release";
 			_normal[Assets.UPGRADE_BUTTON] = "Upgrade";
@@ -355,6 +357,8 @@ package
 			_normal[Assets.LEASE_MIDDLE_BUTTON] = "Request";
 			_normal[Assets.UPGRADE_LEFT_TITLE] = "Castle Upgrades";
 			_normal[Assets.UPGRADE_RIGHT_TITLE] = "Castle Upgrades";
+			_normal[Assets.LEASE_REQUEST_ACCEPT] = "Accept";
+			_normal[Assets.LEASE_REQUEST_REJECT] = "Reject";
 			_normal[Assets.INITIAL_PENDING_WAVE_TEXT] = "Welcome to the cutthroat world of Castle Kingdom. " +
 				"Your castle is your life and the gold within is your means to glory. But right now a band of" +
 				" enemies is on their way to steal your gold. You must defend yourself.";
@@ -372,10 +376,11 @@ package
 			_normal[Assets.INCOMING_WAVE] = "OMG, your friend {0} has sent a wave of enemies at you. Would you " +
 				"like to defend yourself or simply surrender {1} gold?";
 			_normal[Assets.FRIEND_WAVE_WIN] = "Good job, way to fight off the enemies from {0}, they won't be messing with you again soon.";
-			_normal[Assets.FRIEND_WAVE_LOSS] = "Shoot {0} got away with some of your gold.";
+			_normal[Assets.FRIEND_WAVE_LOSS] = "Shoot {0} got away with {1} of your gold.";
 			_normal[Assets.ATTACK_FRIENDS_BROKE] = "Dang, you don't have enough money to attack an enemy yet, save up {0} gold and try again";
 			_normal[Assets.ATTACK_FRIENDS_WIN] = "Congratulations, your attack on {0} was successful, you have gained {1} hold as a result!";
 			_normal[Assets.ATTACK_FRIENDS_LOSE] = "Dang, your attack on {0} failed, you were unable to steal any gold.";
+			_normal[Assets.LEASE_REQUEST_TEXT] = "{0} would like to lease {1} of your units. What would you like to do?";
 		}
 		
 		/**

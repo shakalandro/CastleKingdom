@@ -1,6 +1,7 @@
 package
 {
 	import flash.text.*;
+	import mx.utils.StringUtil;
 	
 	import org.flixel.*;
 	import org.flixel.system.input.Input;
@@ -47,7 +48,7 @@ package
 			var text:FlxText = new FlxText(0, 0, width - padding * 2, "How many units of tower capacity would you like to lease?");
 			text.alignment = "center";
 			text.color = FlxG.BLACK;
-			_slider = new Slider(0, text.height, width - padding * 2, 100, 10, castle.unitCapacity);
+			_slider = new Slider(0, text.height, width - padding * 2, 100, 1, 1);
 			group.add(text);
 			group.add(_slider);
 			page.push(group);
@@ -58,6 +59,29 @@ package
 			_rightMenu.kill();
 			_leftMenu.kill();
 			_middleMenu.kill();
+			Database.getPendingUserLeases(function(leases:Array):void {
+				if (leases != null && leases.length > 0) {
+					FaceBook.getNameByID(leases[0].lid, function(name:String):void {
+						add(new MessageBox(StringUtil.substitute(Util.assets[Assets.LEASE_REQUEST_TEXT], name, leases[0].numUnits), Util.assets[Assets.LEASE_REQUEST_ACCEPT], function():void {
+							Database.confirmUserLease({
+								id: FaceBook.uid,
+								lid: leases[0].lid,
+								numUnits: leases[0].numUnits
+							});
+							castle.leasedOutUnits = leases[0].numUnits;
+						}, Util.assets[Assets.LEASE_REQUEST_REJECT], function():void {
+							Database.({
+								id: FaceBook.uid,
+								lid: leases[0].lid,
+								numUnits: leases[0].numUnits
+							});
+							castle.leasedOutUnits = leases[0].numUnits;
+						}));
+					});
+				} else {
+					Database.
+				}
+			}, FaceBook.uid, true);
 		}
 		
 		private function closeMenusAndSend():void {
@@ -98,9 +122,22 @@ package
 					}
 					var friendBox:FriendBox = new FriendBox(0, y, width, sprites[i], friends[i].name, friends[i].id, function(uid:String, setCallback:Function):void {
 						Database.getUserLeaseInfo(function(leases:Array):void {
-							setCallback(leases == null || leases.length == 0);
+							setCallback(leases == null || leases.length < 1);
+							if (leases == null || leases.length <= 0) {
+								Database.getUserInfo(function(info:Array):void {
+									if (info == null || info.length <= 0) {
+										Util.logObj("LeaseState.formatFriends user info null or empty for ", info);
+										_slider.max = 0;
+									} else {
+										var correctOne:Array = info.filter(function(obj:Object, index:int, arr:Array):Boolean {
+											return obj.id == uid;
+										});
+										_slider.max = Math.floor(correctOne[0].units / 4);
+									}
+								}, [uid, FaceBook.uid], true);
+							}
 						}, uid, true);
-					});
+					}, false);
 					page.add(friendBox);
 					
 					y += friendBox.height + padding / 2;

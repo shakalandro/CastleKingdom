@@ -64,6 +64,20 @@ package
 		override public function update():void {
 			_numText.x = _ball.x + _ball.width / 2 - _numText.width / 2;
 			_numText.text = value + "";
+			if (_ball.x == _box.x + _lineThickness) {
+				_numText.alignment = "left";
+				_numText.x = _ball.x;
+			} else if (_ball.x == _box.x + _box.width - _ball.width - _lineThickness) {
+				_numText.alignment = "right";
+				_numText.x = _ball.x + _ball.width - _numText.width;
+			} else {
+				_numText.alignment = "center";
+				_numText.x = _ball.x + _ball.width / 2 - _numText.width / 2;
+			}
+		}
+		
+		public function set max(n:Number):void {
+			_max = n;
 		}
 		
 		public function get value():Number {

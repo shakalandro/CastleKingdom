@@ -88,7 +88,6 @@ package
 		
 		private function setTutorialUI():void {
 			toggleButtons(0);
-			Util.log(":::Set buttons to 0");
 			if (Castle.tutorialLevel == Castle.TUTORIAL_FIRST_DEFEND) {
 				Database.updateUserTutorialInfo(FaceBook.uid, Castle.TUTORIAL_FIRST_WAVE);
 				Castle.tutorialLevel = Castle.TUTORIAL_FIRST_WAVE;
@@ -110,13 +109,20 @@ package
 				}
 				if (win) {
 					add(new MessageBox(StringUtil.substitute(Util.assets[Assets.FRIEND_WAVE_WIN], _pendingAttack.name), "Okay", null));
+					Database.setWinStatusAttacks({
+						uid: _pendingAttack.id,
+						aid: FaceBook.uid,
+						win: 0
+					});
 				} else {
-					add(new MessageBox(StringUtil.substitute(Util.assets[Assets.FRIEND_WAVE_LOSS], _pendingAttack.name), "Okay", null));
+					var prize:Number = computeStolen(units, castle.gold);
+					add(new MessageBox(StringUtil.substitute(Util.assets[Assets.FRIEND_WAVE_LOSS], _pendingAttack.name, prize), "Okay", null));
+					Database.setWinStatusAttacks({
+						uid: _pendingAttack.id,
+						aid: FaceBook.uid,
+						win: prize + 100
+					});
 				}
-				Database.removeUserAttacks({
-					id: _pendingAttack.id, 
-					aid: _pendingAttack.aid
-				});
 			} else if (win && Castle.tutorialLevel == Castle.TUTORIAL_FIRST_WAVE) {
 				add(new MessageBox(Util.assets[Assets.FIRST_WIN], "Okay", function():void {
 					toggleButtons(3);
@@ -140,6 +146,7 @@ package
 					Util.log("AttackState.waveFinished: unknown tutorial level " + Castle.tutorialLevel);
 				}
 			}
+			remove(units);
 		}
 
 		
@@ -161,12 +168,10 @@ package
 					this.castle.addGold(-cashStolen);
 					// Database.giveUserGold(cashStolen + armyCost);
 					//GameMessages.LOSE_FIGHT("Bob Barker",6);
-					this.remove(units);
 					_gameOver = true;
 					waveFinished(false);
 				} else if (_placeOnLeft.length + _placeOnRight.length == 0  && units.length == 0) { // Check if peeps are still alive
 					this.castle.addGold(this._waveGold);
-					this.remove(units);
 					_gameOver = true;
 					waveFinished(true);
 				}

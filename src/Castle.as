@@ -328,6 +328,10 @@ package
 			return _leasedInNumber > 0;
 		}
 		
+		public function set leasedOutUnits(n:Number):void {
+			_leasedOutNumber = n;
+		}
+		
 		// Returns whether the player is leasing units to anyone
 		public function get isLeased():Boolean {
 			return _leasedOutNumber > 0;

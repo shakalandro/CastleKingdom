@@ -119,7 +119,7 @@ package
 						}
 					});
 				}
-			}, FaceBook.uid);
+			}, FaceBook.uid, true);
 		}
 		
 		/**
@@ -252,6 +252,10 @@ package
 							setCallback(attacks == null || attacks.length == 0);
 						}, uid, true);
 					});
+					Database.isBeingAttacked(function(attacks:Array):void {
+						friendBox.isBeingAttacked = (attacks == null || attacks.length == 0);
+					}, friends[i].id, true);
+					
 					page.add(friendBox);
 					
 					y += friendBox.height + padding / 2;
