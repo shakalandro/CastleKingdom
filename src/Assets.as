@@ -140,6 +140,10 @@ package
 		private static var bullet_normal:Class;
 		public static const BULLET:String = "Bullet";
 		
+		[Embed(source = "../images/rocket.png")]
+		private static var rocket_normal:Class;
+		public static const ROCKET:String = "Rocket";
+		
 		
 		[Embed(source = "../images/flame_tower.png")]
 		private static var flame_tower_normal:Class;
@@ -283,6 +287,7 @@ package
 			_normal[Assets.FIREBALL] = fireball_normal;
 			_normal[Assets.SPEAR] = spear_normal;
 			_normal[Assets.BULLET] = bullet_normal;
+			_normal[Assets.ROCKET] = rocket_normal;
 
 			
 			_normal[Assets.MAP_TILES] = tilesImg_normal;
