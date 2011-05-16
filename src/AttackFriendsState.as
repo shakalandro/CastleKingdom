@@ -42,21 +42,24 @@ package
 				var sides:Array = ["Left Side Units", "Right Side Units"];
 				var page:Array = formatDropBoxes(castle.width - padding * 2, Util.maxY - Util.minY - 75, 1, 2, sides, _dropboxes, padding);
 				
+				
+				
 				Util.getFriendsInRange(Castle.computeValue(castle), LEVEL_THRESHHOLD, function(friends:Array):void {
-					formatFriends(friends, castle.x - Util.minX - padding * 2, Util.maxY - Util.minY - 50, 5, function(pages:Array):void {
-						_rightMenu = new ScrollMenu(castle.x + castle.width, Util.minY, pages, closeMenus, Util.assets[Assets.ATTACK_FRIENDS_RIGHT_TITLE], Util.assets[Assets.BUTTON_CANCEL], FlxG.WHITE, 
-							padding, Util.maxX - castle.x - castle.width, Util.maxY - Util.minY);
-						add(_rightMenu);
-					});
-					
-					Database.getEnemyInfo(function(units:Array):void {
-						var pages:Array = formatUnits(units, castle.x - Util.minX, Util.maxY - Util.minY - 50, 2, 4);
-						_leftMenu = new ScrollMenu(Util.minX, Util.minY, pages, closeMenus, Util.assets[Assets.ATTACK_FRIENDS_LEFT_TITLE], Util.assets[Assets.BUTTON_CANCEL], FlxG.WHITE, padding, 
-							castle.x - Util.minX, Util.maxY - Util.minY, 3, moveUnit);
-						add(_leftMenu);
-						
+					formatFriends(friends, castle.x - Util.minX - padding * 2, Util.maxY - Util.minY - 50, 5, function(friendPages:Array):void {
 						_middleMenu = new ScrollMenu(castle.x, Util.minY, page, closeMenusAndSend, Util.assets[Assets.ATTACK_FRIENDS_MIDDLE_TITLE], Util.assets[Assets.ATTACK_FRIENDS_BUTTON], FlxG.WHITE, padding, castle.width, Util.maxY - Util.minY, 3);
 						add(_middleMenu);
+						
+						Database.getEnemyInfo(function(units:Array):void {
+							var pages:Array = formatUnits(units, castle.x - Util.minX, Util.maxY - Util.minY - 50, 2, 4);
+							
+							_rightMenu = new ScrollMenu(castle.x + castle.width, Util.minY, friendPages, closeMenus, Util.assets[Assets.ATTACK_FRIENDS_RIGHT_TITLE], Util.assets[Assets.BUTTON_CANCEL], FlxG.WHITE, 
+								padding, Util.maxX - castle.x - castle.width, Util.maxY - Util.minY);
+							add(_rightMenu);
+							
+							_leftMenu = new ScrollMenu(Util.minX, Util.minY, pages, closeMenus, Util.assets[Assets.ATTACK_FRIENDS_LEFT_TITLE], Util.assets[Assets.BUTTON_CANCEL], FlxG.WHITE, padding, 
+								castle.x - Util.minX, Util.maxY - Util.minY, 3, moveUnit);
+							add(_leftMenu);
+						});
 					});
 				}, Castle.computeValue);
 			}
