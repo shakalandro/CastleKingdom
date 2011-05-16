@@ -976,6 +976,43 @@ package
 		
 		/**
 		 * <p>
+		 * Rejects the lease between the users given in the leaseInfo object passed in. This method must be called
+		 * only after addUserLease has been called. The object passed in must be of the form: 
+		 * </p>
+		 * <p>
+		 * 	{id, lid}
+		 * </p>
+		 * 
+		 * @param leaseInfo The ids of the two parties that wish to confirm their lease
+		 * 
+		 */	
+		public static function rejectUserLease(leaseInfo:Object):void
+		{
+			var variables:URLVariables = new URLVariables();
+			variables.uid = "" + leaseInfo["id"];
+			variables.lid = "" + leaseInfo["lid"];
+			update("http://games.cs.washington.edu/capstone/11sp/castlekd/database/rejectUserLease.php", variables);
+			if (_userLeaseInfo != null) {
+				for (var i:int = 0; i < _userLeaseInfo.length; i++) {
+					if (_userLeaseInfo[i].id == leaseInfo.id && _userLeaseInfo[i].lid == leaseInfo.lid) {
+						_userLeaseInfo.splice(i,1);
+					}
+				}
+			}
+			
+			if (_save.data.users[leaseInfo.id] == undefined || _save.data.users[leaseInfo.id] == null) {
+				_save.data.users[leaseInfo.id] = {info: {}, tut: {}, leases: [], attacks: [], upgrades: []};
+			} else {
+				for (i = 0; i < _save.data.users[leaseInfo.id].leases.length; i++) {
+					if (_save.data.users[leaseInfo.id].leases[i].id == leaseInfo.id && _save.data.users[leaseInfo.id].leases[i].lid == leaseInfo.lid) {
+						_save.data.users[leaseInfo.id].leases.splice(i, 1);
+					}
+				}
+			}
+		}
+		
+		/**
+		 * <p>
 		 * Removes the lease information for the given user from the object who has a lease contract 
 		 * with the user who has lid in the given object. Increments the units for the user with uid = id
 		 * and decrements the units for the user with uid = lid by numUnits. The object passed must be of
