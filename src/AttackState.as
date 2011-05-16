@@ -87,6 +87,7 @@ package
 		
 		private function setTutorialUI():void {
 			toggleButtons(0);
+			Util.log(":::Set buttons to 0");
 			if (Castle.tutorialLevel == Castle.TUTORIAL_FIRST_DEFEND) {
 				Database.updateUserTutorialInfo(FaceBook.uid, Castle.TUTORIAL_FIRST_WAVE);
 				Castle.tutorialLevel = Castle.TUTORIAL_FIRST_WAVE;
@@ -121,19 +122,22 @@ package
 					Database.updateUserTutorialInfo(FaceBook.uid, Castle.TUTORIAL_UPGRADE);
 					Castle.tutorialLevel = Castle.TUTORIAL_UPGRADE;
 				}));
-			} else if (!win && Castle.tutorialLevel == Castle.TUTORIAL_FIRST_WAVE) {
-				add(new MessageBox(StringUtil.substitute(Util.assets[Assets.FIRST_LOSS], castle.unitCapacity), 
-						"Okay", function():void {
-					toggleButtons(2);
-				}));
-			} else if (Castle.tutorialLevel == Castle.TUTORIAL_UPGRADE){
-				toggleButtons(3);
-			} else if (Castle.tutorialLevel == Castle.TUTORIAL_ATTACK_FRIENDS) {
-				toggleButtons(4);
-			} else if (Castle.tutorialLevel == Castle.TUTORIAL_LEASE) {
-				toggleButtons(5);
 			} else {
-				Util.log("AttackState.waveFinished: unknown tutorial level " + Castle.tutorialLevel);
+				Util.log("AttackState.waveFinished setting tutorial");
+				if (!win && Castle.tutorialLevel == Castle.TUTORIAL_FIRST_WAVE) {
+					add(new MessageBox(StringUtil.substitute(Util.assets[Assets.FIRST_LOSS], castle.unitCapacity), 
+							"Okay", function():void {
+						toggleButtons(2);
+					}));
+				} else if (Castle.tutorialLevel == Castle.TUTORIAL_UPGRADE){
+					toggleButtons(3);
+				} else if (Castle.tutorialLevel == Castle.TUTORIAL_ATTACK_FRIENDS) {
+					toggleButtons(4);
+				} else if (Castle.tutorialLevel == Castle.TUTORIAL_LEASE) {
+					toggleButtons(5);
+				} else {
+					Util.log("AttackState.waveFinished: unknown tutorial level " + Castle.tutorialLevel);
+				}
 			}
 		}
 

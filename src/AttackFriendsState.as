@@ -39,7 +39,6 @@ package
 				var sides:Array = ["Left Side Units", "Right Side Units"];
 				var page:Array = formatDropBoxes(castle.width - padding * 2, Util.maxY - Util.minY - 75, 1, 2, sides, _dropboxes, padding);
 				
-				
 				Util.getFriendsInRange(Castle.computeValue(castle), LEVEL_THRESHHOLD, function(friends:Array):void {
 					formatFriends(friends, castle.x - Util.minX - padding * 2, Util.maxY - Util.minY - 50, 5, function(pages:Array):void {
 						_rightMenu = new ScrollMenu(castle.x + castle.width, Util.minY, pages, closeMenus, Util.assets[Assets.ATTACK_FRIENDS_RIGHT_TITLE], Util.assets[Assets.BUTTON_CANCEL], FlxG.WHITE, 
