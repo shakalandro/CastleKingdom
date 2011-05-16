@@ -378,5 +378,10 @@ package
 			} 
 		}
 		
+		override public function drawStats():void {
+			_towerDisplay.visible = true;
+			_towerDisplay.value = castle.towerCapacity - castle.towerUnitsAvailable;
+			_towerDisplay.max = castle.towerCapacity;
+		}
 	}
 }

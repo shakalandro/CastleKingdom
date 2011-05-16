@@ -13,6 +13,8 @@ package
 		private var _text:FlxText;
 		public var value:Number;
 		public var max:Number;
+		public var width:Number;
+		public var height:Number;
 		
 		public function StatsBox(x:Number, y:Number, img:Class, value:Number, max:Number = -1, padding:Number = 10)
 		{
@@ -30,6 +32,9 @@ package
 				textString += "/" + max;
 			}
 			
+			width = box.width;
+			height = box.height;
+			
 			_text = new FlxText(_x, _y, box.width - X_OFFSET - 2 * _padding, textString);
 			_text.size = 16;
 			_text.color = FlxG.BLACK;
@@ -39,6 +44,15 @@ package
 			
 			add(box);
 			add(_text);
+		}
+		
+		override public function update():void {
+			super.update();
+			var textString:String = value + "";
+			if (max != -1) {
+				textString += "/" + max;
+			}
+			_text.text = textString;
 		}
 	}
 }

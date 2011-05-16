@@ -41,9 +41,9 @@ package
 		/** FlxSprites for unit caps/gold;
 		 * 
 		 * */
-		private var _goldDisplay:StatsBox;
-		private var _towerDisplay:StatsBox;
-		private var _armyDisplay:StatsBox;
+		protected var _goldDisplay:StatsBox;
+		protected var _towerDisplay:StatsBox;
+		protected var _armyDisplay:StatsBox;
 		private var _hudButtons:Array;
 		private var _attackTimer:Timer;
 		private var _attackAnims:FlxGroup;
@@ -455,9 +455,11 @@ package
 			spreadPosition(_attack, 5, 2);
 			spreadPosition(_lease, 5, 1);
 			
-			_armyDisplay = new StatsBox(0, 0, Util.assets[Assets.UNIT_COUNTER], 0);
-			_towerDisplay = new StatsBox(0, 0, Util.assets[Assets.TOWER_COUNTER], 0);
-			_goldDisplay = new StatsBox(0, 0, Util.assets[Assets.GOLD_COUNTER], 0);
+			var statsPadding:Number = 10;
+			_goldDisplay = new StatsBox(statsPadding, (header.height - 30) / 2, Util.assets[Assets.GOLD_COUNTER], 0);
+			_armyDisplay = new StatsBox(_goldDisplay.width + statsPadding, (header.height - _goldDisplay.height) / 2, Util.assets[Assets.UNIT_COUNTER], 0);
+			_towerDisplay = new StatsBox(_goldDisplay.width + _armyDisplay.width + statsPadding * 2, (header.height - _goldDisplay.height) / 2, Util.assets[Assets.TOWER_COUNTER], 0);
+			
 			_armyDisplay.visible = false;
 			_towerDisplay.visible = false;
 			hud.add(_goldDisplay);
@@ -476,8 +478,10 @@ package
 			thing.x = place * width + BUTTON_DIST - thing.width / 2;
 		}
 		
-		public function drawStats(startX:int = 0, startY:int = 0):void {
+		public function drawStats():void {
 			_goldDisplay.visible = true;
+			_armyDisplay.visible = false;
+			_towerDisplay.visible = false;
 			_goldDisplay.value = castle.gold;
 		}
 	}
