@@ -56,6 +56,8 @@ package com.Logging
 			
 			_message = new Message(bufferLogs);
 			_message.gid = gid;
+			_message.g_name = CGSClientConstants.NAME_DICT[gid];
+			_message.skey = CGSClientConstants.SKEY_DICT[gid];
 			_message.cid = cid;
 			_message.vid = vid;
 			_callbackDict = new Dictionary();
@@ -102,6 +104,8 @@ package com.Logging
 				}
 				var o:Object = new Object();
 				o["gid"] = _message.gid;
+				o["g_name"] = _message.g_name;
+				o["skey"] = _message.skey;
 				SendObjectToServer(_serverURL + CGSClientConstants.URL_UID + CGSClientConstants.urlDataSuffix, o, done);
 			}
 		}
@@ -123,6 +127,8 @@ package com.Logging
 			}
 			var o:Object = new Object();
 			o["gid"] = _message.gid;
+			o["g_name"] = _message.g_name;
+			o["skey"] = _message.skey;
 			SendObjectToServer(_serverURL + CGSClientConstants.URL_DQID + CGSClientConstants.urlDataSuffix, o, done);
 		}
 		
@@ -146,11 +152,14 @@ package com.Logging
 			o["qid"] = qid;
 			o["dqid"] = dqid;
 			o["gid"] = _message.gid;
+			o["g_name"] = _message.g_name;
+			o["skey"] = _message.skey;
 			o["uid"] = _message.uid;
 			o["cid"] = _message.cid;
 			o["vid"] = _message.vid;
 			_message.qid = qid;
 			SendObjectToServer(_serverURL + CGSClientConstants.URL_LEVEL + CGSClientConstants.urlDataSuffix, o, done);
+			trace("finished with the ReportLevel function");
 		}
 		
 		//----------- LogAction ---------------------------------------------------------------------------------

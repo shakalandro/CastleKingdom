@@ -51,6 +51,8 @@ package
 				trace("fail");
 			}else{
 				trace("reported new level");
+				trace("This is in the newLevelCallBack function");
+				trace("\n\n\n" + val + "\n\n\n");
 				/*var action:ClientAction = new ClientAction();
 				action.aid = 100;
 				action.ts = 1;

@@ -304,7 +304,7 @@ package
 			while (tileType < map.collideIndex && indices.y < map.heightInTiles) {
 				indices.y++;
 				tileType = map.getTile(indices.x, indices.y);
-			}
+			} 
 			var coords:FlxPoint = Util.indicesToCartesian(indices, ignoreX);
 			var y:Number = coords.y - obj.height;
 			obj.y = y;

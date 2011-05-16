@@ -144,6 +144,18 @@ package
 		private static var rocket_normal:Class;
 		public static const ROCKET:String = "Rocket";
 		
+		[Embed(source = "../images/shockwave.png")]
+		private static var shockwave_normal:Class;
+		public static const SHOCKWAVE:String = "Shockwave";
+		
+		[Embed(source = "../images/grapple.png")]
+		private static var grapple_normal:Class;
+		public static const GRAPPLE:String = "Grapple";
+		
+		[Embed(source = "../images/sawblade.png")]
+		private static var sawblade_normal:Class;
+		public static const SAWBLADE:String = "Sawblade";
+		
 		[Embed(source = "../images/flame_tower.png")]
 		private static var flame_tower_normal:Class;
 		public static const FLAME_TOWER:String = "Flame Tower";
@@ -192,9 +204,21 @@ package
 		private static var magic_wall_normal:Class;
 		public static const MAGIC_WALL:String = "Magic Wall";
 		
+		[Embed(source = "../images/grapple_tower.png")]
+		private static var grapple_tower_normal:Class;
+		public static const GRAPPLE_TOWER:String = "Grapple Tower";
+		
 		[Embed(source = "../images/underground_wall.png")]
 		private static var underground_wall_normal:Class;
 		public static const UNDERGROUND_WALL:String = "Underground Wall";
+		
+		[Embed(source = "../images/quake_machine.png")]
+		private static var quake_machine_normal:Class;
+		public static const QUAKE_MACHINE:String = "Quake Machine";
+		
+		[Embed(source = "../images/traps.png")]
+		private static var traps_normal:Class;
+		public static const TRAPS:String = "Traps";
 		
 		[Embed(source = "../images/space_needle.png")]
 		private static var space_needle:Class;
@@ -306,6 +330,9 @@ package
 			_normal[Assets.SPEAR] = spear_normal;
 			_normal[Assets.BULLET] = bullet_normal;
 			_normal[Assets.ROCKET] = rocket_normal;
+			_normal[Assets.SHOCKWAVE] = shockwave_normal;
+			_normal[Assets.GRAPPLE] = grapple_normal;
+			_normal[Assets.SAWBLADE] = sawblade_normal;
 
 			
 			_normal[Assets.MAP_TILES] = tilesImg_normal;
@@ -336,10 +363,13 @@ package
 			_normal[Assets.SPIKED_WALL] = spiked_wall_normal;
 			_normal[Assets.DEEP_LAND_MINE] = deep_land_mine_normal;
 			_normal[Assets.AIR_MINE] = air_mine_normal;
+			_normal[Assets.GRAPPLE_TOWER] = grapple_tower_normal;
 			_normal[Assets.ROCKET_TOWER] = rocket_tower_normal;
 			_normal[Assets.PHOENIX] = phoenix_normal;
 			_normal[Assets.MAGIC_WALL] = magic_wall_normal;
 			_normal[Assets.UNDERGROUND_WALL] = underground_wall_normal;
+			_normal[Assets.QUAKE_MACHINE] = quake_machine_normal;
+			_normal[Assets.TRAPS] = traps_normal;
 
 
 			_normal[Assets.WALL] = wall_normal;

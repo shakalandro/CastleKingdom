@@ -12,7 +12,7 @@ package
 	/**
 	 * This is the main CastleKingdom class.
 	 * Insert game description here.
-	 * 
+	 *  
 	 * @author roy, robert, gabe, justin, kim
 	 * 
 	 */	
