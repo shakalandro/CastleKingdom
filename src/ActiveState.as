@@ -26,17 +26,17 @@ package
 		/**
 		 * A reference to the singleton castle object.
 		 */		
-		private var _castle:Castle;
+		protected var _castle:Castle;
 		
 		/**
 		 * A group of DefenseUnits 
 		 */		
-		private var _towers:FlxGroup;
+		protected var _towers:FlxGroup;
 		
 		/**
 		 * A group of EnemyUnits 
 		 */		
-		private var _units:FlxGroup;
+		protected var _units:FlxGroup;
 		
 		/** FlxSprites for unit caps/gold;
 		 * 
@@ -110,7 +110,7 @@ package
 						add(clear);
 					}
 					*/
-					if (!(FlxG.state is AttackState)) {
+					if (!(FlxG.state is AttackState) && !(FlxG.state is DefenseState) && !(FlxG.state is AttackFriendsState)) {
 						setTutorialUI();
 					}
 				});
@@ -456,9 +456,9 @@ package
 			spreadPosition(_lease, 5, 1);
 			
 			var statsPadding:Number = 10;
-			_goldDisplay = new StatsBox(statsPadding, (header.height - 30) / 2, Util.assets[Assets.GOLD_COUNTER], 0);
-			_armyDisplay = new StatsBox(_goldDisplay.width + statsPadding, (header.height - _goldDisplay.height) / 2, Util.assets[Assets.UNIT_COUNTER], 0);
-			_towerDisplay = new StatsBox(_goldDisplay.width + _armyDisplay.width + statsPadding * 2, (header.height - _goldDisplay.height) / 2, Util.assets[Assets.TOWER_COUNTER], 0);
+			_goldDisplay = new StatsBox((header.height - 30) / 2, (header.height - 30) / 2, Util.assets[Assets.GOLD_COUNTER], 0);
+			_armyDisplay = new StatsBox((header.height - 30) / 2 + _goldDisplay.width + statsPadding, (header.height - _goldDisplay.height) / 2, Util.assets[Assets.UNIT_COUNTER], 0);
+			_towerDisplay = new StatsBox((header.height - 30) / 2 + _goldDisplay.width + statsPadding, (header.height - _goldDisplay.height) / 2, Util.assets[Assets.TOWER_COUNTER], 0);
 			
 			_armyDisplay.visible = false;
 			_towerDisplay.visible = false;

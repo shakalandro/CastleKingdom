@@ -38,7 +38,7 @@ package
 			// create selection menu of all avaiable towers
 			var unitsUnlocked:Array = this.castle.unitsUnlocked(Castle.TOWER);
 			
-			var pages:Array = createTowers(unitsUnlocked, 2, 4, Castle.TILE_WIDTH * CastleKingdom.TILE_SIZE, Util.maxY - Util.minY - 50);
+			var pages:Array = createTowers(unitsUnlocked, 2, 3, Castle.TILE_WIDTH * CastleKingdom.TILE_SIZE, Util.maxY - Util.minY - 50);
 			_menu = new ScrollMenu(castle.x, Util.minY, pages, closeHandler, Util.assets[Assets.DEFEND_MENU_TITLE], Util.assets[Assets.DEFEND_MENU_BUTTON], 
 				0xffffffff, 10, Castle.TILE_WIDTH * CastleKingdom.TILE_SIZE, Util.maxY - Util.minY, 3, takeTower);
 			add(_menu);
@@ -150,11 +150,11 @@ package
 				for (var j:int = 0; j < perColumn; j++) {
 					for (var k:int = 0; k < perRow; k++) {
 						var index:Number = i * (perRow * perColumn) + j * perRow + k;
-
 						if (index < info.length) {
-							//var towerGroup:FlxGroup = new FlxGroup();
+							//var centerX:Number = k * (width / (perRow)
 							var tower:DefenseUnit = new DefenseUnit(k * (width / perRow), j * (height / perColumn), info[index]);
 							var name:FlxText = new FlxText(k * (width / perRow), j * (height / perColumn), width / perRow - padding, tower.name);
+							name.alignment = "center";
 							name.color = FlxG.BLACK;
 							
 							tower.y += name.height;
@@ -169,9 +169,15 @@ package
 			return result;
 		}
 		
-		override public function update():void {
-			super.update();
+		override public function drawStats():void {
+			super.drawStats();
+			if (_menu.exists) {
+				_towerDisplay.visible = true;
+			} else {
+				_towerDisplay.visible = false;
+			}
+			_towerDisplay.value = castle.towerCapacity - castle.towerUnitsAvailable;
+			_towerDisplay.max = castle.towerCapacity;
 		}
-		
 	}
 }

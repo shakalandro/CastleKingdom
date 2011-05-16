@@ -379,7 +379,12 @@ package
 		}
 		
 		override public function drawStats():void {
-			_towerDisplay.visible = true;
+			super.drawStats();
+			if (!_gameOver) {
+				_towerDisplay.visible = true;
+			} else {
+				_towerDisplay.visible = false;
+			}
 			_towerDisplay.value = castle.towerCapacity - castle.towerUnitsAvailable;
 			_towerDisplay.max = castle.towerCapacity;
 		}

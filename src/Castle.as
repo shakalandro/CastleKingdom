@@ -39,7 +39,7 @@ package
 		public static const TOWER:String = "foundry"; // stores index of foundry level in _upgrades
 		public static const UNIT_INFO:Array = new Array();// stores all unit information 
 				// Tower/Unit --> ID --> info
-		public static const UPGRADE_INFO = new Array();
+		public static const UPGRADE_INFO:Array = new Array();
 
 		public static const TILE_WIDTH:int = 8;
 		public static const START_GOLD:Number = 0;

@@ -11,6 +11,9 @@ package
 	 * 
 	 */	
 	public class ScrollMenu extends FlxGroup implements Droppable {
+		
+		private static const TITLE_PADDING:Number = 4;
+		
 		private var _text:FlxText;
 		private var _pages:Array;
 		private var _currentPage:int;
@@ -63,10 +66,11 @@ package
 			_canDrop = true;
 			
 			//Set the title text and pageText;
-			_text = new FlxText(_x, _y, width - padding * 2, title);
+			_text = new FlxText(_x, _y + TITLE_PADDING, width - padding * 2, title);
 			_text.color = FlxG.BLACK;
+			_text.size = 10;
 			_text.alignment = "center";
-			_pageCount = new FlxText(_x, _y, width - padding * 2, "0/" + _pages.length);
+			_pageCount = new FlxText(_x, _y + TITLE_PADDING, width - padding * 2, "0/" + _pages.length);
 			_pageCount.color = FlxG.BLACK;
 			_pageCount.alignment = "right";
 			

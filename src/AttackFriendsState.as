@@ -3,8 +3,9 @@ package
 	import flash.display.BitmapData;
 	import flash.utils.Dictionary;
 	
-	import org.flixel.*;
 	import mx.utils.StringUtil;
+	
+	import org.flixel.*;
 	
 	/**
 	 * Handles atacking friends. 
@@ -19,10 +20,12 @@ package
 		private var _rightMenu:ScrollMenu;
 		private var _middleMenu:ScrollMenu;
 		private var _dropboxes:Array;
+		private var _accumulatedUnits:Number;
 		
 		public function AttackFriendsState(map:FlxTilemap=null, castle:Castle=null, towers:FlxGroup=null, units:FlxGroup=null)
 		{
 			super(map, castle, towers, units);
+			_accumulatedUnits = 0;
 		}
 		
 		override public function create():void {
@@ -57,6 +60,11 @@ package
 					});
 				}, Castle.computeValue);
 			}
+			setTutorialUI();
+		}
+		
+		private function setTutorialUI():void {
+			toggleButtons(0);
 		}
 		
 		/**
@@ -72,10 +80,13 @@ package
 		 */		
 		public function moveUnit(draggable:Draggable, newX:Number, newY:Number, oldX:Number, oldY:Number):void {
 			var enemy:EnemyUnit = (draggable as EnemyUnit);
-			if (newX > castle.x && newX < castle.x + castle.width && _middleMenu.dropOnto(draggable as FlxObject, oldX, oldY)) {
+			if (newX > castle.x && newX < castle.x + castle.width && 
+					_middleMenu.dropOnto(draggable as FlxObject, oldX, oldY) &&
+					_accumulatedUnits + enemy.cost <= castle.unitCapacity) {
 				var newEnemy:EnemyUnit = enemy.clone() as EnemyUnit;
 				newEnemy.x = oldX;
 				newEnemy.y = oldY;
+				_accumulatedUnits += enemy.cost;
 				_leftMenu.addToCurrentPage(newEnemy);
 				_middleMenu.addToCurrentPage(enemy);
 			} else {
@@ -260,6 +271,17 @@ package
 			}
 			page.push(boxes);
 			return page;
+		}
+		
+		override public function drawStats():void {
+			super.drawStats();
+			if (_middleMenu != null && _middleMenu.exists) {
+				_armyDisplay.visible = true;
+			} else {
+				_armyDisplay.visible = false;
+			}
+			_armyDisplay.value = _accumulatedUnits;
+			_armyDisplay.max = castle.unitCapacity;
 		}
 	}
 }
