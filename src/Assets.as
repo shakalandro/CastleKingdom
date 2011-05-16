@@ -153,6 +153,14 @@ package
 		private static var landmine_normal:Class;
 		public static const LANDMINE:String = "Land Mine";
 		
+		[Embed(source = "../images/deep_land_mine.png")]
+		private static var deep_land_mine_normal:Class;
+		public static const DEEP_LAND_MINE:String = "Deep Land Mine";
+		
+		[Embed(source = "../images/air_mine.png")]
+		private static var air_mine_normal:Class;
+		public static const AIR_MINE:String = "Air Mine";
+		
 		[Embed(source = "../images/space_needle.png")]
 		private static var space_needle:Class;
 		public static const SPACENEEDLE:String = "Space Needle";
@@ -280,6 +288,8 @@ package
 			_normal[Assets.MULTISHOT_TOWER] = multishot_tower_normal;
 			_normal[Assets.LANDMINE] = landmine_normal;
 			_normal[Assets.SPIKED_WALL] = spiked_wall_normal;
+			_normal[Assets.DEEP_LAND_MINE_WALL] = deep_land_mine_normal;
+			_normal[Assets.AIR_MINE_WALL] = air_mine_normal;
 
 
 			_normal[Assets.WALL] = wall_normal;
