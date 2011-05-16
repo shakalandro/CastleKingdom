@@ -112,6 +112,22 @@ package
 		private static var arrow_normal:Class;
 		public static const ARROW:String = "Arrow";
 		
+		[Embed(source = "../images/cannonball.png")]
+		private static var cannonball_normal:Class;
+		public static const CANNONBALL:String = "Cannonball";
+		
+		[Embed(source = "../images/fireball.png")]
+		private static var fireball_normal:Class;
+		public static const FIREBALL:String = "Fireball";
+		
+		[Embed(source = "../images/spear.png")]
+		private static var spear_normal:Class;
+		public static const SPEAR:String = "Spear";
+		
+		[Embed(source = "../images/bullet.png")]
+		private static var bullet_normal:Class;
+		public static const BULLET:String = "Bullet";
+		
 		
 		[Embed(source = "../images/flame_tower.png")]
 		private static var flame_tower_normal:Class;
@@ -233,6 +249,10 @@ package
 			_assets[SKIN_NORMAL] = _normal;
 			
 			_normal[Assets.ARROW] = arrow_normal;
+			_normal[Assets.CANNONBALL] = cannonball_normal;
+			_normal[Assets.FIREBALL] = fireball_normal;
+			_normal[Assets.SPEAR] = spear_normal;
+			_normal[Assets.BULLET] = bullet_normal;
 
 			
 			_normal[Assets.MAP_TILES] = tilesImg_normal;
