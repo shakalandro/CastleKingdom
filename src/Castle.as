@@ -79,7 +79,8 @@ package
 			_upgrades["mine"] = 0;
 			_upgrades["aviary"] = 0;
 			//_upgrades = ;
-	//		Database.getUserInfo(initUserInfo, FaceBook.uid);
+			
+			Database.getUserInfo(initUserInfo, FaceBook.uid);
 			Database.getUserUpgrades(initUpgrades,FaceBook.uid);
 			Database.getDefenseUnitInfo(initDefense);  // stores into UNIT_INFO
 			Database.getEnemyInfo(initArmy);
