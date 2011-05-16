@@ -30,6 +30,9 @@ package
 		public function DefenseUnit(x:Number, y:Number, towerID:int, canDrag:Boolean = true, dragCallback:Function = null, 
 									canHighlight:Boolean = true, highlightCallback:Function = null) {
 			super (x,y,towerID, "foundry");
+			
+			this.allowCollisions = NONE;
+			
 			var unitName:String = Castle.UNIT_INFO["foundry"][towerID].name;
 			var imgResource:Class = Util.assets[unitName];
 			//imgResource.bitMapData.height; 
@@ -96,7 +99,12 @@ package
 				if(type == "Mine") {
 					this.health = 0;
 				} else if (this.range > 0) {
-					new AttackAnimation(this.x,this.y,_target);
+					if(this.facing == LEFT) {
+						new AttackAnimation(this.x,this.y,_target, attackAnimationString());
+					} else {
+						new AttackAnimation(this.x + this.width,this.y + this.height,_target, attackAnimationString());
+
+					}
 				}
 				if(_target.inflictDamage(this.damageDone)){
 					_target = null;
@@ -189,6 +197,31 @@ package
 		
 		override public function clone():Unit {
 			return new DefenseUnit(x, y, unitID, canDrag, dragCallback, canHighlight, highlightCallback);
+		}
+		
+		private function attackAnimationString():String {
+			if(checkVsArray(this.name, ["Cannon", "Iron Tower"])) {
+				return "Cannonball";
+			} else if(checkVsArray(this.name, ["Airplane", "Zeppelin"])) {
+				return "Bullet";
+			} else if(checkVsArray(this.name, ["Flame Tower", "Dragon", "Tamed Pheonix"])) {
+				return "Fireball";
+			} else if(checkVsArray(this.name, ["Rocket Tower"])) {
+				return "Arrow";
+			} else {
+				return "Arrow";
+			}
+			
+			
+		}
+		
+		private function checkVsArray(name:String, arr:Array):Boolean {
+			for each (var val:String in arr) {
+				if (val == name) {
+					return true;
+				}
+			}
+			return false;
 		}
 	}
 }
