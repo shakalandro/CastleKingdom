@@ -48,7 +48,6 @@ package
 		
 		private function login():void {
 			FaceBook.connect(function(ready:Boolean):void {
-				CastleKingdom.loading = false;
 				if (ready) {
 					FaceBook.userInfo(function(fbInfo:Object):void {
 						if (fbInfo != null) {

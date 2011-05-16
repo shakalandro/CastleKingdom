@@ -43,9 +43,9 @@ package
 			var loader:URLLoader = new URLLoader();
 			Util.log("request.url: " + request.url);
 			loader.dataFormat = URLLoaderDataFormat.TEXT;
-			CastleKingdom.loading = true;
+			(FlxG.state as GameState).loading = true;
 			loader.addEventListener(Event.COMPLETE, function(evt:Event):void {
-				CastleKingdom.loading = false;
+				(FlxG.state as GameState).loading = false;
 				callback(new XML(evt.target.data));
 			});
 			loader.load(request);
@@ -70,9 +70,9 @@ package
 		 */		
 		public static function getUserInfo(callback:Function, ids:Object = null, forceRefresh:Boolean = false):void {
 			if (forceRefresh || _userInfo == null) {
-				CastleKingdom.loading = true;
+				(FlxG.state as GameState).loading = true;
 				getMain("http://games.cs.washington.edu/capstone/11sp/castlekd/database/getUserInfo.php", function(xmlData:XML):void {
-					CastleKingdom.loading = false;
+					(FlxG.state as GameState).loading = false;
 					_userInfo = processList(xmlData.user, function(unit:XML):Object {
 						return {
 							id: unit.uid,
@@ -108,9 +108,9 @@ package
 		 */		
 		public static function getUserUpgrades(callback:Function, ids:Object = null, forceRefresh:Boolean = false):void {
 			if (forceRefresh || _userUps == null) {
-				CastleKingdom.loading = true;
+				(FlxG.state as GameState).loading = true;
 				getMain("http://games.cs.washington.edu/capstone/11sp/castlekd/database/getUserUpgrades.php", function(xmlData:XML):void {
-					CastleKingdom.loading = false;
+					(FlxG.state as GameState).loading = false;
 					_userUps = processList(xmlData.user, function(unit:XML):Object {
 						return {
 							id: unit.uid,
@@ -148,9 +148,9 @@ package
 		public static function getPendingUserLeases(callback:Function, ids:Object = null, forceRefresh:Boolean = false):void
 		{
 			if (forceRefresh || _pendingUserLeaseInfo == null) {
-				CastleKingdom.loading = true;
+				(FlxG.state as GameState).loading = true;
 				getMain("http://games.cs.washington.edu/capstone/11sp/castlekd/database/getPendingUserLeases.php", function(xmlData:XML):void {
-					CastleKingdom.loading = false;
+					(FlxG.state as GameState).loading = false;
 					_pendingUserLeaseInfo = processList(xmlData.user, function(unit:XML):Object {
 						return {
 							id: unit.uid,
@@ -186,9 +186,9 @@ package
 		 */
 		public static function getUserLeaseInfo(callback:Function, ids:Object = null, forceRefresh:Boolean = false):void {
 			if (forceRefresh || _userLeaseInfo == null) {
-				CastleKingdom.loading = true;
+				(FlxG.state as GameState).loading = true;
 				getMain("http://games.cs.washington.edu/capstone/11sp/castlekd/database/getUserLeases.php", function(xmlData:XML):void {
-					CastleKingdom.loading = false;
+					(FlxG.state as GameState).loading = false;
 					_userLeaseInfo = processList(xmlData.user, function(unit:XML):Object {
 						return {
 							id: unit.uid,
@@ -224,9 +224,9 @@ package
 		 */
 		public static function getUserTutorialInfo(callback:Function, ids:Object = null, forceRefresh:Boolean = false):void {
 			if (forceRefresh || _userTutorialInfo == null) {
-				CastleKingdom.loading = true;
+				(FlxG.state as GameState).loading = true;
 				getMain("http://games.cs.washington.edu/capstone/11sp/castlekd/database/getUserTutorial.php", function(xmlData:XML):void {
-					CastleKingdom.loading = false;
+					(FlxG.state as GameState).loading = false;
 					_userTutorialInfo = processList(xmlData.user, function(unit:XML):Object {
 						return {
 							id: unit.uid,
@@ -264,9 +264,9 @@ package
 		 */		
 		public static function isBeingAttacked(callback:Function, ids:Object = null, forceRefresh:Boolean = false):void {
 			if (forceRefresh || _attacked == null) {
-				CastleKingdom.loading = true;
+				(FlxG.state as GameState).loading = true;
 				getMain("http://games.cs.washington.edu/capstone/11sp/castlekd/database/getUserAttacks.php", function(xmlData:XML):void {
-					CastleKingdom.loading = false;
+					(FlxG.state as GameState).loading = false;
 					_attacked = processList(xmlData.attack, function(unit:XML):Object {
 						return {
 							id: unit.aid
@@ -299,9 +299,9 @@ package
 		 */
 		public static function hasPendingLeases(callback:Function, ids:Object = null, forceRefresh:Boolean = false):void {
 			if (forceRefresh || _pendingLeases == null) {
-				CastleKingdom.loading = true;
+				(FlxG.state as GameState).loading = true;
 				getMain("http://games.cs.washington.edu/capstone/11sp/castlekd/database/pendingUserLeases.php", function(xmlData:XML):void {
-					CastleKingdom.loading = false;
+					(FlxG.state as GameState).loading = false;
 					_pendingLeases = processList(xmlData.lease, function(unit:XML):Object {
 						return {
 							id: unit.lid
@@ -334,9 +334,9 @@ package
 		 */
 		public static function pendingAttacks(callback:Function, ids:Object = null, forceRefresh:Boolean = false):void {
 			if (forceRefresh || _pendingAttacks == null) {
-				CastleKingdom.loading = true;
+				(FlxG.state as GameState).loading = true;
 				getMain("http://games.cs.washington.edu/capstone/11sp/castlekd/database/pendingUserAttacks.php", function(xmlData:XML):void {
-					CastleKingdom.loading = false;
+					(FlxG.state as GameState).loading = false;
 					_pendingAttacks = processList(xmlData.attack, function(unit:XML):Object {
 						return {
 							id: unit.uid,
@@ -397,9 +397,9 @@ package
 		 */
 		public static function getDefenseUnitInfo(callback:Function, ids:Object = null, forceRefresh:Boolean = false):void {
 			if (forceRefresh || _defUnitInfo == null) {
-				CastleKingdom.loading = true;
+				(FlxG.state as GameState).loading = true;
 				getMain("http://games.cs.washington.edu/capstone/11sp/castlekd/database/getDefInfo.php", function(xmlData:XML):void {
-					CastleKingdom.loading = false;
+					(FlxG.state as GameState).loading = false;
 					_defUnitInfo = processList(xmlData.def, function(unit:XML):Object {
 						return {
 							id: unit.did,
@@ -440,9 +440,9 @@ package
 		 */
 		public static function getEnemyInfo(callback:Function, ids:Object = null, forceRefresh:Boolean = false):void {
 			if (forceRefresh || _enemyInfo == null) {
-				CastleKingdom.loading = true;
+				(FlxG.state as GameState).loading = true;
 				getMain("http://games.cs.washington.edu/capstone/11sp/castlekd/database/getArmyInfo.php", function(xmlData:XML):void {
-					CastleKingdom.loading = false;
+					(FlxG.state as GameState).loading = false;
 					_enemyInfo = processList(xmlData.army, function(unit:XML):Object {
 						return {
 							id: unit.aid,
@@ -488,9 +488,9 @@ package
 		 */
 		public static function getUpgradesInfo(callback:Function, levels:Object = null, types:Object = null, forceRefresh:Boolean = false):void {
 			if (forceRefresh || _upgradeInfo == null) {
-				CastleKingdom.loading = true;
+				(FlxG.state as GameState).loading = true;
 				upgradeMain("http://games.cs.washington.edu/capstone/11sp/castlekd/database/getUpgradeInfo.php", function(xmlData:XML):void {
-					CastleKingdom.loading = false;
+					(FlxG.state as GameState).loading = false;
 					_upgradeInfo = processList(xmlData.upgrade, function(unit:XML):Object {
 						return {
 							id: unit.id,
@@ -677,9 +677,9 @@ package
 			FlxG.log("request.data: " + request.data.toString());
 			var loader:URLLoader = new URLLoader();
 			loader.dataFormat = URLLoaderDataFormat.TEXT;
-			CastleKingdom.loading = true;
+			(FlxG.state as GameState).loading = true;
 			loader.addEventListener(Event.COMPLETE, function(evt:Event):void {
-				CastleKingdom.loading = false;
+				(FlxG.state as GameState).loading = false;
 				callback(new XML(evt.target.data));
 			});
 			loader.load(request);

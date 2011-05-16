@@ -332,10 +332,8 @@ package
 				var coordinates:FlxPoint = Util.roundToNearestTile(new FlxPoint(unit.x, unit.y));
 				unit.x = coordinates.x;
 				unit.y = coordinates.y;
-				if (unit.clas == "ground") Util.placeInZone(unit, map, true, true);
-			
+				Util.placeInZone(unit, map, true, true);			
 				group.add(unit);
-				//add(unit);
 				return true;
 			}
 			return false;
