@@ -237,6 +237,7 @@ package
 			_normal[Assets.BACKGROUND] = background_img;
 			_normal[Assets.LOGIN_BACKGROUND] = startpage_background;
 			_normal[Assets.BUTTON_SMALL] = button_small_img;
+			_normal[Assets.PLAY_BUTTON] = play_button;
 			
 			_normal[Assets.ARROW_TOWER] = arrow_tower_normal;
 			_normal[Assets.SNIPER_TOWER] = sniper_tower_normal;
