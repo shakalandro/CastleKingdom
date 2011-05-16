@@ -84,6 +84,10 @@ package
 		private static var zeppelin_normal:Class;
 		public static const ZEPPELIN:String = "Zeppelin";
 		
+		[Embed(source = "../images/mutant_mole.png")]
+		private static var mutant_mole_normal:Class;
+		public static const MUTANT_MOLE:String = "Mutant Mole";
+		
 		[Embed(source = "../images/hud_header.png")]
 		private static var hud_header:Class;
 		public static const HUD_HEADER:String = "hud_header";
@@ -307,6 +311,7 @@ package
 			_normal[Assets.LOADER] = loader_img;
 			_normal[Assets.WARRIOR_ANGEL] = warrior_angel_normal;
 			_normal[Assets.ZEPPELIN] = zeppelin_normal;
+			_normal[Assets.MUTANT_MOLE] = mutant_mole_normal;
 			
 			//Textual assets
 			
