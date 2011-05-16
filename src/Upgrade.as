@@ -29,12 +29,16 @@ package
 			
 			_box = new FlxSprite(x + margin, y + margin);
 			_box.makeGraphic(width - margin * 2, height - margin * 2, bgColor, true);
-			_nameText = new FlxText(x, y + (2 * padding), width, name + "");
+			_nameText = new FlxText(x, y + padding, width, name + "");
 			_nameText.alignment = "center";
-			var costText:FlxText = new FlxText(x + (2 * padding), _nameText.y + _nameText.height, width - padding * 2, "Cost: " + goldCost);
-			var towerText:FlxText = new FlxText(x + (2 * padding), costText.y + costText.height + padding, width - padding * 2, "Towers: +" + unitWorth);
-			var armyText:FlxText = new FlxText(x + (2 * padding), towerText.y + towerText.height + padding, width - padding * 2, "Armies: +" + unitWorth);
+			_nameText.size += 2;
+			var costText:FlxText = new FlxText(x, _nameText.y + _nameText.height, width, "Cost: " + goldCost);
+			var towerText:FlxText = new FlxText(x, costText.y + costText.height, width, "Towers: +" + unitWorth);
+			var armyText:FlxText = new FlxText(x, towerText.y + towerText.height, width, "Armies: +" + unitWorth);
 			Util.drawBorder(_box, borderColor, borderThickness);
+			costText.alignment = "center";
+			towerText.alignment = "center";
+			armyText.alignment = "center";
 			
 			_box.allowCollisions = FlxObject.NONE;
 			_nameText.allowCollisions = FlxObject.NONE;
