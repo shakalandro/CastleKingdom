@@ -320,7 +320,7 @@ package
 		 * Feature or bug? Checking vertices only means edge-edge min distances will be ignored
 		 * this will only happen if the units are semi-overlapping and offset from each other (share no vertexes at same level)
 		 * */	
-		private function unitDistance(otherUnit:Unit):Number {
+		public function unitDistance(otherUnit:Object):Number {
 			if(otherUnit == null) {
 				return int.MAX_VALUE;
 			}

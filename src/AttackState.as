@@ -140,6 +140,7 @@ package
 					Util.log("AttackState.waveFinished: unknown tutorial level " + Castle.tutorialLevel);
 				}
 			}
+			remove(units);
 		}
 
 		
@@ -161,12 +162,10 @@ package
 					this.castle.addGold(-cashStolen);
 					// Database.giveUserGold(cashStolen + armyCost);
 					//GameMessages.LOSE_FIGHT("Bob Barker",6);
-					this.remove(units);
 					_gameOver = true;
 					waveFinished(false);
 				} else if (_placeOnLeft.length + _placeOnRight.length == 0  && units.length == 0) { // Check if peeps are still alive
 					this.castle.addGold(this._waveGold);
-					this.remove(units);
 					_gameOver = true;
 					waveFinished(true);
 				}
@@ -174,7 +173,7 @@ package
 				
 				_unitDropCounter--;
 				if(_unitDropCounter <= 0) {
-					_unitDropCounter = 50;
+					_unitDropCounter = 50 - Math.sqrt(units.length);
 					placeDudes(_placeOnLeft, Util.minX);
 					placeDudes(_placeOnRight, Util.maxX - 20);
 				}
@@ -182,6 +181,7 @@ package
 			}
 			super.collide();
 			this.rangeCollideDetector(units,towers);
+			checkCastle();
 			super.update();
 			
 		}
@@ -388,6 +388,25 @@ package
 			}
 			_towerDisplay.value = castle.towerCapacity - castle.towerUnitsAvailable;
 			_towerDisplay.max = castle.towerCapacity;
+		}
+		
+		public function checkCastle():void {
+			for each (var unit:Unit in units.members) {
+				if(unit != null) {
+					if( pointIsIn(unit.x, unit.y) 
+						|| pointIsIn(unit.x + unit.width, unit.y)
+						|| pointIsIn(unit.x, unit.y + unit.height)
+						|| pointIsIn(unit.x + unit.width, unit.y + unit.height)) {
+						
+						castle.hitRanged(unit);
+					}
+				}
+			}
+		}
+		
+		private function pointIsIn(ox:int, oy:int):Boolean {
+			return ( ox > this.castle.x && ox < this.castle.x + this.castle.width 
+				&& oy > this.castle.y && oy < this.castle.y + this.castle.height);
 		}
 	}
 }

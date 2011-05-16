@@ -95,8 +95,6 @@ package
 			immovable = true;
 			
 			
-			// test
-			this.color =  Math.random() * 0xffffffff;
 		}
 		
 		/**

@@ -31,7 +31,8 @@ package
 									canHighlight:Boolean = true, highlightCallback:Function = null) {
 			super (x,y,towerID, "foundry");
 			
-			this.allowCollisions = NONE;
+			//this.allowCollisions = NONE;
+			this.immovable = true;
 			
 			var unitName:String = Castle.UNIT_INFO["foundry"][towerID].name;
 			var imgResource:Class = Util.assets[unitName];
@@ -102,7 +103,7 @@ package
 					if(this.facing == LEFT) {
 						new AttackAnimation(this.x,this.y,_target, attackAnimationString());
 					} else {
-						new AttackAnimation(this.x + this.width,this.y + this.height,_target, attackAnimationString());
+						new AttackAnimation(this.x + this.width,this.y,_target, attackAnimationString());
 
 					}
 				}
@@ -207,7 +208,7 @@ package
 			} else if(checkVsArray(this.name, ["Flame Tower", "Dragon", "Tamed Pheonix"])) {
 				return "Fireball";
 			} else if(checkVsArray(this.name, ["Rocket Tower"])) {
-				return "Arrow";
+				return "Rocket";
 			} else {
 				return "Arrow";
 			}

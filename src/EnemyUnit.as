@@ -39,6 +39,8 @@ package
 			this._active = active;
 			_canDrag = canDrag;
 			
+			this.immovable = true;
+			
 				
 			//var unitName:String = Castle.UNIT_INFO["barracks"][towerID].name;
 			var imgResource:Class = Util.assets[_unitName];
@@ -57,10 +59,12 @@ package
 			
 			if (this._active) {
 
-				this._type = Unit.GROUND;
+				//this._type = Unit.GROUND;
 				this.speed *= 2;
 				this.velocity.x = speed;
-				this.velocity.y = 1;
+				if(this.clas == "air") {
+					this.velocity.y = 1;	
+				}
 				if(this.x > Util.maxX/2) {
 					// goes left
 					this.velocity.x = -speed;
@@ -91,7 +95,6 @@ package
 		override public function update():void {
 			if (this._active) {
 				if(!this.alive || this.health <= 0) {
-					this.velocity.y = 2; //-this.speed;
 					this.velocity.x = 0;
 					this.color =  Math.random() * 0xffffffff; 
 					if(this.alive) {
@@ -107,6 +110,9 @@ package
 				} else {
 					if (type == Unit.GROUND && this.y <= Util.castle.y ){
 						this.velocity.y = 0 ;
+					} else if (clas == Unit.AIR && this.x > (FlxG.state as ActiveState).castle.x 
+								&& this.x < ((FlxG.state as ActiveState).castle.x + (FlxG.state as ActiveState).castle.width) ) {
+						this.velocity.y += 1;
 					}
 					if(this._target == null || _target.health <= 0) {
 						this._target = null;
@@ -141,7 +147,12 @@ package
 		override public function executeAttack():Boolean {
 			if(_target != null) {
 				if(this.range > 0) {
-					new AttackAnimation(this.x,this.y,_target, attackAnimationString());
+					if(this.facing == LEFT) {
+						new AttackAnimation(this.x,this.y,_target, attackAnimationString());
+					} else {
+						new AttackAnimation(this.x + this.width,this.y,_target, attackAnimationString());
+						
+					}
 				}
 				_target.inflictDamage(this.damageDone);
 				return true;
