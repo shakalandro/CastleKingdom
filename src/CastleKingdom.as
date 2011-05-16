@@ -49,6 +49,9 @@ package
 			_loading.visible = false;
 			numWaiting = 0;
 			
+			_loading.x = 680;
+			_loading.y = 10;
+			
 			FlxG.mouse.show(Util.assets[Assets.CURSOR]);
 			FlxG.framerate = FRAMERATE;
 			
@@ -73,6 +76,12 @@ package
 		}
 		
 		public static function set loading(t:Boolean):void {
+			if (!_loading.visible) {
+				FlxG.state.add(_loading);
+			} else {
+				FlxG.state.add(FlxG.state.remove(_loading));
+			}
+			/*
 			if (t && _loading != null && !_loading.visible && numWaiting == 0) {
 				Util.log("Loading image added");
 				_loading.visible = true;
@@ -84,7 +93,6 @@ package
 			} else {
 				FlxG.state.add(FlxG.state.remove(_loading));
 			}
-			/*
 			if (t) {
 				numWaiting++;
 			} else {
