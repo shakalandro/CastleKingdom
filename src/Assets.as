@@ -177,6 +177,10 @@ package
 		private static var air_mine_normal:Class;
 		public static const AIR_MINE:String = "Air Mine";
 		
+		[Embed(source = "../images/rocket_tower.png")]
+		private static var rocket_tower_normal:Class;
+		public static const ROCKET_TOWER:String = "Rocket Tower";
+		
 		[Embed(source = "../images/space_needle.png")]
 		private static var space_needle:Class;
 		public static const SPACENEEDLE:String = "Space Needle";
@@ -309,6 +313,7 @@ package
 			_normal[Assets.SPIKED_WALL] = spiked_wall_normal;
 			_normal[Assets.DEEP_LAND_MINE] = deep_land_mine_normal;
 			_normal[Assets.AIR_MINE] = air_mine_normal;
+			_normal[Assets.ROCKET_TOWER] = rocket_tower_normal;
 
 
 			_normal[Assets.WALL] = wall_normal;
