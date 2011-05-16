@@ -63,14 +63,8 @@ package
 		
 		private function createUpgrades(info:Array, width:Number, height:Number, perRow:int, perColumn:int, clickCallback:Function):Array {
 			var pages:Array = [];
-/*
-			for (var i:int = 0; i < (max - min) / (perRow * perColumn); i++) {
-				var group:FlxGroup = new FlxGroup;
-				var upgradeShown:int = 0;
-*/
-	for (var i:int = 0; i < info.length / (perRow * perColumn); i++) {
+			for (var i:int = 0; i < info.length / (perRow * perColumn); i++) {
 				var group:FlxGroup = new FlxGroup();
-//
 				for (var j:int = 0; j < perColumn; j++) {
 					for (var k:int = 0; k < perRow; k++) {
 						var index:Number =  i * (perRow * perColumn) + j * perRow + k;
@@ -82,22 +76,10 @@ package
 							else if (info[index].type == "aviary") bgColor = FlxG.BLUE;
 							else if (info[index].type == "foundry") bgColor = 0xFF767473;
 							else if (info[index].type == "barracks") bgColor = FlxG.GREEN;
-/*							if(checkLevel(info[index])) {
-								Util.log("Upgrade created: " + info[index].name);
-								Util.log("Upgrade type: " + info[index].type);
-								//k * (width / perRow), j * (height / perColumn)
-								var upgrade:Upgrade = new Upgrade(upgradeShown%perRow * (width / perRow), upgradeShown/perColumn * (height / perColumn), 
-									width / perRow, height / perColumn, info[index].name, info[index].unitWorth, info[index].level,
-									info[index].goldCost, info[index].type, clickCallback, bgColor);
-								group.add(upgrade);
-								upgradeShown++;
-							}
-*/
 							var upgrade:Upgrade = new Upgrade(k * (width / perRow), j * (height / perColumn), 
 								width / perRow, height / perColumn, info[index].name, info[index].unitWorth, info[index].level,
 								info[index].goldCost, info[index].type, info[index].id, clickCallback, bgColor);
 							group.add(upgrade);
-//
 						}
 					}
 				}

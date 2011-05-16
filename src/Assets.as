@@ -244,6 +244,7 @@ package
 			_normal[Assets.DRAGON] = dragon_normal;
 			_normal[Assets.AIRPLANE] = airplane_normal;
 			_normal[Assets.HORNET] = hornet_normal;
+			_normal[Assets.LOADER] = loader_img;
 			
 			//Textual assets
 			
