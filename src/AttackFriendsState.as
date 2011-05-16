@@ -14,7 +14,7 @@ package
 	 */	
 	public class AttackFriendsState extends ActiveState
 	{		
-		public static const LEVEL_THRESHHOLD:Number = 75;
+		public static const LEVEL_THRESHHOLD:Number = 200;
 		
 		private var _leftMenu:ScrollMenu;
 		private var _rightMenu:ScrollMenu;
