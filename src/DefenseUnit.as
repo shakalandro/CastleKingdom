@@ -115,7 +115,7 @@ package
 		 */
 		override public function hitRanged(contact:FlxObject):void {
 			//	super.hitRanged(contact);
-			if (contact is EnemyUnit) {
+			if (contact is EnemyUnit && (contact as EnemyUnit).clas == this.clas) {
 				if (_target == null || _target.health <= 0) {
 					_target = contact as Unit;
 				}
