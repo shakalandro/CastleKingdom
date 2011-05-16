@@ -144,6 +144,10 @@ package
 		private static var rocket_normal:Class;
 		public static const ROCKET:String = "Rocket";
 		
+		[Embed(source = "../images/shockwave.png")]
+		private static var shockwave_normal:Class;
+		public static const SHOCKWAVE:String = "Shockwave";
+		
 		[Embed(source = "../images/flame_tower.png")]
 		private static var flame_tower_normal:Class;
 		public static const FLAME_TOWER:String = "Flame Tower";
@@ -195,6 +199,10 @@ package
 		[Embed(source = "../images/underground_wall.png")]
 		private static var underground_wall_normal:Class;
 		public static const UNDERGROUND_WALL:String = "Underground Wall";
+		
+		[Embed(source = "../images/quake_machine.png")]
+		private static var quake_machine_normal:Class;
+		public static const QUAKE_MACHINE:String = "Quake Machine";
 		
 		[Embed(source = "../images/space_needle.png")]
 		private static var space_needle:Class;
@@ -306,6 +314,7 @@ package
 			_normal[Assets.SPEAR] = spear_normal;
 			_normal[Assets.BULLET] = bullet_normal;
 			_normal[Assets.ROCKET] = rocket_normal;
+			_normal[Assets.SHOCKWAVE] = shockwave_normal;
 
 			
 			_normal[Assets.MAP_TILES] = tilesImg_normal;
@@ -340,6 +349,7 @@ package
 			_normal[Assets.PHOENIX] = phoenix_normal;
 			_normal[Assets.MAGIC_WALL] = magic_wall_normal;
 			_normal[Assets.UNDERGROUND_WALL] = underground_wall_normal;
+			_normal[Assets.QUAKE_MACHINE] = quake_machine_normal;
 
 
 			_normal[Assets.WALL] = wall_normal;
