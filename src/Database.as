@@ -172,7 +172,7 @@ package
 		 * the callback function. The object that is passed to the callback function is of the following form:
 		 * </p>
 		 * <p>
-		 * {id, lid, numUnits, pending}
+		 * {id, lid, numUnits, pending, accepted}
 		 * </p>
 		 * <p>
 		 * id = the user uid, lid = the uid of the person you are leasing to, and numUnits is the number of units
@@ -195,7 +195,8 @@ package
 							id: unit.uid,
 							lid: unit.lid,
 							numUnits: unit.numUnits,
-							pending: unit.pending
+							pending: unit.pending,
+							accepted: unit.accepted
 						};
 					});
 					callback(_userLeaseInfo);
@@ -1019,7 +1020,7 @@ package
 		 * the following format:
 		 * </p>
 		 * <p>
-		 * {id, lid, numUnits}
+		 * {id, lid}
 		 * </p>
 		 * 
 		 * @param leaseInfo must be of the specified format and != null
@@ -1030,7 +1031,6 @@ package
 			var variables:URLVariables = new URLVariables();
 			variables.uid = "" + leaseInfo["id"];
 			variables.lid = "" + leaseInfo["lid"];
-			variables.numUnits = "" + leaseInfo["numUnits"];
 			update("http://games.cs.washington.edu/capstone/11sp/castlekd/database/removeUserLease.php", variables);
 			for (var i:int = 0; i < _userLeaseInfo.length; i++) {
 				if (_userLeaseInfo[i].id == leaseInfo["id"] && _userLeaseInfo[i].lid == leaseInfo["lid"] 
