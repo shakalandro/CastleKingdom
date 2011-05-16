@@ -44,7 +44,7 @@ package
 			createHUD();
 			
 			_map = new FlxTilemap();
-			_map.loadMap(new Util.assets[Assets.TILE_LAYOUT], Util.assets[Assets.MAP_TILES],CastleKingdom.TILE_SIZE, CastleKingdom.TILE_SIZE, FlxTilemap.OFF, 0, 0, 1);
+			_map.loadMap(new Util.assets[Assets.TILE_LAYOUT], Util.assets[Assets.MAP_TILES],CastleKingdom.TILE_SIZE, CastleKingdom.TILE_SIZE, FlxTilemap.OFF, 0, 0, 3);
 			_map.y = _header.height;
 			
 			_background = new FlxSprite(0, _header.height, Util.assets[Assets.BACKGROUND]);

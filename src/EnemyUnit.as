@@ -133,9 +133,6 @@ package
 		public function setNewTarget():Boolean {
 			this._target = null;
 			hitRanged(this.getUnitsInRange((FlxG.state as ActiveState).towers)[0]);
-			if(this._unitName == "Archer") {
-				var _bobbo:int = 1;
-			}
 			return (_target != null);
 			
 		}
@@ -158,7 +155,8 @@ package
 		
 		override public function hitRanged(contact:FlxObject):void {
 			if(contact is DefenseUnit && (this._target == null || _target.health <= 0) 
-					&& ((contact as DefenseUnit).type as String).indexOf("Mine") < 0) {
+					&& (((contact as DefenseUnit).name as String).indexOf("Mine") < 0)
+					&& (contact as DefenseUnit).clas == this.clas ){
 				this._target = contact as Unit;
 				this.velocity.y = 0;
 				this.velocity.x = 0;
