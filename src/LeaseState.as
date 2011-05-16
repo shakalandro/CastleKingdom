@@ -48,7 +48,7 @@ package
 			var text:FlxText = new FlxText(0, 0, width - padding * 2, "How many units of tower capacity would you like to lease?");
 			text.alignment = "center";
 			text.color = FlxG.BLACK;
-			_slider = new Slider(0, text.height, width - padding * 2, 100, 1, 1);
+			_slider = new Slider(0, text.height, width - padding * 2, 100, 0, 0);
 			group.add(text);
 			group.add(_slider);
 			page.push(group);
@@ -70,22 +70,20 @@ package
 							});
 							castle.leasedOutUnits = leases[0].numUnits;
 						}, Util.assets[Assets.LEASE_REQUEST_REJECT], function():void {
-							Database.({
+							Database.rejectUserLease({
 								id: FaceBook.uid,
-								lid: leases[0].lid,
-								numUnits: leases[0].numUnits
+								lid: leases[0].lid
 							});
-							castle.leasedOutUnits = leases[0].numUnits;
 						}));
 					});
 				} else {
-					Database.
+					//Database.getUserLeaseInfo(function(userLeases
 				}
 			}, FaceBook.uid, true);
 		}
 		
 		private function closeMenusAndSend():void {
-			if (FriendBox.selected != null) {
+			if (FriendBox.selected != null && _slider.value > 0) {
 				Database.addUserLease({
 					id: FriendBox.selected.uid,
 					lid: FaceBook.uid,
