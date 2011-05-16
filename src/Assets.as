@@ -227,6 +227,8 @@ package
 		public static const ATTACK_FRIENDS_LEFT_TITLE:String = "attack friends left title";
 		public static const ATTACK_FRIENDS_RIGHT_TITLE:String = "attack friends right title";
 		public static const ATTACK_FRIENDS_MIDDLE_TITLE:String = "attack friends middle menu";
+		public static const ATTACK_FRIENDS_WIN:String = "attack friends win";
+		public static const ATTACK_FRIENDS_LOSE:String = "attack friends lose";
 		public static const LEASE_RIGHT_TITLE:String = "lease right title";
 		public static const LEASE_LEFT_TITLE:String = "lease left title";
 		public static const LEASE_MIDDLE_TITLE:String = "lease middle title";
@@ -362,6 +364,8 @@ package
 			_normal[Assets.FRIEND_WAVE_WIN] = "Good job, way to fight off the enemies from {0}, they won't be messing with you again soon.";
 			_normal[Assets.FRIEND_WAVE_LOSS] = "Shoot {0} got away with some of your gold.";
 			_normal[Assets.ATTACK_FRIENDS_BROKE] = "Dang, you don't have enough money to attack an enemy yet, save up {0} gold and try again";
+			_normal[Assets.ATTACK_FRIENDS_WIN] = "Congratulations, your attack on {0} was successful, you have gained {1} hold as a result!";
+			_normal[Assets.ATTACK_FRIENDS_LOSE] = "Dang, your attack on {0} failed, you were unable to steal any gold.";
 		}
 		
 		/**

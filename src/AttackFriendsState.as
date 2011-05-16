@@ -14,7 +14,7 @@ package
 	 */	
 	public class AttackFriendsState extends ActiveState
 	{		
-		public static const LEVEL_THRESHHOLD:Number = 75;
+		public static const LEVEL_THRESHHOLD:Number = CastleKingdom.DEBUG ? 10000000 : 75;
 		
 		private var _leftMenu:ScrollMenu;
 		private var _rightMenu:ScrollMenu;
@@ -41,9 +41,7 @@ package
 				
 				var sides:Array = ["Left Side Units", "Right Side Units"];
 				var page:Array = formatDropBoxes(castle.width - padding * 2, Util.maxY - Util.minY - 75, 1, 2, sides, _dropboxes, padding);
-				
-				
-				
+
 				Util.getFriendsInRange(Castle.computeValue(castle), LEVEL_THRESHHOLD, function(friends:Array):void {
 					formatFriends(friends, castle.x - Util.minX - padding * 2, Util.maxY - Util.minY - 50, 5, function(friendPages:Array):void {
 						_middleMenu = new ScrollMenu(castle.x, Util.minY, page, closeMenusAndSend, Util.assets[Assets.ATTACK_FRIENDS_MIDDLE_TITLE], Util.assets[Assets.ATTACK_FRIENDS_BUTTON], FlxG.WHITE, padding, castle.width, Util.maxY - Util.minY, 3);
@@ -99,6 +97,31 @@ package
 			}
 		}
 		
+		private function checkAttackStatuses():void {
+			Database.getFinishedAttacks(function(attacks:Array):void {
+				Util.logObj("AttackFriendsState.checkAttackStatuses attacks:", attacks);
+				if (attacks != null && attacks.length > 0) {
+					FaceBook.getNameByID(attacks[0].aid, function(name:String):void {
+						Util.logObj("AttackFriendsState.checkAttackStatuses name:", name);
+						if (attacks[0].winAmt > 0) {
+							add(new MessageBox(StringUtil.substitute(Util.assets[Assets.ATTACK_FRIENDS_WIN], name, attacks[0].winAmt), Util.assets[Assets.BUTTON_DONE], null));
+							castle.addGold(attacks[0].winAmt);
+							Database.removeUserAttacks({
+								id: FaceBook.uid,
+								aid: attacks[0].aid
+							});
+						} else if (attacks[0].winAmt == 0) {
+							add(new MessageBox(StringUtil.substitute(Util.assets[Assets.ATTACK_FRIENDS_LOSE], name), Util.assets[Assets.BUTTON_DONE], null));
+							Database.removeUserAttacks({
+								id: FaceBook.uid,
+								aid: attacks[0].aid
+							});
+						}
+					});
+				}
+			}, FaceBook.uid);
+		}
+		
 		/**
 		 * Closes all menus when a single menu is closed and also handles any ui that needs to be drawn as a result. 
 		 * 
@@ -139,6 +162,7 @@ package
 			_rightMenu.kill();
 			_leftMenu.kill();
 			_middleMenu.kill();
+			checkAttackStatuses();
 		}
 		
 		/**

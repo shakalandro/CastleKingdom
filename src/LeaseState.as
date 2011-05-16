@@ -7,7 +7,7 @@ package
 	
 	public class LeaseState extends ActiveState
 	{
-		public static const LEVEL_THRESHHOLD:Number = 75;
+		public static const LEVEL_THRESHHOLD:Number = CastleKingdom.DEBUG ? 10000000 : 75;
 		
 		private var _rightMenu:ScrollMenu;
 		private var _leftMenu:ScrollMenu;

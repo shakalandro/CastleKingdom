@@ -96,7 +96,7 @@ package
 			}
 			
 			if (!attackPending) {
-				checkForPendingAttacks(function():void {
+				checkForThings(function():void {
 					/*
 					if (CastleKingdom.DEBUG) {
 						var clear:CKButton = new CKButton(0, 0, "Clear", function():void {
@@ -153,7 +153,7 @@ package
 		 * @param callback A callback with the signature callback():void
 		 * 
 		 */		
-		private function checkForPendingAttacks(callback:Function):void {
+		private function checkForThings(callback:Function):void {
 			Util.log("ActiveState.checkForPendingAttacks looking for pending attack");
 			Database.pendingAttacks(function(attacks:Array):void {
 				if (attacks == null || attacks.length == 0) {
@@ -168,11 +168,13 @@ package
 							var box:MessageBox = new MessageBox(StringUtil.substitute(Util.assets[Assets.INCOMING_WAVE], name, castle.surrenderCost()), "Defend", function():void {
 								FlxG.switchState(new DefenseState(map, remove(castle) as Castle, remove(towers) as FlxGroup, true, attacks[0]));
 							}, "Surrender", function():void {
-								castle.addGold(-castle.surrenderCost());
+								var prize:Number = castle.surrenderCost();
+								castle.addGold(-prize);
 								setTutorialUI();
-								Database.removeUserAttacks({
-									id: attacks[0].id, 
-									aid: attacks[0].aid
+								Database.setWinStatusAttacks({
+									uid: attacks[0].id,
+									aid: FaceBook.uid,
+									win: prize
 								});
 								box.close();
 							});
@@ -183,7 +185,7 @@ package
 						}
 					});
 				}
-			}, FaceBook.uid);
+			}, FaceBook.uid, true);
 		}
 		
 		override public function update():void {

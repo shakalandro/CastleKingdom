@@ -18,7 +18,7 @@ package
 				attackPending = true;
 			}
 			for each (var tower:Unit in towers.members) {
-				if(tower != null ) {
+				if(tower != null) {
 					tower.health = tower.maxHealth;
 				}
 			}
