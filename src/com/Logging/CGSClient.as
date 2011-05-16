@@ -151,6 +151,7 @@ package com.Logging
 			o["vid"] = _message.vid;
 			_message.qid = qid;
 			SendObjectToServer(_serverURL + CGSClientConstants.URL_LEVEL + CGSClientConstants.urlDataSuffix, o, done);
+			trace("this is the end of the ReportLevel function");
 		}
 		
 		//----------- LogAction ---------------------------------------------------------------------------------

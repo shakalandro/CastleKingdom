@@ -8,7 +8,7 @@ package com.Logging
 	 */
 	public class CGSClientConstants 
 	{
-		public static const URL:String = "http://centerforgamescience.com/cgs/apps/_dev/public/index.php/";
+		public static const URL:String = "http://centerforgamescience.com/cgs/apps/games/ws/index.php/";
 		
 		public static const URL_UID:String = "muser/get/";
 		public static const URL_DQID:String = "logging/getdynamicquestid/";
