@@ -90,9 +90,9 @@ package
 		
 		private function checkLevel(value:Object):Boolean {
 			if( CastleKingdom.DEBUG || 
-				(this.castle.upgrades[value.type] == value.level - 1
-				&& (this.castle.upgrades["castle"] >= value.level || value.type == "castle") 
-				&& checkMineLevel(value) && checkAviaryLevel(value))) {
+					(this.castle.upgrades[value.type] == value.level - 1
+					&& (this.castle.upgrades["castle"] >= value.level || value.type == "castle") 
+					&& checkMineLevel(value) && checkAviaryLevel(value))) {
 				return true;
 			} else {
 				return false;
