@@ -189,6 +189,14 @@ package
 		private static var phoenix_normal:Class;
 		public static const PHOENIX:String = "Tamed Phoenix";
 		
+		[Embed(source = "../images/magic_wall.png")]
+		private static var magic_wall_normal:Class;
+		public static const MAGIC_WALL:String = "Magic Wall";
+		
+		[Embed(source = "../images/underground_wall.png")]
+		private static var underground_wall_normal:Class;
+		public static const UNDERGROUND_WALL:String = "Underground Wall";
+		
 		[Embed(source = "../images/space_needle.png")]
 		private static var space_needle:Class;
 		public static const SPACENEEDLE:String = "Space Needle";
@@ -324,6 +332,8 @@ package
 			_normal[Assets.AIR_MINE] = air_mine_normal;
 			_normal[Assets.ROCKET_TOWER] = rocket_tower_normal;
 			_normal[Assets.PHOENIX] = phoenix_normal;
+			_normal[Assets.MAGIC_WALL] = magic_wall_normal;
+			_normal[Assets.UNDERGROUND_WALL] = underground_wall_normal;
 
 
 			_normal[Assets.WALL] = wall_normal;
