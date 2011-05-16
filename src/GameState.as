@@ -123,7 +123,7 @@ package
 			_hud.add(_header);
 			
 			_loading = new FlxSprite(500, 20);
-			_loading.loadGraphic(Util.assets[Assets.LOADER], true	, false, 40, 40);
+			_loading.loadGraphic(Util.assets[Assets.LOADER], true	, false, 30, 30);
 			_loading.addAnimation("load", [0, 1, 2, 3, 4, 5, 6, 7], 8, true);
 			_loading.play("load");
 			Util.centerY(_loading, _header);

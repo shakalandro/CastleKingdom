@@ -428,7 +428,7 @@ package
 		 * @return A closable window object
 		 * 
 		 */		
-		public static function window(x:Number, y:Number, contents:FlxBasic, closeCallback:Function, title:String = "", bgColor:uint = FlxG.WHITE, 
+		public static function window(x:Number, y:Number, contents:FlxBasic, closeCallback:Function, btnText:String = "", bgColor:uint = FlxG.WHITE, 
 					padding:Number = 10, width:int = 100, height:int = 100, borderThickness:Number = 3):FlxBasic {
 			var window:FlxGroup = new FlxGroup();
 			var box:FlxSprite = new FlxSprite(x, y);
@@ -443,29 +443,27 @@ package
 			box.y = y;
 			window.add(box);
 			
-			var text:FlxText = new FlxText(x + padding, y, width - padding * 3, title);
-			text.color = FlxG.BLACK;
 			var close:FlxButton = new FlxButton(x + borderThickness, y + borderThickness	, "Close", function():void {
 				if (closeCallback != null) closeCallback();
 				window.kill();
 			});
+			close.x = x + box.width / 2 - close.width / 2;
+			close.y = y + box.height - close.height - padding;
 			if (contents) {
 				if (contents is FlxGroup) {
 					for each (var n:FlxBasic in (contents as FlxGroup).members) {
 						if (n is FlxObject) {
 							(n as FlxObject).x += x + padding;
-							(n as FlxObject).y += y + text.height + padding;
+							(n as FlxObject).y += y + padding;
 						}
 					}
 				} else {
 					(contents as FlxObject).x += x + padding;
-					(contents as FlxObject).y += y + text.height + padding;
+					(contents as FlxObject).y += y + padding;
 				}
 				window.add(contents);
 			}
 			window.add(close);
-			text.x += close.width;
-			window.add(text);
 			for each(var m:FlxBasic in window.members) {
 				if (m is FlxObject) {
 					(m as FlxObject).allowCollisions = FlxObject.NONE;
