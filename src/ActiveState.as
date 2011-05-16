@@ -384,8 +384,8 @@ package
 			}
 			for each (var obj:FlxObject in towers.members) {
 				if (obj != null) {
-					var objStart:FlxPoint = Util.cartesianToIndices(new FlxPoint(obj.x, obj.y));
-					var objStop:FlxPoint = Util.cartesianToIndices(new FlxPoint(obj.x + obj.width, obj.y));
+					var objStart:FlxPoint = Util.cartesianToIndices(new FlxPoint(obj.x, obj.y), true);
+					var objStop:FlxPoint = Util.cartesianToIndices(new FlxPoint(obj.x + obj.width, obj.y),true);
 					if (obj is DefenseUnit) {
 						var tower:DefenseUnit = obj as DefenseUnit;
 						if (tower.clas == Unit.GROUND) {
