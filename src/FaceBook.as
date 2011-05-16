@@ -42,9 +42,9 @@ package
 		 * 
 		 */		
 		public static function connect(callback:Function, accessToken:String = null):void {
-			CastleKingdom.loading = true;
+			(FlxG.state as GameState).loading = true;
 			Facebook.init(CastleKingdom.FACEBOOK_APP_ID, function(success:Object, fail:Object):void {
-				CastleKingdom.loading = false;
+				(FlxG.state as GameState).loading = false;
 				if (!success) {
 					Util.log("Facebook.init failed: " + success + ", " + fail);
 					Facebook.login(function(success:Object, fail:Object):void {
@@ -73,9 +73,9 @@ package
 		 * 
 		 */		
 		private static function connectListener(callback:Function):void {
-			CastleKingdom.loading = true;
+			(FlxG.state as GameState).loading = true;
 			Facebook.addJSEventListener("auth.sessionChange", function(result:Object):void {
-				CastleKingdom.loading = false;
+				(FlxG.state as GameState).loading = false;
 				Util.log("called");
 				if (result.status == "connected") {
 					_facebookReady = true;
@@ -121,9 +121,9 @@ package
 				Util.logObj("_facebookUserInfo[uid]:", _facebookUserInfo[uid]);
 				callback(_facebookUserInfo[uid]);
 			} else {
-				CastleKingdom.loading = true;
+				(FlxG.state as GameState).loading = true;
 				Facebook.api("/" + uid, function(results:Object, fail:Object):void {
-					CastleKingdom.loading = false;
+					(FlxG.state as GameState).loading = false;
 					if (results) {
 						_facebookUserInfo[uid] = results;
 						callback(results);
@@ -149,9 +149,9 @@ package
 			} else if (_facebookFriends && !forceRefresh) {
 				callback(_facebookFriends as Array);	
 			} else {
-				CastleKingdom.loading = true;
+				(FlxG.state as GameState).loading = true;
 				Facebook.api("/me/friends", function(result:Object, fail:Object):void {
-					CastleKingdom.loading = false;
+					(FlxG.state as GameState).loading = false;
 					if (result) {
 						_facebookFriends = result;
 						callback(_facebookFriends as Array);
@@ -180,9 +180,9 @@ package
 				var context:LoaderContext = new LoaderContext(true);
 				context.securityDomain = SecurityDomain.currentDomain;
 				var loader:Loader = new Loader();
-				CastleKingdom.loading = true;
+				(FlxG.state as GameState).loading = true;
 				loader.contentLoaderInfo.addEventListener(Event.COMPLETE, function(e:Event):void {
-					CastleKingdom.loading = false;
+					(FlxG.state as GameState).loading = false;
 					_facebookPics[uid] = e.target.content.bitmapData;
 					ExternalImage.setData(_facebookPics[uid], uid);
 					callback(ExternalImage);
@@ -217,9 +217,9 @@ package
 			if (id == FaceBook.uid + "" || id == "me") {
 				callback(FaceBook.session().user.name);
 			} else {
-				CastleKingdom.loading = true;
+				(FlxG.state as GameState).loading = true;
 				FaceBook.friends(function(friends:Array):void {
-					CastleKingdom.loading = false;
+					(FlxG.state as GameState).loading = false;
 					var found:String = null;
 					for each(var friend:Object in friends) {
 						if (friend.id + "" == id + "") {
@@ -249,9 +249,9 @@ package
 			} else {
 				var id:String = ids[0].id || ids[0];
 				Util.log(id);
-				CastleKingdom.loading = true;
+				(FlxG.state as GameState).loading = true;
 				FaceBook.picture(function(pic:Class):void {
-					CastleKingdom.loading = false;
+					(FlxG.state as GameState).loading = false;
 					var picSprite:FlxSprite = new FlxSprite(0, 0, pic);
 					Util.drawBorder(picSprite);
 					result.push(picSprite);

@@ -20,6 +20,8 @@ package
 		private var _header:FlxSprite;
 		
 		private var _background:FlxSprite;
+		
+		private var _loading:FlxSprite;
 				
 		/**
 		 * Constructs a new GameState. This is a helper superclass state. All persistent gamestate materials are held here. 
@@ -40,10 +42,6 @@ package
 		override public function create():void {
 			super.create();
 			createHUD();
-			
-			//Seems useless, but this get sthe loading image added back to the current state
-			CastleKingdom.loading = CastleKingdom.loading;
-			CastleKingdom.loading = !CastleKingdom.loading;
 			
 			_map = new FlxTilemap();
 			_map.loadMap(new Util.assets[Assets.TILE_LAYOUT], Util.assets[Assets.MAP_TILES],CastleKingdom.TILE_SIZE, CastleKingdom.TILE_SIZE, FlxTilemap.OFF, 0, 0, 1);
@@ -109,6 +107,10 @@ package
 			FlxG.framerate = CastleKingdom.FRAMERATE;
 		}
 		
+		public function set loading(t:Boolean):void {
+			_loading.visible = t; 
+		}
+		
 		/**
 		 * Draws the HUD basics that are persistent throughout states. 
 		 * When overriding this function, simply add any additial UI components to hud instead of to the stage.
@@ -119,6 +121,15 @@ package
 			_header = new FlxSprite(0, 0, Util.assets[Assets.HUD_HEADER]);
 			_header.drawLine(0, _header.height, _header.width, _header.height, FlxG.BLACK, 4);
 			_hud.add(_header);
+			
+			_loading = new FlxSprite(500, 20);
+			_loading.loadGraphic(Util.assets[Assets.LOADER], true	, false, 30, 30);
+			_loading.addAnimation("load", [0, 1, 2, 3, 4, 5, 6, 7], 8, true);
+			_loading.play("load");
+			Util.centerY(_loading, _header);
+			_loading.x = Util.maxX - 100;
+			
+			_hud.add(_loading);
 			add(_hud);
 		}
 	}

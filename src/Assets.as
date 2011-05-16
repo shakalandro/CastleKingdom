@@ -112,6 +112,22 @@ package
 		private static var arrow_normal:Class;
 		public static const ARROW:String = "Arrow";
 		
+		[Embed(source = "../images/cannonball.png")]
+		private static var cannonball_normal:Class;
+		public static const CANNONBALL:String = "Cannonball";
+		
+		[Embed(source = "../images/fireball.png")]
+		private static var fireball_normal:Class;
+		public static const FIREBALL:String = "Fireball";
+		
+		[Embed(source = "../images/spear.png")]
+		private static var spear_normal:Class;
+		public static const SPEAR:String = "Spear";
+		
+		[Embed(source = "../images/bullet.png")]
+		private static var bullet_normal:Class;
+		public static const BULLET:String = "Bullet";
+		
 		
 		[Embed(source = "../images/flame_tower.png")]
 		private static var flame_tower_normal:Class;
@@ -137,6 +153,14 @@ package
 		private static var landmine_normal:Class;
 		public static const LANDMINE:String = "Land Mine";
 		
+		[Embed(source = "../images/deep_land_mine.png")]
+		private static var deep_land_mine_normal:Class;
+		public static const DEEP_LAND_MINE:String = "Deep Land Mine";
+		
+		[Embed(source = "../images/air_mine.png")]
+		private static var air_mine_normal:Class;
+		public static const AIR_MINE:String = "Air Mine";
+		
 		[Embed(source = "../images/space_needle.png")]
 		private static var space_needle:Class;
 		public static const SPACENEEDLE:String = "Space Needle";
@@ -160,9 +184,27 @@ package
 		[Embed(source = "../images/startpage_background.png")]
 		private static var startpage_background:Class;
 		public static const LOGIN_BACKGROUND:String = "Login Background";
-	
+		
+		[Embed(source = "../images/play_button.png")]
+		private static var play_button:Class;
+		public static const PLAY_BUTTON:String = "Play Button";
+		
+		[Embed(source = "../images/gold_counter.png")]
+		private static var gold_counter:Class;
+		public static const GOLD_COUNTER:String = "Gold Counter";
+		
+		[Embed(source = "../images/tower_counter.png")]
+		private static var tower_counter:Class;
+		public static const TOWER_COUNTER:String = "Tower Counter";
+		
+		[Embed(source = "../images/unit_counter.png")]
+		private static var unit_counter:Class;
+		public static const UNIT_COUNTER:String = "Unit Counter";
+		
 		// Text resources
 		
+		public static const HELP_BUTTON:String = "help button";
+		public static const HELP_TEXT:String = "help text";
 		public static const PLACE_TOWER_BUTTON:String = "place tower button";
 		public static const RELEASE_WAVE_BUTTON:String = "release wave button";
 		public static const UPGRADE_BUTTON:String = "upgrade button";
@@ -217,6 +259,10 @@ package
 			_assets[SKIN_NORMAL] = _normal;
 			
 			_normal[Assets.ARROW] = arrow_normal;
+			_normal[Assets.CANNONBALL] = cannonball_normal;
+			_normal[Assets.FIREBALL] = fireball_normal;
+			_normal[Assets.SPEAR] = spear_normal;
+			_normal[Assets.BULLET] = bullet_normal;
 
 			
 			_normal[Assets.MAP_TILES] = tilesImg_normal;
@@ -233,6 +279,10 @@ package
 			_normal[Assets.BACKGROUND] = background_img;
 			_normal[Assets.LOGIN_BACKGROUND] = startpage_background;
 			_normal[Assets.BUTTON_SMALL] = button_small_img;
+			_normal[Assets.PLAY_BUTTON] = play_button;
+			_normal[Assets.GOLD_COUNTER] = gold_counter;
+			_normal[Assets.TOWER_COUNTER] = tower_counter;
+			_normal[Assets.UNIT_COUNTER] = unit_counter;
 			
 			_normal[Assets.ARROW_TOWER] = arrow_tower_normal;
 			_normal[Assets.SNIPER_TOWER] = sniper_tower_normal;
@@ -240,6 +290,8 @@ package
 			_normal[Assets.MULTISHOT_TOWER] = multishot_tower_normal;
 			_normal[Assets.LANDMINE] = landmine_normal;
 			_normal[Assets.SPIKED_WALL] = spiked_wall_normal;
+			_normal[Assets.DEEP_LAND_MINE] = deep_land_mine_normal;
+			_normal[Assets.AIR_MINE] = air_mine_normal;
 
 
 			_normal[Assets.WALL] = wall_normal;
@@ -258,6 +310,10 @@ package
 			
 			//Textual assets
 			
+			_normal[Assets.HELP_BUTTON] = "Help";
+			_normal[Assets.HELP_TEXT] = "This is CastleKingdom, a tower defense OCD hybrid game. Bring your castle to glory as " +
+				"you battle your friends for treasure.\n\nAuthors: Gabe Groen, Justin Harding, Robert Johnson, Roy McElmurry, Kim Nguyen" +
+				"\n\nSpring 2011";
 			_normal[Assets.BUTTON_CANCEL] = "Cancel";
 			_normal[Assets.BUTTON_DONE] = "Cancel";
 			_normal[Assets.PLACE_TOWER_BUTTON] = "Defend";

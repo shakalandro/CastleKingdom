@@ -22,16 +22,14 @@ package
 			add(new FlxSprite(0, 0, Util.assets[Assets.LOGIN_BACKGROUND]));
 
 			if (CastleKingdom.FACEBOOK_ON) {
-				_startButton = new FlxButton(0, 0, "Play", login);
+				_startButton = new FlxButton(0, 0, "", login);
 			} else {
-				_startButton = new FlxButton(0, 0, "Play", start);
+				_startButton = new FlxButton(0, 0, "", start);
 			}
 			
-			_startButton.makeGraphic(250, 100, 0x00000000, true);
-			_startButton.y = 325;
-			_startButton.x = 50;
-			_startButton.width = 250;
-			_startButton.height = 100;
+			_startButton.loadGraphic(Util.assets[Assets.PLAY_BUTTON], false, false, 350, 200); 
+			_startButton.y = 270;
+			_startButton.x = 20;
 			add(_startButton);
 			
 			
@@ -48,7 +46,6 @@ package
 		
 		private function login():void {
 			FaceBook.connect(function(ready:Boolean):void {
-				CastleKingdom.loading = false;
 				if (ready) {
 					FaceBook.userInfo(function(fbInfo:Object):void {
 						if (fbInfo != null) {
@@ -97,12 +94,14 @@ package
 		}
 		
 		private function drawHelp(x:Number, y:Number, width:Number, height:Number):void {
-			var helpText:String = "This is CastleKingdom! Here, gold is precious and everyone wants yours. " +
-				"Defend your castle to protect your treasure. Loot other castles to make a profit.";
-			var body:FlxText = new FlxText(0, 0, width, "This is CastleKingdom!");
+			var padding:int = 10;
+			var body:FlxText = new FlxText(0, 0, width - padding * 2, Util.assets[Assets.HELP_TEXT]);
 			body.color = 0x000000;
-			pause();
-			add(Util.window(x, y, body, unpause, "Help", 0xffffffff, 10, width, height));
+			body.size = 14;
+			_startButton.active = false;
+			add(Util.window(x, y, body, function():void {
+				_startButton.active = true;
+			}, Util.assets[Assets.HELP_BUTTON], 0xffffffff, padding, width, height));
 		}
 	}
 }
