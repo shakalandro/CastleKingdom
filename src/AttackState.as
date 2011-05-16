@@ -71,6 +71,18 @@ package
 			towers.setAll("canHighlight", true);
 			
 			setTutorialUI();
+			
+			// Generate attacking wave
+			// lock menus 
+			
+			// If not a sent attack wave, generate random armies
+			if (_placeOnLeft == null && _placeOnLeft == null) { 
+				var leftSide:Array = new Array();
+				var rightSide:Array = new Array();
+				generateArmy(leftSide, rightSide, 10, 10);
+			} 
+			placeArmy(leftSide, rightSide);
+		
 		}
 		
 		private function setTutorialUI():void {
@@ -135,57 +147,29 @@ package
 			}
 			if(!_gameOver) {	
 							
-				if (_activeAttack && this.castle.isGameOver()) {		// Checks if castle has been breached
+				if (this.castle.isGameOver()) {		// Checks if castle has been breached
 					// recover cost, units disband
 					var armyCost:int = sumArmyCost();
 					// take portion of defender's gold and give to attacker
 					var cash:int = this.castle.gold;
 					var cashStolen:int = computeStolen(units, cash);
 					this.castle.addGold(-cashStolen);
-					//Util.goldStolenFromAttack(cashStolen + armyCost);
+					// Database.giveUserGold(cashStolen + armyCost);
 					//GameMessages.LOSE_FIGHT("Bob Barker",6);
-				//	FlxG.state = new ActiveState();
 					this.remove(units);
 					_gameOver = true;
-					_activeAttack = false;
 					waveFinished(false);
-				} else if (_activeAttack && _placeOnLeft.length + _placeOnRight.length == 0  && units.length == 0) { // Check if peeps are still alive
-				//	var armyCost2:int = sumArmyCost();
+				} else if (_placeOnLeft.length + _placeOnRight.length == 0  && units.length == 0) { // Check if peeps are still alive
 					this.castle.addGold(this._waveGold);
 					this.remove(units);
 					_gameOver = true;
-				
-					_activeAttack = false;
 					waveFinished(true);
 				}
 				
-				// Do nothing if peeps are still alive
-				if(!_activeAttack) {
-					_activeAttack = true;
-					// Check for incoming wave
-					// if none, check for automated
-					
-					// else if is, lock menus and drop dudes
-					
-					var type:String = getAttackType();
-					if (leftSide != null || rightSide != null) {
-
-					} else { //if (type == AttackState.REQUESTED){
-						var leftSide:Array = new Array();
-						var rightSide:Array = new Array();
-						generateArmy(leftSide, rightSide, 10, 10);
-					} /*else if ( type == AttackState.TIDAL ) {
-						generateArmy(leftSide, rightSide, 0, 15);
-					} else {  //== AttackState.REQUESTED
-						
-					} */
-					placeArmy(leftSide, rightSide);
-					
-				}
 				
 				_unitDropCounter--;
 				if(_unitDropCounter <= 0) {
-					_unitDropCounter = 50; // 100 -  Math.sqrt(this.castle.towerCapacity);
+					_unitDropCounter = 50;
 					placeDudes(_placeOnLeft, Util.minX);
 					placeDudes(_placeOnRight, Util.maxX - 20);
 				}
@@ -357,20 +341,9 @@ package
 			var bar:HealthBar = new HealthBar();
 			bar = null;
 			var dude:Unit = new EnemyUnit(xVal, Util.minY, dudes[0], false, bar);
-			if (dude.type == Unit.UNDERGROUND) {
-				// set dude on ground dude 
-			} else if (dude.type == Unit.AIR) {
-				// set dude on air dude = new Unit(xVal, Util.minTileY, dudes[i]);
-			} else {
-				//dude = new Unit(xVal, Util.minTileY, dudes[i]);
-				//Util.placeOnGround(dude, this.map, true);
-			//	this.addEnemyUnit(dude as EnemyUnit, true);
-			}
 			units.add(dude);
-			//trace("adding dude: " + dude.x + " " + dude.y);
 			this.add(bar);
 			this.addEnemyUnit(dude as EnemyUnit,true);
-		//	this.add(dude);
 			dudes.shift();
 		}
 		

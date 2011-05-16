@@ -79,7 +79,7 @@ package
 			_upgrades["mine"] = 0;
 			_upgrades["aviary"] = 0;
 			//_upgrades = ;
-			Database.getUserInfo(initUserInfo, FaceBook.uid);
+			Database.getUserInfo(initUserInfo, FaceBook.uid, true);
 			Database.getUserUpgrades(initUpgrades,FaceBook.uid);
 			Database.getDefenseUnitInfo(initDefense);  // stores into UNIT_INFO
 			Database.getEnemyInfo(initArmy);
@@ -227,19 +227,19 @@ package
 		}
 		
 		private function initGenericPieces(info:Array):void {
-			_towerCap += info[0].unitWorth;
-			_unitCap += info[0].unitWorth;
-			_netWorth += info[0].goldCost;
+			_towerCap += parseInt(info[0].unitWorth);
+			_unitCap += parseInt(info[0].unitWorth);
+			_netWorth += parseInt(info[0].goldCost);
 
 		}
 		
 		private function initBarracksPieces(info:Array):void {
-			_unitCap += info[0].unitWorth;
-			_netWorth += info[0].goldCost;
+			_unitCap += parseInt(info[0].unitWorth);
+			_netWorth += parseInt(info[0].goldCost);
 		}
 		private function initFoundryPieces(info:Array):void {
-			_towerCap += info[0].unitWorth;
-			_netWorth += info[0].goldCost;
+			_towerCap += parseInt(info[0].unitWorth);
+			_netWorth += parseInt(info[0].goldCost);
 	
 		}
 		
@@ -488,5 +488,7 @@ package
 			}
 			return n;
 		}
+		
+		
 	}
 }
