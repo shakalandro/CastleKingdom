@@ -85,8 +85,16 @@ package
 								if (lease.accepted == 1) {
 									add(new MessageBox(StringUtil.substitute(Util.assets[Assets.LEASE_ACCEPTED], name, lease.numUnits), Util.assets[Assets.BUTTON_DONE], null));
 									castle.leasedInUnits += parseInt(lease.numUnits);
+									Database.removeUserLease({
+										id: lease.id,
+										lid: lease.lid
+									});
 								} else if (lease.accepted == 0) {
 									add(new MessageBox(StringUtil.substitute(Util.assets[Assets.LEASE_REJECTED], name), Util.assets[Assets.BUTTON_DONE], null));
+									Database.removeUserLease({
+										id: lease.id,
+										lid: lease.lid
+									});
 								} else if (lease.accepted != null) {
 									Util.log("LeaseState.closeMenus unknown user lease accepted value");
 								}
