@@ -97,9 +97,8 @@ package
 		 * {id, upid, xpos, ypos}
 		 * </p>
 		 * <p>
-		 * There will only be one of cid, bid, fid, mid, or aid filled in since an upgrade is only
-		 * one of them. This means that the other fields in the object will be the empty string.
-		 * (This should be checked for if the objects are going to be used). 
+		 * The id is the id of the user, the upid is the id of the upgrade, and the xpos is the 
+		 * x-position and ypos is the y-positions. 
 		 * </p>
 		 * 
 		 * @param callback a function that takes an array of objects as a parameter
@@ -973,11 +972,46 @@ package
 			variables.aid = "" + attackInfo["aid"];
 			variables.leftSide = "" + attackInfo["leftSide"];
 			variables.rightSide = "" + attackInfo["rightSide"];
+			attackInfo["win"] = -1;
 			update("http://games.cs.washington.edu/capstone/11sp/castlekd/database/updateUserAttacks.php", variables);
 			if (_save.data.users[attackInfo.id] == null) {
 				_save.data.users[attackInfo.id] = {info: {}, tut: {}, leases: [], attacks: [], upgrades: []};
 			}
 			_save.data.users[attackInfo.id].attacks.push(attackInfo);
+		}
+		
+		/**
+		 * <p>
+		 * Updates the win status for the given attack pair to the given value. The object passed must be of
+		 * the following format:
+		 * </p>
+		 * <p>
+		 * {uid, aid, win}
+		 * </p>
+		 * <p>
+		 * The win field should be greate than or equal to 0, 0 means the uid lost the attack
+		 * and greate than 0 means that uid won the attack. 
+		 * </p>
+		 * 
+		 * @param attackInfo must be of the specified format and != null
+		 * 
+		 */
+		public static function setWinStatusAttacks(attackInfo:Object):void
+		{
+			var variables:URLVariables = new URLVariables();
+			variables.uid = "" + attackInfo["uid"];
+			variables.aid = "" + attackInfo["aid"];
+			variables.win = "" + attackInfo["win"];
+			update("http://games.cs.washington.edu/capstone/11sp/castlekd/database/setWinStatusAttacks.php", variables);
+			if (_save.data.users[attackInfo.id] == null) {
+				_save.data.users[attackInfo.id] = {info: {}, tut: {}, leases: [], attacks: [], upgrades: []};
+			}
+			for (var i:int = 0; i < _save.data.users[attackInfo.id].attacks.length; i++) {
+				if (_save.data.users[attackInfo.id].attacks[i].uid == attackInfo.uid &&
+					_save.data.users[attackInfo.id].attacks[i].aid == attackInfo.aid) {
+					_save.data.users[attackInfo.id].attacks[i].win = attackInfo["win"];
+				}
+			}
 		}
 		
 		/**
@@ -997,8 +1031,6 @@ package
 			var variables:URLVariables = new URLVariables();
 			variables.uid = "" + attackInfo["id"];
 			variables.aid = "" + attackInfo["aid"];
-			variables.leftSide = "" + attackInfo["leftSide"];
-			variables.rightSide = "" + attackInfo["rightSide"];
 			update("http://games.cs.washington.edu/capstone/11sp/castlekd/database/removeUserAttacks.php", variables);
 			for (var i:int = 0; i < _pendingAttacks.length; i++) {
 				if (_pendingAttacks[i].id == attackInfo["id"] && _pendingAttacks[i].aid == attackInfo["aid"]) {
