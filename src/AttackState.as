@@ -147,6 +147,12 @@ package
 				}
 			}
 			remove(units);
+			if (castle.leasedInUnits > 0) {
+				castle.leasedInUnits = 0;
+			}
+			if (castle.leasedOutUnits > 0) {
+				castle.leasedOutUnits = 0;
+			}
 		}
 
 		

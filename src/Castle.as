@@ -287,7 +287,7 @@ package
 		}
 		
 		public function get towerCapacity():int {
-			return _towerCap;
+			return _towerCap ;
 		}
 		
 		// Returns how many tower units the player has to use
@@ -328,6 +328,10 @@ package
 		
 		public function set leasedOutUnits(n:Number):void {
 			_leasedOutNumber = n;
+		}
+		
+		public function get leasedOutUnits():Number {
+			return _leasedOutNumber;
 		}
 		
 		public function set leasedInUnits(n:Number):void {
