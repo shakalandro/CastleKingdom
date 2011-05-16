@@ -3,8 +3,9 @@ package
 	import flash.display.BitmapData;
 	import flash.utils.Dictionary;
 	
-	import org.flixel.*;
 	import mx.utils.StringUtil;
+	
+	import org.flixel.*;
 	
 	/**
 	 * Handles atacking friends. 
@@ -19,10 +20,12 @@ package
 		private var _rightMenu:ScrollMenu;
 		private var _middleMenu:ScrollMenu;
 		private var _dropboxes:Array;
+		private var _accumulatedUnits:Number;
 		
 		public function AttackFriendsState(map:FlxTilemap=null, castle:Castle=null, towers:FlxGroup=null, units:FlxGroup=null)
 		{
 			super(map, castle, towers, units);
+			_accumulatedUnits = 0;
 		}
 		
 		override public function create():void {
@@ -39,24 +42,32 @@ package
 				var sides:Array = ["Left Side Units", "Right Side Units"];
 				var page:Array = formatDropBoxes(castle.width - padding * 2, Util.maxY - Util.minY - 75, 1, 2, sides, _dropboxes, padding);
 				
+				
+				
 				Util.getFriendsInRange(Castle.computeValue(castle), LEVEL_THRESHHOLD, function(friends:Array):void {
-					formatFriends(friends, castle.x - Util.minX - padding * 2, Util.maxY - Util.minY - 50, 5, function(pages:Array):void {
-						_rightMenu = new ScrollMenu(castle.x + castle.width, Util.minY, pages, closeMenus, Util.assets[Assets.ATTACK_FRIENDS_RIGHT_TITLE], Util.assets[Assets.BUTTON_CANCEL], FlxG.WHITE, 
-							padding, Util.maxX - castle.x - castle.width, Util.maxY - Util.minY);
-						add(_rightMenu);
-					});
-					
-					Database.getEnemyInfo(function(units:Array):void {
-						var pages:Array = formatUnits(units, castle.x - Util.minX, Util.maxY - Util.minY - 50, 2, 4);
-						_leftMenu = new ScrollMenu(Util.minX, Util.minY, pages, closeMenus, Util.assets[Assets.ATTACK_FRIENDS_LEFT_TITLE], Util.assets[Assets.BUTTON_CANCEL], FlxG.WHITE, padding, 
-							castle.x - Util.minX, Util.maxY - Util.minY, 3, moveUnit);
-						add(_leftMenu);
-						
+					formatFriends(friends, castle.x - Util.minX - padding * 2, Util.maxY - Util.minY - 50, 5, function(friendPages:Array):void {
 						_middleMenu = new ScrollMenu(castle.x, Util.minY, page, closeMenusAndSend, Util.assets[Assets.ATTACK_FRIENDS_MIDDLE_TITLE], Util.assets[Assets.ATTACK_FRIENDS_BUTTON], FlxG.WHITE, padding, castle.width, Util.maxY - Util.minY, 3);
 						add(_middleMenu);
+						
+						Database.getEnemyInfo(function(units:Array):void {
+							var pages:Array = formatUnits(units, castle.x - Util.minX, Util.maxY - Util.minY - 50, 2, 4);
+							
+							_rightMenu = new ScrollMenu(castle.x + castle.width, Util.minY, friendPages, closeMenus, Util.assets[Assets.ATTACK_FRIENDS_RIGHT_TITLE], Util.assets[Assets.BUTTON_CANCEL], FlxG.WHITE, 
+								padding, Util.maxX - castle.x - castle.width, Util.maxY - Util.minY);
+							add(_rightMenu);
+							
+							_leftMenu = new ScrollMenu(Util.minX, Util.minY, pages, closeMenus, Util.assets[Assets.ATTACK_FRIENDS_LEFT_TITLE], Util.assets[Assets.BUTTON_CANCEL], FlxG.WHITE, padding, 
+								castle.x - Util.minX, Util.maxY - Util.minY, 3, moveUnit);
+							add(_leftMenu);
+						});
 					});
 				}, Castle.computeValue);
 			}
+			setTutorialUI();
+		}
+		
+		private function setTutorialUI():void {
+			toggleButtons(0);
 		}
 		
 		/**
@@ -72,10 +83,13 @@ package
 		 */		
 		public function moveUnit(draggable:Draggable, newX:Number, newY:Number, oldX:Number, oldY:Number):void {
 			var enemy:EnemyUnit = (draggable as EnemyUnit);
-			if (newX > castle.x && newX < castle.x + castle.width && _middleMenu.dropOnto(draggable as FlxObject, oldX, oldY)) {
+			if (newX > castle.x && newX < castle.x + castle.width && 
+					_middleMenu.dropOnto(draggable as FlxObject, oldX, oldY) &&
+					_accumulatedUnits + enemy.cost <= castle.unitCapacity) {
 				var newEnemy:EnemyUnit = enemy.clone() as EnemyUnit;
 				newEnemy.x = oldX;
 				newEnemy.y = oldY;
+				_accumulatedUnits += enemy.cost;
 				_leftMenu.addToCurrentPage(newEnemy);
 				_middleMenu.addToCurrentPage(enemy);
 			} else {
@@ -260,6 +274,17 @@ package
 			}
 			page.push(boxes);
 			return page;
+		}
+		
+		override public function drawStats():void {
+			super.drawStats();
+			if (_middleMenu != null && _middleMenu.exists) {
+				_armyDisplay.visible = true;
+			} else {
+				_armyDisplay.visible = false;
+			}
+			_armyDisplay.value = _accumulatedUnits;
+			_armyDisplay.max = castle.unitCapacity;
 		}
 	}
 }
