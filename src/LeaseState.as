@@ -2,12 +2,14 @@ package
 {
 	import flash.text.*;
 	
+	import mx.utils.StringUtil;
+	
 	import org.flixel.*;
 	import org.flixel.system.input.Input;
 	
 	public class LeaseState extends ActiveState
 	{
-		public static const LEVEL_THRESHHOLD:Number = 75;
+		public static const LEVEL_THRESHHOLD:Number = CastleKingdom.DEBUG ? 10000000 : 75;
 		
 		private var _rightMenu:ScrollMenu;
 		private var _leftMenu:ScrollMenu;
@@ -47,7 +49,7 @@ package
 			var text:FlxText = new FlxText(0, 0, width - padding * 2, "How many units of tower capacity would you like to lease?");
 			text.alignment = "center";
 			text.color = FlxG.BLACK;
-			_slider = new Slider(0, text.height, width - padding * 2, 100, 10, castle.unitCapacity);
+			_slider = new Slider(0, text.height, width - padding * 2, 100, 0, 0);
 			group.add(text);
 			group.add(_slider);
 			page.push(group);
@@ -58,10 +60,45 @@ package
 			_rightMenu.kill();
 			_leftMenu.kill();
 			_middleMenu.kill();
+			Database.getPendingUserLeases(function(leases:Array):void {
+				if (leases != null && leases.length > 0) {
+					FaceBook.getNameByID(leases[0].lid, function(name:String):void {
+						add(new MessageBox(StringUtil.substitute(Util.assets[Assets.LEASE_REQUEST_TEXT], name, leases[0].numUnits), Util.assets[Assets.LEASE_REQUEST_ACCEPT], function():void {
+							Database.confirmUserLease({
+								id: FaceBook.uid,
+								lid: leases[0].lid,
+								numUnits: leases[0].numUnits
+							});
+							castle.leasedOutUnits = parseInt(leases[0].numUnits);
+						}, Util.assets[Assets.LEASE_REQUEST_REJECT], function():void {
+							Database.rejectUserLease({
+								id: FaceBook.uid,
+								lid: leases[0].lid
+							});
+						}));
+					});
+				} else {
+					Database.getUserLeaseInfo(function(userLeases:Array):void {
+						if (userLeases != null && userLeases.length > 0) {
+							var lease:Object = userLeases[0];
+							FaceBook.getNameByID(lease.id, function(name:String):void {
+								if (lease.accepted == 1) {
+									add(new MessageBox(StringUtil.substitute(Util.assets[Assets.LEASE_ACCEPTED], name, lease.numUnits), Util.assets[Assets.BUTTON_DONE], null));
+									castle.leasedInUnits += parseInt(lease.numUnits);
+								} else if (lease.accepted == 0) {
+									add(new MessageBox(StringUtil.substitute(Util.assets[Assets.LEASE_REJECTED], name), Util.assets[Assets.BUTTON_DONE], null));
+								} else if (lease.accepted != null) {
+									Util.log("LeaseState.closeMenus unknown user lease accepted value");
+								}
+							});
+						}
+					}, FaceBook.uid, true);
+				}
+			}, FaceBook.uid, true);
 		}
 		
 		private function closeMenusAndSend():void {
-			if (FriendBox.selected != null) {
+			if (FriendBox.selected != null && _slider.value > 0) {
 				Database.addUserLease({
 					id: FriendBox.selected.uid,
 					lid: FaceBook.uid,
@@ -98,9 +135,22 @@ package
 					}
 					var friendBox:FriendBox = new FriendBox(0, y, width, sprites[i], friends[i].name, friends[i].id, function(uid:String, setCallback:Function):void {
 						Database.getUserLeaseInfo(function(leases:Array):void {
-							setCallback(leases == null || leases.length == 0);
+							setCallback(leases == null || leases.length < 1);
+							if (leases == null || leases.length <= 0) {
+								Database.getUserInfo(function(info:Array):void {
+									if (info == null || info.length <= 0) {
+										Util.logObj("LeaseState.formatFriends user info null or empty for ", info);
+										_slider.max = 0;
+									} else {
+										var correctOne:Array = info.filter(function(obj:Object, index:int, arr:Array):Boolean {
+											return obj.id == uid;
+										});
+										_slider.max = Math.floor(correctOne[0].units / 4);
+									}
+								}, [uid, FaceBook.uid], true);
+							}
 						}, uid, true);
-					});
+					}, false);
 					page.add(friendBox);
 					
 					y += friendBox.height + padding / 2;

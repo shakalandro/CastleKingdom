@@ -33,14 +33,14 @@ package
 		 * @param padding
 		 * 
 		 */		
-		public function FriendBox(x:Number, y:Number, width:Number, pic:FlxSprite, name:String, uid:String, clickCallback:Function = null, beingAttacked:Boolean = false, bgColor:uint = 0x77ffffff, padding:Number = 5)
+		public function FriendBox(x:Number, y:Number, width:Number, pic:FlxSprite, name:String, uid:String, clickCallback:Function = null, attacking:Boolean = true, bgColor:uint = 0x77ffffff, padding:Number = 5)
 		{
 			super(0);
 			_pic = pic;
 			_bgColor = bgColor;
 			_uid = uid;
 			_clickCallback = clickCallback;
-			_beingAttacked = beingAttacked;
+			_beingAttacked = false;
 			_name = name;
 			pic.x = x + padding;
 			pic.y = y + padding;
@@ -52,10 +52,15 @@ package
 			_box = new FlxSprite(x, y);
 			_box.makeGraphic(width, pic.height + padding * 2, bgColor);
 			Util.drawBorder(_box);
-			
-			Database.isBeingAttacked(function(t:Boolean):void {
-				_beingAttacked = t;
-			}, uid, true);
+			if (attacking) {
+				Database.isBeingAttacked(function(attacks:Array):void {
+					_beingAttacked = attacks != null && attacks.length > 0;
+				}, uid, true);
+			} else {
+				Database.getUserLeaseInfo(function(leases:Array):void {
+					_beingAttacked = leases != null && leases.length > 0;
+				}, uid, true);
+			}
 			
 			add(_box);
 			add(_pic);
@@ -126,6 +131,9 @@ package
 		}
 		public static function resetSelected():void {
 			_selected = null;
+		}
+		public function set isBeingAttacked(t:Boolean):void {
+			_beingAttacked = t;
 		}
 	}
 }
