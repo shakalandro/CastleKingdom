@@ -214,7 +214,7 @@ package
 		 * 
 		 */		
 		public function collide():void {
-			FlxG.collide(units, towers, fightCollide);
+		//	FlxG.collide(units, towers, fightCollide);
 			FlxG.collide(units, this.castle, endGameCollide);
 			FlxG.collide(units, this.map);
 			//FlxG.collide(units, attackAnims, animCollide);

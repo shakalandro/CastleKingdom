@@ -141,7 +141,7 @@ package
 		override public function executeAttack():Boolean {
 			if(_target != null) {
 				if(this.range > 0) {
-					new AttackAnimation(this.x,this.y,_target);
+					new AttackAnimation(this.x,this.y,_target, attackAnimationString());
 				}
 				_target.inflictDamage(this.damageDone);
 				return true;
@@ -176,5 +176,32 @@ package
 		//	play("die");
 			
 		}
+		
+		private function attackAnimationString():String {
+			if(checkVsArray(this.name, ["Cannon", "Iron Tower"])) {
+				return "Cannonball";
+			} else if(checkVsArray(this.name, ["Airplane", "Zeppelin"])) {
+				return "Bullet";
+			} else if(checkVsArray(this.name, ["Flame Tower", "Dragon", "Tamed Pheonix"])) {
+				return "Fireball";
+			} else if(checkVsArray(this.name, ["Rocket Tower"])) {
+				return "Arrow";
+			} else {
+				return "Arrow";
+			}
+				
+			
+		}
+		
+		private function checkVsArray(name:String, arr:Array):Boolean {
+			for each (var val:String in arr) {
+				if (val == name) {
+					return true;
+				}
+			}
+			return false;
+		}
+			
+		
 	}
 }

@@ -52,6 +52,14 @@ package
 				_placeOnLeft = _pendingAttack.leftSide.split(",");
 				_placeOnRight = _pendingAttack.rightSide.split(",");
 			}
+			
+			// If not a sent attack wave, generate random armies
+			if (_placeOnRight == null && _placeOnLeft == null) { 
+				var leftSide:Array = new Array();
+				var rightSide:Array = new Array();
+				generateArmy(leftSide, rightSide, 10, 10);
+				placeArmy(leftSide, rightSide);
+			} 
 			_activeAttack = false;
 			_unitDropCounter = 10;
 		}
@@ -75,13 +83,6 @@ package
 			// Generate attacking wave
 			// lock menus 
 			
-			// If not a sent attack wave, generate random armies
-			if (_placeOnLeft == null && _placeOnLeft == null) { 
-				var leftSide:Array = new Array();
-				var rightSide:Array = new Array();
-				generateArmy(leftSide, rightSide, 10, 10);
-			} 
-			placeArmy(leftSide, rightSide);
 		
 		}
 		
@@ -367,10 +368,10 @@ package
 			for each (var unit1:Unit in group1.members) {
 				for each (var unit2:Unit in group2.members) {
 					if(unit1 != null && unit2 != null && unit1.health > 0 && unit2.health > 0) {
-						if(unit1.inRange(unit2)) {
+						if(unit1.inRange(unit2) || unit1.overlaps(unit2)) {
 							unit1.hitRanged(unit2);
 						}
-						if(unit2.inRange(unit1)) {
+						if(unit2.inRange(unit1) || unit2.overlaps(unit1)) {
 							unit2.hitRanged(unit1);
 						}
 					}
