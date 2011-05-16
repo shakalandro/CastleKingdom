@@ -88,6 +88,14 @@ package
 		private static var mutant_mole_normal:Class;
 		public static const MUTANT_MOLE:String = "Mutant Mole";
 		
+		[Embed(source = "../images/tunneler.png")]
+		private static var tunneler_normal:Class;
+		public static const TUNNELER:String = "Tunneler";
+		
+		[Embed(source = "../images/smart_tunneler.png")]
+		private static var smart_tunneler_normal:Class;
+		public static const SMART_TUNNELER:String = "Smart Tunneler";
+		
 		[Embed(source = "../images/hud_header.png")]
 		private static var hud_header:Class;
 		public static const HUD_HEADER:String = "hud_header";
@@ -319,6 +327,8 @@ package
 			_normal[Assets.WARRIOR_ANGEL] = warrior_angel_normal;
 			_normal[Assets.ZEPPELIN] = zeppelin_normal;
 			_normal[Assets.MUTANT_MOLE] = mutant_mole_normal;
+			_normal[Assets.TUNNELER] = tunneler_normal;
+			_normal[Assets.SMART_TUNNELER] = smart_tunneler_normal;
 			
 			//Textual assets
 			
