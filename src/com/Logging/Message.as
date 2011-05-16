@@ -37,6 +37,8 @@ package com.Logging
 		//----------- Header Variables (schema specific) --------------------------------------------------------
 		//required, probably only set once
 		public var gid:int = -1;	//game id
+		public var g_name:String;	//game name
+		public var skey:String;		//authentication key
 		public var vid:Number = 0;	//version id
 		public var cid:int = -1;	//category id (for event tracking)
 		public var uid:String;		//user id
