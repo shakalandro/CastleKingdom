@@ -139,6 +139,10 @@ package
 		[Embed(source = "../images/bullet.png")]
 		private static var bullet_normal:Class;
 		public static const BULLET:String = "Bullet";
+
+		[Embed(source = "../images/rocket.png")]
+		private static var rocket_normal:Class;
+		public static const ROCKET:String = "Rocket";
 		
 		[Embed(source = "../images/flame_tower.png")]
 		private static var flame_tower_normal:Class;
@@ -175,6 +179,14 @@ package
 		[Embed(source = "../images/air_mine.png")]
 		private static var air_mine_normal:Class;
 		public static const AIR_MINE:String = "Air Mine";
+		
+		[Embed(source = "../images/rocket_tower.png")]
+		private static var rocket_tower_normal:Class;
+		public static const ROCKET_TOWER:String = "Rocket Tower";
+		
+		[Embed(source = "../images/phoenix.png")]
+		private static var phoenix_normal:Class;
+		public static const PHOENIX:String = "Tamed Phoenix";
 		
 		[Embed(source = "../images/space_needle.png")]
 		private static var space_needle:Class;
@@ -283,6 +295,7 @@ package
 			_normal[Assets.FIREBALL] = fireball_normal;
 			_normal[Assets.SPEAR] = spear_normal;
 			_normal[Assets.BULLET] = bullet_normal;
+			_normal[Assets.ROCKET] = rocket_normal;
 
 			
 			_normal[Assets.MAP_TILES] = tilesImg_normal;
@@ -313,6 +326,8 @@ package
 			_normal[Assets.SPIKED_WALL] = spiked_wall_normal;
 			_normal[Assets.DEEP_LAND_MINE] = deep_land_mine_normal;
 			_normal[Assets.AIR_MINE] = air_mine_normal;
+			_normal[Assets.ROCKET_TOWER] = rocket_tower_normal;
+			_normal[Assets.PHOENIX] = phoenix_normal;
 
 
 			_normal[Assets.WALL] = wall_normal;
@@ -386,7 +401,7 @@ package
 		/**
 		 * Gives access to the assets dictioanry of resources.
 		 * 
-]		 * @return A dictionary from skin strings to dictionaries from resource name to resource.
+		 * @return A dictionary from skin strings to dictionaries from resource name to resource.
 		 * 
 		 */
 		public function get assets():Dictionary{

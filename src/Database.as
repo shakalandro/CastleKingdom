@@ -311,7 +311,7 @@ package
 					callback(_pendingLeases);
 				}, ids);
 			} else {
-				callback(getAll(_pendingLeases , ids));
+				callback(getAllPendingLeases(_pendingLeases , ids));
 			}
 		}
 		
@@ -408,6 +408,32 @@ package
 			}
 			var newStuff:Array = stuff.filter(function(item:Object, index:int, arr:Array):Boolean {
 				return idsArr.indexOf(item.aid) >= 0;
+			});
+			if (newStuff.length != idsArr.length) {
+				return null;
+			} else {
+				return newStuff;
+			}
+		}
+		
+		private static function getAllPendingLeases(stuff:Array, ids:Object):Array {
+			if (stuff == null) {
+				return null;
+			}
+			var idsArr:Array = null;
+			if (ids == null) {
+				return stuff;
+			} else if (ids is Number) {
+				idsArr = [ids] 
+			} else if (ids is String) {
+				idsArr = [parseInt(ids as String)];
+			} else if (ids is Array) {
+				idsArr = ids as Array;
+			} else {
+				return null;
+			}
+			var newStuff:Array = stuff.filter(function(item:Object, index:int, arr:Array):Boolean {
+				return idsArr.indexOf(item.lid) >= 0;
 			});
 			if (newStuff.length != idsArr.length) {
 				return null;
@@ -943,6 +969,43 @@ package
 				for (i = 0; i < _save.data.users[leaseInfo.id].leases.length; i++) {
 					if (_save.data.users[leaseInfo.id].leases[i].id == leaseInfo.id && _save.data.users[leaseInfo.id].leases[i].lid == leaseInfo.lid) {
 						_save.data.users[leaseInfo.id].leases[i].pending = 0;
+					}
+				}
+			}
+		}
+		
+		/**
+		 * <p>
+		 * Rejects the lease between the users given in the leaseInfo object passed in. This method must be called
+		 * only after addUserLease has been called. The object passed in must be of the form: 
+		 * </p>
+		 * <p>
+		 * 	{id, lid}
+		 * </p>
+		 * 
+		 * @param leaseInfo The ids of the two parties that wish to confirm their lease
+		 * 
+		 */	
+		public static function rejectUserLease(leaseInfo:Object):void
+		{
+			var variables:URLVariables = new URLVariables();
+			variables.uid = "" + leaseInfo["id"];
+			variables.lid = "" + leaseInfo["lid"];
+			update("http://games.cs.washington.edu/capstone/11sp/castlekd/database/rejectUserLease.php", variables);
+			if (_userLeaseInfo != null) {
+				for (var i:int = 0; i < _userLeaseInfo.length; i++) {
+					if (_userLeaseInfo[i].id == leaseInfo.id && _userLeaseInfo[i].lid == leaseInfo.lid) {
+						_userLeaseInfo.splice(i,1);
+					}
+				}
+			}
+			
+			if (_save.data.users[leaseInfo.id] == undefined || _save.data.users[leaseInfo.id] == null) {
+				_save.data.users[leaseInfo.id] = {info: {}, tut: {}, leases: [], attacks: [], upgrades: []};
+			} else {
+				for (i = 0; i < _save.data.users[leaseInfo.id].leases.length; i++) {
+					if (_save.data.users[leaseInfo.id].leases[i].id == leaseInfo.id && _save.data.users[leaseInfo.id].leases[i].lid == leaseInfo.lid) {
+						_save.data.users[leaseInfo.id].leases.splice(i, 1);
 					}
 				}
 			}

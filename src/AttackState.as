@@ -179,7 +179,7 @@ package
 				
 				_unitDropCounter--;
 				if(_unitDropCounter <= 0) {
-					_unitDropCounter = 50;
+					_unitDropCounter = 50 - Math.sqrt(units.length);
 					placeDudes(_placeOnLeft, Util.minX);
 					placeDudes(_placeOnRight, Util.maxX - 20);
 				}
@@ -187,6 +187,7 @@ package
 			}
 			super.collide();
 			this.rangeCollideDetector(units,towers);
+			checkCastle();
 			super.update();
 			
 		}
@@ -393,6 +394,25 @@ package
 			}
 			_towerDisplay.value = castle.towerCapacity - castle.towerUnitsAvailable;
 			_towerDisplay.max = castle.towerCapacity;
+		}
+		
+		public function checkCastle():void {
+			for each (var unit:Unit in units.members) {
+				if(unit != null) {
+					if( pointIsIn(unit.x, unit.y) 
+						|| pointIsIn(unit.x + unit.width, unit.y)
+						|| pointIsIn(unit.x, unit.y + unit.height)
+						|| pointIsIn(unit.x + unit.width, unit.y + unit.height)) {
+						
+						castle.hitRanged(unit);
+					}
+				}
+			}
+		}
+		
+		private function pointIsIn(ox:int, oy:int):Boolean {
+			return ( ox > this.castle.x && ox < this.castle.x + this.castle.width 
+				&& oy > this.castle.y && oy < this.castle.y + this.castle.height);
 		}
 	}
 }
