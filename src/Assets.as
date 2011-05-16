@@ -288,8 +288,8 @@ package
 			_normal[Assets.MULTISHOT_TOWER] = multishot_tower_normal;
 			_normal[Assets.LANDMINE] = landmine_normal;
 			_normal[Assets.SPIKED_WALL] = spiked_wall_normal;
-			_normal[Assets.DEEP_LAND_MINE_WALL] = deep_land_mine_normal;
-			_normal[Assets.AIR_MINE_WALL] = air_mine_normal;
+			_normal[Assets.DEEP_LAND_MINE] = deep_land_mine_normal;
+			_normal[Assets.AIR_MINE] = air_mine_normal;
 
 
 			_normal[Assets.WALL] = wall_normal;
