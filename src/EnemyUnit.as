@@ -113,6 +113,9 @@ package
 					} else if (clas == Unit.AIR && this.x > (FlxG.state as ActiveState).castle.x 
 								&& this.x < ((FlxG.state as ActiveState).castle.x + (FlxG.state as ActiveState).castle.width) ) {
 						this.velocity.y += 1;
+					} else if (clas == Unit.UNDERGROUND && this.x > (FlxG.state as ActiveState).castle.x 
+						&& this.x < ((FlxG.state as ActiveState).castle.x + (FlxG.state as ActiveState).castle.width) ) {
+						this.velocity.y -= 1;
 					}
 					if(this._target == null || _target.health <= 0) {
 						this._target = null;
