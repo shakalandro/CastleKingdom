@@ -179,6 +179,8 @@ package
 		
 		// Text resources
 		
+		public static const HELP_BUTTON:String = "help button";
+		public static const HELP_TEXT:String = "help text";
 		public static const PLACE_TOWER_BUTTON:String = "place tower button";
 		public static const RELEASE_WAVE_BUTTON:String = "release wave button";
 		public static const UPGRADE_BUTTON:String = "upgrade button";
@@ -278,6 +280,10 @@ package
 			
 			//Textual assets
 			
+			_normal[Assets.HELP_BUTTON] = "Help";
+			_normal[Assets.HELP_TEXT] = "This is CastleKingdom, a tower defense OCD hybrid game. Bring your castle to glory as " +
+				"you battle your friends for treasure.\n\nAuthors: Gabe Groen, Justin Harding, Robert Johnson, Roy McElmurry, Kim Nguyen" +
+				"\n\nSpring 2011";
 			_normal[Assets.BUTTON_CANCEL] = "Cancel";
 			_normal[Assets.BUTTON_DONE] = "Cancel";
 			_normal[Assets.PLACE_TOWER_BUTTON] = "Defend";

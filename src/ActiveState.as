@@ -41,9 +41,9 @@ package
 		/** FlxSprites for unit caps/gold;
 		 * 
 		 * */
-		private var _goldDisplay:FlxText;
-		private var _towerDisplay:FlxText;
-		private var _armyDisplay:FlxText;
+		private var _goldDisplay:StatsBox;
+		private var _towerDisplay:StatsBox;
+		private var _armyDisplay:StatsBox;
 		private var _hudButtons:Array;
 		private var _attackTimer:Timer;
 		private var _attackAnims:FlxGroup;
@@ -455,9 +455,11 @@ package
 			spreadPosition(_attack, 5, 2);
 			spreadPosition(_lease, 5, 1);
 			
-			_armyDisplay = new FlxText(0, 10, 100, "");
-			_towerDisplay = new FlxText(0, 20,100, "");
-			_goldDisplay = new FlxText(0, 0, 100, "");
+			_armyDisplay = new StatsBox(0, 0, Util.assets[Assets.UNIT_COUNTER], 0);
+			_towerDisplay = new StatsBox(0, 0, Util.assets[Assets.TOWER_COUNTER], 0);
+			_goldDisplay = new StatsBox(0, 0, Util.assets[Assets.GOLD_COUNTER], 0);
+			_armyDisplay.visible = false;
+			_towerDisplay.visible = false;
 			hud.add(_goldDisplay);
 			hud.add(_armyDisplay);
 			hud.add(_towerDisplay);
@@ -475,9 +477,8 @@ package
 		}
 		
 		public function drawStats(startX:int = 0, startY:int = 0):void {
-			_armyDisplay.text = this.castle.unitCapacity - this.castle.armyUnitsAvailable + " of " + this.castle.unitCapacity + " Armies";
-			_towerDisplay.text = (this.castle.towerCapacity - this.castle.towerUnitsAvailable) + " of " + this.castle.towerCapacity + " Towers";
-			_goldDisplay.text = "Gold: " + this.castle.gold;
+			_goldDisplay.visible = true;
+			_goldDisplay.value = castle.gold;
 		}
 	}
 }
