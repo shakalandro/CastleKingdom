@@ -97,7 +97,7 @@ package
 		 */		
 		public function takeTower(draggable:Draggable, newX:Number, newY:Number, oldX:Number, oldY:Number):void {
 			var tower:DefenseUnit = (draggable as DefenseUnit);
-			if (!droppable(newX, newY) || tower.cost > (FlxG.state as ActiveState).castle.towerUnitsAvailable) {
+			if (!droppable(newX, newY, tower) || tower.cost > (FlxG.state as ActiveState).castle.towerUnitsAvailable) {
 				tower.x = oldX;
 				tower.y = oldY;
 				_menu.addToCurrentPage(tower.clone());
@@ -122,7 +122,7 @@ package
 			var tower:DefenseUnit = draggable as DefenseUnit;
 			tower.x = oldX;
 			tower.y = oldY;
-			if (droppable(newX, newY)) {
+			if (droppable(newX, newY, tower)) {
 				tower.x = newX;
 				tower.y = newY;
 				Util.placeInZone(tower, map,true, true);

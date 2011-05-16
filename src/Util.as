@@ -369,7 +369,7 @@ package
 		public static function placeInZone(obj:FlxObject, map:FlxTilemap = null, ignoreX:Boolean = false, snapX:Boolean = false):Number {
 			if (map == null) map = Util.state.map;
 			
-			var x:Number = obj.x;// + obj.width / 2;
+			var x:Number = obj.x;// + obj.width / 2; else causes error with new uncollidable ground type
 			if ( x < Util.minX) {
 				x = Util.minX;
 			} else if (x > Util.maxX) {
@@ -378,7 +378,7 @@ package
 			
 			var origIndices:FlxPoint = cartesianToIndices(new FlxPoint(x, Math.max(obj.y, Util.minY)), ignoreX);
 
-			var origY:int = origIndices.y + 4;
+			var origY:int = origIndices.y;
 
 			var indices:FlxPoint = cartesianToIndices(new FlxPoint(x, Util.minY), ignoreX);
 			var tileType:int = map.getTile(indices.x, indices.y);
@@ -387,7 +387,7 @@ package
 				tileType = map.getTile(indices.x, indices.y);
 			}
 			if(obj is Unit && (obj as Unit).clas == "underground") { //underground
-				if (origY >= indices.y && !(obj is EnemyUnit)) { 
+				if (origY > indices.y && !(obj is EnemyUnit)) { 
 					indices.y = origY; // they alrady dropped underground
 					
 				} else {
@@ -396,10 +396,10 @@ package
 				}
 			} else if (obj is Unit &&(obj as Unit).clas == "air") { //air
 			
-				if (origY <= indices.y - 2 && !(obj is EnemyUnit)) { 
+				if (origY <= indices.y - 3 && !(obj is EnemyUnit)) { 
 					indices.y = origY; // they already dropped in air
 				} else {
-					indices.y = Math.floor(indices.y - 1 - Math.random()*(indices.y-3));
+					indices.y = Math.max(Util.minTileY, Math.floor(indices.y - 1 - Math.random()*(indices.y-3)));
 					
 				}
 			}

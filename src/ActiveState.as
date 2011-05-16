@@ -374,7 +374,7 @@ package
 		 * @return 
 		 * 
 		 */		
-		public function droppable(x:int, y:int):Boolean {
+		public function droppable(x:int, y:int, newTower:DefenseUnit):Boolean {
 			if (!Util.inBounds(x, y)) return false;
 			var indices:FlxPoint = Util.cartesianToIndices(new FlxPoint(x, y));
 			var castleStart:int = Util.cartesianToIndices(new FlxPoint(Util.castle.x, Util.castle.y)).x;
@@ -388,11 +388,11 @@ package
 					var objStop:FlxPoint = Util.cartesianToIndices(new FlxPoint(obj.x + obj.width, obj.y),true);
 					if (obj is DefenseUnit) {
 						var tower:DefenseUnit = obj as DefenseUnit;
-						if (tower.clas == Unit.GROUND) {
+						if (newTower.clas == Unit.GROUND && tower.clas == Unit.GROUND) {
 							if (indices.x >= objStart.x && indices.x < objStop.x) {
 								return false;
 							}
-						} else {
+						} else { 
 							if (indices.x >= objStart.x && indices.x < objStop.x && 
 								indices.y >= objStart.y && indices.y <= objStop.y) {
 								return false;
