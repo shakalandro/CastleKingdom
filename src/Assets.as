@@ -160,7 +160,23 @@ package
 		[Embed(source = "../images/startpage_background.png")]
 		private static var startpage_background:Class;
 		public static const LOGIN_BACKGROUND:String = "Login Background";
-	
+		
+		[Embed(source = "../images/play_button.png")]
+		private static var play_button:Class;
+		public static const PLAY_BUTTON:String = "Play Button";
+		
+		[Embed(source = "../images/gold_counter.png")]
+		private static var gold_counter:Class;
+		public static const GOLD_COUNTER:String = "Gold Counter";
+		
+		[Embed(source = "../images/tower_counter.png")]
+		private static var tower_counter:Class;
+		public static const TOWER_COUNTER:String = "Tower Counter";
+		
+		[Embed(source = "../images/unit_counter.png")]
+		private static var unit_counter:Class;
+		public static const UNIT_COUNTER:String = "Unit Counter";
+		
 		// Text resources
 		
 		public static const PLACE_TOWER_BUTTON:String = "place tower button";
@@ -233,6 +249,10 @@ package
 			_normal[Assets.BACKGROUND] = background_img;
 			_normal[Assets.LOGIN_BACKGROUND] = startpage_background;
 			_normal[Assets.BUTTON_SMALL] = button_small_img;
+			_normal[Assets.PLAY_BUTTON] = play_button;
+			_normal[Assets.GOLD_COUNTER] = gold_counter;
+			_normal[Assets.TOWER_COUNTER] = tower_counter;
+			_normal[Assets.UNIT_COUNTER] = unit_counter;
 			
 			_normal[Assets.ARROW_TOWER] = arrow_tower_normal;
 			_normal[Assets.SNIPER_TOWER] = sniper_tower_normal;
