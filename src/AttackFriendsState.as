@@ -27,7 +27,7 @@ package
 		
 		override public function create():void {
 			super.create();
-			if (castle.gold < castle.sendWaveCost()) {
+			if (castle.gold < castle.sendWaveCost() && !CastleKingdom.DEBUG) {
 				add(new MessageBox(StringUtil.substitute(Util.assets[Assets.ATTACK_FRIENDS_BROKE], castle.sendWaveCost()), "Okay", null));
 			} else {
 				_dropboxes = [];
@@ -42,18 +42,18 @@ package
 				
 				Util.getFriendsInRange(Castle.computeValue(castle), LEVEL_THRESHHOLD, function(friends:Array):void {
 					formatFriends(friends, castle.x - Util.minX - padding * 2, Util.maxY - Util.minY - 50, 5, function(pages:Array):void {
-						_rightMenu = new ScrollMenu(castle.x + castle.width, Util.minY, pages, closeMenus, "Cancel", FlxG.WHITE, 
+						_rightMenu = new ScrollMenu(castle.x + castle.width, Util.minY, pages, closeMenus, Util.assets[Assets.ATTACK_FRIENDS_RIGHT_TITLE], Util.assets[Assets.BUTTON_CANCEL], FlxG.WHITE, 
 							padding, Util.maxX - castle.x - castle.width, Util.maxY - Util.minY);
 						add(_rightMenu);
 					});
 					
 					Database.getEnemyInfo(function(units:Array):void {
 						var pages:Array = formatUnits(units, castle.x - Util.minX, Util.maxY - Util.minY - 50, 2, 4);
-						_leftMenu = new ScrollMenu(Util.minX, Util.minY, pages, closeMenus, "Cancel", FlxG.WHITE, padding, 
+						_leftMenu = new ScrollMenu(Util.minX, Util.minY, pages, closeMenus, Util.assets[Assets.ATTACK_FRIENDS_LEFT_TITLE], Util.assets[Assets.BUTTON_CANCEL], FlxG.WHITE, padding, 
 							castle.x - Util.minX, Util.maxY - Util.minY, 3, moveUnit);
 						add(_leftMenu);
 						
-						_middleMenu = new ScrollMenu(castle.x, Util.minY, page, closeMenusAndSend, "Okay", FlxG.WHITE, padding, castle.width, Util.maxY - Util.minY, 3);
+						_middleMenu = new ScrollMenu(castle.x, Util.minY, page, closeMenusAndSend, Util.assets[Assets.ATTACK_FRIENDS_MIDDLE_TITLE], Util.assets[Assets.ATTACK_FRIENDS_BUTTON], FlxG.WHITE, padding, castle.width, Util.maxY - Util.minY, 3);
 						add(_middleMenu);
 					});
 				}, Castle.computeValue);

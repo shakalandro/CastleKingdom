@@ -25,18 +25,18 @@ package
 			
 			Util.getFriendsInRange(Castle.computeValue(castle), LEVEL_THRESHHOLD, function(friends:Array):void {
 				formatFriends(friends.slice(0, (friends.length + 1) / 2), castle.x - Util.minX - padding * 2, Util.maxY - Util.minY - 50, 5, function(pages:Array):void {
-					_rightMenu = new ScrollMenu(Util.minX, Util.minY, pages, closeMenus, "Cancel", FlxG.WHITE, 
+					_rightMenu = new ScrollMenu(Util.minX, Util.minY, pages, closeMenus, Util.assets[Assets.LEASE_RIGHT_TITLE], Util.assets[Assets.BUTTON_CANCEL], FlxG.WHITE, 
 						padding, Util.maxX - castle.x - castle.width, Util.maxY - Util.minY);
 					add(_rightMenu);
 				});
 				formatFriends(friends.slice((friends.length + 1) / 2, friends.length), castle.x - Util.minX - padding * 2, Util.maxY - Util.minY - 50, 5, function(pages:Array):void {
-					_leftMenu = new ScrollMenu(castle.x + castle.width, Util.minY, pages, closeMenus, "Cancel", FlxG.WHITE, 
+					_leftMenu = new ScrollMenu(castle.x + castle.width, Util.minY, pages, closeMenus, Util.assets[Assets.LEASE_LEFT_TITLE], Util.assets[Assets.BUTTON_CANCEL], FlxG.WHITE, 
 						padding, Util.maxX - castle.x - castle.width, Util.maxY - Util.minY);
 					add(_leftMenu);
 				});
 				
 				var page:Array = makeLeasePage(castle.x, Util.minY, castle.width, Util.maxY - Util.minY, padding);
-				_middleMenu = new ScrollMenu(castle.x, Util.minY, page, closeMenusAndSend, "Okay", FlxG.WHITE, padding, castle.width, Util.maxY - Util.minY); 
+				_middleMenu = new ScrollMenu(castle.x, Util.minY, page, closeMenusAndSend, Util.assets[Assets.LEASE_MIDDLE_TITLE], Util.assets[Assets.LEASE_MIDDLE_BUTTON], FlxG.WHITE, padding, castle.width, Util.maxY - Util.minY); 
 				add(_middleMenu);
 			}, Castle.computeValue);
 		}

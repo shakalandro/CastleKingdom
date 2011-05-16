@@ -52,7 +52,7 @@ package
 				if (ready) {
 					FaceBook.userInfo(function(fbInfo:Object):void {
 						if (fbInfo != null) {
-							Util.log('fb user info retrieved: ' + fbInfo);
+							Util.logObj('fb user info retrieved: ', fbInfo);
 							Database.getUserInfo(function(dbInfo:Array):void {
 								if (dbInfo == null || dbInfo.length == 0) {
 									Util.logObj('New user detected:', fbInfo);

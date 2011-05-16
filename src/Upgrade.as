@@ -29,30 +29,40 @@ package
 			
 			_box = new FlxSprite(x + margin, y + margin);
 			_box.makeGraphic(width - margin * 2, height - margin * 2, bgColor, true);
-			_nameText = new FlxText(x + padding, y + padding, width, name + "");
-			var worthText:FlxText = new FlxText(x + padding, _nameText.y + _nameText.height + padding, width - padding * 2, "\t" + "unitWorth: " + unitWorth);
-			var costText:FlxText = new FlxText(x + padding, worthText.y + worthText.height + padding, width - padding * 2, "\t" + "goldCost: " + goldCost);
-			
+			_nameText = new FlxText(x, y + padding, width, name + "");
+			_nameText.alignment = "center";
+			_nameText.size += 2;
+			var costText:FlxText = new FlxText(x, _nameText.y + _nameText.height, width, "Cost: " + goldCost);
+			var towerText:FlxText = new FlxText(x, costText.y + costText.height, width, "Towers: +" + unitWorth);
+			var armyText:FlxText = new FlxText(x, towerText.y + towerText.height, width, "Armies: +" + unitWorth);
 			Util.drawBorder(_box, borderColor, borderThickness);
+			costText.alignment = "center";
+			towerText.alignment = "center";
+			armyText.alignment = "center";
 			
 			_box.allowCollisions = FlxObject.NONE;
 			_nameText.allowCollisions = FlxObject.NONE;
-			worthText.allowCollisions = FlxObject.NONE;
+			towerText.allowCollisions = FlxObject.NONE;
+			armyText.allowCollisions = FlxObject.NONE;
 			costText.allowCollisions = FlxObject.NONE;
 			
 			_box.immovable = true;
 			_nameText.immovable = true;
-			worthText.immovable = true;
+			towerText.immovable = true;
+			armyText.immovable = true;
 			costText.immovable = true;
 			
 			_nameText.color = FlxG.BLACK;
-			worthText.color = FlxG.BLACK;
+			towerText.color = FlxG.BLACK;
+			armyText.color = FlxG.BLACK;
 			costText.color = FlxG.BLACK;
 			
 			add(_box);
 			add(_nameText);
-			add(worthText);
+			
 			add(costText);
+			add(towerText);
+			add(armyText);
 		}
 		
 		public function xOut():void {

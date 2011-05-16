@@ -35,25 +35,19 @@ package
 		
 		private static var _debug:FlxDebugger;
 		
-		private static var _loading:FlxGroup;
+		private static var _loading:FlxSprite;
 		private static var numWaiting:int;
 						
 		public function CastleKingdom()
 		{
 			super(WIDTH, HEIGHT, LoginState, 1);
 			
-			_loading = new FlxGroup();
-			var loadText:FlxText = new FlxText(0, 0, 200, "Loading...");
-			loadText.color = FlxG.RED;
-			loadText.size = 32;
-			var bg:FlxSprite = new FlxSprite(0, 0);
-			bg.makeGraphic(loadText.width * 1.5, loadText.height * 1.5, 0x44ffffff);
-			Util.center(bg);
-			Util.center(loadText);
-			_loading.add(loadText);
+			_loading = new FlxSprite();
+			_loading.loadGraphic(Util.assets[Assets.LOADER], true, false, 40, 40, false);
+			_loading.addAnimation("load", [0, 1, 2, 3, 4, 5, 6, 7], 8, true);
+			_loading.play("load");
 			_loading.visible = false;
 			numWaiting = 0;
-			
 			
 			FlxG.mouse.show(Util.assets[Assets.CURSOR]);
 			FlxG.framerate = FRAMERATE;
@@ -90,11 +84,13 @@ package
 			} else {
 				FlxG.state.add(FlxG.state.remove(_loading));
 			}
+			/*
 			if (t) {
 				numWaiting++;
 			} else {
 				numWaiting = Math.max(numWaiting - 1, 0);
 			}
+			*/
 			Util.log("Loading count: ", numWaiting, _loading != null);
 		}
 		

@@ -39,7 +39,7 @@ package
 			var unitsUnlocked:Array = this.castle.unitsUnlocked(Castle.TOWER);
 			
 			var pages:Array = createTowers(unitsUnlocked, 2, 4, Castle.TILE_WIDTH * CastleKingdom.TILE_SIZE, Util.maxY - Util.minY - 50);
-			_menu = new ScrollMenu(castle.x, Util.minY, pages, closeHandler, Util.assets[Assets.TOWER_WINDOW_TITLE], 
+			_menu = new ScrollMenu(castle.x, Util.minY, pages, closeHandler, Util.assets[Assets.DEFEND_MENU_TITLE], Util.assets[Assets.DEFEND_MENU_BUTTON], 
 				0xffffffff, 10, Castle.TILE_WIDTH * CastleKingdom.TILE_SIZE, Util.maxY - Util.minY, 3, takeTower);
 			add(_menu);
 			
