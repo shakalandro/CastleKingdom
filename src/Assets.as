@@ -252,6 +252,7 @@ package
 			_normal[Assets.DRAGON] = dragon_normal;
 			_normal[Assets.AIRPLANE] = airplane_normal;
 			_normal[Assets.HORNET] = hornet_normal;
+			_normal[Assets.LOADER] = loader_img;
 			_normal[Assets.WARRIOR_ANGEL] = warrior_angel_normal;
 			_normal[Assets.ZEPPELIN] = zeppelin_normal;
 			
