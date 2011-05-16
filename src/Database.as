@@ -703,7 +703,7 @@ package
 				return null;
 			}
 			var newStuff:Array = stuff.filter(function(item:Object, index:int, arr:Array):Boolean {
-				return idsArr.indexOf(item.id) >= 0;
+				return idsArr.indexOf(item.id) < 0;
 			});
 			if (newStuff.length != idsArr.length) {
 				return null;
@@ -737,8 +737,12 @@ package
 		}
 		
 		private static function updateCache(newInfo:Object, oldInfo:Array):void
-
 		{
+			if (newInfo == null)
+				Util.log("\n\n\nnewInfo is null\n\n\n");
+			else
+				Util.log("\n\n\nnewInfo[\"id\"]: " + newInfo["id"] + "\n\n\n");
+			//Util.log("\n\n\noldInfo[\"id\"]: " + oldInfo["id"] + "\n\n\n");
 			if (oldInfo != null) {
 				for (var i:int = 0; i < oldInfo.length; i++) {
 					if (oldInfo[i].id == newInfo["id"]) {
