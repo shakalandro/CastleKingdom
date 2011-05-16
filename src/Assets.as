@@ -160,7 +160,11 @@ package
 		[Embed(source = "../images/startpage_background.png")]
 		private static var startpage_background:Class;
 		public static const LOGIN_BACKGROUND:String = "Login Background";
-	
+		
+		[Embed(source = "../images/play_button.png")]
+		private static var play_button:Class;
+		public static const PLAY_BUTTON:String = "Play Button";
+		
 		// Text resources
 		
 		public static const PLACE_TOWER_BUTTON:String = "place tower button";
