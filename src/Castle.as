@@ -39,6 +39,7 @@ package
 		public static const TOWER:String = "foundry"; // stores index of foundry level in _upgrades
 		public static const UNIT_INFO:Array = new Array();// stores all unit information 
 				// Tower/Unit --> ID --> info
+		public static const UPGRADE_INFO = new Array();
 
 		public static const TILE_WIDTH:int = 8;
 		public static const START_GOLD:Number = 0;
@@ -67,6 +68,7 @@ package
 			//TODO: implement function
 			super(X, Y, SimpleGraphic);
 			trace("CREATING NEW CASTLE");
+			
 			UNIT_INFO[Castle.ARMY] = new Array();
 			UNIT_INFO[Castle.TOWER] = new Array();
 			_unitCap = START_UNIT_CAPACITY;
@@ -78,11 +80,16 @@ package
 			_upgrades["castle"] = 0;
 			_upgrades["mine"] = 0;
 			_upgrades["aviary"] = 0;
+			Database.getUpgradesInfo(function(info:Array):void {
+				for each (var thingy:Object in info) {
+					UPGRADE_INFO[thingy.id.toString()] = thingy;
+				}
+				Database.getUserUpgrades(initUpgrades,FaceBook.uid);
+			});  // caches data (in theory)
 			Database.getUserInfo(initUserInfo, FaceBook.uid);
-			Database.getUserUpgrades(initUpgrades,FaceBook.uid);
 			Database.getDefenseUnitInfo(initDefense);  // stores into UNIT_INFO
 			Database.getEnemyInfo(initArmy);
-			Database.getUpgradesInfo(function(info:Array):void {});  // caches data (in theory)
+			
 
 			solid = true;
 			immovable = true;
@@ -200,41 +207,43 @@ package
 		
 		private function initUpgrades(info:Array):void {
 			for each (var obj:Object in info) {
-				if(obj.cid != "") {
-					_upgrades["castle"]++;
-					Database.getCastleInfo(initGenericPieces,obj.cid);
-				} else if (obj.bid != "") {
-					_upgrades["barracks"]++;
-					Database.getCastleInfo(initBarracksPieces,obj.bid);
-				} else if (obj.fid != "") {
-					_upgrades["foundry"]++;
-					Database.getCastleInfo(initFoundryPieces,obj.fid);
-				} else if (obj.mid != "") {
-					_upgrades["mine"]++;
-					Database.getCastleInfo(initGenericPieces,obj.mid);
-				} else if (obj.aid != "") {
-					_upgrades["aviary"]++;
-					Database.getCastleInfo(initGenericPieces,obj.aid);
+				var upgr:Object = UPGRADE_INFO[obj.upid.toString()];
+				var type:int = parseInt(upgr.id.toString())/1000;
+				if(type == 1) {
+					_upgrades["castle"] = Math.max(_upgrades["castle"], upgr.level.toString());
+					initGenericPieces(upgr);
+				} else if (type == 2) {
+					_upgrades["barracks"] = Math.max(_upgrades["barracks"], upgr.level.toString());
+					initBarracksPieces(upgr);
+				} else if (type == 3) {
+					_upgrades["foundry"]  = Math.max(_upgrades["foundry"], upgr.level.toString());
+					initFoundryPieces(upgr);
+				} else if (type == 4) {
+					_upgrades["mine"] = Math.max(_upgrades["mine"], upgr.level.toString());;
+					initGenericPieces(upgr);
+				} else if (type == 5) {
+					_upgrades["aviary"] = Math.max(_upgrades["aviary"], upgr.level.toString());;
+					initGenericPieces(upgr);
 				}
 				continueSetup();
 
 			}
 		}
 		
-		private function initGenericPieces(info:Array):void {
-			_towerCap += parseInt(info[0].unitWorth);
-			_unitCap += parseInt(info[0].unitWorth);
-			_netWorth += parseInt(info[0].goldCost);
+		private function initGenericPieces(info:Object):void {
+			_towerCap += parseInt(info.unitWorth);
+			_unitCap += parseInt(info.unitWorth);
+			_netWorth += parseInt(info.goldCost);
 
 		}
 		
-		private function initBarracksPieces(info:Array):void {
-			_unitCap += parseInt(info[0].unitWorth);
-			_netWorth += parseInt(info[0].goldCost);
+		private function initBarracksPieces(info:Object):void {
+			_unitCap += parseInt(info.unitWorth);
+			_netWorth += parseInt(info.goldCost);
 		}
-		private function initFoundryPieces(info:Array):void {
-			_towerCap += parseInt(info[0].unitWorth);
-			_netWorth += parseInt(info[0].goldCost);
+		private function initFoundryPieces(info:Object):void {
+			_towerCap += parseInt(info.unitWorth);
+			_netWorth += parseInt(info.goldCost);
 	
 		}
 		

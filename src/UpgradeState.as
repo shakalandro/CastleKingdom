@@ -89,9 +89,9 @@ package
 		}
 		
 		private function checkLevel(value:Object):Boolean {
-			if( (CastleKingdom.DEBUG && (this.castle.upgrades[value.type] < value.level)) || 
-					(this.castle.upgrades[value.type] == value.level - 1
-					&& (this.castle.upgrades["castle"] >= value.level || value.type == "castle") 
+			if( (CastleKingdom.DEBUG && (this.castle.upgrades[value.type] < parseInt(value.level.toString()))) || 
+					(this.castle.upgrades[value.type.toString()] == parseInt(value.level.toString()) - 1
+					&& (this.castle.upgrades["castle"] >= parseInt(value.level.toString()) || value.type.toString() == "castle") 
 					&& checkMineLevel(value) && checkAviaryLevel(value))) {
 				return true;
 			} else {
@@ -101,12 +101,12 @@ package
 		
 		private function checkAviaryLevel(value:Object):Boolean {
 			var stage:Array = [0,8,11,15,21];
-			return value.type != "aviary" || this.castle.upgrades["castle"] >= stage[value.level];
+			return value.type.toString() != "aviary" || this.castle.upgrades["castle"] >= stage[parseInt(value.level.toString())];
 		}
 		
 		private function checkMineLevel(value:Object):Boolean {
 			var stage:Array = [0,5,8,13,21];
-			return value.type != "mine" || this.castle.upgrades["castle"] >= stage[value.level];
+			return value.type.toString() != "mine" || this.castle.upgrades["castle"] >= stage[parseInt(value.level.toString())];
 		}
 	}
 }
