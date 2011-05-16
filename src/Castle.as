@@ -472,7 +472,11 @@ package
 		 * 
 		 */		
 		public static function computeValue(person:Object):Number {
-			return person.units;
+			if(person is Castle) {
+				return (person as Castle).unitCapacity + (person as Castle).towerCapacity;	
+			} else { // person is object
+				return parseInt(person.units.toString());
+			}
 		}
 		
 		/**

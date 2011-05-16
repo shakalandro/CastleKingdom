@@ -330,10 +330,8 @@ package
 				var coordinates:FlxPoint = Util.roundToNearestTile(new FlxPoint(unit.x, unit.y));
 				unit.x = coordinates.x;
 				unit.y = coordinates.y;
-				if (unit.clas == "ground") Util.placeInZone(unit, map, true, true);
-			
+				Util.placeInZone(unit, map, true, true);			
 				group.add(unit);
-				//add(unit);
 				return true;
 			}
 			return false;
@@ -390,18 +388,20 @@ package
 				}
 			}
 			for each (obj in towers.members) {
-				var objStart:FlxPoint = Util.cartesianToIndices(new FlxPoint(obj.x, obj.y));
-				var objStop:FlxPoint = Util.cartesianToIndices(new FlxPoint(obj.x + obj.width, obj.y));
-				if (obj is DefenseUnit) {
-					var tower:DefenseUnit = obj as DefenseUnit;
-					if (tower.clas == Unit.GROUND) {
-						if (indices.x >= objStart.x && indices.x < objStop.x) {
-							return false;
-						}
-					} else {
-						if (indices.x >= objStart.x && indices.x < objStop.x && 
-							indices.y >= objStart.y && indices.y <= objStop.y) {
-							return false;
+				if(obj != null) {
+					var objStart:FlxPoint = Util.cartesianToIndices(new FlxPoint(obj.x, obj.y));
+					var objStop:FlxPoint = Util.cartesianToIndices(new FlxPoint(obj.x + obj.width, obj.y));
+					if (obj is DefenseUnit) {
+						var tower:DefenseUnit = obj as DefenseUnit;
+						if (tower.clas == Unit.GROUND) {
+							if (indices.x >= objStart.x && indices.x < objStop.x) {
+								return false;
+							}
+						} else {
+							if (indices.x >= objStart.x && indices.x < objStop.x && 
+								indices.y >= objStart.y && indices.y <= objStop.y) {
+								return false;
+							}
 						}
 					}
 				}
