@@ -311,7 +311,7 @@ package
 					callback(_pendingLeases);
 				}, ids);
 			} else {
-				callback(getAll(_pendingLeases , ids));
+				callback(getAllPendingLeases(_pendingLeases , ids));
 			}
 		}
 		
@@ -408,6 +408,32 @@ package
 			}
 			var newStuff:Array = stuff.filter(function(item:Object, index:int, arr:Array):Boolean {
 				return idsArr.indexOf(item.aid) >= 0;
+			});
+			if (newStuff.length != idsArr.length) {
+				return null;
+			} else {
+				return newStuff;
+			}
+		}
+		
+		private static function getAllPendingLeases(stuff:Array, ids:Object):Array {
+			if (stuff == null) {
+				return null;
+			}
+			var idsArr:Array = null;
+			if (ids == null) {
+				return stuff;
+			} else if (ids is Number) {
+				idsArr = [ids] 
+			} else if (ids is String) {
+				idsArr = [parseInt(ids as String)];
+			} else if (ids is Array) {
+				idsArr = ids as Array;
+			} else {
+				return null;
+			}
+			var newStuff:Array = stuff.filter(function(item:Object, index:int, arr:Array):Boolean {
+				return idsArr.indexOf(item.lid) >= 0;
 			});
 			if (newStuff.length != idsArr.length) {
 				return null;
