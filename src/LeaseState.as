@@ -79,6 +79,7 @@ package
 					});
 				} else {
 					Database.getUserLeaseInfo(function(userLeases:Array):void {
+						Util.logObj("userLeases object:", userLeases);
 						if (userLeases != null && userLeases.length > 0) {
 							var lease:Object = userLeases[0];
 							FaceBook.getNameByID(lease.id, function(name:String):void {
@@ -99,6 +100,8 @@ package
 									Util.log("LeaseState.closeMenus unknown user lease accepted value");
 								}
 							});
+						} else {
+							Util.log("LeaseState.closeMenus no confirmed or rejected user leases found");
 						}
 					}, FaceBook.uid, true);
 				}

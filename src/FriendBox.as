@@ -57,8 +57,10 @@ package
 					_beingAttacked = attacks != null && attacks.length > 0;
 				}, uid, true);
 			} else {
-				Database.getUserLeaseInfo(function(leases:Array):void {
-					_beingAttacked = leases != null && leases.length > 0;
+				Database.getPendingUserLeases(function(pendingLeases:Array):void {
+					Database.getUserLeaseInfo(function(leases:Array):void {
+						_beingAttacked = pendingLeases != null && pendingLeases.length > 0 && leases != null && leases.length > 0;
+					}, uid, true);
 				}, uid, true);
 			}
 			
