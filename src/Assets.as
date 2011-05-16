@@ -265,6 +265,8 @@ package
 		public static const LEASE_REQUEST_TEXT:String = "lease request text";
 		public static const LEASE_REQUEST_ACCEPT:String = "lease request accept";
 		public static const LEASE_REQUEST_REJECT:String = "lease request reject";
+		public static const LEASE_ACCEPTED:String = "lease accepted";
+		public static const LEASE_REJECTED:String = "lease rejected";
 		
 		public static const FIRST_WIN:String = "first win";
 		public static const FIRST_LOSS:String = "first loss";
@@ -406,6 +408,9 @@ package
 			_normal[Assets.ATTACK_FRIENDS_WIN] = "Congratulations, your attack on {0} was successful, you have gained {1} hold as a result!";
 			_normal[Assets.ATTACK_FRIENDS_LOSE] = "Dang, your attack on {0} failed, you were unable to steal any gold.";
 			_normal[Assets.LEASE_REQUEST_TEXT] = "{0} would like to lease {1} of your units. What would you like to do?";
+			_normal[Assets.LEASE_ACCEPTED] = "{0} has accepted your request to lease out {1} of his/her unit capacity. They have been added " +
+				"to your capacity for the next attack wave.";
+			_normal[Assets.LEASE_REJECTED] = "Dang, {0} rejected your request to lease out some of his/her unit capacity.";
 		}
 		
 		/**

@@ -1,6 +1,7 @@
 package
 {
 	import flash.text.*;
+	
 	import mx.utils.StringUtil;
 	
 	import org.flixel.*;
@@ -68,7 +69,7 @@ package
 								lid: leases[0].lid,
 								numUnits: leases[0].numUnits
 							});
-							castle.leasedOutUnits = leases[0].numUnits;
+							castle.leasedOutUnits = parseInt(leases[0].numUnits);
 						}, Util.assets[Assets.LEASE_REQUEST_REJECT], function():void {
 							Database.rejectUserLease({
 								id: FaceBook.uid,
@@ -77,7 +78,21 @@ package
 						}));
 					});
 				} else {
-					//Database.getUserLeaseInfo(function(userLeases
+					Database.getUserLeaseInfo(function(userLeases:Array):void {
+						if (userLeases != null && userLeases.length > 0) {
+							var lease:Object = userLeases[0];
+							FaceBook.getNameByID(lease.id, function(name:String):void {
+								if (lease.accepted == 1) {
+									add(new MessageBox(StringUtil.substitute(Util.assets[Assets.LEASE_ACCEPTED], name, lease.numUnits), Util.assets[Assets.BUTTON_DONE], null));
+									castle.leasedInUnits += parseInt(lease.numUnits);
+								} else if (lease.accepted == 0) {
+									add(new MessageBox(StringUtil.substitute(Util.assets[Assets.LEASE_REJECTED], name), Util.assets[Assets.BUTTON_DONE], null));
+								} else if (lease.accepted != null) {
+									Util.log("LeaseState.closeMenus unknown user lease accepted value");
+								}
+							});
+						}
+					}, FaceBook.uid, true);
 				}
 			}, FaceBook.uid, true);
 		}

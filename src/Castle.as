@@ -330,6 +330,14 @@ package
 			_leasedOutNumber = n;
 		}
 		
+		public function set leasedInUnits(n:Number):void {
+			_leasedInNumber = n;
+		}
+		
+		public function get leasedInUnits():Number {
+			return _leasedInNumber;
+		}
+		
 		// Returns whether the player is leasing units to anyone
 		public function get isLeased():Boolean {
 			return _leasedOutNumber > 0;
