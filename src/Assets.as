@@ -187,7 +187,7 @@ package
 		
 		[Embed(source = "../images/phoenix.png")]
 		private static var phoenix_normal:Class;
-		public static const PHOENIX:String = "Phoenix";
+		public static const PHOENIX:String = "Tamed Phoenix";
 		
 		[Embed(source = "../images/space_needle.png")]
 		private static var space_needle:Class;
