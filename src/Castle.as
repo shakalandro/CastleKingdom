@@ -292,7 +292,7 @@ package
 		
 		// Returns how many tower units the player has to use
 		public function get towerUnitsAvailable():int {
-			return _towerCap - unitCostSum((FlxG.state as ActiveState).towers);
+			return _towerCap - _leasedOutNumber + _leasedInNumber - unitCostSum((FlxG.state as ActiveState).towers);
 		}
 		
 		public function get gold():int {
