@@ -221,12 +221,18 @@ package
 		
 		private function computeStolen(units:FlxGroup, cash:int):int {
 			
-			var cap:int = 0;
-			for(var unit:Object in units) {
+			var count:int = 0;
+			for each(var unit:Object in units.members) {
+				if(unit != null) count++;
+				/*
 				unit = unit as Unit;
 				cap += unit.goldCapacity;
+				*/
 			}
+			/*
 			return Math.min(.7*cash, cap);
+			*/
+			return (.3 + Math.min(.4,(count + _placeOnLeft.length + _placeOnRight.length)/ 10))*cash;
 		}
 		
 		

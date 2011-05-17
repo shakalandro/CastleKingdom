@@ -290,11 +290,13 @@ package
 			return _towerCap - _leasedOutNumber + _leasedInNumber;
 		}
 		
-		// Returns how many tower units the player has to use
+		/** Returns how many tower units the player has to use
+		 * */
 		public function get towerUnitsAvailable():int {
-			return _towerCap - unitCostSum((FlxG.state as ActiveState).towers);
+			return towerCapacity - unitCostSum((FlxG.state as ActiveState).towers);
 		}
 		
+		/** Returns how much gold the user has */
 		public function get gold():int {
 			return _gold;
 		}

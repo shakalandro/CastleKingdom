@@ -395,6 +395,9 @@ package
 								return false;
 							}
 						} else { 
+							if(checkUnits(newTower, obj as Unit)) {
+								return false;
+							}
 							if (indices.x >= objStart.x && indices.x < objStop.x && 
 								indices.y >= objStart.y && indices.y <= objStop.y) {
 								return false;
@@ -404,6 +407,32 @@ package
 				}
 			}
 			return true;
+		}
+		
+		/**
+		 * 
+		 * @param unit
+		 * @param othUnit
+		 * @return true if unit overlaps othUnit
+		 * 
+		 */	
+		public function checkUnits(unit:Unit, othUnit:Unit):Boolean {
+			if(unit != null) {
+				if( pointIsIn(unit.x, unit.y, othUnit) 
+					|| pointIsIn(unit.x + unit.width, unit.y, othUnit)
+					|| pointIsIn(unit.x, unit.y + unit.height, othUnit)
+					|| pointIsIn(unit.x + unit.width, unit.y + unit.height, othUnit)) {
+					
+					return true;
+				}
+			
+			}
+			return false;
+		}
+		
+		private function pointIsIn(ox:int, oy:int, othUnit:Unit):Boolean {
+			return ( ox > othUnit.x && ox < othUnit.x + othUnit.width 
+				&& oy > othUnit.y && oy < othUnit.y + othUnit.height);
 		}
 		
 		override protected function createHUD():void {
