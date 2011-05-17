@@ -208,6 +208,10 @@ package
 		private static var grapple_tower_normal:Class;
 		public static const GRAPPLE_TOWER:String = "Grapple Tower";
 		
+		[Embed(source = "../images/aa_tower.png")]
+		private static var aa_tower_normal:Class;
+		public static const AA_TOWER:String = "AA Tower";
+		
 		[Embed(source = "../images/underground_wall.png")]
 		private static var underground_wall_normal:Class;
 		public static const UNDERGROUND_WALL:String = "Underground Wall";
@@ -367,6 +371,7 @@ package
 			_normal[Assets.ROCKET_TOWER] = rocket_tower_normal;
 			_normal[Assets.PHOENIX] = phoenix_normal;
 			_normal[Assets.MAGIC_WALL] = magic_wall_normal;
+			_normal[Assets.AA_TOWER] = aa_tower_normal;
 			_normal[Assets.UNDERGROUND_WALL] = underground_wall_normal;
 			_normal[Assets.QUAKE_MACHINE] = quake_machine_normal;
 			_normal[Assets.TRAPS] = traps_normal;
