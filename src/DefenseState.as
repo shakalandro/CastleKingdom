@@ -1,5 +1,7 @@
 package
 {
+	import flash.events.Event;
+	
 	import org.flixel.*;
 	
 	public class DefenseState extends ActiveState
@@ -8,6 +10,7 @@ package
 		private var _menu:ScrollMenu;
 		private var _forcedAttack:Boolean;
 		private var _pendingAttack:Object;
+		private var _clearAll:CKButton;
 		
 		public function DefenseState(map:FlxTilemap=null, castle:Castle = null, towers:FlxGroup = null, forcedAttack:Boolean = false, pendingAttack:Object = null)
 		{
@@ -44,12 +47,14 @@ package
 			add(_menu);
 			
 			setTutorialUI();
+			
 		}
 		
 		private function closeHandler():void {
 			if (_forcedAttack) {
 				FlxG.switchState(new AttackState(map, remove(castle) as Castle, remove(towers) as FlxGroup, null, _pendingAttack));
 			}
+			_clearAll.visible = false;
 		}
 		
 		private function setTutorialUI():void {
@@ -64,21 +69,25 @@ package
 						add(new MessageBox(Util.assets[Assets.FIRST_DEFENSE], "Okay", function():void {
 							toggleButtons(2);
 						}));
+						_clearAll.visible = false;
 					};
 				} else if (Castle.tutorialLevel == Castle.TUTORIAL_UPGRADE) {
 					_menu.onClose = function():void {
 						unpause();
 						toggleButtons(3);
+						_clearAll.visible = false;
 					};
 				} else if (Castle.tutorialLevel == Castle.TUTORIAL_ATTACK_FRIENDS) {
 					_menu.onClose = function():void {
 						unpause();
 						toggleButtons(4);
+						_clearAll.visible = false;
 					};
 				} else if (Castle.tutorialLevel == Castle.TUTORIAL_LEASE) {
 					_menu.onClose = function():void {
 						unpause();
 						toggleButtons(5);
+						_clearAll.visible = false;
 					};
 				} else {
 					Util.log("Unexpected tutorial level: " + Castle.tutorialLevel);
@@ -179,5 +188,32 @@ package
 			_towerDisplay.value = castle.towerCapacity - castle.towerUnitsAvailable;
 			_towerDisplay.max = castle.towerCapacity;
 		}
+		
+		override protected function createHUD():void
+		{
+			super.createHUD();
+			_clearAll = new CKButton(200, 0, "Remove All", function():void {
+				var towersSize:int = towers.members.length;
+				for (var i:int = 0; i < towersSize; i++)
+					towers.members.pop();
+			});
+			Util.centerY(_clearAll, header);
+			Util.centerX(_clearAll);
+			hud.add(_clearAll);
+		}
+	}
+}
+
+import org.flixel.FlxButton;
+
+class CKButton extends FlxButton {	
+	public function CKButton(x:Number, y:Number, text:String, onClick:Function = null, onOver:Function = null, onOut:Function = null) {
+		super(x, y, text, onClick, onOver, onOut);
+	}
+	public function set onClick(callback:Function):void {
+		_onClick = callback;
+	}
+	public function get onClick():Function {
+		return _onClick;
 	}
 }
