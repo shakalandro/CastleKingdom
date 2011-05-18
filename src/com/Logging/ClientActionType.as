@@ -18,6 +18,10 @@ package com.Logging
 	{
 		
 		public static const ENEMY_KILLED:int = 0;
+		public static const CASTLE_UPGRADE:int = 1;
+		public static const BARRACKS_UPGRADE:int = 2;
+		public static const FOUNDRY_UPGRADE:int = 3;
+		public static const AVIARY_UPGRADE:int = 4;
 	}
 
 }

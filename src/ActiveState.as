@@ -440,29 +440,29 @@ package
 			var _prepare:CKButton = new CKButton(0, 0, Util.assets[Assets.PLACE_TOWER_BUTTON], function():void {
 				var oldCastle:Castle = remove(castle);
 				var defTowers:FlxGroup = remove(towers);
-				Util.logging.startDquest(Castle.TUTORIAL_FIRST_DEFEND);
+				Util.logging.startDquest(1);
 				FlxG.switchState(new DefenseState(map, oldCastle, defTowers));
 			});
 			var _release:CKButton = new CKButton(0, 0, Util.assets[Assets.RELEASE_WAVE_BUTTON], function():void {
 				var defTowers:FlxGroup = remove(towers);
 				var oldCastle:Castle = remove(castle);
-				Util.logging.startDquest(Castle.TUTORIAL_FIRST_WAVE);
+				Util.logging.startDquest(2);
 				FlxG.switchState(new AttackState(map, oldCastle, defTowers));
 			});
 			var _upgrade:CKButton = new CKButton(0, 0, Util.assets[Assets.UPGRADE_BUTTON], function():void {
 				var oldCastle:Castle = remove(castle);
 				var defTowers:FlxGroup = remove(towers);
-				Util.logging.startDquest(Castle.TUTORIAL_UPGRADE);
+				Util.logging.startDquest(3);
 				FlxG.switchState(new UpgradeState(map, oldCastle, defTowers));
 			});
 			var _attack:CKButton = new CKButton(0, 0, Util.assets[Assets.ATTACK_BUTTON], function():void {
 				var oldCastle:Castle = remove(castle);
 				var defTowers:FlxGroup = remove(towers);
-				Util.logging.startDquest(Castle.TUTORIAL_ATTACK_FRIENDS);
+				Util.logging.startDquest(4);
 				FlxG.switchState(new AttackFriendsState(map, oldCastle, defTowers));
 			});
 			var _lease:CKButton = new CKButton(0, 0, Util.assets[Assets.LEASE_BUTTON], function():void {
-				Util.logging.startDquest(Castle.TUTORIAL_LEASE);
+				Util.logging.startDquest(5);
 				var oldCastle:Castle = remove(castle);
 				var defTowers:FlxGroup = remove(towers);
 				FlxG.switchState(new LeaseState(map, oldCastle, defTowers));

@@ -58,6 +58,15 @@ package
 		}
 		
 		private function acquireUpgrade(upgrade:Upgrade):Boolean {
+				if (upgrade.type == "castle") {
+					Util.logging.logCastleUpgrade(upgrade.level);
+				} else if (upgrade.type == "barracks") {
+					Util.logging.logBarracksUpgrade(upgrade.level);
+				} else if (upgrade.type == "foundry") {
+					Util.logging.logFoundryUpgrade(upgrade.level);
+				} else if (upgrade.type == "aviary"){
+					Util.logging.logAviaryUpgrade(upgrade.level);
+				}
 			return castle.setUpgrade(upgrade);
 		}
 		
