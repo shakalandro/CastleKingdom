@@ -38,6 +38,7 @@ package
 		private var _placeOnRight:Array;
 		
 		private var _unitDropCounter:int;
+		private var _attackSeedValue:Number;
 		
 		private var _gameOver:Boolean;
 		private var _waveGold:int;
@@ -62,6 +63,12 @@ package
 			} 
 			_activeAttack = false;
 			_unitDropCounter = 10;
+			
+			for each (var tower:Unit in towers.members) {
+				if(tower != null) {
+					tower.health = tower.maxHealth;
+				}
+			}
 		}
 		
 		/**
@@ -178,6 +185,7 @@ package
 					waveFinished(false);
 				} else if (_placeOnLeft.length + _placeOnRight.length == 0  && units.length == 0) { // Check if peeps are still alive
 					this.castle.addGold(this._waveGold);
+					castle.attackSeed = Math.random();
 					_gameOver = true;
 					waveFinished(true);
 				}
@@ -185,7 +193,7 @@ package
 				
 				_unitDropCounter--;
 				if(_unitDropCounter <= 0) {
-					_unitDropCounter = 50 - Math.sqrt(units.length);
+					_unitDropCounter = 50 - Math.sqrt(units.length + _placeOnLeft.length + _placeOnRight.length);
 					placeDudes(_placeOnLeft, Util.minX);
 					placeDudes(_placeOnRight, Util.maxX - 20);
 				}
@@ -254,9 +262,11 @@ package
 			if ( enemyCap < 50 ) {
 				enemyCap = 100;
 			}
-			var rand:int = Math.round(Math.random()*(highRange/100*enemyCap  + lowRange/100*enemyCap)) - lowRange/100*enemyCap; // maps to -lowRange% <= rand% <= highRange%
-			enemyCap += rand;
+			this._attackSeedValue = FlxU.srand(castle.attackSeed);
 			
+			var rand:int = Math.round(FlxU.srand(_attackSeedValue)*(highRange/100*enemyCap  + lowRange/100*enemyCap)) - lowRange/100*enemyCap; // maps to -lowRange% <= rand% <= highRange%
+			enemyCap += rand;
+			this._attackSeedValue = FlxU.srand(_attackSeedValue);
 			
 			possibleUnits.sort(Unit.compareByCost);
 			
@@ -268,9 +278,12 @@ package
 				maxIndex = highestUnit(possibleUnits, remaining, maxIndex);
 				if (maxIndex >= 0 ) {
 					// random index in range of array, of valid cost elements. +2 adds preference for strong units
-					var randIndex:int = Math.min(maxIndex, Math.round(Math.random()*(maxIndex))); 
+					var randIndex:int = Math.min(maxIndex, Math.round(FlxU.srand(_attackSeedValue)*(maxIndex)));
+					this._attackSeedValue = FlxU.srand(_attackSeedValue);
+
 					var unitNum:int = possibleUnits[randIndex];
-					var side:int = Math.round(Math.random());
+					var side:int = Math.round(FlxU.srand(_attackSeedValue));
+					this._attackSeedValue = FlxU.srand(_attackSeedValue);
 					if (side == 0) {
 						leftSide.push(unitNum);
 					} else {

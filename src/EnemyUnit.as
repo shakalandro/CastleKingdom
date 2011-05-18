@@ -15,6 +15,8 @@
 package
 {
 	import org.flixel.*;
+	import flash.display.BitmapData;
+
 
 	/** Unit default behavior:  
 	 * 	Moves at default velocity until reaches a target, then stops. 
@@ -76,6 +78,27 @@ package
 				}
 			}
 			
+			this.canHighlight = true;
+			
+			_infoDisplay = new FlxGroup();
+			var rangeSize:int = this.range*CastleKingdom.TILE_SIZE;
+			var rangeCircle:BitmapData = new BitmapData(rangeSize*2 + width, rangeSize*2 + height, true, FlxG.GREEN);
+			_infoBox = new FlxSprite(this.x - rangeSize, this.y - rangeSize);
+			_infoBox.makeGraphic(rangeSize*2 + width, rangeSize*2 + height, FlxG.GREEN);
+			_infoBox.alpha = .25;
+			_description = new FlxText(this.x - rangeSize, this.y - rangeSize, 75, 
+				this.clas.toUpperCase() +
+				"\n\nCost: " + this.cost + 
+				"\nHP: " + this.health +
+				"\nDmg: " + this.damageDone +
+				"\nRange: " + this.range +
+				"\nROF: " + this.rate +
+				"\n");
+			_description.color = FlxG.BLACK;
+			_infoDisplay.add(_infoBox);
+			_infoDisplay.add(_description);
+			_infoBox.visible = false;
+			_description.visible = false;
 			
 			//this.allowCollisions = FlxObject.ANY;
 			//this.immovable = true;
@@ -146,18 +169,37 @@ package
 			
 		}
 		
+		override public function preUpdate():void {
+			super.preUpdate();
+			if (FlxG.state is AttackFriendsState && this.checkHighlight()) {
+				FlxG.state.add(_infoDisplay);
+				var rangeSize:int = this.range*CastleKingdom.TILE_SIZE;
+				_infoBox.x = this.x - rangeSize;
+				_infoBox.y = this.y - rangeSize;
+				_description.x = this.x + width + 3, 
+					_description.y = this.y;
+				_infoBox.visible = true;
+				_description.visible = true;
+			} else {
+				FlxG.state.remove(_infoDisplay);
+				
+				//_infoBox.visible = false;
+				//_description.visible = false;
+			}
+			
+		}
 		
 		override public function executeAttack():Boolean {
 			if(_target != null) {
 				if(this.range > 0) {
 					if(this.facing == LEFT) {
-						new AttackAnimation(this.x,this.y,_target, attackAnimationString());
+						new AttackAnimation(this.x,this.y,_target,this, attackAnimationString());
 					} else {
-						new AttackAnimation(this.x + this.width,this.y,_target, attackAnimationString());
-						
+						new AttackAnimation(this.x + this.width,this.y,_target,this, attackAnimationString());
 					}
+				} else {
+					_target.inflictDamage(this.damageDone);
 				}
-				_target.inflictDamage(this.damageDone);
 				return true;
 			}
 			return false;
@@ -200,7 +242,9 @@ package
 				return "Fireball";
 			} else if(checkVsArray(this.name, ["Rocket Tower"])) {
 				return "Arrow";
-			} else {
+			} else if(checkVsArray(this.name, ["Spearman"])) {
+				return "Spear";
+			}else {
 				return "Arrow";
 			}
 				
@@ -216,6 +260,10 @@ package
 			return false;
 		}
 			
-		
+		override public function thingKilled(target:Unit):void {
+			if(_target == target) {
+				target = null;
+			}
+		}
 	}
 }

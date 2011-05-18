@@ -19,6 +19,7 @@ package
 		private var _clickCallback:Function;
 		private var _beingAttacked:Boolean;
 		private var _name:String;
+		private var _gold:FlxText;
 		
 		private static var _selected:FriendBox;
 		
@@ -49,6 +50,16 @@ package
 			_text.y += pic.height / 2;
 			_text.color = FlxG.BLACK;
 			
+			Database.getUserInfo(function(info:Array):void {
+				_gold = new FlxText(_text.width + _text.x + padding, y, width - x + pic.width + padding, info[0].gold);
+				_gold.y += pic.height / 2;
+				_gold.color = FlxG.BLACK;
+				add(_gold)}
+				, uid, true);
+			
+
+			
+			
 			_box = new FlxSprite(x, y);
 			_box.makeGraphic(width, pic.height + padding * 2, bgColor);
 			Util.drawBorder(_box);
@@ -67,6 +78,7 @@ package
 			add(_box);
 			add(_pic);
 			add(_text);
+			
 		}
 		
 		/**

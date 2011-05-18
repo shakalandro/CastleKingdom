@@ -105,7 +105,7 @@ package
 		}
 		
 		private function checkMineLevel(value:Object):Boolean {
-			var stage:Array = [0,5,8,13,21];
+			var stage:Array = [0,5,7,11,15,21];
 			return value.type.toString() != "mine" || this.castle.upgrades["castle"] >= stage[parseInt(value.level.toString())];
 		}
 	}

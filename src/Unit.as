@@ -138,6 +138,7 @@ package
 			
 			
 			
+			
 		}
 		
 		public function get canHighlight():Boolean {
@@ -564,5 +565,11 @@ package
 			super.kill();
 			
 		}
+		
+		public function thingKilled(target:Unit):void {
+			
+		}
+		
+		
 	}
 }
