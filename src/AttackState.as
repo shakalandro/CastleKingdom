@@ -257,7 +257,7 @@ package
 			/*
 			return Math.min(.7*cash, cap);
 			*/
-			return (.3 + Math.min(.4,(count + _placeOnLeft.length + _placeOnRight.length)/ 10))*cash;
+			return (.1 + Math.min(.2,(count + _placeOnLeft.length + _placeOnRight.length)/ 10))*cash;
 		}
 		
 		
