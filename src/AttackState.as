@@ -31,12 +31,12 @@ package
 		public static const TIDAL:String = "tidal"; 
 		public static const FRIEND:String = "friend"; 
 		
-		private static const CLICK_DAMAGE_POINTS:Number = 15;
+		private static const CLICK_DAMAGE_POINTS:Number = 20;
 		// The minimum time between click attacks in milliseconds
 		private static const TIME_BETWEEN_CLICKS:Number = 3000;
 		// Number to get to before another click attack is allowed
 		private static const MIN_TICKS_BETWEEN_CLICKS:Number = TIME_BETWEEN_CLICKS / FlxG.framerate;
-		private var _clicks:int;
+		private var _ticks:int;
 		
 		private var _activeAttack:Boolean;
 		private var _droppedGold:int;
@@ -53,7 +53,7 @@ package
 		public function AttackState(map:FlxTilemap=null, castle:Castle = null, towers:FlxGroup = null, units:FlxGroup = null, pendingAttack:Object = null)
 		{
 			super(map, castle, towers, units);
-			_clicks = MIN_TICKS_BETWEEN_CLICKS;
+			_ticks = MIN_TICKS_BETWEEN_CLICKS;
 			_pendingAttack = pendingAttack;
 			if (_pendingAttack != null) {
 				attackPending = true;
@@ -164,19 +164,20 @@ package
 		}
 		
 		private function checkClick():void {
-			if (FlxG.mouse.justPressed() && _clicks > AttackState.MIN_TICKS_BETWEEN_CLICKS) {
-				_clicks = 0;
+			if (FlxG.mouse.justPressed() && _ticks >= AttackState.MIN_TICKS_BETWEEN_CLICKS) {
 				var mouseCoords:FlxPoint = FlxG.mouse.getScreenPosition();
-				var attack:OnetimeSprite = new OnetimeSprite(mouseCoords.x, mouseCoords.y, Util.assets[Assets.ARCHER], 15, 15, [0, 1, 2, 3, 4]);
-				add(attack);
-				for each (var enemy:EnemyUnit in units) {
-					if (enemy.overlapsPoint(mouseCoords)) {
-						enemy.inflictDamage(CLICK_DAMAGE_POINTS * castle.upgrades["castle"]);
+				for each (var enemy:EnemyUnit in units.members) {
+					Util.log(enemy.overlapsPoint(mouseCoords, true), enemy.overlapsPoint(mouseCoords, false));
+					if (enemy.overlapsPoint(mouseCoords, true)) {
+						var attack:OnetimeSprite = new OnetimeSprite(mouseCoords.x, mouseCoords.y, Util.assets[Assets.EXPLODE], 15, 15, [0, 1, 2, 3, 4]);
+						add(attack);
+						enemy.inflictDamage(CLICK_DAMAGE_POINTS * (castle.upgrades["castle"] + 1));
+						_ticks = 0;
 						break;
 					}
 				}
 			} else {
-				_clicks++;
+				_ticks++;
 			}		
 		}
 		
