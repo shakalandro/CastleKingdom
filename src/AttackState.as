@@ -167,8 +167,7 @@ package
 			if (FlxG.mouse.justPressed() && _ticks >= AttackState.MIN_TICKS_BETWEEN_CLICKS) {
 				var mouseCoords:FlxPoint = FlxG.mouse.getScreenPosition();
 				for each (var enemy:EnemyUnit in units.members) {
-					Util.log(enemy.overlapsPoint(mouseCoords, true), enemy.overlapsPoint(mouseCoords, false));
-					if (enemy.overlapsPoint(mouseCoords, true)) {
+					if (enemy.overlapsPoint(mouseCoords)) {
 						var attack:OnetimeSprite = new OnetimeSprite(mouseCoords.x, mouseCoords.y, Util.assets[Assets.EXPLODE], 15, 15, [0, 1, 2, 3, 4]);
 						add(attack);
 						enemy.inflictDamage(CLICK_DAMAGE_POINTS * (castle.upgrades["castle"] + 1));
