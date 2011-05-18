@@ -25,13 +25,24 @@ package
 		public function AttackFriendsState(map:FlxTilemap=null, castle:Castle=null, towers:FlxGroup=null, units:FlxGroup=null)
 		{
 			super(map, castle, towers, units);
+			
 			_accumulatedUnits = 0;
 		}
 		
 		override public function create():void {
 			super.create();
+			towers.setAll("canDrag", false);
+			towers.setAll("canHighlight", true);
 			if (castle.gold < castle.sendWaveCost() && !CastleKingdom.DEBUG) {
-				add(new MessageBox(StringUtil.substitute(Util.assets[Assets.ATTACK_FRIENDS_BROKE], castle.sendWaveCost()), "Okay", null));
+				add(new MessageBox(StringUtil.substitute(Util.assets[Assets.ATTACK_FRIENDS_BROKE], castle.sendWaveCost()), "Okay", function():void {
+					if (Castle.tutorialLevel == Castle.TUTORIAL_ATTACK_FRIENDS) {
+						toggleButtons(4);
+					} else if (Castle.tutorialLevel == Castle.TUTORIAL_LEASE) {
+						toggleButtons(5);
+					} else {
+						Util.log("AttackFriendsState.create not enough money, unknown tutorial level");
+					}
+				}));
 			} else {
 				_dropboxes = [];
 				var padding:Number = 10;
@@ -47,17 +58,17 @@ package
 						_middleMenu = new ScrollMenu(castle.x, Util.minY, page, closeMenusAndSend, Util.assets[Assets.ATTACK_FRIENDS_MIDDLE_TITLE], Util.assets[Assets.ATTACK_FRIENDS_BUTTON], FlxG.WHITE, padding, castle.width, Util.maxY - Util.minY, 3);
 						add(_middleMenu);
 						
-						Database.getEnemyInfo(function(units:Array):void {
-							var pages:Array = formatUnits(units, castle.x - Util.minX, Util.maxY - Util.minY - 50, 2, 4);
-							
-							_rightMenu = new ScrollMenu(castle.x + castle.width, Util.minY, friendPages, closeMenus, Util.assets[Assets.ATTACK_FRIENDS_RIGHT_TITLE], Util.assets[Assets.BUTTON_CANCEL], FlxG.WHITE, 
-								padding, Util.maxX - castle.x - castle.width, Util.maxY - Util.minY);
-							add(_rightMenu);
-							
-							_leftMenu = new ScrollMenu(Util.minX, Util.minY, pages, closeMenus, Util.assets[Assets.ATTACK_FRIENDS_LEFT_TITLE], Util.assets[Assets.BUTTON_CANCEL], FlxG.WHITE, padding, 
-								castle.x - Util.minX, Util.maxY - Util.minY, 3, moveUnit);
-							add(_leftMenu);
-						});
+						var units:Array = castle.unitsUnlocked(Castle.ARMY, false);
+						
+						var pages:Array = formatUnits(units, castle.x - Util.minX, Util.maxY - Util.minY - 50, 2, 4);
+						
+						_rightMenu = new ScrollMenu(castle.x + castle.width, Util.minY, friendPages, closeMenus, Util.assets[Assets.ATTACK_FRIENDS_RIGHT_TITLE], Util.assets[Assets.BUTTON_CANCEL], FlxG.WHITE, 
+							padding, Util.maxX - castle.x - castle.width, Util.maxY - Util.minY);
+						add(_rightMenu);
+						
+						_leftMenu = new ScrollMenu(Util.minX, Util.minY, pages, closeMenus, Util.assets[Assets.ATTACK_FRIENDS_LEFT_TITLE], Util.assets[Assets.BUTTON_CANCEL], FlxG.WHITE, padding, 
+							castle.x - Util.minX, Util.maxY - Util.minY, 3, moveUnit);
+						add(_leftMenu);
 					});
 				}, Castle.computeValue);
 			}
@@ -205,8 +216,7 @@ package
 						var index:Number = i * (perRow * perColumn) + j * perRow + k;
 						
 						if (index < units.length) {
-							//var towerGroup:FlxGroup = new FlxGroup();
-							var baddy:EnemyUnit = new EnemyUnit(k * (width / perRow), j * (height / perColumn), units[index].id, true, null, false);
+							var baddy:EnemyUnit = new EnemyUnit(k * (width / perRow), j * (height / perColumn), units[index], true, null, false);
 							var name:FlxText = new FlxText(k * (width / perRow), j * (height / perColumn), width / perRow - padding, baddy.name);
 							name.color = FlxG.BLACK;
 							

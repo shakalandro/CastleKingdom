@@ -23,6 +23,10 @@ package
 		
 		override public function create():void {
 			super.create();
+			
+			towers.setAll("canDrag", false);
+			towers.setAll("canHighlight", true);
+			
 			var padding:Number = 10;
 			
 			Util.getFriendsInRange(Castle.computeValue(castle), LEVEL_THRESHHOLD, function(friends:Array):void {

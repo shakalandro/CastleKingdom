@@ -264,6 +264,10 @@ package
 		private static var unit_counter:Class;
 		public static const UNIT_COUNTER:String = "Unit Counter";
 		
+		[Embed(source = "../images/explode.png")]
+		private static var explode:Class;
+		public static const EXPLODE:String = "Explode";
+		
 		// Text resources
 		
 		public static const HELP_BUTTON:String = "help button";
@@ -344,6 +348,7 @@ package
 			_normal[Assets.PIKEMAN] = pikeman_normal;
 			_normal[Assets.BLOB] = blob;
 			_normal[Assets.SPACENEEDLE] = space_needle;
+			_normal[Assets.EXPLODE] = explode;
 
 			_normal[Assets.TILE_LAYOUT] = tileLayout_normal;
 			_normal[Assets.HUD_HEADER] = hud_header;

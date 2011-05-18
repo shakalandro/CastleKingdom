@@ -31,6 +31,13 @@ package
 		public static const TIDAL:String = "tidal"; 
 		public static const FRIEND:String = "friend"; 
 		
+		private static const CLICK_DAMAGE_POINTS:Number = 20;
+		// The minimum time between click attacks in milliseconds
+		private static const TIME_BETWEEN_CLICKS:Number = 3000;
+		// Number to get to before another click attack is allowed
+		private static const MIN_TICKS_BETWEEN_CLICKS:Number = TIME_BETWEEN_CLICKS / FlxG.framerate;
+		private var _ticks:int;
+		
 		private var _activeAttack:Boolean;
 		private var _droppedGold:int;
 		
@@ -47,6 +54,7 @@ package
 		public function AttackState(map:FlxTilemap=null, castle:Castle = null, towers:FlxGroup = null, units:FlxGroup = null, pendingAttack:Object = null)
 		{
 			super(map, castle, towers, units);
+			_ticks = MIN_TICKS_BETWEEN_CLICKS;
 			_pendingAttack = pendingAttack;
 			if (_pendingAttack != null) {
 				attackPending = true;
@@ -161,9 +169,26 @@ package
 				castle.leasedOutUnits = 0;
 			}
 		}
-
+		
+		private function checkClick():void {
+			if (FlxG.mouse.justPressed() && _ticks >= AttackState.MIN_TICKS_BETWEEN_CLICKS) {
+				var mouseCoords:FlxPoint = FlxG.mouse.getScreenPosition();
+				for each (var enemy:EnemyUnit in units.members) {
+					if (enemy.overlapsPoint(mouseCoords)) {
+						var attack:OnetimeSprite = new OnetimeSprite(mouseCoords.x, mouseCoords.y, Util.assets[Assets.EXPLODE], 15, 15, [0, 1, 2, 3, 4]);
+						add(attack);
+						enemy.inflictDamage(CLICK_DAMAGE_POINTS * (castle.upgrades["castle"] + 1));
+						_ticks = 0;
+						break;
+					}
+				}
+			} else {
+				_ticks++;
+			}		
+		}
 		
 		override public function update():void {
+			super.update();
 			// hack for stupid null problem >_< 
 			for each (var obj:FlxObject in towers.members) {
 				if (obj == null) {
@@ -171,7 +196,7 @@ package
 				}
 			}
 			if(!_gameOver) {	
-							
+				checkClick();
 				if (this.castle.isGameOver()) {		// Checks if castle has been breached
 					// recover cost, units disband
 					var armyCost:int = sumArmyCost();
@@ -240,7 +265,7 @@ package
 			/*
 			return Math.min(.7*cash, cap);
 			*/
-			return (.3 + Math.min(.4,(count + _placeOnLeft.length + _placeOnRight.length)/ 10))*cash;
+			return (.1 + Math.min(.2,(count + _placeOnLeft.length + _placeOnRight.length)/ 10))*cash;
 		}
 		
 		

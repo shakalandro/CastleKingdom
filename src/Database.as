@@ -932,6 +932,9 @@ package
 			if (_save.data.users[leaseInfo.id] == undefined || _save.data.users[leaseInfo.id] == null) {
 				_save.data.users[leaseInfo.id] = {info: {}, tut: {}, leases: [], attacks: [], upgrades: []};
 			}
+			if (_save.data.users[leaseInfo.id].leases == undefined || _save.data.users[leaseInfo.id].leases == null) {
+				_save.data.users[leaseInfo.id].leases = [];
+			}
 			_save.data.users[leaseInfo.id].leases.push(leaseInfo);
 		}
 		
