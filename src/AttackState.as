@@ -31,6 +31,13 @@ package
 		public static const TIDAL:String = "tidal"; 
 		public static const FRIEND:String = "friend"; 
 		
+		private static const CLICK_DAMAGE_POINTS:Number = 15;
+		// The minimum time between click attacks in milliseconds
+		private static const TIME_BETWEEN_CLICKS:Number = 3000;
+		// Number to get to before another click attack is allowed
+		private static const MIN_TICKS_BETWEEN_CLICKS:Number = TIME_BETWEEN_CLICKS / FlxG.framerate;
+		private var _clicks:int;
+		
 		private var _activeAttack:Boolean;
 		private var _droppedGold:int;
 		
@@ -46,6 +53,7 @@ package
 		public function AttackState(map:FlxTilemap=null, castle:Castle = null, towers:FlxGroup = null, units:FlxGroup = null, pendingAttack:Object = null)
 		{
 			super(map, castle, towers, units);
+			_clicks = MIN_TICKS_BETWEEN_CLICKS;
 			_pendingAttack = pendingAttack;
 			if (_pendingAttack != null) {
 				attackPending = true;
@@ -154,9 +162,26 @@ package
 				castle.leasedOutUnits = 0;
 			}
 		}
-
+		
+		private function checkClick():void {
+			if (FlxG.mouse.justPressed() && _clicks > AttackState.MIN_TICKS_BETWEEN_CLICKS) {
+				_clicks = 0;
+				var mouseCoords:FlxPoint = FlxG.mouse.getScreenPosition();
+				var attack:OnetimeSprite = new OnetimeSprite(mouseCoords.x, mouseCoords.y, Util.assets[Assets.ARCHER], 15, 15, [0, 1, 2, 3, 4]);
+				add(attack);
+				for each (var enemy:EnemyUnit in units) {
+					if (enemy.overlapsPoint(mouseCoords)) {
+						enemy.inflictDamage(CLICK_DAMAGE_POINTS * castle.upgrades["castle"]);
+						break;
+					}
+				}
+			} else {
+				_clicks++;
+			}		
+		}
 		
 		override public function update():void {
+			super.update();
 			// hack for stupid null problem >_< 
 			for each (var obj:FlxObject in towers.members) {
 				if (obj == null) {
@@ -164,7 +189,7 @@ package
 				}
 			}
 			if(!_gameOver) {	
-							
+				checkClick();
 				if (this.castle.isGameOver()) {		// Checks if castle has been breached
 					// recover cost, units disband
 					var armyCost:int = sumArmyCost();
