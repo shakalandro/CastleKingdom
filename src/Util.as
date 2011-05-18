@@ -556,11 +556,14 @@ package
 		
 		/**
 		 * Calls the callback with an array of friends info. Each friends exists 
-		 * in our database and thus has played the game. 
+		 * in our database and thus has played the game. Also adds a few unknown people to 
+		 * our database and adds them to the known list as well
+		 * 
 		 * @param callback A callback for when the data is ready.
+		 * @param addNumUnknown A number of people that are unknown to add
 		 * 
 		 */		
-		public static function getKnownFriends(callback:Function):void {
+		public static function getKnownFriends(callback:Function, addNumUnknown:Number = 0):void {
 			FaceBook.friends(function(friends:Array):void {
 				var ids:Array = [];
 				var lookup:Dictionary = new Dictionary();
