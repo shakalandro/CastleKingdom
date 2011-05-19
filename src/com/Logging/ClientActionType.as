@@ -22,6 +22,8 @@ package com.Logging
 		public static const BARRACKS_UPGRADE:int = 2;
 		public static const FOUNDRY_UPGRADE:int = 3;
 		public static const AVIARY_UPGRADE:int = 4;
+		public static const WIN_ATTACK:int = 5;
+		public static const LOSE_ATTACK:int = 6;
 	}
 
 }
