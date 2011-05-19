@@ -347,6 +347,9 @@ package
 		public static const ATTACK_WIN:String = "attack win";
 		public static const ATTACK_LOSE:String = "attack lose";
 		public static const ATTACK_FRIENDS_SENT:String = "attack friends sent";
+		public static const ATTACK_FRIENDS_NOT_SENT:String = "attack friends not sent";
+		public static const LEASE_SENT:String = "lease sent";
+		public static const LEASE_NOT_SENT:String = "lease not sent";
 		
 		// Other resources
 		
@@ -500,6 +503,9 @@ package
 			_normal[Assets.ATTACK_WIN] = "Sweet, they didn't steal any of your gold, in fact they dropped {0} gold.";
 			_normal[Assets.ATTACK_LOSE] = "Dang, the enemies got away with {0} of your gold.";
 			_normal[Assets.ATTACK_FRIENDS_SENT] = "Your army is on its way to try to steal gold from {0}.";
+			_normal[Assets.ATTACK_FRIENDS_NOT_SENT] = "An army was not sent.";
+			_normal[Assets.LEASE_SENT] = "A lease request was sent to {0} for {1} unit capacity.";
+			_normal[Assets.LEASE_NOT_SENT] = "No lease request was made.";
 		}
 		
 		/**

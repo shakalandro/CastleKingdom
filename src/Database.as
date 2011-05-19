@@ -880,7 +880,7 @@ package
 		 * @param tutLevelComp the tutorial level that has been completed
 		 * 
 		 */
-		public static function updateUserTutorialInfo(uid:int, tutLevelComp:int):void
+		public static function updateUserTutorialInfo(uid:String, tutLevelComp:int):void
 		{
 			var variables:URLVariables = new URLVariables();
 			variables.uid = "" + uid;
