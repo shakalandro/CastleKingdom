@@ -75,6 +75,7 @@ package
 			for each (var tower:Unit in towers.members) {
 				if(tower != null) {
 					tower.health = tower.maxHealth;
+					//put tower id & x/y into array/log
 				}
 			}
 		}
@@ -203,6 +204,7 @@ package
 			if(!_gameOver) {	
 				checkClick();
 				if (this.castle.isGameOver()) {		// Checks if castle has been breached
+					// USER LOSES
 					// recover cost, units disband
 					var armyCost:int = sumArmyCost();
 					// take portion of defender's gold and give to attacker
@@ -214,6 +216,7 @@ package
 					_gameOver = true;
 					waveFinished(false);
 				} else if (_placeOnLeft.length + _placeOnRight.length == 0  && units.length == 0) { // Check if peeps are still alive
+					// USER WINS
 					this.castle.addGold(this._waveGold);
 					castle.attackSeed = Math.random();
 					_gameOver = true;
