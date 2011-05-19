@@ -232,6 +232,10 @@ package
 		private static var cursor_img:Class;
 		public static const CURSOR:String = "cursor";
 		
+		[Embed(source = "../images/cursorstatic.png")]
+		private static var cursorstatic_img:Class;
+		public static const CURSORSTATIC:String = "Cursor Static";
+		
 		[Embed(source = "../images/wholemap.png")]
 		private static var background_img:Class;
 		public static const BACKGROUND:String = "background";
@@ -395,6 +399,7 @@ package
 			_normal[Assets.MENU_BG] = menu_bg;
 			_normal[Assets.CASTLE] = castle_img;
 			_normal[Assets.CURSOR] = cursor_img;
+			_normal[Assets.CURSORSTATIC] = cursorstatic_img;
 			_normal[Assets.BACKGROUND] = background_img;
 			_normal[Assets.LOGIN_BACKGROUND] = startpage_background;
 			_normal[Assets.BUTTON_SMALL] = button_small_img;
