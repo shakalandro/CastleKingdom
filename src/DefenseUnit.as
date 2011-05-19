@@ -57,7 +57,8 @@ package
 			var rangeSize:int = this.range*CastleKingdom.TILE_SIZE;
 			var rangeCircle:BitmapData = new BitmapData(rangeSize*2 + width, rangeSize*2 + height, true, FlxG.GREEN);
 			_infoBox = new FlxSprite(this.x - rangeSize, this.y - rangeSize);
-			_infoBox.makeGraphic(rangeSize*2 + width, rangeSize*2 + height, FlxG.GREEN);
+			//_infoBox.makeGraphic(rangeSize*2 + width, rangeSize*2 + height, FlxG.GREEN);
+			specialCaps(true);
 			_infoBox.alpha = .25;
 			_description = new FlxText(this.x - rangeSize, this.y - rangeSize, 75, 
 				this.clas.toUpperCase() +
@@ -74,6 +75,22 @@ package
 			_description.visible = false;
 		}
 		
+		private function specialCaps(start:Boolean = false):void {
+			var rangeSize:int = this.range*CastleKingdom.TILE_SIZE;
+
+			if(this.name == "Rocket Tower") {
+				_infoBox.x = this.x - rangeSize;
+				_infoBox.y = this.y;
+				if(start) _infoBox.makeGraphic(rangeSize*2 + width, height, FlxG.GREEN);
+			} else if (this.name == "Grapple Tower") {
+				_infoBox.x = this.x;
+				_infoBox.y = this.y  - rangeSize;
+				if(start) _infoBox.makeGraphic(width, rangeSize*2 + height, FlxG.GREEN);
+			} else {
+				if(start) _infoBox.makeGraphic(rangeSize*2 + width, rangeSize*2 + height, FlxG.GREEN);
+			}
+		}
+		
 		override public function preUpdate():void {
 			super.preUpdate();
 			if (checkHighlight()) {
@@ -85,6 +102,7 @@ package
 				_description.y = this.y;
 				_infoBox.visible = true;
 				_description.visible = true;
+				specialCaps();
 			} else {
 				FlxG.state.remove(_infoDisplay);
 				
@@ -128,6 +146,15 @@ package
 			//	super.hitRanged(contact);
 			if (contact is EnemyUnit && (contact as EnemyUnit).clas == this.clas) {
 				if (_target == null || _target.health <= 0) {
+					if(this.name == "Rocket Tower") {
+						if( contact.y < this.y || contact.y > this.y + this.height) {
+							return;
+						}
+					} else if (this.name == "Grapple Tower") {
+						if( contact.x < this.x || contact.x > this.x + this.width) {
+							return;
+						}
+					}
 					_target = contact as Unit;
 				}
 			}

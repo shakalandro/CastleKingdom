@@ -79,10 +79,11 @@ package
 			add(_towers);
 			add(_units);
 			add(_attackAnims);
-			_castle = _castle || new Castle(0, 0, Util.assets[Assets.CASTLE]);
+			_castle = _castle || new Castle(0, 0, Util.assets[Assets.CASTLEBACKGROUND]);
 			Util.centerX(_castle);
 			Util.placeInZone(_castle, map);
 			add(_castle);
+			_castle.drawUpgrades();
 			
 			if (CastleKingdom.FACEBOOK_ON) {
 				FaceBook.picture(function(pic:Class):void {
