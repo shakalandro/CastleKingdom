@@ -210,15 +210,17 @@ package
 					_dragOffset = new FlxPoint(mouseCoords.x - this.x, mouseCoords.y - this.y);
 				} else if (_dragging && FlxG.mouse.justReleased()) {
 					_dragging = false;
-					this.x = mouseCoords.x - _dragOffset.x;
-					this.y = mouseCoords.y - _dragOffset.y;
+					var tileCoords:FlxPoint = Util.roundToNearestTile(new FlxPoint(mouseCoords.x - _dragOffset.x, mouseCoords.y - _dragOffset.y));
+					this.x = tileCoords.x;
+					this.y = tileCoords.y;
 					_dragOffset = null;
-					if (_dragCallback != null) _dragCallback(this, mouseCoords.x, mouseCoords.y, _preDragCoords.x, _preDragCoords.y);
+					if (_dragCallback != null) _dragCallback(this, tileCoords.x, tileCoords.y, _preDragCoords.x, _preDragCoords.y);
 					_preDragCoords = null;
 				}
 				if (_dragging) {
-					this.x = mouseCoords.x - _dragOffset.x;
-					this.y = mouseCoords.y - _dragOffset.y;
+					tileCoords = Util.roundToNearestTile(new FlxPoint(mouseCoords.x - _dragOffset.x, mouseCoords.y - _dragOffset.y));
+					this.x = tileCoords.x;
+					this.y = tileCoords.y;
 					return true;
 				}
 			}

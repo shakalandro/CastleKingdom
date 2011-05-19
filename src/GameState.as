@@ -46,7 +46,7 @@ package
 			createHUD();
 			
 			_cursor = new AnimatedCursor(Util.assets[Assets.CURSOR]);
-			add(_cursor);
+			//add(_cursor);
 			
 			_map = new FlxTilemap();
 			_map.loadMap(new Util.assets[Assets.TILE_LAYOUT], Util.assets[Assets.MAP_TILES],CastleKingdom.TILE_SIZE, CastleKingdom.TILE_SIZE, FlxTilemap.OFF, 0, 0, 3);

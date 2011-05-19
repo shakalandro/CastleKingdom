@@ -39,7 +39,7 @@ package
 		{
 			super(WIDTH, HEIGHT, LoginState, 1);
 			
-			FlxG.mouse.hide();
+			FlxG.mouse.load(Util.assets[Assets.CURSOR]);
 			FlxG.framerate = FRAMERATE;
 			
 			if (CastleKingdom.DEBUG) {
