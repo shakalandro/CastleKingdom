@@ -120,7 +120,12 @@ package
 					numUnits: _slider.value
 				});
 				Util.log("Leasing " + _slider.value + " units from " + FriendBox.selected.name);
-				FriendBox.resetSelected();
+				FaceBook.getNameByID(FriendBox.selected.uid, function(name:String):void {
+					add(new TimedMessageBox(StringUtil.substitute(Util.assets[Assets.LEASE_SENT], name, _slider.value)));
+					FriendBox.resetSelected();
+				});
+			} else {
+				add(new TimedMessageBox(Util.assets[Assets.LEASE_NOT_SENT]));
 			}
 			closeMenus();
 		}

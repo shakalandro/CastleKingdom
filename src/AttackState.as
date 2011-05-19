@@ -135,7 +135,8 @@ package
 			Util.log("AttackState.waveFinished: " + win, Castle.tutorialLevel);
 			var winText:String = Util.assets[Assets.FIRST_WIN];
 			var loseText:String = Util.assets[Assets.FIRST_LOSS];
-			var prize:Number = computeStolen(units, castle.gold);
+			var taken:Number = computeStolen(units, castle.gold);
+			var prize:Number = _waveGold;
 
 			if (_pendingAttack != null) {
 				if (Castle.tutorialLevel == Castle.TUTORIAL_ATTACK_FRIENDS) {
@@ -157,7 +158,7 @@ package
 					Database.setWinStatusAttacks({
 						uid: _pendingAttack.id,
 						aid: FaceBook.uid,
-						win: prize + 100
+						win: taken + 100
 					});
 				}
 			} else if (win && Castle.tutorialLevel == Castle.TUTORIAL_FIRST_WAVE) {
@@ -175,8 +176,7 @@ package
 				if (win) {
 					add(new TimedMessageBox(StringUtil.substitute(Util.assets[Assets.ATTACK_WIN], prize)));
 				} else {
-					prize = _droppedGold;
-					add(new TimedMessageBox(StringUtil.substitute(Util.assets[Assets.ATTACK_LOSE], prize)));
+					add(new TimedMessageBox(StringUtil.substitute(Util.assets[Assets.ATTACK_LOSE], taken)));
 				}
 				if (Castle.tutorialLevel == Castle.TUTORIAL_UPGRADE){
 					toggleButtons(3);
@@ -198,12 +198,14 @@ package
 		}
 		
 		private function checkClick():void {
+			if (_ticks >= AttackState.MIN_TICKS_BETWEEN_CLICKS) {
+				GameState.cursor.prime();
+			}
 			if (FlxG.mouse.justPressed() && _ticks >= AttackState.MIN_TICKS_BETWEEN_CLICKS) {
 				var mouseCoords:FlxPoint = FlxG.mouse.getScreenPosition();
 				for each (var enemy:EnemyUnit in units.members) {
 					if (enemy != null && enemy.overlapsPoint(mouseCoords)) {
-						var attack:OnetimeSprite = new OnetimeSprite(mouseCoords.x, mouseCoords.y, Util.assets[Assets.EXPLODE], 15, 15, [0, 1, 2, 3, 4]);
-						add(attack);
+						GameState.cursor.attack();
 						enemy.inflictDamage(CLICK_DAMAGE_POINTS * (castle.upgrades["castle"] + 1));
 						_ticks = 0;
 						break;
@@ -473,7 +475,7 @@ package
 							unit2.hitRanged(unit1);
 						}
 					}
-				} 
+				}
 			} 
 		}
 		

@@ -154,7 +154,12 @@ package
 					Database.updateUserAttacks(attack);
 				}
 				castle.addGold(-castle.sendWaveCost());
-				FriendBox.resetSelected();
+				FaceBook.getNameByID(FriendBox.selected.uid, function(name:String):void {
+					add(new TimedMessageBox(StringUtil.substitute(Util.assets[Assets.ATTACK_FRIENDS_SENT], name)));
+					FriendBox.resetSelected();
+				});
+			} else {
+				add(new TimedMessageBox(Util.assets[Assets.ATTACK_FRIENDS_NOT_SENT]));
 			}
 			closeMenus();
 		}
