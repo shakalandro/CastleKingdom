@@ -342,6 +342,7 @@ package
 		
 		public static const ATTACK_WIN:String = "attack win";
 		public static const ATTACK_LOSE:String = "attack lose";
+		public static const ATTACK_FRIENDS_SENT:String = "attack friends sent";
 		
 		// Other resources
 		
@@ -493,6 +494,7 @@ package
 			_normal[Assets.LEASE_REJECTED] = "Dang, {0} rejected your request to lease out some of his/her unit capacity.";
 			_normal[Assets.ATTACK_WIN] = "Sweet, they didn't steal any of your gold, in fact they dropped {0} gold.";
 			_normal[Assets.ATTACK_LOSE] = "Dang, the enemies got away with {0} of your gold.";
+			_normal[Assets.ATTACK_FRIENDS_SENT] = "Your army is on its way to try to steal gold from {0}.";
 		}
 		
 		/**

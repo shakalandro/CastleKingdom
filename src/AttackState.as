@@ -176,12 +176,14 @@ package
 		}
 		
 		private function checkClick():void {
+			if (_ticks >= AttackState.MIN_TICKS_BETWEEN_CLICKS) {
+				GameState.cursor.prime();
+			}
 			if (FlxG.mouse.justPressed() && _ticks >= AttackState.MIN_TICKS_BETWEEN_CLICKS) {
 				var mouseCoords:FlxPoint = FlxG.mouse.getScreenPosition();
 				for each (var enemy:EnemyUnit in units.members) {
 					if (enemy != null && enemy.overlapsPoint(mouseCoords)) {
-						var attack:OnetimeSprite = new OnetimeSprite(mouseCoords.x, mouseCoords.y, Util.assets[Assets.EXPLODE], 15, 15, [0, 1, 2, 3, 4]);
-						add(attack);
+						GameState.cursor.attack();
 						enemy.inflictDamage(CLICK_DAMAGE_POINTS * (castle.upgrades["castle"] + 1));
 						_ticks = 0;
 						break;
@@ -436,7 +438,7 @@ package
 							unit2.hitRanged(unit1);
 						}
 					}
-				} 
+				}
 			} 
 		}
 		

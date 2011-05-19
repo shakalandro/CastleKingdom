@@ -22,6 +22,8 @@ package
 		private var _background:FlxSprite;
 		
 		private var _loading:FlxSprite;
+		
+		private static var _cursor:AnimatedCursor;
 				
 		/**
 		 * Constructs a new GameState. This is a helper superclass state. All persistent gamestate materials are held here. 
@@ -43,6 +45,9 @@ package
 			super.create();
 			createHUD();
 			
+			_cursor = new AnimatedCursor(Util.assets[Assets.CURSOR]);
+			add(_cursor);
+			
 			_map = new FlxTilemap();
 			_map.loadMap(new Util.assets[Assets.TILE_LAYOUT], Util.assets[Assets.MAP_TILES],CastleKingdom.TILE_SIZE, CastleKingdom.TILE_SIZE, FlxTilemap.OFF, 0, 0, 3);
 			_map.y = _header.height;
@@ -53,6 +58,10 @@ package
 			
 			add(_background);
 			add(_map);
+		}
+		
+		public static function get cursor():AnimatedCursor {
+			return _cursor;
 		}
 		
 		/**
