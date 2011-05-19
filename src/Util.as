@@ -571,7 +571,6 @@ package
 					ids.push(friend.id);
 					lookup[friend.id + ""] = friend.name;
 				}
-				Util.logObj("Lookup:", lookup);
 				Database.getUserInfo(function(knownFriends:Array):void {
 					var result:Array = [];
 					for each (var person:Object in knownFriends) {

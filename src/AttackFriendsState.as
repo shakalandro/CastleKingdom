@@ -261,7 +261,7 @@ package
 						Database.isBeingAttacked(function(attacks:Array):void {
 							setCallback(attacks == null || attacks.length == 0);
 						}, uid, true);
-					});
+					}, false);
 					Database.isBeingAttacked(function(attacks:Array):void {
 						friendBox.isBeingAttacked = (attacks == null || attacks.length == 0);
 					}, friends[i].id, true);

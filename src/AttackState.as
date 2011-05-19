@@ -106,6 +106,7 @@ package
 			Util.log("AttackState.waveFinished: " + win, Castle.tutorialLevel);
 			var winText:String = Util.assets[Assets.FIRST_WIN];
 			var loseText:String = Util.assets[Assets.FIRST_LOSS];
+			var prize:Number = computeStolen(units, castle.gold);
 
 			if (_pendingAttack != null) {
 				if (Castle.tutorialLevel == Castle.TUTORIAL_ATTACK_FRIENDS) {
@@ -123,7 +124,6 @@ package
 						win: 0
 					});
 				} else {
-					var prize:Number = computeStolen(units, castle.gold);
 					add(new MessageBox(StringUtil.substitute(Util.assets[Assets.FRIEND_WAVE_LOSS], _pendingAttack.name, prize), "Okay", null));
 					Database.setWinStatusAttacks({
 						uid: _pendingAttack.id,
@@ -137,14 +137,19 @@ package
 					Database.updateUserTutorialInfo(FaceBook.uid, Castle.TUTORIAL_UPGRADE);
 					Castle.tutorialLevel = Castle.TUTORIAL_UPGRADE;
 				}));
-			} else {
-				Util.log("AttackState.waveFinished setting tutorial");
-				if (!win && Castle.tutorialLevel == Castle.TUTORIAL_FIRST_WAVE) {
+			} else if (!win && Castle.tutorialLevel == Castle.TUTORIAL_FIRST_WAVE) {
 					add(new MessageBox(StringUtil.substitute(Util.assets[Assets.FIRST_LOSS], castle.unitCapacity), 
 							"Okay", function():void {
 						toggleButtons(2);
 					}));
-				} else if (Castle.tutorialLevel == Castle.TUTORIAL_UPGRADE){
+			} else {
+				if (win) {
+					add(new TimedMessageBox(StringUtil.substitute(Util.assets[Assets.ATTACK_WIN], prize)));
+				} else {
+					prize = _droppedGold;
+					add(new TimedMessageBox(StringUtil.substitute(Util.assets[Assets.ATTACK_LOSE], prize)));
+				}
+				if (Castle.tutorialLevel == Castle.TUTORIAL_UPGRADE){
 					toggleButtons(3);
 				} else if (Castle.tutorialLevel == Castle.TUTORIAL_ATTACK_FRIENDS) {
 					toggleButtons(4);
@@ -167,7 +172,7 @@ package
 			if (FlxG.mouse.justPressed() && _ticks >= AttackState.MIN_TICKS_BETWEEN_CLICKS) {
 				var mouseCoords:FlxPoint = FlxG.mouse.getScreenPosition();
 				for each (var enemy:EnemyUnit in units.members) {
-					if (enemy.overlapsPoint(mouseCoords)) {
+					if (enemy != null && enemy.overlapsPoint(mouseCoords)) {
 						var attack:OnetimeSprite = new OnetimeSprite(mouseCoords.x, mouseCoords.y, Util.assets[Assets.EXPLODE], 15, 15, [0, 1, 2, 3, 4]);
 						add(attack);
 						enemy.inflictDamage(CLICK_DAMAGE_POINTS * (castle.upgrades["castle"] + 1));
