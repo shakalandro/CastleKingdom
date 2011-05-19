@@ -15,6 +15,7 @@ package
 	public class AttackFriendsState extends ActiveState
 	{		
 		public static const LEVEL_THRESHHOLD:Number = CastleKingdom.DEBUG ? 10000000 : 75;
+		public static const NUM_UNKNOWN_FRIENDS:int = 10;
 		
 		private var _leftMenu:ScrollMenu;
 		private var _rightMenu:ScrollMenu;
@@ -70,7 +71,7 @@ package
 							castle.x - Util.minX, Util.maxY - Util.minY, 3, moveUnit);
 						add(_leftMenu);
 					});
-				}, Castle.computeValue);
+				}, Castle.computeValue, NUM_UNKNOWN_FRIENDS);
 			}
 			setTutorialUI();
 		}
@@ -261,10 +262,7 @@ package
 						Database.isBeingAttacked(function(attacks:Array):void {
 							setCallback(attacks == null || attacks.length == 0);
 						}, uid, true);
-					});
-					Database.isBeingAttacked(function(attacks:Array):void {
-						friendBox.isBeingAttacked = (attacks == null || attacks.length == 0);
-					}, friends[i].id, true);
+					}, true);
 					
 					page.add(friendBox);
 					

@@ -6,12 +6,13 @@ package
 	
 	public class MessageBox extends FlxGroup
 	{
-		private var _text:FlxText;
-		private var _btn1:FlxButton;
-		private var _btn2:FlxButton;
+		protected var _text:FlxText;
+		protected var _btn1:FlxButton;
+		protected var _btn2:FlxButton;
 		private var _padding:Number;
 		private var _borderThickness:Number;
 		private var _borderColor:uint;
+		protected var _box:FlxSprite;
 		
 		/**
 		 * Creates a message box just below the hud with the option for one of two buttons.
@@ -26,19 +27,21 @@ package
 		 * @param borderThickness The thickness of the border
 		 * 
 		 */		
-		public function MessageBox(message:String, button1Text:String, button1Callback:Function, 
+		public function MessageBox(message:String, button1Text:String = null, button1Callback:Function = null, 
 					button2Text:String = null, button2Callback:Function = null, padding:Number = 10, borderColor:uint = FlxG.RED, borderThickness:Number = 3) {
 			super(0);
 			_padding = padding;	
 			_borderThickness = borderThickness;
 			_borderColor = borderColor;
 			
-			_btn1 = new FlxButton(0, 0, button1Text, function():void {
-				close(button1Callback);
-			});
-			_btn1.x = Util.maxX - _btn1.width - _padding;
-			_btn1.allowCollisions = FlxObject.NONE;
-			_btn1.immovable = true;
+			if (button1Text != null) {
+				_btn1 = new FlxButton(0, 0, button1Text, function():void {
+					close(button1Callback);
+				});
+				_btn1.x = Util.maxX - _btn1.width - _padding;
+				_btn1.allowCollisions = FlxObject.NONE;
+				_btn1.immovable = true;
+			}
 			if (button2Text != null) {
 				_btn2 = new FlxButton(0, 0, button2Text, function():void {
 					close(button2Callback);
@@ -49,28 +52,32 @@ package
 			}
 			if (button2Text != null) {
 				_text = new FlxText(_padding + Util.minX, Util.minY + _padding, _btn2.x - _padding * 2, message);
-			} else {
+			} else if (button1Text != null) {
 				_text = new FlxText(_padding + Util.minX, Util.minY + _padding, _btn1.x - _padding * 2, message);
+			} else {
+				_text = new FlxText(_padding + Util.minX, Util.minY + _padding, Util.maxX - _padding * 2, message);
 			}
 			_text.color = FlxG.BLACK;
 			_text.allowCollisions = FlxObject.NONE;
 			_text.immovable = true;
 			
-			var box:FlxSprite = new FlxSprite(Util.minX, Util.minY);
-			box.makeGraphic(FlxG.width, _text.height + _padding * 2, 0xffffffff);
-			Util.drawBorder(box, borderColor, borderThickness);
-			box.allowCollisions = FlxObject.NONE;
-			box.immovable = true;
-			add(box);
+			_box = new FlxSprite(Util.minX, Util.minY);
+			_box.makeGraphic(FlxG.width, _text.height + _padding * 2, 0xffffffff);
+			Util.drawBorder(_box, borderColor, borderThickness);
+			_box.allowCollisions = FlxObject.NONE;
+			_box.immovable = true;
+			add(_box);
 			
 			if (button2Text != null) {
-				Util.centerY(_btn2, box);
+				Util.centerY(_btn2, _box);
 				add(_btn2);
 			}
-			Util.centerY(_btn1, box);
-			Util.centerY(_text, box);
+			if (button1Text != null) {
+				Util.centerY(_btn1, _box);
+				add(_btn1);
+			}
 			
-			add(_btn1);
+			Util.centerY(_text, _box);
 			add(_text);
 		}
 		

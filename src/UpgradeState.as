@@ -20,8 +20,8 @@ package
 		override public function create():void {
 			super.create();
 			
-			towers.setAll("canDrag", true);
-			towers.setAll("canHighlight", true);
+			towers.setAll("canDrag", false);
+			towers.setAll("canHighlight", false);
 			
 			Database.getUpgradesInfo(function(info:Array):void {
 				var padding:Number = 10;

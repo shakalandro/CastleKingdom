@@ -571,15 +571,39 @@ package
 					ids.push(friend.id);
 					lookup[friend.id + ""] = friend.name;
 				}
-				Util.logObj("Lookup:", lookup);
 				Database.getUserInfo(function(knownFriends:Array):void {
 					var result:Array = [];
+					var knownFriendsIds:Array = [];
 					for each (var person:Object in knownFriends) {
 						person.name = lookup[person.id + ""];
+						person.toString = function():String { return this.name};
 						result.push(person);
+						knownFriendsIds.push(person.id);
 						Util.logObj("Known Friend:", person);
 					}
-					if (callback != null) callback(result);
+					//Throw in some unknown friends
+					var unknownFriends:Array = ids.filter(function(obj:Object, index:int, arr:Array):Boolean {
+						if (! (knownFriendsIds.indexOf(obj + "") >= 0)) {
+						Util.log("contains:"+ obj + "=" + (knownFriendsIds.indexOf(obj + "") < 0));
+						}
+						return knownFriendsIds.indexOf(obj + "") < 0;
+					});
+					Util.log("unknownfriends length=" + unknownFriends.length);
+					unknownFriends = FlxG.shuffle(unknownFriends.slice(0, addNumUnknown), 1);
+					for (var i:int = 0; i < addNumUnknown && i < unknownFriends.length; i++) {
+						// User is added to the database when invite is clicked by user
+						//Send a FaceBook invitation message on invite click
+						var newPerson:Object = {
+							id: unknownFriends[i],
+							name: lookup[unknownFriends[i]],
+							gold: Database.START_GOLD,
+							units: Database.START_UNITS,
+							toString: function():String { return this.name}
+						};
+						Util.logObj("Unknown Friend:", newPerson);
+						result.push(newPerson);
+					}
+					if (callback != null) callback(result.sort());
 				}, ids, true); 
 			});
 		}
@@ -593,12 +617,12 @@ package
 		 * @param appraisal A function used to computer a friend's level
 		 * 
 		 */		
-		public static function getFriendsInRange(level:Number, threshhold:Number, callback:Function, appraisal:Function):void {
+		public static function getFriendsInRange(level:Number, threshhold:Number, callback:Function, appraisal:Function, addNumUnknown:Number = 0):void {
 			Util.getKnownFriends(function(friends:Array):void {
 				callback(friends.filter(function(friend:Object, index:int, arr:Array):Boolean {
 					return Math.abs(level - appraisal(friend)) <= threshhold;
 				}));
-			});
+			}, addNumUnknown);
 		}
 		
 		public static function drawBorder(sprite:FlxSprite, borderColor:uint = FlxG.BLACK, borderThickness:Number = 3):FlxSprite {

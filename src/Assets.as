@@ -340,6 +340,9 @@ package
 		public static const FRIEND_WAVE_WIN:String = "friend wave win";
 		public static const ATTACK_FRIENDS_BROKE:String = "attack friends broke";
 		
+		public static const ATTACK_WIN:String = "attack win";
+		public static const ATTACK_LOSE:String = "attack lose";
+		
 		// Other resources
 		
 		[Embed(source = "mapLayout.txt", mimeType = "application/octet-stream")]
@@ -488,6 +491,8 @@ package
 			_normal[Assets.LEASE_ACCEPTED] = "{0} has accepted your request to lease out {1} of his/her unit capacity. They have been added " +
 				"to your capacity for the next attack wave.";
 			_normal[Assets.LEASE_REJECTED] = "Dang, {0} rejected your request to lease out some of his/her unit capacity.";
+			_normal[Assets.ATTACK_WIN] = "Sweet, they didn't steal any of your gold, in fact they dropped {0} gold.";
+			_normal[Assets.ATTACK_LOSE] = "Dang, the enemies got away with {0} of your gold.";
 		}
 		
 		/**

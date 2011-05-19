@@ -19,7 +19,6 @@ package
 		private var _clickCallback:Function;
 		private var _beingAttacked:Boolean;
 		private var _name:String;
-		private var _gold:FlxText;
 		
 		private static var _selected:FriendBox;
 		
@@ -46,19 +45,10 @@ package
 			pic.x = x + padding;
 			pic.y = y + padding;
 			pic.height = Math.min(pic.height, 50);
-			_text = new FlxText(x + pic.width + padding, y, width - x + pic.width + padding, name);
+			_text = new FlxText(x + pic.width + padding, y, width - pic.width - padding * 3, name);
 			_text.y += pic.height / 2;
 			_text.color = FlxG.BLACK;
-			
-			Database.getUserInfo(function(info:Array):void {
-				_gold = new FlxText(_text.width + _text.x + padding, y, width - x + pic.width + padding, info[0].gold);
-				_gold.y += pic.height / 2;
-				_gold.color = FlxG.BLACK;
-				add(_gold)}
-				, uid, true);
-			
-
-			
+			_text.size = 11;
 			
 			_box = new FlxSprite(x, y);
 			_box.makeGraphic(width, pic.height + padding * 2, bgColor);
@@ -75,10 +65,28 @@ package
 				}, uid, true);
 			}
 			
+			Database.getUserInfo(function(info:Array):void {
+				if (info != null && info.length > 0) {
+					_text.text += "\n\tGold: " + info[0].gold + "\n\tUnits: " + info[0].units;
+					Util.centerY(_text, _box);
+				} else {
+					var invite:FlxButton = new FlxButton(0, 0, "Invite", function():void {
+						Database.addNewUser(parseInt(_uid));
+						//Send facebook message to user
+						_text.text = name + "\n\tGold: " + Database.START_GOLD + "\n\tUnits: " + Database.START_UNITS;
+						remove(invite, true);
+						invite.kill();
+					});
+					_text.y = _box.y + padding;
+					invite.y = _box.y + _box.height - invite.height - padding;
+					invite.x = _box.x + _box.width + (((_pic.x + _pic.width - padding) - (_box.x + _box.width + padding)) - invite.width) / 2;
+					add(invite);
+				}
+			}, uid, true);
+			
 			add(_box);
 			add(_pic);
 			add(_text);
-			
 		}
 		
 		/**
