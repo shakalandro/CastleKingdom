@@ -113,7 +113,8 @@ package
 			Util.log("AttackState.waveFinished: " + win, Castle.tutorialLevel);
 			var winText:String = Util.assets[Assets.FIRST_WIN];
 			var loseText:String = Util.assets[Assets.FIRST_LOSS];
-			var prize:Number = computeStolen(units, castle.gold);
+			var taken:Number = computeStolen(units, castle.gold);
+			var prize:Number = _waveGold;
 
 			if (_pendingAttack != null) {
 				if (Castle.tutorialLevel == Castle.TUTORIAL_ATTACK_FRIENDS) {
@@ -135,7 +136,7 @@ package
 					Database.setWinStatusAttacks({
 						uid: _pendingAttack.id,
 						aid: FaceBook.uid,
-						win: prize + 100
+						win: taken + 100
 					});
 				}
 			} else if (win && Castle.tutorialLevel == Castle.TUTORIAL_FIRST_WAVE) {
@@ -153,8 +154,7 @@ package
 				if (win) {
 					add(new TimedMessageBox(StringUtil.substitute(Util.assets[Assets.ATTACK_WIN], prize)));
 				} else {
-					prize = _droppedGold;
-					add(new TimedMessageBox(StringUtil.substitute(Util.assets[Assets.ATTACK_LOSE], prize)));
+					add(new TimedMessageBox(StringUtil.substitute(Util.assets[Assets.ATTACK_LOSE], taken)));
 				}
 				if (Castle.tutorialLevel == Castle.TUTORIAL_UPGRADE){
 					toggleButtons(3);
