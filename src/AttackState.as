@@ -91,7 +91,7 @@ package
 			_gameOver = false;
 			
 			towers.setAll("canDrag", false);
-			towers.setAll("canHighlight", true);
+			towers.setAll("canHighlight", false);
 			
 			setTutorialUI();
 			
@@ -467,9 +467,9 @@ package
 			}
 		}
 		
+		/** Returns true if point is in the castle */
 		private function pointIsIn(ox:int, oy:int):Boolean {
-			return ( ox > this.castle.x && ox < this.castle.x + this.castle.width 
-				&& oy > this.castle.y && oy < this.castle.y + this.castle.height);
+			return castle.pointIsInCastle(ox,oy);
 		}
 	}
 }

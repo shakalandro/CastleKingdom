@@ -14,8 +14,9 @@
 
 package
 {
-	import org.flixel.*;
 	import flash.display.BitmapData;
+	
+	import org.flixel.*;
 
 
 	/** Unit default behavior:  
@@ -31,6 +32,7 @@ package
 		private var _reward:int;
 		private var _active:Boolean;
 		private var _canDrag:Boolean;
+		private var _invuln:int;
 
 		public function EnemyUnit(x:Number, y:Number, towerID:int, canDrag:Boolean = false, bar:HealthBar = null, active:Boolean = true) {
 			
@@ -79,6 +81,7 @@ package
 			}
 			
 			this.canHighlight = true;
+			_invuln = 20;
 			
 			_infoDisplay = new FlxGroup();
 			var rangeSize:int = this.range*CastleKingdom.TILE_SIZE;
@@ -116,7 +119,9 @@ package
 		 * 
 		 */
 		override public function update():void {
+			
 			if (this._active) {
+				_invuln--;
 				if(!this.alive || this.health <= 0) {
 					this.velocity.x = 0;
 					this.color =  Math.random() * 0xffffffff; 
@@ -238,7 +243,7 @@ package
 				return "Cannonball";
 			} else if(checkVsArray(this.name, ["Airplane", "Zeppelin"])) {
 				return "Bullet";
-			} else if(checkVsArray(this.name, ["Flame Tower", "Dragon", "Tamed Pheonix"])) {
+			} else if(checkVsArray(this.name, ["Flame Tower", "Dragon", "Tamed Phoenix"])) {
 				return "Fireball";
 			} else if(checkVsArray(this.name, ["Rocket Tower"])) {
 				return "Arrow";

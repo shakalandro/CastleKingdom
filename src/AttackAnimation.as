@@ -7,7 +7,7 @@ package
 		
 		private var _target:Unit;
 		private var _source:Unit;
-		
+		private var _timeout:int;
 		
 		
 		public function AttackAnimation(X:Number=0, Y:Number=0, target:Unit = null, source:Unit = null, type:String = "Arrow" )
@@ -20,16 +20,20 @@ package
 			this.immovable = true;
 			this.allowCollisions = 0;
 			_source = source;
+			_timeout = 10;
 
 		}
 		
 		override public function update():void {
-			this.velocity.y = (_target.y - this.y);
-			this.velocity.x = (_target.x - this.x);
-			var scale:Number = this.velocity.y / Math.abs(this.velocity.x) ;
-			this.velocity.x = 200 * Math.abs(this.velocity.x) / this.velocity.x;
-			this.velocity.y = scale * 200;
-			if(this.overlaps(_target) ) {
+			_timeout--;
+			if(_target != null) {
+				this.velocity.y = (_target.y - this.y);
+				this.velocity.x = (_target.x - this.x);
+				var scale:Number = this.velocity.y / Math.abs(this.velocity.x) ;
+				this.velocity.x = 200 * Math.abs(this.velocity.x) / this.velocity.x;
+				this.velocity.y = scale * 200;
+			}
+			if(this.overlaps(_target)) {
 				trace( "Found dude: " + _target.health + " / " + _target.maxHealth);
 				if(_target.inflictDamage(_source.damageDone)){
 					trace("Dealt " + _source.damageDone + " damage to " + _target.health + " / " + _target.maxHealth + " dude");
@@ -38,9 +42,12 @@ package
 				hitLeft(_target);
 			}
 			
-			if(_target == null || _target.health <= 0 || !(FlxG.state is AttackState) || (FlxG.state as AttackState).castle.isGameOver()) {
+			if( (this.x < Util.minX || this.x > Util.maxX
+				|| this.y > Util.maxY || this.y < Util.minY
+				|| !(FlxG.state is AttackState)) || (FlxG.state as AttackState).castle.isGameOver()) {
 				hitLeft(_target);
 			}
+			//_target == null || _target.health <= 0 || 
 			if(this.velocity.x > 0) {
 				// goes left
 				this.facing = LEFT;
@@ -51,7 +58,7 @@ package
 		}
 		
 		public function hitLeft(Contact:Object):void {
-			if (Contact == _target) {
+			if (!(FlxG.state is AttackState) || (FlxG.state as AttackState).castle.isGameOver() || (Contact == _target  && _timeout < 0) ) {
 				(FlxG.state as ActiveState).attackAnims.remove(this);
 			}
 		}

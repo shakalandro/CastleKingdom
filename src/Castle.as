@@ -62,6 +62,7 @@ package
 		private var _loadedInfo:int = 0;
 		private static var _tutorialLevel:int;
 		private var _attackSeed:Number;
+		private var _UpgrImages:FlxGroup;
 		
 		public function Castle(X:Number=0, Y:Number=0, SimpleGraphic:Class=null)
 		{
@@ -93,8 +94,12 @@ package
 			_attackSeed = Math.random();
 			solid = true;
 			immovable = true;
+
 			
-			
+		}
+		
+		public function get upgrImages():FlxGroup {
+			return _UpgrImages;
 		}
 		
 		/**
@@ -167,10 +172,33 @@ package
 			continueSetup();
 		}
 		
+		public function drawUpgrades():void {
+			_UpgrImages = new FlxGroup(); 
+			applyImage("castle");
+			applyImage("barracks");
+			applyImage("foundry");
+			applyImage("mine");
+			applyImage("aviary");
+			FlxG.state.add(_UpgrImages);
+		}
+		
+		/** Called after each of 4 load methods called.
+		 * When counter is 4, continues any additional loading requiring all to be finished
+		 * */
 		private function continueSetup():void {
 			_loadedInfo++;
 			if (_loadedInfo >= 4) {
 				
+			}
+		}
+		
+		private function applyImage(type:String):void {
+			var imgName:String = type + this._upgrades[type];
+			if(Util.assets[imgName] != null) {
+				var upgr:FlxSprite = new FlxSprite(this.x,this.y + this.height,Util.assets[imgName]);
+				upgr.y = this.y + this.height - upgr.height;
+				Util.centerX(upgr);
+				this._UpgrImages.add(upgr);
 			}
 		}
 		
@@ -269,6 +297,7 @@ package
 				Util.log("\n\n\nBefore calling insert: \n{id: " + FaceBook.uid + ", upid: " + upgrade.upgradeID + 
 					"}\n\n\n"); 
 				Database.insertUserUpgrade({id:FaceBook.uid, upid:upgrade.upgradeID,xpos:0,ypos:0});
+				applyImage(upgrade.type);
 				return true;
 			}
 			return false;
@@ -363,6 +392,18 @@ package
 			
 			// call to util function
 			
+		}
+		
+		public function pointIsInCastle(ox:int, oy:int):Boolean {
+			var isIn:Boolean = ( ox > this.x && ox < this.x + this.width 
+				&& oy > this.y && oy < this.y + this.height);
+			for each (var upgr:FlxSprite in _UpgrImages.members) {
+				if(( ox > upgr.x && ox < upgr.x + upgr.width 
+					&& oy > upgr.y && oy < upgr.y + upgr.height)) {
+					isIn = true;
+				}
+			}
+			return isIn;
 		}
 		
 		

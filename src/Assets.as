@@ -271,27 +271,27 @@ package
 		
 		[Embed(source = "../images/castle1.png")]
 		private static var castle1:Class;
-		public static const CASTLE1:String = "Castle1";
+		public static const CASTLE1:String = "castle1";
 		
 		[Embed(source = "../images/castle2.png")]
 		private static var castle2:Class;
-		public static const CASTLE2:String = "Castle2";
+		public static const CASTLE2:String = "castle2";
 		
 		[Embed(source = "../images/castle3.png")]
 		private static var castle3:Class;
-		public static const CASTLE3:String = "Castle3";
+		public static const CASTLE3:String = "castle3";
 		
 		[Embed(source = "../images/castle4.png")]
 		private static var castle4:Class;
-		public static const CASTLE4:String = "Castle4";
+		public static const CASTLE4:String = "castle4";
 		
 		[Embed(source = "../images/aviary1.png")]
 		private static var aviary1:Class;
-		public static const AVIARY1:String = "Aviary1";
+		public static const AVIARY1:String = "aviary1";
 		
 		[Embed(source = "../images/barracks1.png")]
 		private static var barracks1:Class;
-		public static const BARRACKS1:String = "Barracks1";
+		public static const BARRACKS1:String = "barracks1";
 		
 		[Embed(source = "../images/castlebackground.png")]
 		private static var castlebackground:Class;
