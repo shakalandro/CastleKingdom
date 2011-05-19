@@ -155,6 +155,9 @@ package
 				}
 				castle.addGold(-castle.sendWaveCost());
 				FriendBox.resetSelected();
+				add(new TimedMessageBox(StringUtil.substitute(Util.assets[Assets.ATTACK_FRIENDS_SENT], FriendBox.selected.uid)));
+			} else {
+				add(new TimedMessageBox(Util.assets[Assets.ATTACK_FRIENDS_NOT_SENT]));
 			}
 			closeMenus();
 		}

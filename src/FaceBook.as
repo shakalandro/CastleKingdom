@@ -265,11 +265,11 @@ package
 		 * @return The facebook uid of the currently logged in user
 		 * 
 		 */		
-		public static function get uid():Number {
+		public static function get uid():String {
 			if (_facebookReady) {
-				return parseInt(FaceBook.session().uid);
+				return FaceBook.session().uid;
 			} else {
-				return NaN;
+				return null;
 			}
 		}
 	}
