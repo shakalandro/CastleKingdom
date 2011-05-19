@@ -218,7 +218,7 @@ package
 					_preDragCoords = null;
 				}
 				if (_dragging) {
-					tileCoords = Util.roundToNearestTile(new FlxPoint(mouseCoords.x - _dragOffset.x, mouseCoords.y - _dragOffset.y));
+					tileCoords = Util.roundToNearestTile(new FlxPoint(mouseCoords.x, mouseCoords.y - _dragOffset.y));
 					this.x = tileCoords.x;
 					this.y = tileCoords.y;
 					return true;
