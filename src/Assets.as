@@ -268,6 +268,35 @@ package
 		private static var explode:Class;
 		public static const EXPLODE:String = "Explode";
 		
+		
+		[Embed(source = "../images/castle1.png")]
+		private static var castle1:Class;
+		public static const CASTLE1:String = "Castle1";
+		
+		[Embed(source = "../images/castle2.png")]
+		private static var castle2:Class;
+		public static const CASTLE2:String = "Castle2";
+		
+		[Embed(source = "../images/castle3.png")]
+		private static var castle3:Class;
+		public static const CASTLE3:String = "Castle3";
+		
+		[Embed(source = "../images/castle4.png")]
+		private static var castle4:Class;
+		public static const CASTLE4:String = "Castle4";
+		
+		[Embed(source = "../images/aviary1.png")]
+		private static var aviary1:Class;
+		public static const AVIARY1:String = "Aviary1";
+		
+		[Embed(source = "../images/barracks1.png")]
+		private static var barracks1:Class;
+		public static const BARRACKS1:String = "Barracks1";
+		
+		[Embed(source = "../images/castlebackground.png")]
+		private static var castlebackground:Class;
+		public static const CASTLEBACKGROUND:String = "Castle Background";
+		
 		// Text resources
 		
 		public static const HELP_BUTTON:String = "help button";
@@ -344,6 +373,14 @@ package
 			_normal[Assets.SHOCKWAVE] = shockwave_normal;
 			_normal[Assets.GRAPPLE] = grapple_normal;
 			_normal[Assets.SAWBLADE] = sawblade_normal;
+
+			_normal[Assets.CASTLE1] = castle1;
+			_normal[Assets.CASTLE2] = castle2;
+			_normal[Assets.CASTLE3] = castle3;
+			_normal[Assets.CASTLE4] = castle4;
+			_normal[Assets.AVIARY1] = aviary1;
+			_normal[Assets.BARRACKS1] = barracks1;
+			_normal[Assets.CASTLEBACKGROUND] = castlebackground;
 
 			
 			_normal[Assets.MAP_TILES] = tilesImg_normal;

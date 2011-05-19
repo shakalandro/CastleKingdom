@@ -99,16 +99,18 @@ package
 			if(_target != null) {
 				if(type == "Mine") {
 					this.health = 0;
-				} else if (this.range > 0) {
-					if(this.facing == LEFT) {
-						new AttackAnimation(this.x,this.y,_target, attackAnimationString());
+				}
+				if (this.range > 0) {
+					if(this.facing == RIGHT) {
+						new AttackAnimation(this.x,this.y,_target,this, attackAnimationString());
 					} else {
-						new AttackAnimation(this.x + this.width,this.y,_target, attackAnimationString());
+						new AttackAnimation(this.x + this.width,this.y,_target,this, attackAnimationString());
 
 					}
-				}
-				if(_target.inflictDamage(this.damageDone)){
-					_target = null;
+				} else {
+					if(_target.inflictDamage(this.damageDone)){
+						_target = null;
+					}
 				}
 				
 				return true;
@@ -145,7 +147,9 @@ package
 				}
 				
 			} else {
-				
+				if(_target != null && _target.health <= 0) {
+					_target = null;
+				}
 				
 				if(this.x > Util.maxX/2) {
 					// goes left
@@ -154,12 +158,7 @@ package
 					// goes right
 					this.facing = RIGHT;
 				}
-				if(this._target == null) {
-					this.color =  0xcccccccc;  // Idle indicator
-				} else {
-					this.color = 0xffffffff;  // Attacking indicator
-				}
-				
+							
 				if (highlighted) {
 					frame = 0;
 				} else {
@@ -203,13 +202,19 @@ package
 		private function attackAnimationString():String {
 			if(checkVsArray(this.name, ["Cannon", "Iron Tower"])) {
 				return "Cannonball";
-			} else if(checkVsArray(this.name, ["Airplane", "Zeppelin"])) {
+			} else if(checkVsArray(this.name, ["Airplane", "Zeppelin", "AA Gun"])) {
 				return "Bullet";
 			} else if(checkVsArray(this.name, ["Flame Tower", "Dragon", "Tamed Pheonix"])) {
 				return "Fireball";
 			} else if(checkVsArray(this.name, ["Rocket Tower"])) {
 				return "Rocket";
-			} else {
+			} else if(checkVsArray(this.name, ["Quake Machine"])) {
+				return "Shockwave";
+			} else if(checkVsArray(this.name, ["Traps"])) {
+				return "Sawblade";
+			} else if(checkVsArray(this.name, ["Grapple Tower"])) {
+				return "Grapple";
+			}else {
 				return "Arrow";
 			}
 			
@@ -223,6 +228,12 @@ package
 				}
 			}
 			return false;
+		}
+		
+		override public function thingKilled(target:Unit):void {
+			if(_target == target) {
+				target = null;
+			}
 		}
 	}
 }

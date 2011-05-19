@@ -58,6 +58,15 @@ package
 		}
 		
 		private function acquireUpgrade(upgrade:Upgrade):Boolean {
+				if (upgrade.type == "castle") {
+					Util.logging.logCastleUpgrade(upgrade.level);
+				} else if (upgrade.type == "barracks") {
+					Util.logging.logBarracksUpgrade(upgrade.level);
+				} else if (upgrade.type == "foundry") {
+					Util.logging.logFoundryUpgrade(upgrade.level);
+				} else if (upgrade.type == "aviary"){
+					Util.logging.logAviaryUpgrade(upgrade.level);
+				}
 			return castle.setUpgrade(upgrade);
 		}
 		
@@ -105,7 +114,7 @@ package
 		}
 		
 		private function checkMineLevel(value:Object):Boolean {
-			var stage:Array = [0,5,8,13,21];
+			var stage:Array = [0,5,7,11,15,21];
 			return value.type.toString() != "mine" || this.castle.upgrades["castle"] >= stage[parseInt(value.level.toString())];
 		}
 	}

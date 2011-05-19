@@ -65,6 +65,75 @@ package
 			}
 		}
 		
+		
+		public function logCastleUpgrade(level:int):void{
+		
+		if (LOGGING){
+		
+		var action:ClientAction = new ClientAction();
+		action.aid = ClientActionType.CASTLE_UPGRADE;
+		action.ts = time; 
+		action.uid = uid;
+		
+		action.detail = new Object();
+		action.detail["level"] = level;
+		
+		client.LogAction(action);
+		}
+		trace("Castle Upgrade to level "+level);
+		}
+		
+		public function logBarracksUpgrade(level:int):void{
+			
+			if (LOGGING){
+				
+				var action:ClientAction = new ClientAction();
+				action.aid = ClientActionType.BARRACKS_UPGRADE;
+				action.ts = time; 
+				action.uid = uid;
+				
+				action.detail = new Object();
+				action.detail["level"] = level;
+				
+				client.LogAction(action);
+			}
+			trace("Barracks Upgrade to level "+level);
+		}
+		
+		public function logFoundryUpgrade(level:int):void{
+			
+			if (LOGGING){
+				
+				var action:ClientAction = new ClientAction();
+				action.aid = ClientActionType.FOUNDRY_UPGRADE;
+				action.ts = time; 
+				action.uid = uid;
+				
+				action.detail = new Object();
+				action.detail["level"] = level;
+				
+				client.LogAction(action);
+			}
+			trace("Foundry Upgrade to level "+level);
+		}
+		
+		public function logAviaryUpgrade(level:int):void{
+			
+			if (LOGGING){
+				
+				var action:ClientAction = new ClientAction();
+				action.aid = ClientActionType.AVIARY_UPGRADE;
+				action.ts = time; 
+				action.uid = uid;
+				
+				action.detail = new Object();
+				action.detail["level"] = level;
+				
+				client.LogAction(action);
+			}
+			trace("Aviary Upgrade to level "+level);
+		}
+		
 		/*
 		public function logArrowPlaced(index:int, arrowDirection:int):void{
 			var point:Point = GameState.getPointFromIndex(index);

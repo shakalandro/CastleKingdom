@@ -48,7 +48,6 @@ package
 		
 		private var _upgrades:Array;  // should be:  {Castle level, Barracks level, foundry level, Smith level?}
 		private var _gold:int;	
-		
 		private var _unitCap:int;	
 				
 		private var _towerCap:int;
@@ -62,6 +61,7 @@ package
 		
 		private var _loadedInfo:int = 0;
 		private static var _tutorialLevel:int;
+		private var _attackSeed:Number;
 		
 		public function Castle(X:Number=0, Y:Number=0, SimpleGraphic:Class=null)
 		{
@@ -90,7 +90,7 @@ package
 			Database.getDefenseUnitInfo(initDefense);  // stores into UNIT_INFO
 			Database.getEnemyInfo(initArmy);
 			
-
+			_attackSeed = Math.random();
 			solid = true;
 			immovable = true;
 			
@@ -377,6 +377,29 @@ package
 			return cost;
 		}
 		
+		/** Returns whether a given unitID of unitType (Castle.ARMY or TOWER) is available
+		 * based on current upgrades
+		 * */
+		public function isUnitUnlocked(unitID:int, unitType:String):Boolean {
+			
+			return unitsUnlocked(unitType).indexOf(unitID) >= 0;
+		}
+		
+		public function getNamesByLevel(type:String, level:int):String {
+			var result:String = "";
+			var strata:String = "ground";
+			if(type == "mine") {
+				strata = "underground";		
+			} else if(type == "aviary") {
+				strata = "air";
+			}
+			result = unitsFromLevel(ARMY,level,strata);
+			if(type == "barracks") {
+				return result;
+			}
+			return result + unitsFromLevel(TOWER,level,strata);
+		}
+		
 		/** Returns the unitIDs for the units unlocked by the castle's upgrade levels
 		 * 
 		 * @param unitType Either Castle.TOWER or Castle.ARMY to search for each type
@@ -413,14 +436,24 @@ package
 		private function unitsFromUpgradeType(unitList:Array, upgradeLevelMax:int, unitType:String, strata:String):void {
 			// Iterates over upgrade list to add all unitIDs contained
 			for ( var upgradeLevel:int = 0; upgradeLevel <= upgradeLevelMax ; upgradeLevel++) {
-				if (UNIT_INFO[unitType].byLevel != null && UNIT_INFO[unitType].byLevel[upgradeLevel] != null) {
-					for(var unitID:Object in UNIT_INFO[unitType].byLevel[upgradeLevel]) {
-						if(UNIT_INFO[unitType].byLevel[upgradeLevel][unitID].clas == strata) {
-							unitList.push(UNIT_INFO[unitType].byLevel[upgradeLevel][unitID].uid);	
+				unitsFromLevel(unitType, upgradeLevel, strata, unitList);
+			}
+		}
+		
+		/** fills unitList with IDs unlocked at a given level*/
+		private function unitsFromLevel(unitType:String,upgradeLevel:int,strata:String, unitList:Array = null):String {
+			var names:String = "";
+			if (UNIT_INFO[unitType].byLevel != null && UNIT_INFO[unitType].byLevel[upgradeLevel] != null) {
+				for(var unitID:Object in UNIT_INFO[unitType].byLevel[upgradeLevel]) {
+					if(UNIT_INFO[unitType].byLevel[upgradeLevel][unitID].clas == strata) {
+						if(unitList != null) {
+							unitList.push(UNIT_INFO[unitType].byLevel[upgradeLevel][unitID].uid);		
 						}
+						names += UNIT_INFO[unitType].byLevel[upgradeLevel][unitID].name + ", ";
 					}
 				}
 			}
+			return names;
 		}
 		
 		public function isGameOver():Boolean {
@@ -483,6 +516,14 @@ package
 		 */		
 		public function get upgrades():Array {
 			return _upgrades;
+		}
+		
+		public function get attackSeed():Number {
+			return _attackSeed;
+		}
+		
+		public function set attackSeed(newSeed:Number):void {
+			_attackSeed = newSeed || .125;
 		}
 		
 		/**
