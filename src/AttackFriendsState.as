@@ -33,7 +33,7 @@ package
 		override public function create():void {
 			super.create();
 			towers.setAll("canDrag", false);
-			towers.setAll("canHighlight", true);
+			towers.setAll("canHighlight", false);
 			if (castle.gold < castle.sendWaveCost() && !CastleKingdom.DEBUG) {
 				add(new MessageBox(StringUtil.substitute(Util.assets[Assets.ATTACK_FRIENDS_BROKE], castle.sendWaveCost()), "Okay", function():void {
 					if (Castle.tutorialLevel == Castle.TUTORIAL_ATTACK_FRIENDS) {

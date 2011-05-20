@@ -110,11 +110,10 @@ package
 			}
 		}
 		
-		private function waveFinished(win:Boolean):void {
+		private function waveFinished(win:Boolean, prize:Number):void {
 			Util.log("AttackState.waveFinished: " + win, Castle.tutorialLevel);
 			var winText:String = Util.assets[Assets.FIRST_WIN];
 			var loseText:String = Util.assets[Assets.FIRST_LOSS];
-			var prize:Number = computeStolen(units, castle.gold);
 
 			if (_pendingAttack != null) {
 				if (Castle.tutorialLevel == Castle.TUTORIAL_ATTACK_FRIENDS) {
@@ -154,7 +153,7 @@ package
 				if (win) {
 					add(new TimedMessageBox(StringUtil.substitute(Util.assets[Assets.ATTACK_WIN], prize)));
 				} else {
-					prize = _droppedGold;
+					//prize = _droppedGold;
 					add(new TimedMessageBox(StringUtil.substitute(Util.assets[Assets.ATTACK_LOSE], prize)));
 				}
 				if (Castle.tutorialLevel == Castle.TUTORIAL_UPGRADE){
@@ -216,13 +215,13 @@ package
 					// Database.giveUserGold(cashStolen + armyCost);
 					//GameMessages.LOSE_FIGHT("Bob Barker",6);
 					_gameOver = true;
-					waveFinished(false);
+					waveFinished(false, cashStolen);
 				} else if (_placeOnLeft.length + _placeOnRight.length == 0  && units.length == 0) { // Check if peeps are still alive
 					// USER WINS
 					this.castle.addGold(this._waveGold);
 					castle.attackSeed = Math.random();
 					_gameOver = true;
-					waveFinished(true);
+					waveFinished(true, _waveGold);
 				}
 				
 				
