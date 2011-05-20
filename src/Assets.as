@@ -354,6 +354,9 @@ package
 		public static const ATTACK_FRIENDS_NOT_SENT:String = "attack friends not sent";
 		public static const LEASE_SENT:String = "lease sent";
 		public static const LEASE_NOT_SENT:String = "lease not sent";
+		public static const INVITE_FRIEND:String = "invite friend";
+		
+		public static const GAME_URL:String = "game url";
 		
 		// Other resources
 		
@@ -510,6 +513,10 @@ package
 			_normal[Assets.ATTACK_LOSE] = "Too bad! The enemies got away with {0} of your gold.";
 			_normal[Assets.ATTACK_FRIENDS_SENT] = "Your army is on its way to try to steal gold from {0}.";
 			_normal[Assets.ATTACK_FRIENDS_NOT_SENT] = "An army was not sent.";
+			_normal[Assets.LEASE_SENT] = "A request was sent to {0} for {1} unit capacity.";
+			_normal[Assets.LEASE_NOT_SENT] = "No request was made.";
+			_normal[Assets.INVITE_FRIEND] = "{0} would like to invite you to play an awesome game, Castle Kingdom.";
+			_normal[Assets.GAME_URL] = "http://games.cs.washington.edu/capstone/11sp/castlekd/roy/index.html";
 			_normal[Assets.LEASE_SENT] = "A request was sent to {0} for {1} unit capacity.";
 			_normal[Assets.LEASE_NOT_SENT] = "No request was made.";
 		}

@@ -53,7 +53,7 @@ package
 							Database.getUserInfo(function(dbInfo:Array):void {
 								if (dbInfo == null || dbInfo.length == 0) {
 									Util.logObj('New user detected:', fbInfo);
-									Database.addNewUser(parseInt(fbInfo.id));
+									Database.addNewUser(fbInfo.id);
 									Castle.tutorialLevel = 0;
 									FlxG.switchState(new ActiveState(map));
 								} else {
@@ -78,7 +78,7 @@ package
 		private function setTutorialLevel(info:Object):void {
 			Castle.tutorialLevel = 0;
 			if (info == null || info.length == 0) {
-				Util.log("tutorial info came back bad: " + info.toString());
+				Util.log("tutorial info came back bad: " + info);
 			} else {
 				Util.logObj("tutorial info came back good: ", info[0]);
 				for (var prop:String in info[0]) {

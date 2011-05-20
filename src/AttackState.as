@@ -197,14 +197,10 @@ package
 		}
 		
 		private function checkClick():void {
-			if (_ticks >= AttackState.MIN_TICKS_BETWEEN_CLICKS) {
-				GameState.cursor.prime();
-			}
 			if (FlxG.mouse.justPressed() && _ticks >= AttackState.MIN_TICKS_BETWEEN_CLICKS) {
 				var mouseCoords:FlxPoint = FlxG.mouse.getScreenPosition();
 				for each (var enemy:EnemyUnit in units.members) {
 					if (enemy != null && enemy.overlapsPoint(mouseCoords)) {
-						GameState.cursor.attack();
 						enemy.inflictDamage(CLICK_DAMAGE_POINTS * (castle.upgrades["castle"] + 1));
 						_ticks = 0;
 						break;
