@@ -134,6 +134,57 @@ package
 			trace("Aviary Upgrade to level "+level);
 		}
 		
+		public function userWinAttackRound(_attackTypeLogging:String, 
+										   _towerLogging:String, 
+										   _leftArmyLogging:String,
+										   _rightArmyLogging:String,
+									       _goldWon:int):void{
+		
+		if (LOGGING){
+		
+		var action:ClientAction = new ClientAction();
+		action.aid = ClientActionType.WIN_ATTACK;
+		action.ts = time; 
+		action.uid = uid;
+		
+		action.detail = new Object();
+		action.detail["type"] = _attackTypeLogging;
+		action.detail["towers"] = _towerLogging;
+		action.detail["left army"] = _leftArmyLogging;
+		action.detail["right army"] = _rightArmyLogging;
+		action.detail["gold won"] = _goldWon;
+		
+		client.LogAction(action);
+		}
+		trace("User won attack of type "+ _attackTypeLogging);
+		}
+		
+		public function userLoseAttackRound(_attackTypeLogging:String, 
+										   _towerLogging:String, 
+										   _leftArmyLogging:String,
+										   _rightArmyLogging:String,
+										   _goldLost:int):void{
+			
+			if (LOGGING){
+				
+				var action:ClientAction = new ClientAction();
+				action.aid = ClientActionType.LOSE_ATTACK;
+				action.ts = time; 
+				action.uid = uid;
+				
+				action.detail = new Object();
+				action.detail["type"] = _attackTypeLogging;
+				action.detail["towers"] = _towerLogging;
+				action.detail["left army"] = _leftArmyLogging;
+				action.detail["right army"] = _rightArmyLogging;
+				action.detail["gold lost"] = _goldLost;
+				
+				client.LogAction(action);
+			}
+			trace("User loss attack of type "+ _attackTypeLogging);
+		}
+		
+		
 		/*
 		public function logArrowPlaced(index:int, arrowDirection:int):void{
 			var point:Point = GameState.getPointFromIndex(index);
