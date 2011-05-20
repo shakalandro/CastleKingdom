@@ -181,7 +181,7 @@ package
 		 * 
 		 */		
 		public static function roundToNearestTile(point:FlxPoint):FlxPoint {
-			return indicesToCartesian(cartesianToIndices(point));
+			return indicesToCartesian(cartesianToIndices(point, true),true);
 		}
 		
 		/**
@@ -352,7 +352,7 @@ package
 			var y:Number = coords.y - obj.height;
 			obj.y = y;
 			if (snapX)  {
-				obj.x = coords.x;
+			//	obj.x = coords.x;
 			}
 			return y;
 		}
@@ -375,8 +375,9 @@ package
 			} else if (x > Util.maxX) {
 				x = Util.maxX - CastleKingdom.TILE_SIZE / 2;
 			} 
-			
-			var origIndices:FlxPoint = cartesianToIndices(new FlxPoint(x, Math.max(obj.y, Util.minY)), ignoreX);
+			var origXp:int = obj.x;
+			var origYp:int = obj.y;
+			var origIndices:FlxPoint = cartesianToIndices(new FlxPoint(x+5, Math.max(obj.y + 5, Util.minY)), ignoreX);
 
 			var origY:int = origIndices.y;
 
@@ -386,20 +387,25 @@ package
 				indices.y++;
 				tileType = map.getTile(indices.x, indices.y);
 			}
+			var dontTouch:Boolean = false;
 			if(obj is Unit && (obj as Unit).clas == "underground") { //underground
-				if (origY > indices.y && !(obj is EnemyUnit)) { 
-					indices.y = origY; // they alrady dropped underground
-					
+				if (origY >= indices.y && !(obj is EnemyUnit)) { 
+					//indices.y = origY; // they alrady dropped underground
+					dontTouch = true;
+					trace("Dropping to orig coords");
 				} else {
-					indices.y = Math.floor(indices.y + 1 + Math.random()*(Util.maxTileY-indices.y-1));
-					
+					indices.y = Math.floor(indices.y + 2 + Math.random()*(Util.maxTileY-indices.y-1));
+					trace("Droping to rand coords");
 				}
 			} else if (obj is Unit &&(obj as Unit).clas == "air") { //air
 			
-				if (origY <= indices.y - 3 && !(obj is EnemyUnit)) { 
-					indices.y = origY; // they already dropped in air
+				if (origY < indices.y - 3 && !(obj is EnemyUnit)) { 
+					//indices.y = origY; // they already dropped in air
+					dontTouch = true;
+					trace("Dropping to orig coords");
 				} else {
-					indices.y = Math.max(Util.minTileY, Math.floor(indices.y - 1 - Math.random()*(indices.y-3)));
+					indices.y = Math.max(Util.minTileY, Math.floor(indices.y - 3 - Math.random()*(indices.y-3)));
+					trace("Dropping to rand coords");
 					
 				}
 			}
@@ -408,7 +414,11 @@ package
 			y = Math.max(y, Util.minY);
 			obj.y = y;
 			if (snapX)  {
-				obj.x = coords.x;
+			//	obj.x = coords.x;
+			}
+			if(dontTouch) {
+				obj.x = origXp;
+				obj.y = origYp;
 			}
 			return y;
 		}

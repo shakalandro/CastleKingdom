@@ -117,9 +117,10 @@ package
 				newTower.y = oldY;
 				_menu.addToCurrentPage(newTower);
 				towers.add(tower);
-				var tileCoords:FlxPoint = Util.roundToNearestTile(new FlxPoint(newX, newY));
-				tower.x = tileCoords.x;
-				tower.y = tileCoords.y;
+			// Commented out to avoid rounding issues in placement
+			//	var tileCoords:FlxPoint = Util.roundToNearestTile(new FlxPoint(newX, newY));
+			//	tower.x = tileCoords.x;
+			//	tower.y = tileCoords.y;
 				Util.placeInZone(tower, map, true, true);
 				tower.allowCollisions = FlxObject.ANY;
 				tower.immovable = true;
