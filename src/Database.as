@@ -70,6 +70,7 @@ package
 		 * 
 		 */		
 		public static function getUserInfo(callback:Function, ids:Object = null, forceRefresh:Boolean = false):void {
+			Util.logObj("\n\nuid to addnewuser: ", ids);
 			if (forceRefresh || _userInfo == null) {
 				(FlxG.state as GameState).loading = true;
 				getMain("http://games.cs.washington.edu/capstone/11sp/castlekd/database/getUserInfo.php", function(xmlData:XML):void {
@@ -832,8 +833,9 @@ package
 		 * @param uid a users facebook id
 		 * 
 		 */		
-		public static function addNewUser(uid:int):void
+		public static function addNewUser(uid:String):void
 		{
+			Util.log("\n\nuid to addnewuser: " + uid + "\n\n");
 			var variables:URLVariables = new URLVariables();
 			variables.uid = "" + uid;
 			variables.gold = "" + START_GOLD;

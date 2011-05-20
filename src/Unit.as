@@ -214,7 +214,7 @@ package
 					this.x = tileCoords.x;
 					this.y = tileCoords.y;
 					_dragOffset = null;
-					if (_dragCallback != null) _dragCallback(this, tileCoords.x, tileCoords.y, _preDragCoords.x, _preDragCoords.y);
+					if (_dragCallback != null) _dragCallback(this, tileCoords.x + 10, tileCoords.y - 10, _preDragCoords.x, _preDragCoords.y);
 					_preDragCoords = null;
 				}
 				if (_dragging) {
