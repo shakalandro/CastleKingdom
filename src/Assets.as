@@ -236,6 +236,10 @@ package
 		private static var cursorstatic_img:Class;
 		public static const CURSORSTATIC:String = "Cursor Static";
 		
+		[Embed(source = "../images/cursorprimed.png")]
+		private static var cursorprimed_img:Class;
+		public static const CURSORPRIMED:String = "Cursor Primed";
+		
 		[Embed(source = "../images/wholemap.png")]
 		private static var background_img:Class;
 		public static const BACKGROUND:String = "background";
@@ -404,6 +408,7 @@ package
 			_normal[Assets.CASTLE] = castle_img;
 			_normal[Assets.CURSOR] = cursor_img;
 			_normal[Assets.CURSORSTATIC] = cursorstatic_img;
+			_normal[Assets.CURSORPRIMED] = cursorprimed_img;
 			_normal[Assets.BACKGROUND] = background_img;
 			_normal[Assets.LOGIN_BACKGROUND] = startpage_background;
 			_normal[Assets.BUTTON_SMALL] = button_small_img;
@@ -429,6 +434,7 @@ package
 			_normal[Assets.UNDERGROUND_WALL] = underground_wall_normal;
 			_normal[Assets.QUAKE_MACHINE] = quake_machine_normal;
 			_normal[Assets.TRAPS] = traps_normal;
+			_normal[Assets.FLAME_TOWER] = flame_tower_normal;
 
 
 			_normal[Assets.WALL] = wall_normal;
