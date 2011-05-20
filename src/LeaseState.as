@@ -25,7 +25,7 @@ package
 			super.create();
 			
 			towers.setAll("canDrag", false);
-			towers.setAll("canHighlight", true);
+			towers.setAll("canHighlight", false);
 			
 			var padding:Number = 10;
 			

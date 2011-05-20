@@ -94,7 +94,6 @@ package
 			for each (var tower:Unit in towers.members) {
 				if(tower != null) {
 					tower.health = tower.maxHealth;
-					
 					// build tower info string for logging
 					_towerLogging = _towerLogging + tower.ID + " " + tower.x + " " + tower.y + " ";
 				}
@@ -131,12 +130,10 @@ package
 			}
 		}
 		
-		private function waveFinished(win:Boolean):void {
+		private function waveFinished(win:Boolean, prize:Number):void {
 			Util.log("AttackState.waveFinished: " + win, Castle.tutorialLevel);
 			var winText:String = Util.assets[Assets.FIRST_WIN];
 			var loseText:String = Util.assets[Assets.FIRST_LOSS];
-			var taken:Number = computeStolen(units, castle.gold);
-			var prize:Number = _waveGold;
 
 			if (_pendingAttack != null) {
 				if (Castle.tutorialLevel == Castle.TUTORIAL_ATTACK_FRIENDS) {
@@ -158,7 +155,7 @@ package
 					Database.setWinStatusAttacks({
 						uid: _pendingAttack.id,
 						aid: FaceBook.uid,
-						win: taken + 100
+						win: prize + 100
 					});
 				}
 			} else if (win && Castle.tutorialLevel == Castle.TUTORIAL_FIRST_WAVE) {
@@ -176,7 +173,9 @@ package
 				if (win) {
 					add(new TimedMessageBox(StringUtil.substitute(Util.assets[Assets.ATTACK_WIN], prize)));
 				} else {
-					add(new TimedMessageBox(StringUtil.substitute(Util.assets[Assets.ATTACK_LOSE], taken)));
+
+					add(new TimedMessageBox(StringUtil.substitute(Util.assets[Assets.ATTACK_LOSE], prize)));
+
 				}
 				if (Castle.tutorialLevel == Castle.TUTORIAL_UPGRADE){
 					toggleButtons(3);
@@ -204,7 +203,6 @@ package
 				var mouseCoords:FlxPoint = FlxG.mouse.getScreenPosition();
 				for each (var enemy:EnemyUnit in units.members) {
 					if (enemy != null && enemy.overlapsPoint(mouseCoords)) {
-						GameState.cursor.attack();
 						enemy.inflictDamage(CLICK_DAMAGE_POINTS * (castle.upgrades["castle"] + 1));
 						_ticks = 0;
 						FlxG.mouse.load(Util.assets[Assets.CURSORSTATIC]);
@@ -227,6 +225,7 @@ package
 			if(!_gameOver) {	
 				checkClick();
 				if (this.castle.isGameOver()) {		// Checks if castle has been breached
+					// USER LOSES
 					// recover cost, units disband
 					// user loses
 					var armyCost:int = sumArmyCost();
@@ -237,7 +236,7 @@ package
 					// Database.giveUserGold(cashStolen + armyCost);
 					//GameMessages.LOSE_FIGHT("Bob Barker",6);
 					_gameOver = true;
-					waveFinished(false);
+					waveFinished(false, cashStolen);
 					
 					Util.logging.userLoseAttackRound(_attackTypeLogging, 
 													 _towerLogging, 
@@ -246,11 +245,13 @@ package
 													 cashStolen);
 					
 				} else if (_placeOnLeft.length + _placeOnRight.length == 0  && units.length == 0) { // Check if peeps are still alive
-					// user wins
+
+					// USER WINS
+
 					this.castle.addGold(this._waveGold);
 					castle.attackSeed = Math.random();
 					_gameOver = true;
-					waveFinished(true);
+					waveFinished(true, _waveGold);
 					
 					Util.logging.userWinAttackRound(_attackTypeLogging, 
 						_towerLogging, 

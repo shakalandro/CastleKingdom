@@ -2,6 +2,8 @@ package
 {
 	import flash.display.BitmapData;
 	
+	import mx.utils.StringUtil;
+	
 	import org.flixel.*;
 	
 	/**
@@ -71,8 +73,10 @@ package
 					Util.centerY(_text, _box);
 				} else {
 					var invite:FlxButton = new FlxButton(0, 0, "Invite", function():void {
-						Database.addNewUser(parseInt(_uid));
-						//Send facebook message to user
+						if (!CastleKingdom.DEBUG) {
+							Database.addNewUser(_uid);
+						}
+						FaceBook.post(FaceBook.uid, _uid, StringUtil.substitute(Util.assets[Assets.INVITE_FRIEND], FaceBook.name), null);
 						_text.text = name + "\n\tGold: " + Database.START_GOLD + "\n\tUnits: " + Database.START_UNITS;
 						remove(invite, true);
 						invite.kill();
