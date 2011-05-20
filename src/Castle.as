@@ -394,6 +394,13 @@ package
 			
 		}
 		
+		/**
+		 * 
+		 * @param ox
+		 * @param oy
+		 * @return 
+		 * 
+		 */
 		public function pointIsInCastle(ox:int, oy:int):Boolean {
 			var isIn:Boolean = ( ox > this.x && ox < this.x + this.width 
 				&& oy > this.y && oy < this.y + this.height);
@@ -406,6 +413,16 @@ package
 			return isIn;
 		}
 		
+		public function unitIsInCastle(unit:Unit):Boolean {
+			if( pointIsInCastle(unit.x, unit.y) 
+				|| pointIsInCastle(unit.x + unit.width, unit.y)
+				|| pointIsInCastle(unit.x, unit.y + unit.height)
+				|| pointIsInCastle(unit.x + unit.width, unit.y + unit.height)) {
+				
+				return true;
+			}
+			return false;
+		}
 		
 		
 		private function unitCostSum(unitList:FlxGroup):int {

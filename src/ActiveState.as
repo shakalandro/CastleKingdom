@@ -399,6 +399,9 @@ package
 							if(checkUnits(newTower, obj as Unit)) {
 								return false;
 							}
+							if(tower.overlaps(obj) || obj.overlaps(tower)) {
+								return false;
+							}
 							if (indices.x >= objStart.x && indices.x < objStop.x && 
 								indices.y >= objStart.y && indices.y <= objStop.y) {
 								return false;

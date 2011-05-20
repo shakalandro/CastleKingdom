@@ -506,6 +506,8 @@ package
 			}
 		}
 		
+	
+		
 		/** Returns true if point is in the castle */
 		private function pointIsIn(ox:int, oy:int):Boolean {
 			return castle.pointIsInCastle(ox,oy);
