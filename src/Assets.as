@@ -236,6 +236,10 @@ package
 		private static var cursorstatic_img:Class;
 		public static const CURSORSTATIC:String = "Cursor Static";
 		
+		[Embed(source = "../images/cursorprimed.png")]
+		private static var cursorprimed_img:Class;
+		public static const CURSORPRIMED:String = "Cursor Primed";
+		
 		[Embed(source = "../images/wholemap.png")]
 		private static var background_img:Class;
 		public static const BACKGROUND:String = "background";
@@ -404,6 +408,7 @@ package
 			_normal[Assets.CASTLE] = castle_img;
 			_normal[Assets.CURSOR] = cursor_img;
 			_normal[Assets.CURSORSTATIC] = cursorstatic_img;
+			_normal[Assets.CURSORPRIMED] = cursorprimed_img;
 			_normal[Assets.BACKGROUND] = background_img;
 			_normal[Assets.LOGIN_BACKGROUND] = startpage_background;
 			_normal[Assets.BUTTON_SMALL] = button_small_img;
@@ -429,6 +434,7 @@ package
 			_normal[Assets.UNDERGROUND_WALL] = underground_wall_normal;
 			_normal[Assets.QUAKE_MACHINE] = quake_machine_normal;
 			_normal[Assets.TRAPS] = traps_normal;
+			_normal[Assets.FLAME_TOWER] = flame_tower_normal;
 
 
 			_normal[Assets.WALL] = wall_normal;
@@ -456,11 +462,11 @@ package
 				"\n\nSpring 2011";
 			_normal[Assets.BUTTON_CANCEL] = "Cancel";
 			_normal[Assets.BUTTON_DONE] = "Done";
-			_normal[Assets.PLACE_TOWER_BUTTON] = "Defend";
-			_normal[Assets.RELEASE_WAVE_BUTTON] = "Release";
+			_normal[Assets.PLACE_TOWER_BUTTON] = "Build";
+			_normal[Assets.RELEASE_WAVE_BUTTON] = "Defend";
 			_normal[Assets.UPGRADE_BUTTON] = "Upgrade";
-			_normal[Assets.ATTACK_BUTTON] = "Attack";
-			_normal[Assets.LEASE_BUTTON] = "Lease";
+			_normal[Assets.ATTACK_BUTTON] = "Attack Friends";
+			_normal[Assets.LEASE_BUTTON] = "Borrow";
 			_normal[Assets.DEFEND_MENU_BUTTON] = "Done";
 			_normal[Assets.DEFEND_MENU_TITLE] = "Drag And Drop";
 			_normal[Assets.ATTACK_FRIENDS_BUTTON] = "Send";
@@ -475,37 +481,37 @@ package
 			_normal[Assets.UPGRADE_RIGHT_TITLE] = "Castle Upgrades";
 			_normal[Assets.LEASE_REQUEST_ACCEPT] = "Accept";
 			_normal[Assets.LEASE_REQUEST_REJECT] = "Reject";
-			_normal[Assets.INITIAL_PENDING_WAVE_TEXT] = "Welcome to the cutthroat world of Castle Kingdom. " +
-				"Your castle is your life and the gold within is your means to glory. But right now a band of" +
-				" enemies is on their way to steal your gold. You must defend yourself.";
-			_normal[Assets.FIRST_WIN] = "Congratulations on defeating all those enemies. You can now upgrade " +
-				"your castle. Castle upgrades will allow you to use new kinds of towers, imcrease your stats " +
-				"and more. Save up your gold and try to buy 3 upgrades!";
-			_normal[Assets.FIRST_LOSS] = "Hmm, that tower configuration didn't seem to put up a fight against " +
+			_normal[Assets.INITIAL_PENDING_WAVE_TEXT] = "Welcome to the world of Castle Kingdom. " +
+				"Build your castle up, and protect it from those who would steal your gold. Right now a band of" +
+				" enemies is in wait to steal your gold. You must defend yourself.";
+			_normal[Assets.FIRST_WIN] = "Congratulations on defending yourself from the attackers! You can now upgrade " +
+				"your castle. Castle upgrades will allow you to place more towers, and even place completely new kinds " +
+				"of towers. Save up your gold and try to buy 3 upgrades!";
+			_normal[Assets.FIRST_LOSS] = "Hmm, that tower configuration didn't work too well against " +
 				"those enemeies. Try a different configuration and remember that you can set up to {0} tower units";
-			_normal[Assets.FIRST_DEFENSE] = "Let's see how that defensive strategy plays out, release " +
-				"the enemies to find out.";
+			_normal[Assets.FIRST_DEFENSE] = "Let's see how that well your setup will work. Press Defend to " +
+				"let the enemies start their attack!";
 			_normal[Assets.FIRST_ATTACK] = "Your castle has become quite impressive. You are now ready to " +
-				"venture out and try stealing gold from your friends castles! But don't go nuts, an attack comes with an initial investment.";
+				"send units to go attack your friends' castles!";
 			_normal[Assets.SENT_WAVE] = "Now that you can attack friends, they can also attack you. Try asking " +
-				"your friends to lease some of their resources to help you in battle.";
-			_normal[Assets.INCOMING_WAVE] = "OMG, your friend {0} has sent a wave of enemies at you. Would you " +
-				"like to defend yourself or simply surrender {1} gold?";
+				"your friends to loan you some of their resources to help you in battle.";
+			_normal[Assets.INCOMING_WAVE] = "Watch out! Your friend {0} has sent a wave of enemies at you. Would you " +
+				"like to try defending yourself or simply surrender {1} gold?";
 			_normal[Assets.FRIEND_WAVE_WIN] = "Good job, way to fight off the enemies from {0}, they won't be messing with you again soon.";
-			_normal[Assets.FRIEND_WAVE_LOSS] = "Shoot {0} got away with {1} of your gold.";
-			_normal[Assets.ATTACK_FRIENDS_BROKE] = "Dang, you don't have enough money to attack an enemy yet, save up {0} gold and try again";
-			_normal[Assets.ATTACK_FRIENDS_WIN] = "Congratulations, your attack on {0} was successful, you have gained {1} hold as a result!";
-			_normal[Assets.ATTACK_FRIENDS_LOSE] = "Dang, your attack on {0} failed, you were unable to steal any gold.";
-			_normal[Assets.LEASE_REQUEST_TEXT] = "{0} would like to lease {1} of your units. What would you like to do?";
-			_normal[Assets.LEASE_ACCEPTED] = "{0} has accepted your request to lease out {1} of his/her unit capacity. They have been added " +
+			_normal[Assets.FRIEND_WAVE_LOSS] = "Too bad! {0} got away with {1} of your gold.";
+			_normal[Assets.ATTACK_FRIENDS_BROKE] = "Sorry, you don't have enough money to attack anyone yet. Save up {0} gold and try again";
+			_normal[Assets.ATTACK_FRIENDS_WIN] = "Congratulations, your attack on {0} was successful, and you stole {1} gold from them!";
+			_normal[Assets.ATTACK_FRIENDS_LOSE] = "Too bad! Your attack on {0} failed, so you were unable to steal any gold.";
+			_normal[Assets.LEASE_REQUEST_TEXT] = "{0} would like to borrow {1} of your units. What would you like to do?";
+			_normal[Assets.LEASE_ACCEPTED] = "{0} has accepted your request to loan out {1} of their unit capacity. They have been added " +
 				"to your capacity for the next attack wave.";
-			_normal[Assets.LEASE_REJECTED] = "Dang, {0} rejected your request to lease out some of his/her unit capacity.";
-			_normal[Assets.ATTACK_WIN] = "Sweet, they didn't steal any of your gold, in fact they dropped {0} gold.";
-			_normal[Assets.ATTACK_LOSE] = "Dang, the enemies got away with {0} of your gold.";
+			_normal[Assets.LEASE_REJECTED] = "Too bad. {0} rejected your request to loan out some of their unit capacity this time.";
+			_normal[Assets.ATTACK_WIN] = "Great! They didn't steal any of your gold - in fact they dropped {0} gold!";
+			_normal[Assets.ATTACK_LOSE] = "Too bad! The enemies got away with {0} of your gold.";
 			_normal[Assets.ATTACK_FRIENDS_SENT] = "Your army is on its way to try to steal gold from {0}.";
 			_normal[Assets.ATTACK_FRIENDS_NOT_SENT] = "An army was not sent.";
-			_normal[Assets.LEASE_SENT] = "A lease request was sent to {0} for {1} unit capacity.";
-			_normal[Assets.LEASE_NOT_SENT] = "No lease request was made.";
+			_normal[Assets.LEASE_SENT] = "A request was sent to {0} for {1} unit capacity.";
+			_normal[Assets.LEASE_NOT_SENT] = "No request was made.";
 		}
 		
 		/**

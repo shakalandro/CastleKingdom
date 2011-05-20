@@ -352,7 +352,7 @@ package
 			var y:Number = coords.y - obj.height;
 			obj.y = y;
 			if (snapX)  {
-				obj.x = coords.x;
+			//	obj.x = coords.x;
 			}
 			return y;
 		}
@@ -404,7 +404,7 @@ package
 					dontTouch = true;
 					trace("Dropping to orig coords");
 				} else {
-					indices.y = Math.max(Util.minTileY, Math.floor(indices.y - 1 - Math.random()*(indices.y-3)));
+					indices.y = Math.max(Util.minTileY, Math.floor(indices.y - 3 - Math.random()*(indices.y-3)));
 					trace("Dropping to rand coords");
 					
 				}
@@ -414,7 +414,7 @@ package
 			y = Math.max(y, Util.minY);
 			obj.y = y;
 			if (snapX)  {
-				obj.x = coords.x;
+			//	obj.x = coords.x;
 			}
 			if(dontTouch) {
 				obj.x = origXp;
