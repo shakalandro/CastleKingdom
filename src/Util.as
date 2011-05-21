@@ -578,7 +578,7 @@ package
 				var ids:Array = [];
 				var lookup:Dictionary = new Dictionary();
 				for each (var friend:Object in friends) {
-					ids.push(friend.id);
+					ids.push(friend.id + "");
 					lookup[friend.id + ""] = friend.name;
 				}
 				Database.getUserInfo(function(knownFriends:Array):void {
@@ -588,17 +588,12 @@ package
 						person.name = lookup[person.id + ""];
 						person.toString = function():String { return this.name};
 						result.push(person);
-						knownFriendsIds.push(person.id);
-						Util.logObj("Known Friend:", person);
+						knownFriendsIds.push(person.id.toString());
 					}
 					//Throw in some unknown friends
 					var unknownFriends:Array = ids.filter(function(obj:Object, index:int, arr:Array):Boolean {
-						if (! (knownFriendsIds.indexOf(obj + "") >= 0)) {
-						Util.log("contains:"+ obj + "=" + (knownFriendsIds.indexOf(obj + "") < 0));
-						}
 						return knownFriendsIds.indexOf(obj + "") < 0;
 					});
-					Util.log("unknownfriends length=" + unknownFriends.length);
 					unknownFriends = FlxG.shuffle(unknownFriends.slice(0, addNumUnknown), 1);
 					for (var i:int = 0; i < addNumUnknown && i < unknownFriends.length; i++) {
 						// User is added to the database when invite is clicked by user
@@ -610,7 +605,6 @@ package
 							units: Database.START_UNITS,
 							toString: function():String { return this.name}
 						};
-						Util.logObj("Unknown Friend:", newPerson);
 						result.push(newPerson);
 					}
 					if (callback != null) callback(result.sort());

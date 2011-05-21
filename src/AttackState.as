@@ -132,6 +132,7 @@ package
 		
 		private function waveFinished(win:Boolean, prize:Number):void {
 			Util.log("AttackState.waveFinished: " + win, Castle.tutorialLevel);
+			FlxG.mouse.load(Util.assets[Assets.CURSORSTATIC]);
 			var winText:String = Util.assets[Assets.FIRST_WIN];
 			var loseText:String = Util.assets[Assets.FIRST_LOSS];
 
