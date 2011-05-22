@@ -353,6 +353,82 @@ package
 		private static var barracks1:Class;
 		public static const BARRACKS1:String = "barracks1";
 		
+		[Embed(source = "../images/barracks2.png")]
+		private static var barracks2:Class;
+		public static const BARRACKS2:String = "barracks2";
+		
+		[Embed(source = "../images/barracks3.png")]
+		private static var barracks3:Class;
+		public static const BARRACKS3:String = "barracks3";
+		
+		[Embed(source = "../images/barracks4.png")]
+		private static var barracks4:Class;
+		public static const BARRACKS4:String = "barracks4";
+		
+		[Embed(source = "../images/barracks5.png")]
+		private static var barracks5:Class;
+		public static const BARRACKS5:String = "barracks5";
+		
+		[Embed(source = "../images/barracks6.png")]
+		private static var barracks6:Class;
+		public static const BARRACKS6:String = "barracks6";
+		
+		[Embed(source = "../images/barracks7.png")]
+		private static var barracks7:Class;
+		public static const BARRACKS7:String = "barracks7";
+		
+		[Embed(source = "../images/barracks8.png")]
+		private static var barracks8:Class;
+		public static const BARRACKS8:String = "barracks8";
+		
+		[Embed(source = "../images/barracks9.png")]
+		private static var barracks9:Class;
+		public static const BARRACKS9:String = "barracks9";
+		
+		[Embed(source = "../images/barracks10.png")]
+		private static var barracks10:Class;
+		public static const BARRACKS10:String = "barracks10";
+		
+		[Embed(source = "../images/barracks11.png")]
+		private static var barracks11:Class;
+		public static const BARRACKS11:String = "barracks11";
+		
+		[Embed(source = "../images/barracks12.png")]
+		private static var barracks12:Class;
+		public static const BARRACKS12:String = "barracks12";
+		
+		[Embed(source = "../images/barracks13.png")]
+		private static var barracks13:Class;
+		public static const BARRACKS13:String = "barracks13";
+		
+		[Embed(source = "../images/barracks14.png")]
+		private static var barracks14:Class;
+		public static const BARRACKS14:String = "barracks14";
+		
+		[Embed(source = "../images/barracks15.png")]
+		private static var barracks15:Class;
+		public static const BARRACKS15:String = "barracks15";
+		
+		[Embed(source = "../images/mine1.png")]
+		private static var mine1:Class;
+		public static const MINE1:String = "mine1";
+		
+		[Embed(source = "../images/mine2.png")]
+		private static var mine2:Class;
+		public static const MINE2:String = "mine2";
+		
+		[Embed(source = "../images/mine3.png")]
+		private static var mine3:Class;
+		public static const MINE3:String = "mine3";
+		
+		[Embed(source = "../images/mine4.png")]
+		private static var mine4:Class;
+		public static const MINE4:String = "mine4";
+		
+		[Embed(source = "../images/mine5.png")]
+		private static var mine5:Class;
+		public static const MINE5:String = "mine5";
+		
 		[Embed(source = "../images/castlebackground.png")]
 		private static var castlebackground:Class;
 		public static const CASTLEBACKGROUND:String = "Castle Background";
@@ -460,6 +536,25 @@ package
 			_normal[Assets.AVIARY2] = aviary2;
 			_normal[Assets.AVIARY3] = aviary3;
 			_normal[Assets.BARRACKS1] = barracks1;
+			_normal[Assets.BARRACKS2] = barracks2;
+			_normal[Assets.BARRACKS3] = barracks3;
+			_normal[Assets.BARRACKS4] = barracks4;
+			_normal[Assets.BARRACKS5] = barracks5;
+			_normal[Assets.BARRACKS6] = barracks6;
+			_normal[Assets.BARRACKS7] = barracks7;
+			_normal[Assets.BARRACKS8] = barracks8;
+			_normal[Assets.BARRACKS9] = barracks9;
+			_normal[Assets.BARRACKS10] = barracks10;
+			_normal[Assets.BARRACKS11] = barracks11;
+			_normal[Assets.BARRACKS12] = barracks12;
+			_normal[Assets.BARRACKS13] = barracks13;
+			_normal[Assets.BARRACKS14] = barracks14;
+			_normal[Assets.BARRACKS15] = barracks15;
+			_normal[Assets.MINE1] = mine1;
+			_normal[Assets.MINE2] = mine2;
+			_normal[Assets.MINE3] = mine3;
+			_normal[Assets.MINE4] = mine4;
+			_normal[Assets.MINE5] = mine5;
 			_normal[Assets.CASTLEBACKGROUND] = castlebackground;
 
 			
