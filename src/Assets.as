@@ -293,9 +293,61 @@ package
 		private static var castle4:Class;
 		public static const CASTLE4:String = "castle4";
 		
+		[Embed(source = "../images/castle5.png")]
+		private static var castle5:Class;
+		public static const CASTLE5:String = "castle5";
+		
+		[Embed(source = "../images/castle6.png")]
+		private static var castle6:Class;
+		public static const CASTLE6:String = "castle6";
+		
+		[Embed(source = "../images/castle7.png")]
+		private static var castle7:Class;
+		public static const CASTLE7:String = "castle7";
+		
+		[Embed(source = "../images/castle8.png")]
+		private static var castle8:Class;
+		public static const CASTLE8:String = "castle8";
+		
+		[Embed(source = "../images/castle9.png")]
+		private static var castle9:Class;
+		public static const CASTLE9:String = "castle9";
+		
+		[Embed(source = "../images/castle10.png")]
+		private static var castle10:Class;
+		public static const CASTLE10:String = "castle10";
+		
+		[Embed(source = "../images/castle11.png")]
+		private static var castle11:Class;
+		public static const CASTLE11:String = "castle11";
+		
+		[Embed(source = "../images/castle12.png")]
+		private static var castle12:Class;
+		public static const CASTLE12:String = "castle12";
+		
+		[Embed(source = "../images/castle13.png")]
+		private static var castle13:Class;
+		public static const CASTLE13:String = "castle13";
+		
+		[Embed(source = "../images/castle14.png")]
+		private static var castle14:Class;
+		public static const CASTLE14:String = "castle14";
+		
+		[Embed(source = "../images/castle15.png")]
+		private static var castle15:Class;
+		public static const CASTLE15:String = "castle15";
+		
 		[Embed(source = "../images/aviary1.png")]
 		private static var aviary1:Class;
 		public static const AVIARY1:String = "aviary1";
+		
+		[Embed(source = "../images/aviary2.png")]
+		private static var aviary2:Class;
+		public static const AVIARY2:String = "aviary2";
+		
+		[Embed(source = "../images/aviary3.png")]
+		private static var aviary3:Class;
+		public static const AVIARY3:String = "aviary3";
 		
 		[Embed(source = "../images/barracks1.png")]
 		private static var barracks1:Class;
@@ -393,7 +445,20 @@ package
 			_normal[Assets.CASTLE2] = castle2;
 			_normal[Assets.CASTLE3] = castle3;
 			_normal[Assets.CASTLE4] = castle4;
+			_normal[Assets.CASTLE5] = castle5;
+			_normal[Assets.CASTLE6] = castle6;
+			_normal[Assets.CASTLE7] = castle7;
+			_normal[Assets.CASTLE8] = castle8;
+			_normal[Assets.CASTLE9] = castle9;
+			_normal[Assets.CASTLE10] = castle10;
+			_normal[Assets.CASTLE11] = castle11;
+			_normal[Assets.CASTLE12] = castle12;
+			_normal[Assets.CASTLE13] = castle13;
+			_normal[Assets.CASTLE14] = castle14;
+			_normal[Assets.CASTLE15] = castle15;
 			_normal[Assets.AVIARY1] = aviary1;
+			_normal[Assets.AVIARY2] = aviary2;
+			_normal[Assets.AVIARY3] = aviary3;
 			_normal[Assets.BARRACKS1] = barracks1;
 			_normal[Assets.CASTLEBACKGROUND] = castlebackground;
 

@@ -132,6 +132,7 @@ package
 		
 		private function waveFinished(win:Boolean, prize:Number):void {
 			Util.log("AttackState.waveFinished: " + win, Castle.tutorialLevel);
+			FlxG.mouse.load(Util.assets[Assets.CURSORSTATIC]);
 			var winText:String = Util.assets[Assets.FIRST_WIN];
 			var loseText:String = Util.assets[Assets.FIRST_LOSS];
 
@@ -197,12 +198,15 @@ package
 		}
 		
 		private function checkClick():void {
+			if (_ticks >= AttackState.MIN_TICKS_BETWEEN_CLICKS)
+				FlxG.mouse.load(Util.assets[Assets.CURSORPRIMED]);
 			if (FlxG.mouse.justPressed() && _ticks >= AttackState.MIN_TICKS_BETWEEN_CLICKS) {
 				var mouseCoords:FlxPoint = FlxG.mouse.getScreenPosition();
 				for each (var enemy:EnemyUnit in units.members) {
 					if (enemy != null && enemy.overlapsPoint(mouseCoords)) {
 						enemy.inflictDamage(CLICK_DAMAGE_POINTS * (castle.upgrades["castle"] + 1));
 						_ticks = 0;
+						FlxG.mouse.load(Util.assets[Assets.CURSORSTATIC]);
 						break;
 					}
 				}

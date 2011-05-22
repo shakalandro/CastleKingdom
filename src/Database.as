@@ -835,7 +835,6 @@ package
 		 */		
 		public static function addNewUser(uid:String):void
 		{
-			Util.log("\n\nuid to addnewuser: " + uid + "\n\n");
 			var variables:URLVariables = new URLVariables();
 			variables.uid = "" + uid;
 			variables.gold = "" + START_GOLD;

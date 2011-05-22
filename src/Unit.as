@@ -214,12 +214,14 @@ package
 					this.x = tileCoords.x;
 					this.y = tileCoords.y;
 					_dragOffset = null;
-					if (_dragCallback != null) _dragCallback(this, tileCoords.x + 10, tileCoords.y - 10, _preDragCoords.x, _preDragCoords.y);
+
+					if (_dragCallback != null) _dragCallback(this, mouseCoords.x, mouseCoords.y, _preDragCoords.x, _preDragCoords.y);
+
 					_preDragCoords = null;
 				}
 				if (_dragging) {
-					tileCoords = Util.roundToNearestTile(new FlxPoint(mouseCoords.x - _dragOffset.x/8, mouseCoords.y - _dragOffset.y));
-					this.x = tileCoords.x + _dragOffset.x/8;
+					tileCoords = Util.roundToNearestTile(new FlxPoint(mouseCoords.x, mouseCoords.y - _dragOffset.y));
+					this.x = tileCoords.x;
 					this.y = tileCoords.y;
 					return true;
 				}

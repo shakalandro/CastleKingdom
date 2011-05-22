@@ -156,37 +156,39 @@ package
 		 */		
 		private function checkForThings(callback:Function):void {
 			Util.log("ActiveState.checkForPendingAttacks looking for pending attack");
-			Database.pendingAttacks(function(attacks:Array):void {
-				if (attacks == null || attacks.length == 0) {
-					Util.log("ActiveState.checkForPendingAttacks, no pending attack");
-					callback();
-				} else {
-					FaceBook.getNameByID(attacks[0].id, function(name:String):void {
-						if (name != null) {
-							Util.log("ActiveState.checkForPendingAttacks attack found: " + name);
-							toggleButtons(0);
-							attacks[0].name = name;
-							var box:MessageBox = new MessageBox(StringUtil.substitute(Util.assets[Assets.INCOMING_WAVE], name, castle.surrenderCost()), "Defend", function():void {
-								FlxG.switchState(new DefenseState(map, remove(castle) as Castle, remove(towers) as FlxGroup, true, attacks[0]));
-							}, "Surrender", function():void {
-								var prize:Number = castle.surrenderCost();
-								castle.addGold(-prize);
-								setTutorialUI();
-								Database.setWinStatusAttacks({
-									uid: attacks[0].id,
-									aid: FaceBook.uid,
-									win: prize
+			if (Castle.tutorialLevel >= Castle.TUTORIAL_LEASE) {
+				Database.pendingAttacks(function(attacks:Array):void {
+					if (attacks == null || attacks.length == 0) {
+						Util.log("ActiveState.checkForPendingAttacks, no pending attack");
+						callback();
+					} else {
+						FaceBook.getNameByID(attacks[0].id, function(name:String):void {
+							if (name != null) {
+								Util.log("ActiveState.checkForPendingAttacks attack found: " + name);
+								toggleButtons(0);
+								attacks[0].name = name;
+								var box:MessageBox = new MessageBox(StringUtil.substitute(Util.assets[Assets.INCOMING_WAVE], name, castle.surrenderCost()), "Defend", function():void {
+									FlxG.switchState(new DefenseState(map, remove(castle) as Castle, remove(towers) as FlxGroup, true, attacks[0]));
+								}, "Surrender", function():void {
+									var prize:Number = castle.surrenderCost();
+									castle.addGold(-prize);
+									setTutorialUI();
+									Database.setWinStatusAttacks({
+										uid: attacks[0].id,
+										aid: FaceBook.uid,
+										win: prize
+									});
+									box.close();
 								});
-								box.close();
-							});
-							FlxG.state.add(box);
-						} else {
-							callback();
-							Util.logObj("ActiveState.checkForPendingAttacks pending attack, but user unknown ", attacks[0]);
-						}
-					});
-				}
-			}, FaceBook.uid, true);
+								FlxG.state.add(box);
+							} else {
+								callback();
+								Util.logObj("ActiveState.checkForPendingAttacks pending attack, but user unknown ", attacks[0]);
+							}
+						});
+					}
+				}, FaceBook.uid, true);
+			}
 		}
 		
 		override public function update():void {

@@ -248,7 +248,6 @@ package
 				callback(result);
 			} else {
 				var id:String = ids[0].id || ids[0];
-				Util.log(id);
 				(FlxG.state as GameState).loading = true;
 				FaceBook.picture(function(pic:Class):void {
 					(FlxG.state as GameState).loading = false;

@@ -24,7 +24,9 @@ package
 				_text.alpha -= .05;
 			});
 			_fadeTimer.addEventListener(TimerEvent.TIMER_COMPLETE, function():void {
-				close(_callback)
+				if (alive && visible) {
+					close(_callback);
+				}
 			});
 			
 			_timer.start();
