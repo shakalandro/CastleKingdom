@@ -10,6 +10,8 @@ package
 	public class LeaseState extends ActiveState
 	{
 		public static const LEVEL_THRESHHOLD:Number = CastleKingdom.DEBUG ? 10000000 : 75;
+		//TODO: change back after the tests
+		public static const NUM_UNKNOWN_FRIENDS:int = 0;
 		
 		private var _rightMenu:ScrollMenu;
 		private var _leftMenu:ScrollMenu;
@@ -44,7 +46,7 @@ package
 				var page:Array = makeLeasePage(castle.x, Util.minY, castle.width, Util.maxY - Util.minY, padding);
 				_middleMenu = new ScrollMenu(castle.x, Util.minY, page, closeMenusAndSend, Util.assets[Assets.LEASE_MIDDLE_TITLE], Util.assets[Assets.LEASE_MIDDLE_BUTTON], FlxG.WHITE, padding, castle.width, Util.maxY - Util.minY); 
 				add(_middleMenu);
-			}, Castle.computeValue);
+			}, Castle.computeValue, NUM_UNKNOWN_FRIENDS);
 		}
 		
 		private function makeLeasePage(x:Number, y:Number, width:Number, height:Number, padding:Number = 10):Array {

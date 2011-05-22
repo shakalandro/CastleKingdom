@@ -15,7 +15,8 @@ package
 	public class AttackFriendsState extends ActiveState
 	{		
 		public static const LEVEL_THRESHHOLD:Number = CastleKingdom.DEBUG ? 10000000 : 75;
-		public static const NUM_UNKNOWN_FRIENDS:int = 10;
+		//TODO: change this back after the test round
+		public static const NUM_UNKNOWN_FRIENDS:int = 0;
 		
 		private var _leftMenu:ScrollMenu;
 		private var _rightMenu:ScrollMenu;
