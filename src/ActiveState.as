@@ -400,7 +400,7 @@ package
 								return false;
 							}
 							if(tower.overlaps(obj) || obj.overlaps(tower)) {
-								return false;
+							//	return false;
 							}
 							if (indices.x >= objStart.x && indices.x < objStop.x && 
 								indices.y >= objStart.y && indices.y <= objStop.y) {

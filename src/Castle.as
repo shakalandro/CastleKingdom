@@ -454,8 +454,14 @@ package
 			result = unitsFromLevel(ARMY,level,strata);
 			if(type == "barracks") {
 				return result;
+			} else if (type == "foundry") {
+				return unitsFromLevel(TOWER,level,strata);
 			}
-			return result + unitsFromLevel(TOWER,level,strata);
+			var result2:String = unitsFromLevel(TOWER,level,strata);
+			if(result2.length == 0) {
+				return result;
+			}
+			return result + ", " + result2;
 		}
 		
 		/** Returns the unitIDs for the units unlocked by the castle's upgrade levels
@@ -511,7 +517,7 @@ package
 					}
 				}
 			}
-			return names;
+			return names.substr(0,names.length-2);
 		}
 		
 		public function isGameOver():Boolean {
