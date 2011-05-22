@@ -251,9 +251,12 @@ package
 					_upgrades["aviary"] = Math.max(_upgrades["aviary"], upgr.level.toString());;
 					initGenericPieces(upgr);
 				}
-				continueSetup();
+				
 
 			}
+			continueSetup();
+			drawUpgrades();
+
 		}
 		
 		private function initGenericPieces(info:Object):void {
