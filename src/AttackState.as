@@ -94,8 +94,10 @@ package
 			for each (var tower:Unit in towers.members) {
 				if(tower != null) {
 					tower.health = tower.maxHealth;
+					var point:FlxPoint = Util.cartesianToIndices(new FlxPoint(tower.x, tower.y));
+
 					// build tower info string for logging
-					_towerLogging = _towerLogging + tower.ID + " " + tower.x + " " + tower.y + " ";
+					_towerLogging = _towerLogging + tower.ID + " " + point.x + " " + point.y + " ";
 				}
 			}
 		}

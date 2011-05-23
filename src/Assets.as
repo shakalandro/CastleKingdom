@@ -337,6 +337,34 @@ package
 		private static var castle15:Class;
 		public static const CASTLE15:String = "castle15";
 		
+		[Embed(source = "../images/castle16.png")]
+		private static var castle16:Class;
+		public static const CASTLE16:String = "castle16";
+		
+		[Embed(source = "../images/castle17.png")]
+		private static var castle17:Class;
+		public static const CASTLE17:String = "castle17";
+		
+		[Embed(source = "../images/castle18.png")]
+		private static var castle18:Class;
+		public static const CASTLE18:String = "castle18";
+		
+		[Embed(source = "../images/castle19.png")]
+		private static var castle19:Class;
+		public static const CASTLE19:String = "castle19";
+		
+		[Embed(source = "../images/castle20.png")]
+		private static var castle20:Class;
+		public static const CASTLE20:String = "castle20";
+		
+		[Embed(source = "../images/castle21.png")]
+		private static var castle21:Class;
+		public static const CASTLE21:String = "castle21";
+		
+		[Embed(source = "../images/castle22.png")]
+		private static var castle22:Class;
+		public static const CASTLE22:String = "castle22";
+		
 		[Embed(source = "../images/aviary1.png")]
 		private static var aviary1:Class;
 		public static const AVIARY1:String = "aviary1";
@@ -352,6 +380,142 @@ package
 		[Embed(source = "../images/barracks1.png")]
 		private static var barracks1:Class;
 		public static const BARRACKS1:String = "barracks1";
+		
+		[Embed(source = "../images/barracks2.png")]
+		private static var barracks2:Class;
+		public static const BARRACKS2:String = "barracks2";
+		
+		[Embed(source = "../images/barracks3.png")]
+		private static var barracks3:Class;
+		public static const BARRACKS3:String = "barracks3";
+		
+		[Embed(source = "../images/barracks4.png")]
+		private static var barracks4:Class;
+		public static const BARRACKS4:String = "barracks4";
+		
+		[Embed(source = "../images/barracks5.png")]
+		private static var barracks5:Class;
+		public static const BARRACKS5:String = "barracks5";
+		
+		[Embed(source = "../images/barracks6.png")]
+		private static var barracks6:Class;
+		public static const BARRACKS6:String = "barracks6";
+		
+		[Embed(source = "../images/barracks7.png")]
+		private static var barracks7:Class;
+		public static const BARRACKS7:String = "barracks7";
+		
+		[Embed(source = "../images/barracks8.png")]
+		private static var barracks8:Class;
+		public static const BARRACKS8:String = "barracks8";
+		
+		[Embed(source = "../images/barracks9.png")]
+		private static var barracks9:Class;
+		public static const BARRACKS9:String = "barracks9";
+		
+		[Embed(source = "../images/barracks10.png")]
+		private static var barracks10:Class;
+		public static const BARRACKS10:String = "barracks10";
+		
+		[Embed(source = "../images/barracks11.png")]
+		private static var barracks11:Class;
+		public static const BARRACKS11:String = "barracks11";
+		
+		[Embed(source = "../images/barracks12.png")]
+		private static var barracks12:Class;
+		public static const BARRACKS12:String = "barracks12";
+		
+		[Embed(source = "../images/barracks13.png")]
+		private static var barracks13:Class;
+		public static const BARRACKS13:String = "barracks13";
+		
+		[Embed(source = "../images/barracks14.png")]
+		private static var barracks14:Class;
+		public static const BARRACKS14:String = "barracks14";
+		
+		[Embed(source = "../images/barracks15.png")]
+		private static var barracks15:Class;
+		public static const BARRACKS15:String = "barracks15";
+		
+		[Embed(source = "../images/foundry1.png")]
+		private static var foundry1:Class;
+		public static const FOUNDRY1:String = "foundry1";
+		
+		[Embed(source = "../images/foundry2.png")]
+		private static var foundry2:Class;
+		public static const FOUNDRY2:String = "foundry2";
+		
+		[Embed(source = "../images/foundry3.png")]
+		private static var foundry3:Class;
+		public static const FOUNDRY3:String = "foundry3";
+		
+		[Embed(source = "../images/foundry4.png")]
+		private static var foundry4:Class;
+		public static const FOUNDRY4:String = "foundry4";
+		
+		[Embed(source = "../images/foundry5.png")]
+		private static var foundry5:Class;
+		public static const FOUNDRY5:String = "foundry5";
+		
+		[Embed(source = "../images/foundry6.png")]
+		private static var foundry6:Class;
+		public static const FOUNDRY6:String = "foundry6";
+		
+		[Embed(source = "../images/foundry7.png")]
+		private static var foundry7:Class;
+		public static const FOUNDRY7:String = "foundry7";
+		
+		[Embed(source = "../images/foundry8.png")]
+		private static var foundry8:Class;
+		public static const FOUNDRY8:String = "foundry8";
+		
+		[Embed(source = "../images/foundry9.png")]
+		private static var foundry9:Class;
+		public static const FOUNDRY9:String = "foundry9";
+		
+		[Embed(source = "../images/foundry10.png")]
+		private static var foundry10:Class;
+		public static const FOUNDRY10:String = "foundry10";
+		
+		[Embed(source = "../images/foundry11.png")]
+		private static var foundry11:Class;
+		public static const FOUNDRY11:String = "foundry11";
+		
+		[Embed(source = "../images/foundry12.png")]
+		private static var foundry12:Class;
+		public static const FOUNDRY12:String = "foundry12";
+		
+		[Embed(source = "../images/foundry13.png")]
+		private static var foundry13:Class;
+		public static const FOUNDRY13:String = "foundry13";
+		
+		[Embed(source = "../images/foundry14.png")]
+		private static var foundry14:Class;
+		public static const FOUNDRY14:String = "foundry14";
+		
+		[Embed(source = "../images/foundry15.png")]
+		private static var foundry15:Class;
+		public static const FOUNDRY15:String = "foundry15";
+		
+		[Embed(source = "../images/mine1.png")]
+		private static var mine1:Class;
+		public static const MINE1:String = "mine1";
+		
+		[Embed(source = "../images/mine2.png")]
+		private static var mine2:Class;
+		public static const MINE2:String = "mine2";
+		
+		[Embed(source = "../images/mine3.png")]
+		private static var mine3:Class;
+		public static const MINE3:String = "mine3";
+		
+		[Embed(source = "../images/mine4.png")]
+		private static var mine4:Class;
+		public static const MINE4:String = "mine4";
+		
+		[Embed(source = "../images/mine5.png")]
+		private static var mine5:Class;
+		public static const MINE5:String = "mine5";
 		
 		[Embed(source = "../images/castlebackground.png")]
 		private static var castlebackground:Class;
@@ -456,10 +620,51 @@ package
 			_normal[Assets.CASTLE13] = castle13;
 			_normal[Assets.CASTLE14] = castle14;
 			_normal[Assets.CASTLE15] = castle15;
+			_normal[Assets.CASTLE15] = castle16;
+			_normal[Assets.CASTLE17] = castle17;
+			_normal[Assets.CASTLE18] = castle18;
+			_normal[Assets.CASTLE19] = castle19;
+			_normal[Assets.CASTLE20] = castle20;
+			_normal[Assets.CASTLE21] = castle21;
+			_normal[Assets.CASTLE22] = castle22;
 			_normal[Assets.AVIARY1] = aviary1;
 			_normal[Assets.AVIARY2] = aviary2;
 			_normal[Assets.AVIARY3] = aviary3;
 			_normal[Assets.BARRACKS1] = barracks1;
+			_normal[Assets.BARRACKS2] = barracks2;
+			_normal[Assets.BARRACKS3] = barracks3;
+			_normal[Assets.BARRACKS4] = barracks4;
+			_normal[Assets.BARRACKS5] = barracks5;
+			_normal[Assets.BARRACKS6] = barracks6;
+			_normal[Assets.BARRACKS7] = barracks7;
+			_normal[Assets.BARRACKS8] = barracks8;
+			_normal[Assets.BARRACKS9] = barracks9;
+			_normal[Assets.BARRACKS10] = barracks10;
+			_normal[Assets.BARRACKS11] = barracks11;
+			_normal[Assets.BARRACKS12] = barracks12;
+			_normal[Assets.BARRACKS13] = barracks13;
+			_normal[Assets.BARRACKS14] = barracks14;
+			_normal[Assets.BARRACKS15] = barracks15;
+			_normal[Assets.FOUNDRY1] = foundry1;
+			_normal[Assets.FOUNDRY2] = foundry2;
+			_normal[Assets.FOUNDRY3] = foundry3;
+			_normal[Assets.FOUNDRY4] = foundry4;
+			_normal[Assets.FOUNDRY5] = foundry5;
+			_normal[Assets.FOUNDRY6] = foundry6;
+			_normal[Assets.FOUNDRY7] = foundry7;
+			_normal[Assets.FOUNDRY8] = foundry8;
+			_normal[Assets.FOUNDRY9] = foundry9;
+			_normal[Assets.FOUNDRY10] = foundry10;
+			_normal[Assets.FOUNDRY11] = foundry11;
+			_normal[Assets.FOUNDRY12] = foundry12;
+			_normal[Assets.FOUNDRY13] = foundry13;
+			_normal[Assets.FOUNDRY14] = foundry14;
+			_normal[Assets.FOUNDRY15] = foundry15;
+			_normal[Assets.MINE1] = mine1;
+			_normal[Assets.MINE2] = mine2;
+			_normal[Assets.MINE3] = mine3;
+			_normal[Assets.MINE4] = mine4;
+			_normal[Assets.MINE5] = mine5;
 			_normal[Assets.CASTLEBACKGROUND] = castlebackground;
 
 			
