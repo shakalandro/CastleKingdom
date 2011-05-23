@@ -337,6 +337,34 @@ package
 		private static var castle15:Class;
 		public static const CASTLE15:String = "castle15";
 		
+		[Embed(source = "../images/castle16.png")]
+		private static var castle16:Class;
+		public static const CASTLE16:String = "castle16";
+		
+		[Embed(source = "../images/castle17.png")]
+		private static var castle17:Class;
+		public static const CASTLE17:String = "castle17";
+		
+		[Embed(source = "../images/castle18.png")]
+		private static var castle18:Class;
+		public static const CASTLE18:String = "castle18";
+		
+		[Embed(source = "../images/castle19.png")]
+		private static var castle19:Class;
+		public static const CASTLE19:String = "castle19";
+		
+		[Embed(source = "../images/castle20.png")]
+		private static var castle20:Class;
+		public static const CASTLE20:String = "castle20";
+		
+		[Embed(source = "../images/castle21.png")]
+		private static var castle21:Class;
+		public static const CASTLE21:String = "castle21";
+		
+		[Embed(source = "../images/castle22.png")]
+		private static var castle22:Class;
+		public static const CASTLE22:String = "castle22";
+		
 		[Embed(source = "../images/aviary1.png")]
 		private static var aviary1:Class;
 		public static const AVIARY1:String = "aviary1";
@@ -592,6 +620,13 @@ package
 			_normal[Assets.CASTLE13] = castle13;
 			_normal[Assets.CASTLE14] = castle14;
 			_normal[Assets.CASTLE15] = castle15;
+			_normal[Assets.CASTLE15] = castle16;
+			_normal[Assets.CASTLE17] = castle17;
+			_normal[Assets.CASTLE18] = castle18;
+			_normal[Assets.CASTLE19] = castle19;
+			_normal[Assets.CASTLE20] = castle20;
+			_normal[Assets.CASTLE21] = castle21;
+			_normal[Assets.CASTLE22] = castle22;
 			_normal[Assets.AVIARY1] = aviary1;
 			_normal[Assets.AVIARY2] = aviary2;
 			_normal[Assets.AVIARY3] = aviary3;
