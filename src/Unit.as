@@ -200,6 +200,9 @@ package
 			}
 */		}
 		
+		public function get dragging():Boolean {
+			return this._dragging;
+		}
 		
 		public function checkDrag():Boolean {
 			if (_canDrag) {

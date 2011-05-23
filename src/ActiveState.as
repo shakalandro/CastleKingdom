@@ -385,10 +385,10 @@ package
 		 */		
 		public function droppable(x:int, y:int, newTower:DefenseUnit):Boolean {
 			if (!Util.inBounds(x, y)) return false;
-			var indices:FlxPoint = Util.cartesianToIndices(new FlxPoint(newTower.x, newTower.y));
-			var indicesEnd:FlxPoint = Util.cartesianToIndices(new FlxPoint(newTower.x + newTower.width, newTower.y + newTower.height));
-			var castleStart:int = Util.cartesianToIndices(new FlxPoint(Util.castle.x, Util.castle.y)).x;
-			var castleStop:int = Util.cartesianToIndices(new FlxPoint(Util.castle.x + Util.castle.width, Util.castle.y)).x;
+			var indices:FlxPoint = Util.cartesianToIndices(new FlxPoint(newTower.x, newTower.y),true);
+			var indicesEnd:FlxPoint = Util.cartesianToIndices(new FlxPoint(newTower.x + newTower.width, newTower.y + newTower.height), true);
+			var castleStart:int = Util.cartesianToIndices(new FlxPoint(Util.castle.x, Util.castle.y), true).x;
+			var castleStop:int = Util.cartesianToIndices(new FlxPoint(Util.castle.x + Util.castle.width, Util.castle.y), true).x;
 			if (indices.x >= castleStart && indices.x < castleStop) {
 				return false;
 			}
@@ -430,6 +430,16 @@ package
 					}
 				}
 			}
+			return true;
+		}
+		
+		/** returns true if the unit is in the correct vertical location for its strata */
+		public function isValidHeight(unit:Unit):Boolean {
+			if(unit.clas == "air") {
+				return unit.y < Util.maxY - 9*CastleKingdom.TILE_SIZE;
+			} else if(unit.clas == "underground") {
+				return unit.y >= Util.maxY - 6*CastleKingdom.TILE_SIZE;
+			} 
 			return true;
 		}
 		

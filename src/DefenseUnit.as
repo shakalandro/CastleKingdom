@@ -77,22 +77,32 @@ package
 		
 		private function specialCaps(start:Boolean = false):void {
 			var rangeSize:int = this.range*CastleKingdom.TILE_SIZE;
-
+			var color:uint = FlxG.GREEN;
+			
 			if(this.name == "Rocket Tower") {
 				_infoBox.x = this.x - rangeSize;
 				_infoBox.y = this.y;
-				if(start) _infoBox.makeGraphic(rangeSize*2 + width, height, FlxG.GREEN);
+				if(start) _infoBox.makeGraphic(rangeSize*2 + width, height, color);
 			} else if (this.name == "Grapple Tower") {
 				_infoBox.x = this.x;
 				_infoBox.y = this.y  - rangeSize;
-				if(start) _infoBox.makeGraphic(width, rangeSize*2 + height, FlxG.GREEN);
+				if(start) _infoBox.makeGraphic(width, rangeSize*2 + height, color);
 			} else {
-				if(start) _infoBox.makeGraphic(rangeSize*2 + width, rangeSize*2 + height, FlxG.GREEN);
+				if(start) _infoBox.makeGraphic(rangeSize*2 + width, rangeSize*2 + height, color);
 			}
 		}
 		
 		override public function preUpdate():void {
 			super.preUpdate();
+			
+			if (!(this.dragging)) {
+				this.color = FlxG.WHITE;
+			} else if(!((FlxG.state as ActiveState).droppable(this.x,this.y,this)) || !((FlxG.state as ActiveState).isValidHeight(this))) {
+				this.color = FlxG.RED;
+			} else {
+				this.color = FlxG.GREEN;
+			}
+			
 			if (checkHighlight()) {
 				FlxG.state.add(_infoDisplay);
 				var rangeSize:int = this.range*CastleKingdom.TILE_SIZE;
