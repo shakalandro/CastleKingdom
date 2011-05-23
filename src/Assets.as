@@ -409,6 +409,66 @@ package
 		private static var barracks15:Class;
 		public static const BARRACKS15:String = "barracks15";
 		
+		[Embed(source = "../images/foundry1.png")]
+		private static var foundry1:Class;
+		public static const FOUNDRY1:String = "foundry1";
+		
+		[Embed(source = "../images/foundry2.png")]
+		private static var foundry2:Class;
+		public static const FOUNDRY2:String = "foundry2";
+		
+		[Embed(source = "../images/foundry3.png")]
+		private static var foundry3:Class;
+		public static const FOUNDRY3:String = "foundry3";
+		
+		[Embed(source = "../images/foundry4.png")]
+		private static var foundry4:Class;
+		public static const FOUNDRY4:String = "foundry4";
+		
+		[Embed(source = "../images/foundry5.png")]
+		private static var foundry5:Class;
+		public static const FOUNDRY5:String = "foundry5";
+		
+		[Embed(source = "../images/foundry6.png")]
+		private static var foundry6:Class;
+		public static const FOUNDRY6:String = "foundry6";
+		
+		[Embed(source = "../images/foundry7.png")]
+		private static var foundry7:Class;
+		public static const FOUNDRY7:String = "foundry7";
+		
+		[Embed(source = "../images/foundry8.png")]
+		private static var foundry8:Class;
+		public static const FOUNDRY8:String = "foundry8";
+		
+		[Embed(source = "../images/foundry9.png")]
+		private static var foundry9:Class;
+		public static const FOUNDRY9:String = "foundry9";
+		
+		[Embed(source = "../images/foundry10.png")]
+		private static var foundry10:Class;
+		public static const FOUNDRY10:String = "foundry10";
+		
+		[Embed(source = "../images/foundry11.png")]
+		private static var foundry11:Class;
+		public static const FOUNDRY11:String = "foundry11";
+		
+		[Embed(source = "../images/foundry12.png")]
+		private static var foundry12:Class;
+		public static const FOUNDRY12:String = "foundry12";
+		
+		[Embed(source = "../images/foundry13.png")]
+		private static var foundry13:Class;
+		public static const FOUNDRY13:String = "foundry13";
+		
+		[Embed(source = "../images/foundry14.png")]
+		private static var foundry14:Class;
+		public static const FOUNDRY14:String = "foundry14";
+		
+		[Embed(source = "../images/foundry15.png")]
+		private static var foundry15:Class;
+		public static const FOUNDRY15:String = "foundry15";
+		
 		[Embed(source = "../images/mine1.png")]
 		private static var mine1:Class;
 		public static const MINE1:String = "mine1";
@@ -550,6 +610,21 @@ package
 			_normal[Assets.BARRACKS13] = barracks13;
 			_normal[Assets.BARRACKS14] = barracks14;
 			_normal[Assets.BARRACKS15] = barracks15;
+			_normal[Assets.FOUNDRY1] = foundry1;
+			_normal[Assets.FOUNDRY2] = foundry2;
+			_normal[Assets.FOUNDRY3] = foundry3;
+			_normal[Assets.FOUNDRY4] = foundry4;
+			_normal[Assets.FOUNDRY5] = foundry5;
+			_normal[Assets.FOUNDRY6] = foundry6;
+			_normal[Assets.FOUNDRY7] = foundry7;
+			_normal[Assets.FOUNDRY8] = foundry8;
+			_normal[Assets.FOUNDRY9] = foundry9;
+			_normal[Assets.FOUNDRY10] = foundry10;
+			_normal[Assets.FOUNDRY11] = foundry11;
+			_normal[Assets.FOUNDRY12] = foundry12;
+			_normal[Assets.FOUNDRY13] = foundry13;
+			_normal[Assets.FOUNDRY14] = foundry14;
+			_normal[Assets.FOUNDRY15] = foundry15;
 			_normal[Assets.MINE1] = mine1;
 			_normal[Assets.MINE2] = mine2;
 			_normal[Assets.MINE3] = mine3;
