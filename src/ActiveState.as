@@ -381,31 +381,45 @@ package
 		 */		
 		public function droppable(x:int, y:int, newTower:DefenseUnit):Boolean {
 			if (!Util.inBounds(x, y)) return false;
-			var indices:FlxPoint = Util.cartesianToIndices(new FlxPoint(x, y));
+			var indices:FlxPoint = Util.cartesianToIndices(new FlxPoint(newTower.x, newTower.y));
+			var indicesEnd:FlxPoint = Util.cartesianToIndices(new FlxPoint(newTower.x + newTower.width, newTower.y + newTower.height));
 			var castleStart:int = Util.cartesianToIndices(new FlxPoint(Util.castle.x, Util.castle.y)).x;
 			var castleStop:int = Util.cartesianToIndices(new FlxPoint(Util.castle.x + Util.castle.width, Util.castle.y)).x;
 			if (indices.x >= castleStart && indices.x < castleStop) {
 				return false;
 			}
 			for each (var obj:FlxObject in towers.members) {
-				if (obj != null) {
+				if (obj != null && obj != newTower) {
 					var objStart:FlxPoint = Util.cartesianToIndices(new FlxPoint(obj.x, obj.y), true);
-					var objStop:FlxPoint = Util.cartesianToIndices(new FlxPoint(obj.x + obj.width, obj.y),true);
+					var objStop:FlxPoint = Util.cartesianToIndices(new FlxPoint(obj.x + obj.width, obj.y+obj.height),true);
 					if (obj is DefenseUnit) {
 						var tower:DefenseUnit = obj as DefenseUnit;
 						if (newTower.clas == Unit.GROUND && tower.clas == Unit.GROUND) {
-							if (indices.x >= objStart.x && indices.x < objStop.x) {
+							if (indices.x >= objStart.x && indices.x < objStop.x ||
+								indicesEnd.x > objStart.x && indicesEnd.x <= objStop.x) {
+								trace("Overlapping other tower: " + indices.x + "." +indicesEnd.x + "  " + objStart.x + "." + objStop.x);
 								return false;
 							}
 						} else { 
 							if(checkUnits(newTower, obj as Unit)) {
-								return false;
+								//return false;
 							}
 							if(tower.overlaps(obj) || obj.overlaps(tower)) {
 							//	return false;
 							}
 							if (indices.x >= objStart.x && indices.x < objStop.x && 
-								indices.y >= objStart.y && indices.y <= objStop.y) {
+								indices.y >= objStart.y && indices.y < objStop.y ||
+								// Checked top-left
+								indicesEnd.x > objStart.x && indicesEnd.x <= objStop.x && 
+								indicesEnd.y > objStart.y && indicesEnd.y <= objStop.y ||
+								// checked bottom-right
+								indicesEnd.x > objStart.x && indicesEnd.x <= objStop.x && 
+								indices.y >= objStart.y && indices.y < objStop.y ||
+								// checked top-right
+								indices.x >= objStart.x && indices.x < objStop.x && 
+								indicesEnd.y > objStart.y && indicesEnd.y <= objStop.y ) {
+								// checked bottom left
+								trace("overlapping other air/underground");
 								return false;
 							}
 						}

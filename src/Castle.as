@@ -173,10 +173,13 @@ package
 		}
 		
 		public function drawUpgrades():void {
+			if (_UpgrImages) {
+				FlxG.state.remove(_UpgrImages);
+			}
 			_UpgrImages = new FlxGroup(); 
-			applyImage("castle");
 			applyImage("barracks");
 			applyImage("foundry");
+			applyImage("castle");
 			applyImage("mine");
 			applyImage("aviary");
 			FlxG.state.add(_UpgrImages);
@@ -300,7 +303,7 @@ package
 				Util.log("\n\n\nBefore calling insert: \n{id: " + FaceBook.uid + ", upid: " + upgrade.upgradeID + 
 					"}\n\n\n"); 
 				Database.insertUserUpgrade({id:FaceBook.uid, upid:upgrade.upgradeID,xpos:0,ypos:0});
-				applyImage(upgrade.type);
+				drawUpgrades();
 				return true;
 			}
 			return false;

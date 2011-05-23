@@ -130,15 +130,18 @@ package
 		
 		private function handleMapTowerDrag(draggable:Draggable, newX:Number, newY:Number, oldX:Number, oldY:Number):void {
 			var tower:DefenseUnit = draggable as DefenseUnit;
-			tower.x = oldX;
-			tower.y = oldY;
+		//	tower.x = oldX;
+		//	tower.y = oldY;
 			if (droppable(newX, newY, tower)) {
-				tower.x = newX;
-				tower.y = newY;
+		//		tower.x = newX;
+		//		tower.y = newY;
 				Util.placeInZone(tower, map,true, true);
 				//Util.placeOnGroundOld(tower, map, false, true);
 			} else if (newX > castle.x && newX < castle.x + castle.width && _menu.visible) {
 				towers.remove(tower, true);
+			} else {
+				tower.x = oldX;
+				tower.y = oldY;
 			}			
 		}
 		

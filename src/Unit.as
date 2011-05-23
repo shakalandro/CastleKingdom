@@ -210,9 +210,11 @@ package
 					_dragOffset = new FlxPoint(mouseCoords.x - this.x, mouseCoords.y - this.y);
 				} else if (_dragging && FlxG.mouse.justReleased()) {
 					_dragging = false;
-					var tileCoords:FlxPoint = Util.roundToNearestTile(new FlxPoint(mouseCoords.x - _dragOffset.x, mouseCoords.y - _dragOffset.y));
-					this.x = tileCoords.x;
-					this.y = tileCoords.y;
+					// Commenting out solves "Double Round" problem - that is what caused units to move over after being placed.
+				//	var tileCoords:FlxPoint = Util.roundToNearestTile(new FlxPoint(mouseCoords.x - _dragOffset.x, mouseCoords.y - _dragOffset.y));
+				//	this.x = tileCoords.x;
+				//	this.y = tileCoords.y;
+					
 					_dragOffset = null;
 
 					if (_dragCallback != null) _dragCallback(this, mouseCoords.x, mouseCoords.y, _preDragCoords.x, _preDragCoords.y);
@@ -220,7 +222,7 @@ package
 					_preDragCoords = null;
 				}
 				if (_dragging) {
-					tileCoords = Util.roundToNearestTile(new FlxPoint(mouseCoords.x, mouseCoords.y - _dragOffset.y));
+					var tileCoords:FlxPoint = Util.roundToNearestTile(new FlxPoint(mouseCoords.x, mouseCoords.y - _dragOffset.y));
 					this.x = tileCoords.x;
 					this.y = tileCoords.y;
 					return true;
