@@ -236,6 +236,10 @@ package
 		private static var cursorstatic_img:Class;
 		public static const CURSORSTATIC:String = "Cursor Static";
 		
+		[Embed(source = "../images/cursorprimed.png")]
+		private static var cursorprimed_img:Class;
+		public static const CURSORPRIMED:String = "Cursor Primed";
+		
 		[Embed(source = "../images/wholemap.png")]
 		private static var background_img:Class;
 		public static const BACKGROUND:String = "background";
@@ -289,13 +293,229 @@ package
 		private static var castle4:Class;
 		public static const CASTLE4:String = "castle4";
 		
+		[Embed(source = "../images/castle5.png")]
+		private static var castle5:Class;
+		public static const CASTLE5:String = "castle5";
+		
+		[Embed(source = "../images/castle6.png")]
+		private static var castle6:Class;
+		public static const CASTLE6:String = "castle6";
+		
+		[Embed(source = "../images/castle7.png")]
+		private static var castle7:Class;
+		public static const CASTLE7:String = "castle7";
+		
+		[Embed(source = "../images/castle8.png")]
+		private static var castle8:Class;
+		public static const CASTLE8:String = "castle8";
+		
+		[Embed(source = "../images/castle9.png")]
+		private static var castle9:Class;
+		public static const CASTLE9:String = "castle9";
+		
+		[Embed(source = "../images/castle10.png")]
+		private static var castle10:Class;
+		public static const CASTLE10:String = "castle10";
+		
+		[Embed(source = "../images/castle11.png")]
+		private static var castle11:Class;
+		public static const CASTLE11:String = "castle11";
+		
+		[Embed(source = "../images/castle12.png")]
+		private static var castle12:Class;
+		public static const CASTLE12:String = "castle12";
+		
+		[Embed(source = "../images/castle13.png")]
+		private static var castle13:Class;
+		public static const CASTLE13:String = "castle13";
+		
+		[Embed(source = "../images/castle14.png")]
+		private static var castle14:Class;
+		public static const CASTLE14:String = "castle14";
+		
+		[Embed(source = "../images/castle15.png")]
+		private static var castle15:Class;
+		public static const CASTLE15:String = "castle15";
+		
+		[Embed(source = "../images/castle16.png")]
+		private static var castle16:Class;
+		public static const CASTLE16:String = "castle16";
+		
+		[Embed(source = "../images/castle17.png")]
+		private static var castle17:Class;
+		public static const CASTLE17:String = "castle17";
+		
+		[Embed(source = "../images/castle18.png")]
+		private static var castle18:Class;
+		public static const CASTLE18:String = "castle18";
+		
+		[Embed(source = "../images/castle19.png")]
+		private static var castle19:Class;
+		public static const CASTLE19:String = "castle19";
+		
+		[Embed(source = "../images/castle20.png")]
+		private static var castle20:Class;
+		public static const CASTLE20:String = "castle20";
+		
+		[Embed(source = "../images/castle21.png")]
+		private static var castle21:Class;
+		public static const CASTLE21:String = "castle21";
+		
+		[Embed(source = "../images/castle22.png")]
+		private static var castle22:Class;
+		public static const CASTLE22:String = "castle22";
+		
 		[Embed(source = "../images/aviary1.png")]
 		private static var aviary1:Class;
 		public static const AVIARY1:String = "aviary1";
 		
+		[Embed(source = "../images/aviary2.png")]
+		private static var aviary2:Class;
+		public static const AVIARY2:String = "aviary2";
+		
+		[Embed(source = "../images/aviary3.png")]
+		private static var aviary3:Class;
+		public static const AVIARY3:String = "aviary3";
+		
 		[Embed(source = "../images/barracks1.png")]
 		private static var barracks1:Class;
 		public static const BARRACKS1:String = "barracks1";
+		
+		[Embed(source = "../images/barracks2.png")]
+		private static var barracks2:Class;
+		public static const BARRACKS2:String = "barracks2";
+		
+		[Embed(source = "../images/barracks3.png")]
+		private static var barracks3:Class;
+		public static const BARRACKS3:String = "barracks3";
+		
+		[Embed(source = "../images/barracks4.png")]
+		private static var barracks4:Class;
+		public static const BARRACKS4:String = "barracks4";
+		
+		[Embed(source = "../images/barracks5.png")]
+		private static var barracks5:Class;
+		public static const BARRACKS5:String = "barracks5";
+		
+		[Embed(source = "../images/barracks6.png")]
+		private static var barracks6:Class;
+		public static const BARRACKS6:String = "barracks6";
+		
+		[Embed(source = "../images/barracks7.png")]
+		private static var barracks7:Class;
+		public static const BARRACKS7:String = "barracks7";
+		
+		[Embed(source = "../images/barracks8.png")]
+		private static var barracks8:Class;
+		public static const BARRACKS8:String = "barracks8";
+		
+		[Embed(source = "../images/barracks9.png")]
+		private static var barracks9:Class;
+		public static const BARRACKS9:String = "barracks9";
+		
+		[Embed(source = "../images/barracks10.png")]
+		private static var barracks10:Class;
+		public static const BARRACKS10:String = "barracks10";
+		
+		[Embed(source = "../images/barracks11.png")]
+		private static var barracks11:Class;
+		public static const BARRACKS11:String = "barracks11";
+		
+		[Embed(source = "../images/barracks12.png")]
+		private static var barracks12:Class;
+		public static const BARRACKS12:String = "barracks12";
+		
+		[Embed(source = "../images/barracks13.png")]
+		private static var barracks13:Class;
+		public static const BARRACKS13:String = "barracks13";
+		
+		[Embed(source = "../images/barracks14.png")]
+		private static var barracks14:Class;
+		public static const BARRACKS14:String = "barracks14";
+		
+		[Embed(source = "../images/barracks15.png")]
+		private static var barracks15:Class;
+		public static const BARRACKS15:String = "barracks15";
+		
+		[Embed(source = "../images/foundry1.png")]
+		private static var foundry1:Class;
+		public static const FOUNDRY1:String = "foundry1";
+		
+		[Embed(source = "../images/foundry2.png")]
+		private static var foundry2:Class;
+		public static const FOUNDRY2:String = "foundry2";
+		
+		[Embed(source = "../images/foundry3.png")]
+		private static var foundry3:Class;
+		public static const FOUNDRY3:String = "foundry3";
+		
+		[Embed(source = "../images/foundry4.png")]
+		private static var foundry4:Class;
+		public static const FOUNDRY4:String = "foundry4";
+		
+		[Embed(source = "../images/foundry5.png")]
+		private static var foundry5:Class;
+		public static const FOUNDRY5:String = "foundry5";
+		
+		[Embed(source = "../images/foundry6.png")]
+		private static var foundry6:Class;
+		public static const FOUNDRY6:String = "foundry6";
+		
+		[Embed(source = "../images/foundry7.png")]
+		private static var foundry7:Class;
+		public static const FOUNDRY7:String = "foundry7";
+		
+		[Embed(source = "../images/foundry8.png")]
+		private static var foundry8:Class;
+		public static const FOUNDRY8:String = "foundry8";
+		
+		[Embed(source = "../images/foundry9.png")]
+		private static var foundry9:Class;
+		public static const FOUNDRY9:String = "foundry9";
+		
+		[Embed(source = "../images/foundry10.png")]
+		private static var foundry10:Class;
+		public static const FOUNDRY10:String = "foundry10";
+		
+		[Embed(source = "../images/foundry11.png")]
+		private static var foundry11:Class;
+		public static const FOUNDRY11:String = "foundry11";
+		
+		[Embed(source = "../images/foundry12.png")]
+		private static var foundry12:Class;
+		public static const FOUNDRY12:String = "foundry12";
+		
+		[Embed(source = "../images/foundry13.png")]
+		private static var foundry13:Class;
+		public static const FOUNDRY13:String = "foundry13";
+		
+		[Embed(source = "../images/foundry14.png")]
+		private static var foundry14:Class;
+		public static const FOUNDRY14:String = "foundry14";
+		
+		[Embed(source = "../images/foundry15.png")]
+		private static var foundry15:Class;
+		public static const FOUNDRY15:String = "foundry15";
+		
+		[Embed(source = "../images/mine1.png")]
+		private static var mine1:Class;
+		public static const MINE1:String = "mine1";
+		
+		[Embed(source = "../images/mine2.png")]
+		private static var mine2:Class;
+		public static const MINE2:String = "mine2";
+		
+		[Embed(source = "../images/mine3.png")]
+		private static var mine3:Class;
+		public static const MINE3:String = "mine3";
+		
+		[Embed(source = "../images/mine4.png")]
+		private static var mine4:Class;
+		public static const MINE4:String = "mine4";
+		
+		[Embed(source = "../images/mine5.png")]
+		private static var mine5:Class;
+		public static const MINE5:String = "mine5";
 		
 		[Embed(source = "../images/castlebackground.png")]
 		private static var castlebackground:Class;
@@ -350,6 +570,9 @@ package
 		public static const ATTACK_FRIENDS_NOT_SENT:String = "attack friends not sent";
 		public static const LEASE_SENT:String = "lease sent";
 		public static const LEASE_NOT_SENT:String = "lease not sent";
+		public static const INVITE_FRIEND:String = "invite friend";
+		
+		public static const GAME_URL:String = "game url";
 		
 		// Other resources
 		
@@ -386,8 +609,62 @@ package
 			_normal[Assets.CASTLE2] = castle2;
 			_normal[Assets.CASTLE3] = castle3;
 			_normal[Assets.CASTLE4] = castle4;
+			_normal[Assets.CASTLE5] = castle5;
+			_normal[Assets.CASTLE6] = castle6;
+			_normal[Assets.CASTLE7] = castle7;
+			_normal[Assets.CASTLE8] = castle8;
+			_normal[Assets.CASTLE9] = castle9;
+			_normal[Assets.CASTLE10] = castle10;
+			_normal[Assets.CASTLE11] = castle11;
+			_normal[Assets.CASTLE12] = castle12;
+			_normal[Assets.CASTLE13] = castle13;
+			_normal[Assets.CASTLE14] = castle14;
+			_normal[Assets.CASTLE15] = castle15;
+			_normal[Assets.CASTLE15] = castle16;
+			_normal[Assets.CASTLE17] = castle17;
+			_normal[Assets.CASTLE18] = castle18;
+			_normal[Assets.CASTLE19] = castle19;
+			_normal[Assets.CASTLE20] = castle20;
+			_normal[Assets.CASTLE21] = castle21;
+			_normal[Assets.CASTLE22] = castle22;
 			_normal[Assets.AVIARY1] = aviary1;
+			_normal[Assets.AVIARY2] = aviary2;
+			_normal[Assets.AVIARY3] = aviary3;
 			_normal[Assets.BARRACKS1] = barracks1;
+			_normal[Assets.BARRACKS2] = barracks2;
+			_normal[Assets.BARRACKS3] = barracks3;
+			_normal[Assets.BARRACKS4] = barracks4;
+			_normal[Assets.BARRACKS5] = barracks5;
+			_normal[Assets.BARRACKS6] = barracks6;
+			_normal[Assets.BARRACKS7] = barracks7;
+			_normal[Assets.BARRACKS8] = barracks8;
+			_normal[Assets.BARRACKS9] = barracks9;
+			_normal[Assets.BARRACKS10] = barracks10;
+			_normal[Assets.BARRACKS11] = barracks11;
+			_normal[Assets.BARRACKS12] = barracks12;
+			_normal[Assets.BARRACKS13] = barracks13;
+			_normal[Assets.BARRACKS14] = barracks14;
+			_normal[Assets.BARRACKS15] = barracks15;
+			_normal[Assets.FOUNDRY1] = foundry1;
+			_normal[Assets.FOUNDRY2] = foundry2;
+			_normal[Assets.FOUNDRY3] = foundry3;
+			_normal[Assets.FOUNDRY4] = foundry4;
+			_normal[Assets.FOUNDRY5] = foundry5;
+			_normal[Assets.FOUNDRY6] = foundry6;
+			_normal[Assets.FOUNDRY7] = foundry7;
+			_normal[Assets.FOUNDRY8] = foundry8;
+			_normal[Assets.FOUNDRY9] = foundry9;
+			_normal[Assets.FOUNDRY10] = foundry10;
+			_normal[Assets.FOUNDRY11] = foundry11;
+			_normal[Assets.FOUNDRY12] = foundry12;
+			_normal[Assets.FOUNDRY13] = foundry13;
+			_normal[Assets.FOUNDRY14] = foundry14;
+			_normal[Assets.FOUNDRY15] = foundry15;
+			_normal[Assets.MINE1] = mine1;
+			_normal[Assets.MINE2] = mine2;
+			_normal[Assets.MINE3] = mine3;
+			_normal[Assets.MINE4] = mine4;
+			_normal[Assets.MINE5] = mine5;
 			_normal[Assets.CASTLEBACKGROUND] = castlebackground;
 
 			
@@ -404,6 +681,7 @@ package
 			_normal[Assets.CASTLE] = castle_img;
 			_normal[Assets.CURSOR] = cursor_img;
 			_normal[Assets.CURSORSTATIC] = cursorstatic_img;
+			_normal[Assets.CURSORPRIMED] = cursorprimed_img;
 			_normal[Assets.BACKGROUND] = background_img;
 			_normal[Assets.LOGIN_BACKGROUND] = startpage_background;
 			_normal[Assets.BUTTON_SMALL] = button_small_img;
@@ -429,6 +707,7 @@ package
 			_normal[Assets.UNDERGROUND_WALL] = underground_wall_normal;
 			_normal[Assets.QUAKE_MACHINE] = quake_machine_normal;
 			_normal[Assets.TRAPS] = traps_normal;
+			_normal[Assets.FLAME_TOWER] = flame_tower_normal;
 
 
 			_normal[Assets.WALL] = wall_normal;
@@ -456,11 +735,11 @@ package
 				"\n\nSpring 2011";
 			_normal[Assets.BUTTON_CANCEL] = "Cancel";
 			_normal[Assets.BUTTON_DONE] = "Done";
-			_normal[Assets.PLACE_TOWER_BUTTON] = "Defend";
-			_normal[Assets.RELEASE_WAVE_BUTTON] = "Release";
+			_normal[Assets.PLACE_TOWER_BUTTON] = "Build";
+			_normal[Assets.RELEASE_WAVE_BUTTON] = "Defend";
 			_normal[Assets.UPGRADE_BUTTON] = "Upgrade";
-			_normal[Assets.ATTACK_BUTTON] = "Attack";
-			_normal[Assets.LEASE_BUTTON] = "Lease";
+			_normal[Assets.ATTACK_BUTTON] = "Attack Friends";
+			_normal[Assets.LEASE_BUTTON] = "Borrow";
 			_normal[Assets.DEFEND_MENU_BUTTON] = "Done";
 			_normal[Assets.DEFEND_MENU_TITLE] = "Drag And Drop";
 			_normal[Assets.ATTACK_FRIENDS_BUTTON] = "Send";
@@ -475,37 +754,41 @@ package
 			_normal[Assets.UPGRADE_RIGHT_TITLE] = "Castle Upgrades";
 			_normal[Assets.LEASE_REQUEST_ACCEPT] = "Accept";
 			_normal[Assets.LEASE_REQUEST_REJECT] = "Reject";
-			_normal[Assets.INITIAL_PENDING_WAVE_TEXT] = "Welcome to the cutthroat world of Castle Kingdom. " +
-				"Your castle is your life and the gold within is your means to glory. But right now a band of" +
-				" enemies is on their way to steal your gold. You must defend yourself.";
-			_normal[Assets.FIRST_WIN] = "Congratulations on defeating all those enemies. You can now upgrade " +
-				"your castle. Castle upgrades will allow you to use new kinds of towers, imcrease your stats " +
-				"and more. Save up your gold and try to buy 3 upgrades!";
-			_normal[Assets.FIRST_LOSS] = "Hmm, that tower configuration didn't seem to put up a fight against " +
+			_normal[Assets.INITIAL_PENDING_WAVE_TEXT] = "Welcome to the world of Castle Kingdom. " +
+				"Build your castle up, and protect it from those who would steal your gold. Right now a band of" +
+				" enemies is in wait to steal your gold. You must defend yourself.";
+			_normal[Assets.FIRST_WIN] = "Congratulations on defending yourself from the attackers! You can now upgrade " +
+				"your castle. Castle upgrades will allow you to place more towers, and even place completely new kinds " +
+				"of towers. Save up your gold and try to buy 3 upgrades!";
+			_normal[Assets.FIRST_LOSS] = "Hmm, that tower configuration didn't work too well against " +
 				"those enemeies. Try a different configuration and remember that you can set up to {0} tower units";
-			_normal[Assets.FIRST_DEFENSE] = "Let's see how that defensive strategy plays out, release " +
-				"the enemies to find out.";
+			_normal[Assets.FIRST_DEFENSE] = "Let's see how that well your setup will work. Press Defend to " +
+				"let the enemies start their attack!";
 			_normal[Assets.FIRST_ATTACK] = "Your castle has become quite impressive. You are now ready to " +
-				"venture out and try stealing gold from your friends castles! But don't go nuts, an attack comes with an initial investment.";
+				"send units to go attack your friends' castles!";
 			_normal[Assets.SENT_WAVE] = "Now that you can attack friends, they can also attack you. Try asking " +
-				"your friends to lease some of their resources to help you in battle.";
-			_normal[Assets.INCOMING_WAVE] = "OMG, your friend {0} has sent a wave of enemies at you. Would you " +
-				"like to defend yourself or simply surrender {1} gold?";
+				"your friends to loan you some of their resources to help you in battle.";
+			_normal[Assets.INCOMING_WAVE] = "Watch out! Your friend {0} has sent a wave of enemies at you. Would you " +
+				"like to try defending yourself or simply surrender {1} gold?";
 			_normal[Assets.FRIEND_WAVE_WIN] = "Good job, way to fight off the enemies from {0}, they won't be messing with you again soon.";
-			_normal[Assets.FRIEND_WAVE_LOSS] = "Shoot {0} got away with {1} of your gold.";
-			_normal[Assets.ATTACK_FRIENDS_BROKE] = "Dang, you don't have enough money to attack an enemy yet, save up {0} gold and try again";
-			_normal[Assets.ATTACK_FRIENDS_WIN] = "Congratulations, your attack on {0} was successful, you have gained {1} hold as a result!";
-			_normal[Assets.ATTACK_FRIENDS_LOSE] = "Dang, your attack on {0} failed, you were unable to steal any gold.";
-			_normal[Assets.LEASE_REQUEST_TEXT] = "{0} would like to lease {1} of your units. What would you like to do?";
-			_normal[Assets.LEASE_ACCEPTED] = "{0} has accepted your request to lease out {1} of his/her unit capacity. They have been added " +
+			_normal[Assets.FRIEND_WAVE_LOSS] = "Too bad! {0} got away with {1} of your gold.";
+			_normal[Assets.ATTACK_FRIENDS_BROKE] = "Sorry, you don't have enough money to attack anyone yet. Save up {0} gold and try again";
+			_normal[Assets.ATTACK_FRIENDS_WIN] = "Congratulations, your attack on {0} was successful, and you stole {1} gold from them!";
+			_normal[Assets.ATTACK_FRIENDS_LOSE] = "Too bad! Your attack on {0} failed, so you were unable to steal any gold.";
+			_normal[Assets.LEASE_REQUEST_TEXT] = "{0} would like to borrow {1} of your units. What would you like to do?";
+			_normal[Assets.LEASE_ACCEPTED] = "{0} has accepted your request to loan out {1} of their unit capacity. They have been added " +
 				"to your capacity for the next attack wave.";
-			_normal[Assets.LEASE_REJECTED] = "Dang, {0} rejected your request to lease out some of his/her unit capacity.";
-			_normal[Assets.ATTACK_WIN] = "Sweet, they didn't steal any of your gold, in fact they dropped {0} gold.";
-			_normal[Assets.ATTACK_LOSE] = "Dang, the enemies got away with {0} of your gold.";
+			_normal[Assets.LEASE_REJECTED] = "Too bad. {0} rejected your request to loan out some of their unit capacity this time.";
+			_normal[Assets.ATTACK_WIN] = "Great! They didn't steal any of your gold - in fact they dropped {0} gold!";
+			_normal[Assets.ATTACK_LOSE] = "Too bad! The enemies got away with {0} of your gold.";
 			_normal[Assets.ATTACK_FRIENDS_SENT] = "Your army is on its way to try to steal gold from {0}.";
 			_normal[Assets.ATTACK_FRIENDS_NOT_SENT] = "An army was not sent.";
-			_normal[Assets.LEASE_SENT] = "A lease request was sent to {0} for {1} unit capacity.";
-			_normal[Assets.LEASE_NOT_SENT] = "No lease request was made.";
+			_normal[Assets.LEASE_SENT] = "A request was sent to {0} for {1} unit capacity.";
+			_normal[Assets.LEASE_NOT_SENT] = "No request was made.";
+			_normal[Assets.INVITE_FRIEND] = "{0} would like to invite you to play an awesome game, Castle Kingdom.";
+			_normal[Assets.GAME_URL] = "http://games.cs.washington.edu/capstone/11sp/castlekd/roy/index.html";
+			_normal[Assets.LEASE_SENT] = "A request was sent to {0} for {1} unit capacity.";
+			_normal[Assets.LEASE_NOT_SENT] = "No request was made.";
 		}
 		
 		/**

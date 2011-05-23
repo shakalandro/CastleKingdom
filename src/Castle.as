@@ -251,9 +251,12 @@ package
 					_upgrades["aviary"] = Math.max(_upgrades["aviary"], upgr.level.toString());;
 					initGenericPieces(upgr);
 				}
-				continueSetup();
+				
 
 			}
+			continueSetup();
+			drawUpgrades();
+
 		}
 		
 		private function initGenericPieces(info:Object):void {
@@ -394,6 +397,13 @@ package
 			
 		}
 		
+		/**
+		 * 
+		 * @param ox
+		 * @param oy
+		 * @return 
+		 * 
+		 */
 		public function pointIsInCastle(ox:int, oy:int):Boolean {
 			var isIn:Boolean = ( ox > this.x && ox < this.x + this.width 
 				&& oy > this.y && oy < this.y + this.height);
@@ -406,6 +416,16 @@ package
 			return isIn;
 		}
 		
+		public function unitIsInCastle(unit:Unit):Boolean {
+			if( pointIsInCastle(unit.x, unit.y) 
+				|| pointIsInCastle(unit.x + unit.width, unit.y)
+				|| pointIsInCastle(unit.x, unit.y + unit.height)
+				|| pointIsInCastle(unit.x + unit.width, unit.y + unit.height)) {
+				
+				return true;
+			}
+			return false;
+		}
 		
 		
 		private function unitCostSum(unitList:FlxGroup):int {
@@ -437,8 +457,14 @@ package
 			result = unitsFromLevel(ARMY,level,strata);
 			if(type == "barracks") {
 				return result;
+			} else if (type == "foundry") {
+				return unitsFromLevel(TOWER,level,strata);
 			}
-			return result + unitsFromLevel(TOWER,level,strata);
+			var result2:String = unitsFromLevel(TOWER,level,strata);
+			if(result2.length == 0) {
+				return result;
+			}
+			return result + ", " + result2;
 		}
 		
 		/** Returns the unitIDs for the units unlocked by the castle's upgrade levels
@@ -494,7 +520,7 @@ package
 					}
 				}
 			}
-			return names;
+			return names.substr(0,names.length-2);
 		}
 		
 		public function isGameOver():Boolean {

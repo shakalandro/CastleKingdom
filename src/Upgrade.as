@@ -45,7 +45,7 @@ package
 			
 			
 			var textIndex:int = _nameText.y + _nameText.height;
-			var costText:FlxText = new FlxText(x, textIndex, width, "Cost: " + goldCost);
+			var costText:FlxText = new FlxText(x + padding, textIndex, width - 2*padding, "Cost: " + goldCost);
 			textIndex += costText.height;
 			costText.alignment = "center";
 			costText.allowCollisions = FlxObject.NONE;
@@ -55,7 +55,7 @@ package
 			add(costText);
 			
 			if(type != "barracks") {
-				var towerText:FlxText = new FlxText(x, textIndex, width, "Towers: +" + unitWorth);
+				var towerText:FlxText = new FlxText(x + padding, textIndex, width  - 2*padding, "Towers: +" + unitWorth);
 				textIndex += towerText.height;
 				towerText.alignment = "center";
 				towerText.allowCollisions = FlxObject.NONE;
@@ -65,7 +65,7 @@ package
 
 			} 
 			if (type != "foundry") {
-				var armyText:FlxText = new FlxText(x, textIndex, width, "Armies: +" + unitWorth);
+				var armyText:FlxText = new FlxText(x + padding, textIndex, width  - 2*padding, "Armies: +" + unitWorth);
 				textIndex += armyText.height;
 				armyText.allowCollisions = FlxObject.NONE;
 				armyText.alignment = "center";
@@ -80,7 +80,7 @@ package
 				_unlocks = (FlxG.state as ActiveState).castle.getNamesByLevel(type, level);
 			}
 			if(_unlocks != "") {
-				var unlockText:FlxText = new FlxText(x,textIndex,width, "Unlocks: " + _unlocks);
+				var unlockText:FlxText = new FlxText(x + padding/1.5,textIndex,width - padding*1.33, "Unlocks: " + _unlocks);
 				textIndex += unlockText.height;
 				unlockText.allowCollisions = FlxObject.NONE;
 				unlockText.alignment = "center";

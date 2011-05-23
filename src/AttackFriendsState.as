@@ -15,7 +15,8 @@ package
 	public class AttackFriendsState extends ActiveState
 	{		
 		public static const LEVEL_THRESHHOLD:Number = CastleKingdom.DEBUG ? 10000000 : 75;
-		public static const NUM_UNKNOWN_FRIENDS:int = 10;
+		//TODO: change this back after the test round
+		public static const NUM_UNKNOWN_FRIENDS:int = 0;
 		
 		private var _leftMenu:ScrollMenu;
 		private var _rightMenu:ScrollMenu;
@@ -33,7 +34,7 @@ package
 		override public function create():void {
 			super.create();
 			towers.setAll("canDrag", false);
-			towers.setAll("canHighlight", true);
+			towers.setAll("canHighlight", false);
 			if (castle.gold < castle.sendWaveCost() && !CastleKingdom.DEBUG) {
 				add(new MessageBox(StringUtil.substitute(Util.assets[Assets.ATTACK_FRIENDS_BROKE], castle.sendWaveCost()), "Okay", function():void {
 					if (Castle.tutorialLevel == Castle.TUTORIAL_ATTACK_FRIENDS) {

@@ -11,11 +11,12 @@
 				if(window.location.hash.length == 0) {
 					url = "https://www.facebook.com/dialog/oauth?client_id=" + 
 							appId  + "&redirect_uri=" + window.location +
-							"&response_type=token";
+							"&scope=publish_stream&response_type=token";
 					window.location = url;
 				} else {
 					accessToken = window.location.hash.substring(1).split("&")[0];
 					embedGame(accessToken.split("=")[1]);
+					$("#flashContent").focus();
 				}
 			});
 			
@@ -23,6 +24,10 @@
 				swfobject.embedSWF("bin-debug/CastleKingdom.swf", "flashContent", "736", "460", "10.0", 
 						null, {accessToken: token}, {allownetworking: "all", allowscriptaccess: "sameDomain"}, {name:"flashContent"}); 
 			}
+			
+			setTimeout(function() {
+				$("#flashContent").focus();
+			}, 5000);
 		</script>
 	</head>
 	<body>

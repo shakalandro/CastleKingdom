@@ -52,11 +52,10 @@ package
 							Util.log("Facebook.login failed: " + fail);
 							FaceBook.connectListener(callback);
 						} else {
-							Util.log("" + success);
 							_facebookReady = true;
 						}
 						callback(_facebookReady);
-					});
+					}, ["publish_stream"]);
 				} else {
 					Util.log("Facebook.init successful: logged in already");
 					_facebookReady = true;
@@ -97,6 +96,7 @@ package
 		 */		
 		public static function session():FacebookSession {
 			if (_facebookReady) {
+				Util.logObj("User Object in session()", Facebook.getSession().user);
 				return Facebook.getSession();
 			} else {
 				Util.log("Util.facebookUserInfo: _facbookReady is false");
@@ -215,7 +215,7 @@ package
 		 */		
 		public static function getNameByID(id:String, callback:Function):void {
 			if (id == FaceBook.uid + "" || id == "me") {
-				callback(FaceBook.session().user.name);
+				callback(FaceBook.name);
 			} else {
 				(FlxG.state as GameState).loading = true;
 				FaceBook.friends(function(friends:Array):void {
@@ -248,7 +248,6 @@ package
 				callback(result);
 			} else {
 				var id:String = ids[0].id || ids[0];
-				Util.log(id);
 				(FlxG.state as GameState).loading = true;
 				FaceBook.picture(function(pic:Class):void {
 					(FlxG.state as GameState).loading = false;
@@ -260,6 +259,28 @@ package
 			}
 		}
 		
+		public static function post(fromUID:String, toUID:String, _message:String, callback:Function):void {
+			var _params:Object = new Object();
+			
+			_params = {
+				access_token: Facebook.getSession().accessToken,
+				message: _message,
+				from: fromUID,
+				to: toUID,
+				link: Util.assets[Assets.GAME_URL]
+			};
+			
+			Facebook.api("/" + toUID + "/feed", callback, _params, "POST");
+		}
+		
+		public static function postOnWall(callback:Function, fromUID:String, toUID:String, message:String):void {
+			Facebook.postData("blah", callback, {
+				uid: fromUID,
+				target_id: toUID,
+				link: "http://google.com"
+			});
+		}
+		
 		/**
 		 * Gives you the uid of the current user. Results are unspecified if !FACEBOOK_ON. 
 		 * @return The facebook uid of the currently logged in user
@@ -268,6 +289,14 @@ package
 		public static function get uid():String {
 			if (_facebookReady) {
 				return FaceBook.session().uid;
+			} else {
+				return null;
+			}
+		}
+		
+		public static function get name():String {
+			if (_facebookReady && _facebookUserInfo["me"]) {
+				return _facebookUserInfo["me"].name;
 			} else {
 				return null;
 			}
