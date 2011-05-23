@@ -60,6 +60,7 @@ package
 		 */		
 		public function ActiveState(map:FlxTilemap = null, castle:Castle = null, towers:FlxGroup = null, units:FlxGroup = null)
 		{
+			Util.log("New State entered");
 			super(map);
 			_towers = towers || new FlxGroup();
 			_units = units || new FlxGroup();
@@ -111,6 +112,7 @@ package
 						add(clear);
 					}
 					*/
+					Util.log("ActiveState.checkForThings: callback called");
 					if (!(FlxG.state is AttackState) && !(FlxG.state is DefenseState) && !(FlxG.state is AttackFriendsState)) {
 						setTutorialUI();
 					}
@@ -188,6 +190,8 @@ package
 						});
 					}
 				}, FaceBook.uid, true);
+			} else {
+				callback();
 			}
 		}
 		

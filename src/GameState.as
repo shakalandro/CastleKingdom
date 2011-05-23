@@ -45,7 +45,7 @@ package
 			super.create();
 			createHUD();
 			
-			_cursor = new AnimatedCursor(Util.assets[Assets.CURSOR]);
+			//_cursor = new AnimatedCursor(Util.assets[Assets.CURSOR]);
 			//add(_cursor);
 			
 			_map = new FlxTilemap();
@@ -117,6 +117,7 @@ package
 		}
 		
 		public function set loading(t:Boolean):void {
+			Util.log("GameState.logging: " + t);
 			_loading.visible = t; 
 		}
 		
@@ -139,6 +140,7 @@ package
 			_loading.x = Util.maxX - 100;
 			
 			_hud.add(_loading);
+			loading = false;
 			add(_hud);
 		}
 	}

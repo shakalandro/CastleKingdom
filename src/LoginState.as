@@ -2,6 +2,7 @@ package
 {
 	import com.facebook.graph.*;
 	import com.facebook.graph.data.*;
+	import mx.utils.StringUtil;
 	
 	import org.flixel.*;
 	
@@ -60,6 +61,7 @@ package
 									Util.logObj("Return user detected", dbInfo[0]);
 									Database.getUserTutorialInfo(function(info:Object):void {
 										setTutorialLevel(info);
+										this.loading = false;
 										FlxG.switchState(new ActiveState(map));
 									}, FaceBook.uid, true);
 								}
@@ -101,7 +103,7 @@ package
 			_startButton.active = false;
 			add(Util.window(x, y, body, function():void {
 				_startButton.active = true;
-			}, Util.assets[Assets.HELP_BUTTON], 0xffffffff, padding, width, height));
+			}, StringUtil.substitute(Util.assets[Assets.HELP_BUTTON], Logging.vid), 0xffffffff, padding, width, height));
 		}
 	}
 }

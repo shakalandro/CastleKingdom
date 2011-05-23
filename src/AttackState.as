@@ -204,7 +204,8 @@ package
 				var mouseCoords:FlxPoint = FlxG.mouse.getScreenPosition();
 				for each (var enemy:EnemyUnit in units.members) {
 					if (enemy != null && enemy.overlapsPoint(mouseCoords)) {
-						enemy.inflictDamage(CLICK_DAMAGE_POINTS * (castle.upgrades["castle"] + 1));
+						enemy.inflictDamage(CLICK_DAMAGE_POINTS * (castle.upgrades["castle"] + 2));
+						Util.log("enemy life: " + enemy.health + "/" + enemy.maxHealth);
 						_ticks = 0;
 						FlxG.mouse.load(Util.assets[Assets.CURSORSTATIC]);
 						break;

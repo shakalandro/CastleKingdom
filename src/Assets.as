@@ -527,7 +527,7 @@ package
 			_normal[Assets.HELP_BUTTON] = "Help";
 			_normal[Assets.HELP_TEXT] = "This is CastleKingdom, a tower defense OCD hybrid game. Bring your castle to glory as " +
 				"you battle your friends for treasure.\n\nAuthors: Gabe Groen, Justin Harding, Robert Johnson, Roy McElmurry, Kim Nguyen" +
-				"\n\nSpring 2011";
+				"\n\nSpring 2011\nversion {0} ";
 			_normal[Assets.BUTTON_CANCEL] = "Cancel";
 			_normal[Assets.BUTTON_DONE] = "Done";
 			_normal[Assets.PLACE_TOWER_BUTTON] = "Build";
