@@ -140,23 +140,23 @@ package
 										   _rightArmyLogging:String,
 									       _goldWon:int):void{
 		
-		if (LOGGING){
-		
-		var action:ClientAction = new ClientAction();
-		action.aid = ClientActionType.WIN_ATTACK;
-		action.ts = time; 
-		action.uid = uid;
-		
-		action.detail = new Object();
-		action.detail["type"] = _attackTypeLogging;
-		action.detail["towers"] = _towerLogging;
-		action.detail["left army"] = _leftArmyLogging;
-		action.detail["right army"] = _rightArmyLogging;
-		action.detail["gold won"] = _goldWon;
-		
-		client.LogAction(action);
-		}
-		trace("User won attack of type "+ _attackTypeLogging);
+			if (LOGGING){
+			
+				var action:ClientAction = new ClientAction();
+				action.aid = ClientActionType.WIN_ATTACK;
+				action.ts = time; 
+				action.uid = uid;
+				
+				action.detail = new Object();
+				action.detail["type"] = _attackTypeLogging;
+				action.detail["towers"] = _towerLogging;
+				action.detail["left army"] = _leftArmyLogging;
+				action.detail["right army"] = _rightArmyLogging;
+				action.detail["gold won"] = _goldWon;
+				
+				client.LogAction(action);
+			}
+				trace("User won attack of type "+ _attackTypeLogging);
 		}
 		
 		public function userLoseAttackRound(_attackTypeLogging:String, 
