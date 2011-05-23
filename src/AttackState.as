@@ -197,7 +197,7 @@ package
 			}
 		}
 		
-		private function checkClick():void {
+		private function checkClick():void { 
 			if (_ticks >= AttackState.MIN_TICKS_BETWEEN_CLICKS)
 				FlxG.mouse.load(Util.assets[Assets.CURSORPRIMED]);
 			if (FlxG.mouse.justPressed() && _ticks >= AttackState.MIN_TICKS_BETWEEN_CLICKS) {
