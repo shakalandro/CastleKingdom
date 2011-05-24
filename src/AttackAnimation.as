@@ -30,8 +30,8 @@ package
 				this.velocity.y = (_target.y - this.y);
 				this.velocity.x = (_target.x - this.x);
 				var scale:Number = this.velocity.y / Math.abs(this.velocity.x) ;
-				this.velocity.x = 200 * Math.abs(this.velocity.x) / this.velocity.x;
-				this.velocity.y = scale * 200;
+				this.velocity.x = 120 * Math.abs(this.velocity.x) / this.velocity.x;
+				this.velocity.y = scale * 120;
 			}
 			if(this.overlaps(_target)) {
 				trace( "Found dude: " + _target.health + " / " + _target.maxHealth);
