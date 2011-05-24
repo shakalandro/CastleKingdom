@@ -391,7 +391,8 @@ package
 			var castleStop:int = Util.cartesianToIndices(new FlxPoint(Util.castle.x + Util.castle.width, Util.castle.y), true).x;
 			if (indices.x >= castleStart && indices.x < castleStop) {
 				return false;
-			}
+			} 
+			
 			for each (var obj:FlxObject in towers.members) {
 				if (obj != null && obj != newTower) {
 					var objStart:FlxPoint = Util.cartesianToIndices(new FlxPoint(obj.x, obj.y), true);
@@ -430,7 +431,7 @@ package
 					}
 				}
 			}
-			return true;
+			return isValidHeight(newTower);
 		}
 		
 		/** returns true if the unit is in the correct vertical location for its strata */

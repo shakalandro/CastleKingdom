@@ -97,7 +97,7 @@ package
 			
 			if (!(this.dragging)) {
 				this.color = FlxG.WHITE;
-			} else if(!((FlxG.state as ActiveState).droppable(this.x,this.y,this)) || !((FlxG.state as ActiveState).isValidHeight(this))) {
+			} else if(!((FlxG.state as ActiveState).droppable(this.x,this.y,this)) ) {
 				this.color = FlxG.RED;
 			} else {
 				this.color = FlxG.GREEN;
