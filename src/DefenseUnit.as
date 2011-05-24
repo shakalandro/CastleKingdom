@@ -122,6 +122,10 @@ package
 			
 		}
 		
+		public function killInfo():void {
+			FlxG.state.remove(_infoDisplay);
+		}
+		
 		
 		override public function executeAttack():Boolean {
 			if(_target != null) {

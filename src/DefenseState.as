@@ -138,6 +138,8 @@ package
 				Util.placeInZone(tower, map,true, true);
 				//Util.placeOnGroundOld(tower, map, false, true);
 			} else if (newX > castle.x && newX < castle.x + castle.width && _menu.visible) {
+				tower.killInfo();
+				tower.canHighlight = false;
 				towers.remove(tower, true);
 			} else {
 				tower.x = oldX;

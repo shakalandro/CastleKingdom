@@ -571,6 +571,7 @@ package
 		
 		override public function kill():void{
 			this.alive = false;
+			FlxG.state.remove(this._infoBox);
 			super.kill();
 			
 		}
