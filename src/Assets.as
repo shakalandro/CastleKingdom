@@ -210,7 +210,7 @@ package
 		
 		[Embed(source = "../images/aa_tower.png")]
 		private static var aa_tower_normal:Class;
-		public static const AA_TOWER:String = "AA Gun";
+		public static const AA_TOWER:String = "AA Tower";
 		
 		[Embed(source = "../images/underground_wall.png")]
 		private static var underground_wall_normal:Class;
@@ -521,6 +521,10 @@ package
 		private static var castlebackground:Class;
 		public static const CASTLEBACKGROUND:String = "Castle Background";
 		
+		[Embed(source = "../images/blingbling.png")]
+		private static var blingbling:Class;
+		public static const BLINGBLING:String = "blingbling";
+		
 		// Text resources
 		
 		public static const HELP_BUTTON:String = "help button";
@@ -666,6 +670,7 @@ package
 			_normal[Assets.MINE4] = mine4;
 			_normal[Assets.MINE5] = mine5;
 			_normal[Assets.CASTLEBACKGROUND] = castlebackground;
+			_normal[Assets.BLINGBLING] = blingbling;
 
 			
 			_normal[Assets.MAP_TILES] = tilesImg_normal;
@@ -732,7 +737,7 @@ package
 			_normal[Assets.HELP_BUTTON] = "Help";
 			_normal[Assets.HELP_TEXT] = "This is CastleKingdom, a tower defense OCD hybrid game. Bring your castle to glory as " +
 				"you battle your friends for treasure.\n\nAuthors: Gabe Groen, Justin Harding, Robert Johnson, Roy McElmurry, Kim Nguyen" +
-				"\n\nSpring 2011\nversion {0} ";
+				"\n\nSpring 2011";
 			_normal[Assets.BUTTON_CANCEL] = "Cancel";
 			_normal[Assets.BUTTON_DONE] = "Done";
 			_normal[Assets.PLACE_TOWER_BUTTON] = "Build";
