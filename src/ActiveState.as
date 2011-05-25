@@ -484,12 +484,14 @@ package
 				Util.logging.startDquest(1);
 				FlxG.switchState(new DefenseState(map, oldCastle, defTowers));
 			});
+			_prepare.color = FlxG.GREEN;
 			var _release:CKButton = new CKButton(0, 0, Util.assets[Assets.RELEASE_WAVE_BUTTON], function():void {
 				var defTowers:FlxGroup = remove(towers);
 				var oldCastle:Castle = remove(castle);
 				Util.logging.startDquest(2);
 				FlxG.switchState(new AttackState(map, oldCastle, defTowers));
 			});
+			_release.color = FlxG.RED;
 			var _upgrade:CKButton = new CKButton(0, 0, Util.assets[Assets.UPGRADE_BUTTON], function():void {
 				var oldCastle:Castle = remove(castle);
 				var defTowers:FlxGroup = remove(towers);

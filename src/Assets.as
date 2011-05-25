@@ -210,7 +210,7 @@ package
 		
 		[Embed(source = "../images/aa_tower.png")]
 		private static var aa_tower_normal:Class;
-		public static const AA_TOWER:String = "AA Tower";
+		public static const AA_TOWER:String = "AA Gun";
 		
 		[Embed(source = "../images/underground_wall.png")]
 		private static var underground_wall_normal:Class;
