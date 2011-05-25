@@ -143,6 +143,9 @@ package
 					if(_target.inflictDamage(this.damageDone)){
 						_target = null;
 					}
+				} 
+				if(name.indexOf("Multi") >= 0) {
+					_target = null; // allows multishot towers to hit multiple units?
 				}
 				
 				return true;

@@ -180,9 +180,7 @@ package
 			super.preUpdate();
 			if (FlxG.state is AttackFriendsState && this.checkHighlight()) {
 				_infoDisplay.remove(_multiDisplay);
-				if(this.name == "Dragon") {
-					trace("plz break here");
-				}
+			
 				//-((FlxG.state as AttackFriendsState).accumulatedUnits)
 				var maxFit:int = (6/(this.width/CastleKingdom.TILE_SIZE))* (6/(this.height/CastleKingdom.TILE_SIZE));
 				maxFit *= 2; // 1 for each side

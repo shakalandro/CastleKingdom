@@ -180,10 +180,16 @@ package
 			_blingbling = new FlxSprite(x,y+this.height);
 			_blingbling.loadGraphic(Util.assets["blingbling"],false,false,138,115);
 			_blingbling.frame = blingFrame();
-			_blingbling.alpha = .75;
+			var vaultCover:FlxSprite = new FlxSprite(x,y+this.height,Util.assets["vaultCover"]);
+			vaultCover.alpha = .4;
+			Util.centerX(vaultCover);
+			
+			//_blingbling.alpha = .75;
 			Util.centerX(_blingbling);
 			_UpgrImages = new FlxGroup(); 
 			_UpgrImages.add(_blingbling);
+			_UpgrImages.add(vaultCover);
+
 			applyImage("barracks");
 			applyImage("foundry");
 			applyImage("castle");

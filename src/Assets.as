@@ -276,6 +276,9 @@ package
 		private static var explode:Class;
 		public static const EXPLODE:String = "Explode";
 		
+		[Embed(source = "../images/vault_cover.png")]
+		private static var vault_cover:Class;
+		public static const VAULT_COVER:String = "vaultCover";
 		
 		[Embed(source = "../images/castle1.png")]
 		private static var castle1:Class;
@@ -672,7 +675,8 @@ package
 			_normal[Assets.CASTLEBACKGROUND] = castlebackground;
 			_normal[Assets.BLINGBLING] = blingbling;
 
-			
+			_normal[Assets.VAULT_COVER] = vault_cover;
+
 			_normal[Assets.MAP_TILES] = tilesImg_normal;
 			_normal[Assets.SWORDSMAN] = swordsman_normal;
 			_normal[Assets.PIKEMAN] = pikeman_normal;
