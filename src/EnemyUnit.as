@@ -33,6 +33,8 @@ package
 		private var _active:Boolean;
 		private var _canDrag:Boolean;
 		private var _invuln:int;
+		private var _multiNumber:int;
+		private var _multiDisplay:FlxText;
 
 		public function EnemyUnit(x:Number, y:Number, towerID:int, canDrag:Boolean = false, bar:HealthBar = null, active:Boolean = true) {
 			
@@ -177,10 +179,25 @@ package
 		override public function preUpdate():void {
 			super.preUpdate();
 			if (FlxG.state is AttackFriendsState && this.checkHighlight()) {
+				_infoDisplay.remove(_multiDisplay);
+				if(this.name == "Dragon") {
+					trace("plz break here");
+				}
+				//-((FlxG.state as AttackFriendsState).accumulatedUnits)
+				var maxFit:int = (6/(this.width/CastleKingdom.TILE_SIZE))* (6/(this.height/CastleKingdom.TILE_SIZE));
+				maxFit *= 2; // 1 for each side
+				_multiNumber = ((((FlxG.state as AttackFriendsState).castle.unitCapacity)) / maxFit) / this.cost;
+				_multiDisplay = new FlxText(this.x,this.y + this.height,this.width,"x" +_multiNumber);
+				_multiDisplay.color = FlxG.BLACK;
+				_infoDisplay.add(_multiDisplay);
 				FlxG.state.add(_infoDisplay);
 				var rangeSize:int = this.range*CastleKingdom.TILE_SIZE;
 				_infoBox.x = this.x - rangeSize;
 				_infoBox.y = this.y - rangeSize;
+				if(_multiDisplay) {
+					_multiDisplay.x = this.x;
+					_multiDisplay.y = this.y + this.height;
+				}
 				_description.x = this.x + width + 3, 
 					_description.y = this.y;
 				_infoBox.visible = true;
@@ -270,5 +287,23 @@ package
 				target = null;
 			}
 		}
+		
+		public function setMultiple(maxUnits:int):void {
+			if(false) {
+			// compute max number of this unit that can fit in 1 attack box
+			_infoDisplay.remove(_multiDisplay);
+			var maxFit:int = (6/(this.width/CastleKingdom.TILE_SIZE))* (6/(this.height/CastleKingdom.TILE_SIZE));
+			maxFit *= 2; // 1 for each side
+			_multiNumber = maxUnits / maxFit / 1.5;
+			_multiDisplay = new FlxText(this.x,this.y + this.height,this.width,"Places\n" + _multiNumber + "\nunits");
+			_multiDisplay.color = FlxG.BLACK;
+			_infoDisplay.add(_multiDisplay);
+			}
+		}
+		
+		public function get multiNumber():int {
+			return _multiNumber;
+		}
+		
 	}
 }

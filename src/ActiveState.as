@@ -395,6 +395,9 @@ package
 			if (indices.x >= castleStart && indices.x < castleStop) {
 				return false;
 			} 
+			if(indices.x <= Util.minTileX + 1 || indices.x >= Util.maxTileX - 2) {
+				return false;
+			}
 			
 			for each (var obj:FlxObject in towers.members) {
 				if (obj != null && obj != newTower) {
