@@ -96,11 +96,13 @@ package
 			var enemy:EnemyUnit = (draggable as EnemyUnit);
 			if (newX > castle.x && newX < castle.x + castle.width && 
 					_middleMenu.dropOnto(draggable as FlxObject, oldX, oldY) &&
-					_accumulatedUnits + enemy.cost <= castle.unitCapacity) {
+					_accumulatedUnits + enemy.cost*enemy.multiNumber <= castle.unitCapacity) {
 				var newEnemy:EnemyUnit = enemy.clone() as EnemyUnit;
 				newEnemy.x = oldX;
 				newEnemy.y = oldY;
-				_accumulatedUnits += enemy.cost;
+				newEnemy.setMultiple(castle.unitCapacity - _accumulatedUnits);
+				_accumulatedUnits += enemy.cost * enemy.multiNumber;
+				enemy.canDrag = false;
 				_leftMenu.addToCurrentPage(newEnemy);
 				_middleMenu.addToCurrentPage(enemy);
 			} else {
@@ -195,7 +197,9 @@ package
 			for each (var thing:FlxBasic in dropbox.members) {
 				if (thing is EnemyUnit) {
 					var enemy:EnemyUnit = thing as EnemyUnit;
-					units += enemy.unitID + ",";
+					for(var i:int = 0; i < enemy.multiNumber; i++) {
+						units += enemy.unitID + ",";
+					}
 				}
 			}
 			return units.substr(0, units.length - 1);
@@ -224,6 +228,7 @@ package
 						
 						if (index < units.length) {
 							var baddy:EnemyUnit = new EnemyUnit(k * (width / perRow), j * (height / perColumn), units[index], true, null, false);
+							baddy.setMultiple(castle.unitCapacity);
 							var name:FlxText = new FlxText(k * (width / perRow), j * (height / perColumn), width / perRow - padding, baddy.name);
 							name.color = FlxG.BLACK;
 							
@@ -327,6 +332,10 @@ package
 			}
 			_armyDisplay.value = _accumulatedUnits;
 			_armyDisplay.max = castle.unitCapacity;
+		}
+		
+		public function get accumulatedUnits():int {
+			return _accumulatedUnits;
 		}
 	}
 }
