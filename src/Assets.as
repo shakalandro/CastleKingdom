@@ -627,7 +627,7 @@ package
 			_normal[Assets.CASTLE13] = castle13;
 			_normal[Assets.CASTLE14] = castle14;
 			_normal[Assets.CASTLE15] = castle15;
-			_normal[Assets.CASTLE15] = castle16;
+			_normal[Assets.CASTLE16] = castle16;
 			_normal[Assets.CASTLE17] = castle17;
 			_normal[Assets.CASTLE18] = castle18;
 			_normal[Assets.CASTLE19] = castle19;
