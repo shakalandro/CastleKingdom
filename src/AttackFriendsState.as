@@ -147,8 +147,6 @@ package
 			if (FriendBox.selected != null) {
 				var leftUnits:String = getAttackingUnits(_dropboxes[0]);
 				var rightUnits:String = getAttackingUnits(_dropboxes[1]);
-				Util.logObj("leftUnits:", leftUnits);
-				Util.logObj("rightUnits:", rightUnits);
 				if (leftUnits.length > 0 || rightUnits.length > 0) {
 					var attack:Object = {
 						uid: FaceBook.uid + "",
@@ -157,7 +155,6 @@ package
 						rightSide: rightUnits,
 						time: (new Date()).time
 					};
-					Util.logObj("Attack:", attack);
 					Database.updateUserAttacks(attack);
 				}
 				castle.addGold(-castle.sendWaveCost());

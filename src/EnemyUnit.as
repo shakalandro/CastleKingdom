@@ -184,7 +184,7 @@ package
 				//-((FlxG.state as AttackFriendsState).accumulatedUnits)
 				var maxFit:int = (6/(this.width/CastleKingdom.TILE_SIZE))* (6/(this.height/CastleKingdom.TILE_SIZE));
 				maxFit *= 2; // 1 for each side
-				_multiNumber = ((((FlxG.state as AttackFriendsState).castle.unitCapacity)) / maxFit) / this.cost;
+				_multiNumber = ((((FlxG.state as AttackFriendsState).castle.unitCapacity)) / maxFit) / this.cost + 1;
 				_multiDisplay = new FlxText(this.x,this.y + this.height,this.width,"x" +_multiNumber);
 				_multiDisplay.color = FlxG.BLACK;
 				_infoDisplay.add(_multiDisplay);

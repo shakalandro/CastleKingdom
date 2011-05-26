@@ -1138,7 +1138,6 @@ package
 		 */
 		public static function updateUserAttacks(attackInfo:Object):void
 		{
-			Util.logObj(":::::::::attack object:", attackInfo);
 			var variables:URLVariables = new URLVariables();
 			variables.uid = "" + attackInfo["uid"];
 			variables.aid = "" + attackInfo["aid"];
