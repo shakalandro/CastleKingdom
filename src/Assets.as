@@ -276,6 +276,9 @@ package
 		private static var explode:Class;
 		public static const EXPLODE:String = "Explode";
 		
+		[Embed(source = "../images/vault_cover.png")]
+		private static var vault_cover:Class;
+		public static const VAULT_COVER:String = "vaultCover";
 		
 		[Embed(source = "../images/castle1.png")]
 		private static var castle1:Class;
@@ -521,6 +524,10 @@ package
 		private static var castlebackground:Class;
 		public static const CASTLEBACKGROUND:String = "Castle Background";
 		
+		[Embed(source = "../images/blingbling.png")]
+		private static var blingbling:Class;
+		public static const BLINGBLING:String = "blingbling";
+		
 		// Text resources
 		
 		public static const HELP_BUTTON:String = "help button";
@@ -620,7 +627,7 @@ package
 			_normal[Assets.CASTLE13] = castle13;
 			_normal[Assets.CASTLE14] = castle14;
 			_normal[Assets.CASTLE15] = castle15;
-			_normal[Assets.CASTLE15] = castle16;
+			_normal[Assets.CASTLE16] = castle16;
 			_normal[Assets.CASTLE17] = castle17;
 			_normal[Assets.CASTLE18] = castle18;
 			_normal[Assets.CASTLE19] = castle19;
@@ -666,8 +673,10 @@ package
 			_normal[Assets.MINE4] = mine4;
 			_normal[Assets.MINE5] = mine5;
 			_normal[Assets.CASTLEBACKGROUND] = castlebackground;
+			_normal[Assets.BLINGBLING] = blingbling;
 
-			
+			_normal[Assets.VAULT_COVER] = vault_cover;
+
 			_normal[Assets.MAP_TILES] = tilesImg_normal;
 			_normal[Assets.SWORDSMAN] = swordsman_normal;
 			_normal[Assets.PIKEMAN] = pikeman_normal;
@@ -732,7 +741,7 @@ package
 			_normal[Assets.HELP_BUTTON] = "Help";
 			_normal[Assets.HELP_TEXT] = "This is CastleKingdom, a tower defense OCD hybrid game. Bring your castle to glory as " +
 				"you battle your friends for treasure.\n\nAuthors: Gabe Groen, Justin Harding, Robert Johnson, Roy McElmurry, Kim Nguyen" +
-				"\n\nSpring 2011\nversion {0} ";
+				"\n\nSpring 2011";
 			_normal[Assets.BUTTON_CANCEL] = "Cancel";
 			_normal[Assets.BUTTON_DONE] = "Done";
 			_normal[Assets.PLACE_TOWER_BUTTON] = "Build";

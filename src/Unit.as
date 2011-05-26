@@ -266,7 +266,7 @@ package
 			if(_attackCounter <= 0) {				//first check if this unit's timer has expired
 				if(executeAttack()) {		// Tries to attack if possible, fails if no units in range
 					this._shotCount--;
-					if(this._shotCount == 0) {
+					if(this._shotCount <= 0) {
 						resetAttackCounter();
 					}
 				}
@@ -276,7 +276,10 @@ package
 		
 		private function resetAttackCounter():void {
 			_attackCounter = 250/rate;
-			_shotCount = shots;
+			_shotCount = 1;
+			if(name.indexOf("Multi") >= 0) {
+				_shotCount = 3;
+			} 
 		}
 		
 		/** Calls hitRanged(contact, velocity) for any units in range of the current item

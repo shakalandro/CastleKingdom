@@ -63,6 +63,7 @@ package
 		private static var _tutorialLevel:int;
 		private var _attackSeed:Number;
 		private var _UpgrImages:FlxGroup;
+		private var _blingbling:FlxSprite;
 		
 		public function Castle(X:Number=0, Y:Number=0, SimpleGraphic:Class=null)
 		{
@@ -176,7 +177,19 @@ package
 			if (_UpgrImages) {
 				FlxG.state.remove(_UpgrImages);
 			}
+			_blingbling = new FlxSprite(x,y+this.height);
+			_blingbling.loadGraphic(Util.assets["blingbling"],false,false,138,115);
+			_blingbling.frame = blingFrame();
+			var vaultCover:FlxSprite = new FlxSprite(x,y+this.height,Util.assets["vaultCover"]);
+			vaultCover.alpha = .4;
+			Util.centerX(vaultCover);
+			
+			//_blingbling.alpha = .75;
+			Util.centerX(_blingbling);
 			_UpgrImages = new FlxGroup(); 
+			_UpgrImages.add(_blingbling);
+			_UpgrImages.add(vaultCover);
+
 			applyImage("barracks");
 			applyImage("foundry");
 			applyImage("castle");
@@ -348,13 +361,23 @@ package
 				_gold = int.MAX_VALUE; // Caps gold at largest amount;
 				return true;
 			}
+		
+			_gold += amount;
+			if(_blingbling)	_blingbling.frame = blingFrame();
+			
 			if (_gold + amount < 0) {
 				return false;
-			}
-			
-			_gold += amount;
+			}			
 			Database.updateUserInfo({id:(FaceBook.uid), gold: _gold, units:this.unitCapacity + this.towerCapacity});
 			return true;
+		}
+		
+		/** returns int between 0 and 14 (max gold frames) */
+		private function blingFrame():int {
+			return Math.min(	14, // caps at highest frame
+								Math.floor(  // round up
+											Math.log( // normalize so that changes at good rate
+													Math.max(1,gold/30))  )); // ensure valid, good start pattern
 		}
 		
 		

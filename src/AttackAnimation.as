@@ -34,9 +34,7 @@ package
 				this.velocity.y = scale * 120;
 			}
 			if(this.overlaps(_target)) {
-				trace( "Found dude: " + _target.health + " / " + _target.maxHealth);
 				if(_target.inflictDamage(_source.damageDone)){
-					trace("Dealt " + _source.damageDone + " damage to " + _target.health + " / " + _target.maxHealth + " dude");
 					_source.thingKilled(_target);
 				}
 				hitLeft(_target);
