@@ -1072,11 +1072,13 @@ package
 		 */
 		public static function updateUserAttacks(attackInfo:Object):void
 		{
+			Util.logObj(":::::::::attack object:", attackInfo);
 			var variables:URLVariables = new URLVariables();
 			variables.uid = "" + attackInfo["uid"];
 			variables.aid = "" + attackInfo["aid"];
 			variables.leftSide = "" + attackInfo["leftSide"];
 			variables.rightSide = "" + attackInfo["rightSide"];
+			variables.time = attackInfo["time"];
 			attackInfo["win"] = -1;
 			update("http://games.cs.washington.edu/capstone/11sp/castlekd/database/updateUserAttacks.php", variables);
 			if (_save.data.users[attackInfo.id] == null) {
