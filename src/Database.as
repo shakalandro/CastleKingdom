@@ -1269,7 +1269,7 @@ package
 			variables.ypos = "" + userDefs["ypos"];
 			update("http://games.cs.washington.edu/capstone/11sp/castlekd/database/insertUserDefs.php", variables);
 			if (_save.data.users[userDefs.id] == null) {
-				_save.data.users[userDefs.id].upgrades = {info: {}, tut: {}, defs: [], leases: [], attacks: [], upgrades: []};
+				_save.data.users[userDefs.id] = {info: {}, tut: {}, defs: [], leases: [], attacks: [], upgrades: []};
 			}
 			_save.data.users[userDefs.id].defs.push(userDefs);
 		}
