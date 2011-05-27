@@ -96,6 +96,10 @@ package
 		private static var smart_tunneler_normal:Class;
 		public static const SMART_TUNNELER:String = "Smart Tunneler";
 		
+		[Embed(source = "../images/sandworm.png")]
+		private static var sandworm_normal:Class;
+		public static const SANDWORM:String = "Sandworm";
+		
 		[Embed(source = "../images/hud_header.png")]
 		private static var hud_header:Class;
 		public static const HUD_HEADER:String = "hud_header";
@@ -742,6 +746,7 @@ package
 			_normal[Assets.MUTANT_MOLE] = mutant_mole_normal;
 			_normal[Assets.TUNNELER] = tunneler_normal;
 			_normal[Assets.SMART_TUNNELER] = smart_tunneler_normal;
+			_normal[Assets.SANDWORM] = sandworm_normal;
 			
 			//Textual assets
 			
