@@ -132,7 +132,7 @@ package
 			}
 		}
 		
-		private function waveFinished(win:Boolean, prize:Number):void {
+		private function waveFinished(win:Boolean, prize:Number, pickedUp:Number = 0):void {
 			Util.log("AttackState.waveFinished: " + win, Castle.tutorialLevel);
 			FlxG.mouse.load(Util.assets[Assets.CURSORSTATIC]);
 			var winText:String = Util.assets[Assets.FIRST_WIN];
@@ -173,8 +173,10 @@ package
 						toggleButtons(2);
 					}));
 			} else {
-				if (win) {
-					add(new TimedMessageBox(StringUtil.substitute(Util.assets[Assets.ATTACK_WIN], prize)));
+				if (win && castle.sessionAttackCounter >= 60 ) {
+					add(new TimedMessageBox(StringUtil.substitute(Util.assets[Assets.ATTACK_LOW_GOLD], prize, pickedUp)));
+				} else if (win) {
+					add(new TimedMessageBox(StringUtil.substitute(Util.assets[Assets.ATTACK_WIN], prize, pickedUp)));
 				} else {
 
 					add(new TimedMessageBox(StringUtil.substitute(Util.assets[Assets.ATTACK_LOSE], prize)));
@@ -253,11 +255,12 @@ package
 					// USER WINS
 					
 					castle.sessionAttackCounter += 1;
-					_waveGold *= (100 - Math.max(20, castle.sessionAttackCounter) / 100);
-					this.castle.addGold(this._waveGold);
+					trace("session counter at " + castle.sessionAttackCounter + " and " + ((100 - Math.min(80, castle.sessionAttackCounter)) / 100));
+					trace( _waveGold + " picked up " + sessionGold());
+					this.castle.addGold(sessionGold());
 					castle.attackSeed = Math.random();
 					_gameOver = true;
-					waveFinished(true, _waveGold);
+					waveFinished(true, _waveGold,sessionGold());
 					
 					Util.logging.userWinAttackRound(_attackTypeLogging, 
 						_towerLogging, 
@@ -282,6 +285,9 @@ package
 			
 		}
 		
+		private function sessionGold():int{
+			return  Math.ceil(_waveGold * (100 - Math.min(80, castle.sessionAttackCounter)) / 100);
+		}
 
 		
 		/**

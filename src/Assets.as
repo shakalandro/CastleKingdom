@@ -582,6 +582,7 @@ package
 		public static const LEASE_SENT:String = "lease sent";
 		public static const LEASE_NOT_SENT:String = "lease not sent";
 		public static const INVITE_FRIEND:String = "invite friend";
+		public static const ATTACK_LOW_GOLD:String = "attack low gold";
 		
 		public static const GAME_URL:String = "game url";
 		
@@ -793,7 +794,11 @@ package
 			_normal[Assets.LEASE_ACCEPTED] = "{0} has accepted your request to loan out {1} of their unit capacity. They have been added " +
 				"to your capacity for the next attack wave.";
 			_normal[Assets.LEASE_REJECTED] = "Too bad. {0} rejected your request to loan out some of their unit capacity this time.";
-			_normal[Assets.ATTACK_WIN] = "Great! They didn't steal any of your gold - in fact they dropped {0} gold!";
+			_normal[Assets.ATTACK_WIN] = "Great! They didn't steal any of your gold - in fact they dropped {0} gold!" +
+				"Your troops get tired the more gold they collect. They collected {1} of the gold available.";
+			_normal[Assets.ATTACK_LOW_GOLD] = "Your troops are pretty tired from defending against so many enemies! \n" +
+				"They still managed to pick up {1} of {0} of the dropped gold. They could have gotten more of what was dropped if they rested." +
+				"You should take a break, so they can rest! Come back later and you'll gain more gold from each attack.";
 			_normal[Assets.ATTACK_LOSE] = "Too bad! The enemies got away with {0} of your gold.";
 			_normal[Assets.ATTACK_FRIENDS_SENT] = "Your army is on its way to try to steal gold from {0}.";
 			_normal[Assets.ATTACK_FRIENDS_NOT_SENT] = "An army was not sent.";
