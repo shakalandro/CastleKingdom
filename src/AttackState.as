@@ -251,7 +251,9 @@ package
 				} else if (_placeOnLeft.length + _placeOnRight.length == 0  && units.length == 0) { // Check if peeps are still alive
 
 					// USER WINS
-
+					
+					castle.sessionAttackCounter += 1;
+					_waveGold *= (100 - Math.max(20, castle.sessionAttackCounter) / 100);
 					this.castle.addGold(this._waveGold);
 					castle.attackSeed = Math.random();
 					_gameOver = true;

@@ -280,6 +280,10 @@ package
 		private static var vault_cover:Class;
 		public static const VAULT_COVER:String = "vaultCover";
 		
+		[Embed(source = "../images/vault_grass.png")]
+		private static var vault_grass:Class;
+		public static const VAULT_GRASS:String = "vaultGrass";
+		
 		[Embed(source = "../images/castle1.png")]
 		private static var castle1:Class;
 		public static const CASTLE1:String = "castle1";
@@ -676,6 +680,8 @@ package
 			_normal[Assets.BLINGBLING] = blingbling;
 
 			_normal[Assets.VAULT_COVER] = vault_cover;
+			_normal[Assets.VAULT_GRASS] = vault_grass;
+
 
 			_normal[Assets.MAP_TILES] = tilesImg_normal;
 			_normal[Assets.SWORDSMAN] = swordsman_normal;

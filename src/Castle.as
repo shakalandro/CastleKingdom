@@ -65,6 +65,8 @@ package
 		private var _UpgrImages:FlxGroup;
 		private var _blingbling:FlxSprite;
 		
+		private var _sessionAttackCounter:int;
+		
 		public function Castle(X:Number=0, Y:Number=0, SimpleGraphic:Class=null)
 		{
 			//TODO: implement function
@@ -95,8 +97,17 @@ package
 			_attackSeed = Math.random();
 			solid = true;
 			immovable = true;
+			_sessionAttackCounter = 0;
 
 			
+		}
+		
+		public function get sessionAttackCounter():int {
+			return _sessionAttackCounter;
+		}
+		
+		public function set sessionAttackCounter(x:int) {
+			_sessionAttackCounter = x;
 		}
 		
 		public function get upgrImages():FlxGroup {
@@ -183,13 +194,15 @@ package
 			var vaultCover:FlxSprite = new FlxSprite(x,y+this.height,Util.assets["vaultCover"]);
 			vaultCover.alpha = .4;
 			Util.centerX(vaultCover);
-			
+			var vaultGrass:FlxSprite = new FlxSprite(x,y+this.height,Util.assets["vaultGrass"]);
+			Util.centerX(vaultGrass);
+			vaultGrass.alpha = .8;
 			//_blingbling.alpha = .75;
 			Util.centerX(_blingbling);
 			_UpgrImages = new FlxGroup(); 
 			_UpgrImages.add(_blingbling);
 			_UpgrImages.add(vaultCover);
-
+			_UpgrImages.add(vaultGrass);
 			applyImage("barracks");
 			applyImage("foundry");
 			applyImage("castle");

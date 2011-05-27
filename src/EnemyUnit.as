@@ -284,6 +284,7 @@ package
 			if(_target == target) {
 				target = null;
 			}
+			var force:uint;
 		}
 		
 		public function setMultiple(maxUnits:int):void {
