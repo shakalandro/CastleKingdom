@@ -29,6 +29,7 @@ package
 		private static var _pendingUserLeaseInfo:Array;
 		private static var _pendingLeases:Array;
 		private static var _finishedAttacks:Array;
+		private static var _userDef:Array;
 		
 		
 		private static function getMain(url:String, callback:Function, ids:Object = null):void
@@ -86,6 +87,42 @@ package
 				}, ids);
 			} else {
 				callback(getAll(_userInfo, ids));
+			}
+		}
+		
+		/**
+		 * <p>
+		 * Passes an array of objects representing the given users (based on the given ids) defence information to
+		 * the callback function. The object that is passed to the callback function is of the following form:
+		 * </p>
+		 * <p>
+		 * {did, xpos, ypos}
+		 * </p>
+		 * <p>
+		 * If the user does not have any information, the the array that is passed to the callback is null.
+		 * </p>
+		 * 
+		 * @param callback a function that takes one argument, an array of objects
+		 * @param ids either a number or an array of numbers representing the user ids
+		 * @param forceRefresh
+		 * 
+		 */
+		public static function getUserDef(callback:Function, ids:Object = null, forceRefresh:Boolean = false):void {
+			if (forceRefresh || _userDef == null) {
+				(FlxG.state as GameState).loading = true;
+				getMain("http://games.cs.washington.edu/capstone/11sp/castlekd/database/getUserDef.php", function(xmlData:XML):void {
+					(FlxG.state as GameState).loading = false;
+					_userDef = processList(xmlData.def, function(unit:XML):Object {
+						return {
+							did: unit.did,
+							xpos: unit.xpos,
+							ypos: unit.ypos
+						};
+					});
+					callback(_userDef);
+				}, ids);
+			} else {
+				callback(getAll(_userDef, ids));
 			}
 		}
 		
@@ -840,7 +877,7 @@ package
 			variables.gold = "" + START_GOLD;
 			variables.units = "" + START_UNITS;
 			update("http://games.cs.washington.edu/capstone/11sp/castlekd/database/addNewUser.php", variables);
-			_save.data.users[uid] = {info: {}, tut: {}, leases: [], attacks: [], upgrades: []};
+			_save.data.users[uid] = {info: {}, tut: {}, defs: [], leases: [], attacks: [], upgrades: []};
 			_save.data.users[uid].info = {id: uid, gold: 0, units: 5};
 		}
 		
@@ -870,6 +907,35 @@ package
 					leases: [], attacks: [], upgrades: []};
 			}
 			_save.data.users[userInfo.id].info = userInfo;
+		}
+		
+		/**
+		 * <p>
+		 * Updates the given users def information to what is provided in the given object. The object must be of the
+		 * form: 
+		 * </p>
+		 * <p>
+		 * {id, did, xpos, ypos}
+		 * </p>
+		 *  
+		 * @param userInfo an object of the specified form and should not be null
+		 * 
+		 */
+		public static function updateUserDef(userDefs:Object):void
+		{
+			var variables:URLVariables = new URLVariables();
+			variables.uid = "" + userDefs["id"];
+			variables.did = "" + userDefs["did"];
+			variables.xpos = "" + userDefs["xpos"];
+			variables.ypos = "" + userDefs["ypos"];
+			update("http://games.cs.washington.edu/capstone/11sp/castlekd/database/updateUserDef.php", variables);
+			updateCache(userDefs, _userDef);
+			if (_save.data.users[userDefs.id] == undefined || _save.data.users[userDefs.id] == null) {
+				_save.data.users[userDefs.id] = {info: {}, 
+					tut: {id: userDefs.uid, tut1: 0, tut2: 0, tut3: 0, tut4: 0, tut5: 0, tut6: 0}, 
+					defs: [], leases: [], attacks: [], upgrades: []};
+			}
+			_save.data.users[userDefs.id].defs = userDefs;
 		}
 		
 		/**
@@ -1077,6 +1143,7 @@ package
 			variables.aid = "" + attackInfo["aid"];
 			variables.leftSide = "" + attackInfo["leftSide"];
 			variables.rightSide = "" + attackInfo["rightSide"];
+			variables.time = attackInfo["time"];
 			attackInfo["win"] = -1;
 			update("http://games.cs.washington.edu/capstone/11sp/castlekd/database/updateUserAttacks.php", variables);
 			if (_save.data.users[attackInfo.id] == null) {
@@ -1137,11 +1204,13 @@ package
 			variables.uid = "" + attackInfo["id"];
 			variables.aid = "" + attackInfo["aid"];
 			update("http://games.cs.washington.edu/capstone/11sp/castlekd/database/removeUserAttacks.php", variables);
-			for (var i:int = 0; i < _pendingAttacks.length; i++) {
-				if (_pendingAttacks[i].id == attackInfo["id"] && _pendingAttacks[i].aid == attackInfo["aid"]) {
-					_pendingAttacks.splice(i, 1);
-					break;
-				}
+			if (_pendingAttacks != null) {
+				for (var i:int = 0; i < _pendingAttacks.length; i++) {
+					if (_pendingAttacks[i].id == attackInfo["id"] && _pendingAttacks[i].aid == attackInfo["aid"]) {
+						_pendingAttacks.splice(i, 1);
+						break;
+					}
+				}	
 			}
 			if (_save.data.users[attackInfo.id] == undefined || _save.data.users[attackInfo.id] == null)
 				_save.data.users[attackInfo.id] = {info: {}, tut: {}, leases: [], attacks: [], upgrades: []};
@@ -1180,6 +1249,32 @@ package
 				_save.data.users[userUpgrades.id].upgrades = {info: {}, tut: {}, leases: [], attacks: [], upgrades: []};
 			}
 			_save.data.users[userUpgrades.id].upgrades.push(userUpgrades);
+		}
+		
+		/**
+		 * <p>
+		 * Inserts the given user defence information into the database. The object passed must be of
+		 * the following format:
+		 * </p>
+		 * <p>
+		 * {id, did, xpos, ypos}
+		 * </p>
+		 * 
+		 * @param userDefs must be of the specified format and != null
+		 * 
+		 */
+		public static function insertUserDef(userDefs:Object):void
+		{
+			var variables:URLVariables = new URLVariables();
+			variables.uid = "" + userDefs["id"];
+			variables.did = "" + userDefs["did"];
+			variables.xpos = "" + userDefs["xpos"];
+			variables.ypos = "" + userDefs["ypos"];
+			update("http://games.cs.washington.edu/capstone/11sp/castlekd/database/insertUserDefs.php", variables);
+			if (_save.data.users[userDefs.id] == null) {
+				_save.data.users[userDefs.id] = {info: {}, tut: {}, defs: [], leases: [], attacks: [], upgrades: []};
+			}
+			_save.data.users[userDefs.id].defs.push(userDefs);
 		}
 		
 		/**

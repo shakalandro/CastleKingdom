@@ -9,7 +9,7 @@ package
 	
 	public class LeaseState extends ActiveState
 	{
-		public static const LEVEL_THRESHHOLD:Number = CastleKingdom.DEBUG ? 10000000 : 75;
+		public static const LEVEL_THRESHHOLD:Number = CastleKingdom.DEBUG ? 10000000 : 100000000;
 		//TODO: change back after the tests
 		public static const NUM_UNKNOWN_FRIENDS:int = 0;
 		

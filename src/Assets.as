@@ -781,8 +781,7 @@ package
 				"let the enemies start their attack!";
 			_normal[Assets.FIRST_ATTACK] = "Your castle has become quite impressive. You are now ready to " +
 				"send units to go attack your friends' castles!";
-			_normal[Assets.SENT_WAVE] = "Now that you can attack friends, they can also attack you. Try asking " +
-				"your friends to loan you some of their resources to help you in battle.";
+			_normal[Assets.SENT_WAVE] = "Now that you can attack friends, they can also attack you. Be on your gaurd.";
 			_normal[Assets.INCOMING_WAVE] = "Watch out! Your friend {0} has sent a wave of enemies at you. Would you " +
 				"like to try defending yourself or simply surrender {1} gold?";
 			_normal[Assets.FRIEND_WAVE_WIN] = "Good job, way to fight off the enemies from {0}, they won't be messing with you again soon.";

@@ -37,6 +37,9 @@ package
 			
 			_text = new FlxText(_x, _y, box.width - X_OFFSET - 2 * _padding, textString);
 			_text.size = 14;
+			if (textString.length > 8) {
+				_text.size = 10;
+			}
 			_text.color = FlxG.BLACK;
 			_text.alignment = "right";
 			Util.centerY(_text, box);

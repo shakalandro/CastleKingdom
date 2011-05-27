@@ -14,9 +14,10 @@ package
 	 */	
 	public class AttackFriendsState extends ActiveState
 	{		
-		public static const LEVEL_THRESHHOLD:Number = CastleKingdom.DEBUG ? 10000000 : 75;
+		//TODO: change this back when testing is over
+		public static const LEVEL_THRESHHOLD:Number = CastleKingdom.DEBUG ? 10000000 : 1000;
 		//TODO: change this back after the test round
-		public static const NUM_UNKNOWN_FRIENDS:int = 0;
+		public static const NUM_UNKNOWN_FRIENDS:int = 10;
 		
 		private var _leftMenu:ScrollMenu;
 		private var _rightMenu:ScrollMenu;
@@ -39,8 +40,8 @@ package
 				add(new MessageBox(StringUtil.substitute(Util.assets[Assets.ATTACK_FRIENDS_BROKE], castle.sendWaveCost()), "Okay", function():void {
 					if (Castle.tutorialLevel == Castle.TUTORIAL_ATTACK_FRIENDS) {
 						toggleButtons(4);
-					} else if (Castle.tutorialLevel == Castle.TUTORIAL_LEASE) {
-						toggleButtons(5);
+					//} else if (Castle.tutorialLevel == Castle.TUTORIAL_LEASE) {
+					//	toggleButtons(5);
 					} else {
 						Util.log("AttackFriendsState.create not enough money, unknown tutorial level");
 					}
@@ -151,9 +152,9 @@ package
 						uid: FaceBook.uid + "",
 						aid: FriendBox.selected.uid,
 						leftSide: leftUnits,
-						rightSide: rightUnits
+						rightSide: rightUnits,
+						time: (new Date()).time
 					};
-					Util.logObj("Attack:", attack);
 					Database.updateUserAttacks(attack);
 				}
 				castle.addGold(-castle.sendWaveCost());
@@ -172,10 +173,10 @@ package
 				Database.updateUserTutorialInfo(FaceBook.uid, Castle.TUTORIAL_LEASE);
 				Castle.tutorialLevel = Castle.TUTORIAL_LEASE;
 				add(new MessageBox(Util.assets[Assets.SENT_WAVE], "Okay", function():void {
-					toggleButtons(5);
+					toggleButtons(4);
 				}));
 			} else if (Castle.tutorialLevel == Castle.TUTORIAL_LEASE) {
-				toggleButtons(5);
+				toggleButtons(4);
 			} else {
 				Util.log("Unknown tutorial leval: " + Castle.tutorialLevel);
 			}
