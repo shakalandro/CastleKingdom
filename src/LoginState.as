@@ -46,6 +46,7 @@ package
 		}
 		
 		private function login():void {
+			Util.logging.startDquest(6);
 			FaceBook.connect(function(ready:Boolean):void {
 				if (ready) {
 					FaceBook.userInfo(function(fbInfo:Object):void {
