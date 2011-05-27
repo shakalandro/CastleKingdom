@@ -86,7 +86,7 @@ package
 				} else if (Castle.tutorialLevel == Castle.TUTORIAL_LEASE) {
 					_menu.onClose = function():void {
 						unpause();
-						toggleButtons(5);
+						toggleButtons(4);
 						_clearAll.visible = false;
 					};
 				} else {

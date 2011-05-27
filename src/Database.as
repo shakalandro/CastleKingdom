@@ -1204,11 +1204,13 @@ package
 			variables.uid = "" + attackInfo["id"];
 			variables.aid = "" + attackInfo["aid"];
 			update("http://games.cs.washington.edu/capstone/11sp/castlekd/database/removeUserAttacks.php", variables);
-			for (var i:int = 0; i < _pendingAttacks.length; i++) {
-				if (_pendingAttacks[i].id == attackInfo["id"] && _pendingAttacks[i].aid == attackInfo["aid"]) {
-					_pendingAttacks.splice(i, 1);
-					break;
-				}
+			if (_pendingAttacks != null) {
+				for (var i:int = 0; i < _pendingAttacks.length; i++) {
+					if (_pendingAttacks[i].id == attackInfo["id"] && _pendingAttacks[i].aid == attackInfo["aid"]) {
+						_pendingAttacks.splice(i, 1);
+						break;
+					}
+				}	
 			}
 			if (_save.data.users[attackInfo.id] == undefined || _save.data.users[attackInfo.id] == null)
 				_save.data.users[attackInfo.id] = {info: {}, tut: {}, leases: [], attacks: [], upgrades: []};

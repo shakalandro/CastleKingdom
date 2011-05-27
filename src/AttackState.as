@@ -142,7 +142,7 @@ package
 				if (Castle.tutorialLevel == Castle.TUTORIAL_ATTACK_FRIENDS) {
 					toggleButtons(4);
 				} else if (Castle.tutorialLevel == Castle.TUTORIAL_LEASE) {
-					toggleButtons(5);
+					toggleButtons(4);
 				} else {
 					Util.log("AttackState.waveFinished: win=" + win + ", unexpected tutorial level for pending attack");
 				}
@@ -185,7 +185,7 @@ package
 				} else if (Castle.tutorialLevel == Castle.TUTORIAL_ATTACK_FRIENDS) {
 					toggleButtons(4);
 				} else if (Castle.tutorialLevel == Castle.TUTORIAL_LEASE) {
-					toggleButtons(5);
+					toggleButtons(4);
 				} else {
 					Util.log("AttackState.waveFinished: unknown tutorial level " + Castle.tutorialLevel);
 				}
