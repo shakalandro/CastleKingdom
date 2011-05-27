@@ -97,7 +97,7 @@ package
 			_attackSeed = Math.random();
 			solid = true;
 			immovable = true;
-			_sessionAttackCounter = 0;
+			_sessionAttackCounter = -1;
 
 			
 		}
@@ -106,7 +106,7 @@ package
 			return _sessionAttackCounter;
 		}
 		
-		public function set sessionAttackCounter(x:int) {
+		public function set sessionAttackCounter(x:int):void {
 			_sessionAttackCounter = x;
 		}
 		
