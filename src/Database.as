@@ -30,6 +30,7 @@ package
 		private static var _pendingLeases:Array;
 		private static var _finishedAttacks:Array;
 		private static var _userDef:Array;
+		private static var _test:Array;
 		
 		
 		private static function getMain(url:String, callback:Function, ids:Object = null):void
