@@ -91,6 +91,7 @@ package
 			_unitDropCounter = 10;
 			
 			_towerLogging = "";
+			
 			for each (var tower:Unit in towers.members) {
 				if(tower != null) {
 					tower.health = tower.maxHealth;
@@ -137,7 +138,20 @@ package
 			FlxG.mouse.load(Util.assets[Assets.CURSORSTATIC]);
 			var winText:String = Util.assets[Assets.FIRST_WIN];
 			var loseText:String = Util.assets[Assets.FIRST_LOSS];
-
+			
+			
+			// 		 * {id, did, xpos, ypos}
+			/* Not working yet
+			for each (var tow:DefenseUnit in towers.members) {
+				if(tow != null) {
+					Database.updateUserDef({id:(FaceBook.uid), 
+											did: tow.unitID, 
+											xpos: tow.x,
+											ypos: tow.y});
+				}
+			}
+			*/
+			
 			if (_pendingAttack != null) {
 				if (Castle.tutorialLevel == Castle.TUTORIAL_ATTACK_FRIENDS) {
 					toggleButtons(4);
