@@ -263,7 +263,6 @@ package
 					(FlxG.state as ActiveState).towers.add( new DefenseUnit(thingy.xpos.toString(), thingy.ypos.toString(),
 						thingy.did.toString(), false, null, false, null)); 
 				}
-				Database.removeUserDef(FaceBook.uid);
 				
 			}, FaceBook.uid, true);
 

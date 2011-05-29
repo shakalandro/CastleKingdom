@@ -86,10 +86,8 @@ package
 			Util.placeInZone(_castle, map);
 			add(_castle);
 			_castle.drawUpgrades();
-			
 			towers.setAll("canDrag", false);
-			towers.setAll("canHighlight", false);
-			
+			towers.setAll("canHighlight", false);			
 			if (CastleKingdom.FACEBOOK_ON) {
 				FaceBook.picture(function(pic:Class):void {
 					var profilePic:FlxSprite = new FlxSprite(0, 0, pic);

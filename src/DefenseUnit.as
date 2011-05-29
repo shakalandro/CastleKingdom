@@ -29,7 +29,7 @@ package
 		 */		
 		public function DefenseUnit(x:Number, y:Number, towerID:int, canDrag:Boolean = true, dragCallback:Function = null, 
 									canHighlight:Boolean = true, highlightCallback:Function = null) {
-			super (x,y,towerID, "foundry");
+			super (x,y,towerID, "foundry", null,canDrag,dragCallback,canHighlight,highlightCallback);
 			
 			//this.allowCollisions = NONE;
 			this.immovable = true;
