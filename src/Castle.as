@@ -90,14 +90,7 @@ package
 				}
 				Database.getUserUpgrades(initUpgrades,FaceBook.uid);
 			});  // caches data (in theory)
-			/* Not working currently
-			Database.getUserDef(function(info:Array):void {
-					for each ( var thingy:Object in info) {
-						(FlxG.state as ActiveState).towers.add( new DefenseUnit(thingy.xpos.toString(), thingy.ypos.toString(),
-												thingy.did.toString(), false, null, false, null)); 
-					}
-				}, FaceBook.uid, true);
-			*/
+			
 			Database.getUserInfo(initUserInfo, FaceBook.uid);
 			Database.getDefenseUnitInfo(initDefense);  // stores into UNIT_INFO
 			Database.getEnemyInfo(initArmy);
@@ -265,6 +258,14 @@ package
 				
 			}
 			continueSetup();
+			Database.getUserDef(function(info:Array):void {
+				for each ( var thingy:Object in info) {
+					(FlxG.state as ActiveState).towers.add( new DefenseUnit(thingy.xpos.toString(), thingy.ypos.toString(),
+						thingy.did.toString(), false, null, false, null)); 
+				}
+				Database.removeUserDef(FaceBook.uid);
+				
+			}, FaceBook.uid, true);
 
 		}
 		

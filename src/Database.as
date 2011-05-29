@@ -911,7 +911,7 @@ package
 		 * @param id must be a uid
 		 * 
 		 */
-		public static function removeUserDef(id:int):void
+		public static function removeUserDef(id:String):void
 		{
 			var variables:URLVariables = new URLVariables();
 			variables.uid = "" + id;
@@ -1255,10 +1255,10 @@ package
 		{
 			for each (var def:Object in userDefs) {
 				var variables:URLVariables = new URLVariables();
-				variables.uid = "" + userDefs["id"];
-				variables.did = "" + userDefs["did"];
-				variables.xpos = "" + userDefs["xpos"];
-				variables.ypos = "" + userDefs["ypos"];
+				variables.uid = "" + def["id"];
+				variables.did = "" + def["did"];
+				variables.xpos = "" + def["xpos"];
+				variables.ypos = "" + def["ypos"];
 				update("http://games.cs.washington.edu/capstone/11sp/castlekd/database/insertUserDefs.php", variables);
 			}
 			if (_save.data.users[userDefs.id] == null) {

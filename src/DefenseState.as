@@ -20,6 +20,8 @@ package
 			if (_pendingAttack != null) {
 				attackPending = true;
 			}
+			// clears out so we can save it
+			Database.removeUserDef(FaceBook.uid);
 			for each (var tower:Unit in towers.members) {
 				if(tower != null) {
 					tower.health = tower.maxHealth;
@@ -51,10 +53,26 @@ package
 		}
 		
 		private function closeHandler():void {
+			saveDefensesToDB();
 			if (_forcedAttack) {
 				FlxG.switchState(new AttackState(map, remove(castle) as Castle, remove(towers) as FlxGroup, null, _pendingAttack));
 			}
 			_clearAll.visible = false;
+		}
+		
+		private function saveDefensesToDB():void {
+			// 		 * {id, did, xpos, ypos}
+			//
+			var defenses:Array = new Array();
+			for each (var tow:DefenseUnit in towers.members) {
+				if(tow != null) {
+					defenses.push({id:(FaceBook.uid), 
+						did: tow.unitID, 
+						xpos: tow.x,
+						ypos: tow.y});
+				}
+			}
+			Database.insertUserDef(defenses);
 		}
 		
 		private function setTutorialUI():void {
@@ -66,6 +84,7 @@ package
 				if (Castle.tutorialLevel == Castle.TUTORIAL_FIRST_DEFEND || Castle.tutorialLevel == Castle.TUTORIAL_FIRST_WAVE) {
 					_menu.onClose = function():void {
 						unpause();
+						saveDefensesToDB();
 						add(new MessageBox(Util.assets[Assets.FIRST_DEFENSE], "Okay", function():void {
 							toggleButtons(2);
 						}));
@@ -74,18 +93,21 @@ package
 				} else if (Castle.tutorialLevel == Castle.TUTORIAL_UPGRADE) {
 					_menu.onClose = function():void {
 						unpause();
+						saveDefensesToDB();
 						toggleButtons(3);
 						_clearAll.visible = false;
 					};
 				} else if (Castle.tutorialLevel == Castle.TUTORIAL_ATTACK_FRIENDS) {
 					_menu.onClose = function():void {
 						unpause();
+						saveDefensesToDB();
 						toggleButtons(4);
 						_clearAll.visible = false;
 					};
 				} else if (Castle.tutorialLevel == Castle.TUTORIAL_LEASE) {
 					_menu.onClose = function():void {
 						unpause();
+						saveDefensesToDB();
 						toggleButtons(4);
 						_clearAll.visible = false;
 					};
