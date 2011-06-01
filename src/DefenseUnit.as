@@ -248,7 +248,7 @@ package
 				return "Cannonball";
 			} else if(checkVsArray(this.name, ["Airplane", "Zeppelin", "AA Gun"])) {
 				return "Bullet";
-			} else if(checkVsArray(this.name, ["Flame Tower", "Dragon", "Tamed Pheonix"])) {
+			} else if(checkVsArray(this.name, ["Flame Tower", "Dragon", "Tamed Phoenix"])) {
 				return "Fireball";
 			} else if(checkVsArray(this.name, ["Rocket Tower"])) {
 				return "Rocket";
