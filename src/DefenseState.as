@@ -22,9 +22,11 @@ package
 			}
 			// clears out so we can save it
 			Database.removeUserDef(FaceBook.uid);
-			for each (var tower:Unit in towers.members) {
-				if(tower != null) {
-					tower.health = tower.maxHealth;
+			if(towers != null) {
+				for each (var tower:Unit in towers.members) {
+					if(tower != null) {
+						tower.health = tower.maxHealth;
+					}
 				}
 			}
 		}

@@ -132,7 +132,7 @@ package
 				if(type == "Mine") {
 					this.health = 0;
 				}
-				if (this.range > 0) {
+				if (this.range > 0 && type != "Mine" ) {
 					if(this.facing == RIGHT) {
 						new AttackAnimation(this.x,this.y,_target,this, attackAnimationString());
 					} else {

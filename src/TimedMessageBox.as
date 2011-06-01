@@ -9,9 +9,13 @@ package
 	{
 		private var _callback:Function;
 		
-		public function TimedMessageBox(message:String, time:Number = 4000, callback:Function = null, padding:Number=10, borderColor:uint=FlxG.RED, borderThickness:Number=3)
+		public function TimedMessageBox(message:String, time:Number = -1, callback:Function = null, padding:Number=10, borderColor:uint=FlxG.RED, borderThickness:Number=3)
 		{
 			super(message, null, null, null, null, padding, borderColor, borderThickness);
+			if(time == -1) {
+				time = message.length *70;
+			}
+			
 			var _timer:Timer = new Timer(time, 1);
 			var _fadeTimer:Timer = new Timer(100, 20);
 			_callback = callback;

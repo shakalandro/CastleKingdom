@@ -220,7 +220,7 @@ package
 					
 					_dragOffset = null;
 
-					if (_dragCallback != null) _dragCallback(this, mouseCoords.x, mouseCoords.y, _preDragCoords.x, _preDragCoords.y);
+					if (_dragCallback != null) _dragCallback(this, this.x, this.y, _preDragCoords.x, _preDragCoords.y);
 
 					_preDragCoords = null;
 				}

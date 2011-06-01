@@ -52,7 +52,7 @@ package
 				
 				towers.setAll("canDrag", false);
 				towers.setAll("canHighlight", false);
-				
+				checkAttackStatuses();
 				var sides:Array = ["Left Side Units", "Right Side Units"];
 				var page:Array = formatDropBoxes(castle.width - padding * 2, Util.maxY - Util.minY - 75, 1, 2, sides, _dropboxes, padding);
 
@@ -113,30 +113,7 @@ package
 			}
 		}
 		
-		private function checkAttackStatuses():void {
-			Database.getFinishedAttacks(function(attacks:Array):void {
-				Util.logObj("AttackFriendsState.checkAttackStatuses attacks:", attacks);
-				if (attacks != null && attacks.length > 0) {
-					FaceBook.getNameByID(attacks[0].aid, function(name:String):void {
-						Util.logObj("AttackFriendsState.checkAttackStatuses name:", name);
-						if (attacks[0].winAmt > 0) {
-							add(new MessageBox(StringUtil.substitute(Util.assets[Assets.ATTACK_FRIENDS_WIN], name, attacks[0].winAmt), Util.assets[Assets.BUTTON_DONE], null));
-							castle.addGold(attacks[0].winAmt);
-							Database.removeUserAttacks({
-								id: FaceBook.uid,
-								aid: attacks[0].aid
-							});
-						} else if (attacks[0].winAmt == 0) {
-							add(new MessageBox(StringUtil.substitute(Util.assets[Assets.ATTACK_FRIENDS_LOSE], name), Util.assets[Assets.BUTTON_DONE], null));
-							Database.removeUserAttacks({
-								id: FaceBook.uid,
-								aid: attacks[0].aid
-							});
-						}
-					});
-				}
-			}, FaceBook.uid, true);
-		}
+		
 		
 		/**
 		 * Closes all menus when a single menu is closed and also handles any ui that needs to be drawn as a result. 
