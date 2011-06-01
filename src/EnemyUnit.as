@@ -44,7 +44,6 @@ package
 			_reward = Castle.UNIT_INFO["barracks"][unitID].reward;
 			this._active = active;
 			_canDrag = canDrag;
-			
 			this.immovable = true;
 			
 				

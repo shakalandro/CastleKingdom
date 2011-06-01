@@ -782,7 +782,8 @@ package
 				"your castle. Castle upgrades will allow you to place more towers, and even place completely new kinds " +
 				"of towers. Save up your gold and try to buy 3 upgrades!";
 			_normal[Assets.FIRST_LOSS] = "Hmm, that tower configuration didn't work too well against " +
-				"those enemeies. Try a different configuration and remember that you can set up to {0} tower units";
+				"those enemeies. Try a different configuration and remember that you can set up to {0} tower units. \n\n" +
+				"Also, you can click on enemies to deal damage! It takes time to reload though";
 			_normal[Assets.FIRST_DEFENSE] = "Let's see how that well your setup will work. Press Defend to " +
 				"let the enemies start their attack!";
 			_normal[Assets.FIRST_ATTACK] = "Your castle has become quite impressive. You are now ready to " +
@@ -804,7 +805,7 @@ package
 			_normal[Assets.ATTACK_LOW_GOLD] = "Your troops are pretty tired from defending against so many enemies! \n\n" +
 				"They still managed to pick up {1} of {0} of the dropped gold. They could have gotten more of what was dropped if they rested.\n\n" +
 				"You should take a break, so they can rest! Come back later and you'll gain more gold from each attack.";
-			_normal[Assets.ATTACK_LOSE] = "Too bad! The enemies got away with {0} of your gold.";
+			_normal[Assets.ATTACK_LOSE] = "Too bad! The enemies got away with {0} of your gold. \n\n Remember, you can deal damage by clicking on the enemy... but it takes time to reload!";
 			_normal[Assets.ATTACK_FRIENDS_SENT] = "Your army is on its way to try to steal gold from {0}.\n\n Check the attack menu later to find out what happened.";
 			_normal[Assets.ATTACK_FRIENDS_NOT_SENT] = "An army was not sent.";
 			_normal[Assets.LEASE_SENT] = "A request was sent to {0} for {1} unit capacity.";
