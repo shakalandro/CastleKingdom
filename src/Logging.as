@@ -12,7 +12,7 @@ package
 		
 		public static const gid:int = 3;
 		public static const cid:int = 1;
-		public static const vid:int = 3;
+		public static const vid:int = 4;
 		public static const g_name:String = "castlekd";
 		
 		//this keep track of which level the player is on (the qid)
