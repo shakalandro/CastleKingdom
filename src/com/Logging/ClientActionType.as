@@ -24,6 +24,7 @@ package com.Logging
 		public static const AVIARY_UPGRADE:int = 4;
 		public static const WIN_ATTACK:int = 5;
 		public static const LOSE_ATTACK:int = 6;
+		public static const MINE_UPGRADE:int = 7;
 	}
 
 }

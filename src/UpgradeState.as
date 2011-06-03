@@ -66,6 +66,8 @@ package
 					Util.logging.logFoundryUpgrade(upgrade.level);
 				} else if (upgrade.type == "aviary"){
 					Util.logging.logAviaryUpgrade(upgrade.level);
+				}  else if (upgrade.type == "mine"){
+					Util.logging.logMineUpgrade(upgrade.level);
 				}
 			return castle.setUpgrade(upgrade);
 		}

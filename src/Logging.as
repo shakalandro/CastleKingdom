@@ -83,6 +83,23 @@ package
 		trace("Castle Upgrade to level "+level);
 		}
 		
+		public function logMineUpgrade(level:int):void{
+			
+			if (LOGGING){
+				
+				var action:ClientAction = new ClientAction();
+				action.aid = ClientActionType.MINE_UPGRADE;
+				action.ts = time; 
+				action.uid = uid;
+				
+				action.detail = new Object();
+				action.detail["level"] = level;
+				
+				client.LogAction(action);
+			}
+			trace("Mine Upgrade to level "+level);
+		}
+		
 		public function logBarracksUpgrade(level:int):void{
 			
 			if (LOGGING){
