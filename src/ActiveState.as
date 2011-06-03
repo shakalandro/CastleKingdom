@@ -20,6 +20,7 @@ package
 		public static const ATTACK_MENU:String = "attack";
 		public static const DEFEND_MENU:String = "defend";
 		public static const BUTTON_DIST:Number = 75;
+		public static const BUTTON_LEFT_OFFSET:Number = 20;
 						
 		private static const HUD_BUTTON_PADDING:uint = 10;
 		
@@ -85,10 +86,8 @@ package
 			Util.placeInZone(_castle, map);
 			add(_castle);
 			_castle.drawUpgrades();
-			
 			towers.setAll("canDrag", false);
-			towers.setAll("canHighlight", false);
-			
+			towers.setAll("canHighlight", false);			
 			if (CastleKingdom.FACEBOOK_ON) {
 				FaceBook.picture(function(pic:Class):void {
 					var profilePic:FlxSprite = new FlxSprite(0, 0, pic);
@@ -147,7 +146,7 @@ package
 			} else if (Castle.tutorialLevel == Castle.TUTORIAL_ATTACK_FRIENDS) {
 				toggleButtons(4);
 			} else if (Castle.tutorialLevel == Castle.TUTORIAL_LEASE) {
-				toggleButtons(5);
+				toggleButtons(4);
 			} else {
 				Util.log("ActiveState.setTutorialUI: unexpected tutorial level " + Castle.tutorialLevel);
 			}
@@ -250,6 +249,30 @@ package
 			}
 		}
 		
+		protected function checkAttackStatuses():void {
+			Database.getFinishedAttacks(function(attacks:Array):void {
+				Util.logObj("AttackFriendsState.checkAttackStatuses attacks:", attacks);
+				if (attacks != null && attacks.length > 0) {
+					FaceBook.getNameByID(attacks[0].aid, function(name:String):void {
+						Util.logObj("AttackFriendsState.checkAttackStatuses name:", name);
+						if (attacks[0].winAmt > 0) {
+							add(new MessageBox(StringUtil.substitute(Util.assets[Assets.ATTACK_FRIENDS_WIN], name, attacks[0].winAmt), Util.assets[Assets.BUTTON_DONE], null));
+							castle.addGold(attacks[0].winAmt);
+							Database.removeUserAttacks({
+								id: FaceBook.uid,
+								aid: attacks[0].aid
+							});
+						} else if (attacks[0].winAmt == 0) {
+							add(new MessageBox(StringUtil.substitute(Util.assets[Assets.ATTACK_FRIENDS_LOSE], name), Util.assets[Assets.BUTTON_DONE], null));
+							Database.removeUserAttacks({
+								id: FaceBook.uid,
+								aid: attacks[0].aid
+							});
+						}
+					});
+				}
+			}, FaceBook.uid, true);
+		}
 		
 		
 		/**
@@ -504,6 +527,7 @@ package
 				Util.logging.startDquest(4);
 				FlxG.switchState(new AttackFriendsState(map, oldCastle, defTowers));
 			});
+			/*
 			var _lease:CKButton = new CKButton(0, 0, Util.assets[Assets.LEASE_BUTTON], function():void {
 				Util.logging.startDquest(5);
 				var oldCastle:Castle = remove(castle);
@@ -511,23 +535,23 @@ package
 				FlxG.switchState(new LeaseState(map, oldCastle, defTowers));
 
 			});
-			
+			*/
 			_hudButtons.push(_prepare);
 			_hudButtons.push(_release);
 			_hudButtons.push(_upgrade);
 			_hudButtons.push(_attack);
-			_hudButtons.push(_lease);
+			//_hudButtons.push(_lease);
 			
 			Util.centerY(_prepare, header);
 			Util.centerY(_release, header);
 			Util.centerY(_upgrade, header);
 			Util.centerY(_attack, header);
-			Util.centerY(_lease, header);
-			spreadPosition(_prepare, 5, 5);
-			spreadPosition(_release, 5, 4);
-			spreadPosition(_upgrade, 5, 3);
-			spreadPosition(_attack, 5, 2);
-			spreadPosition(_lease, 5, 1);
+			//Util.centerY(_lease, header);
+			spreadPosition(_prepare, 5, 3);
+			spreadPosition(_release, 5, 5);
+			spreadPosition(_upgrade, 5, 2);
+			spreadPosition(_attack, 5, 1);
+			//spreadPosition(_lease, 5, 1);
 			
 			var statsPadding:Number = 10;
 			_goldDisplay = new StatsBox((header.height - 30) / 2, (header.height - 30) / 2, Util.assets[Assets.GOLD_COUNTER], 0);
@@ -544,12 +568,12 @@ package
 			hud.add(_release);
 			hud.add(_upgrade);
 			hud.add(_attack);
-			hud.add(_lease);
+			//hud.add(_lease);
 		}
 		
 		private function spreadPosition(thing:FlxObject, peices:Number, place:int):void {
 			var width:Number = (FlxG.width - BUTTON_DIST * 2) / (peices + 1);
-			thing.x = place * width + BUTTON_DIST - thing.width / 2;
+			thing.x = place * width + BUTTON_DIST - thing.width / 2 + BUTTON_LEFT_OFFSET;
 		}
 		
 		public function drawStats():void {

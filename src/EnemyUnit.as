@@ -44,7 +44,6 @@ package
 			_reward = Castle.UNIT_INFO["barracks"][unitID].reward;
 			this._active = active;
 			_canDrag = canDrag;
-			
 			this.immovable = true;
 			
 				
@@ -284,6 +283,7 @@ package
 			if(_target == target) {
 				target = null;
 			}
+			var force:uint;
 		}
 		
 		public function setMultiple(maxUnits:int):void {

@@ -29,7 +29,7 @@ package
 		 */		
 		public function DefenseUnit(x:Number, y:Number, towerID:int, canDrag:Boolean = true, dragCallback:Function = null, 
 									canHighlight:Boolean = true, highlightCallback:Function = null) {
-			super (x,y,towerID, "foundry");
+			super (x,y,towerID, "foundry", null,canDrag,dragCallback,canHighlight,highlightCallback);
 			
 			//this.allowCollisions = NONE;
 			this.immovable = true;
@@ -132,7 +132,7 @@ package
 				if(type == "Mine") {
 					this.health = 0;
 				}
-				if (this.range > 0) {
+				if (this.range > 0 && type != "Mine" ) {
 					if(this.facing == RIGHT) {
 						new AttackAnimation(this.x,this.y,_target,this, attackAnimationString());
 					} else {
@@ -248,7 +248,7 @@ package
 				return "Cannonball";
 			} else if(checkVsArray(this.name, ["Airplane", "Zeppelin", "AA Gun"])) {
 				return "Bullet";
-			} else if(checkVsArray(this.name, ["Flame Tower", "Dragon", "Tamed Pheonix"])) {
+			} else if(checkVsArray(this.name, ["Flame Tower", "Dragon", "Tamed Phoenix"])) {
 				return "Fireball";
 			} else if(checkVsArray(this.name, ["Rocket Tower"])) {
 				return "Rocket";

@@ -91,6 +91,7 @@ package
 			_unitDropCounter = 10;
 			
 			_towerLogging = "";
+			
 			for each (var tower:Unit in towers.members) {
 				if(tower != null) {
 					tower.health = tower.maxHealth;
@@ -132,17 +133,20 @@ package
 			}
 		}
 		
-		private function waveFinished(win:Boolean, prize:Number):void {
+		private function waveFinished(win:Boolean, prize:Number, pickedUp:Number = 0):void {
 			Util.log("AttackState.waveFinished: " + win, Castle.tutorialLevel);
 			FlxG.mouse.load(Util.assets[Assets.CURSORSTATIC]);
 			var winText:String = Util.assets[Assets.FIRST_WIN];
 			var loseText:String = Util.assets[Assets.FIRST_LOSS];
-
+			
+			
+			
+			
 			if (_pendingAttack != null) {
 				if (Castle.tutorialLevel == Castle.TUTORIAL_ATTACK_FRIENDS) {
 					toggleButtons(4);
 				} else if (Castle.tutorialLevel == Castle.TUTORIAL_LEASE) {
-					toggleButtons(5);
+					toggleButtons(4);
 				} else {
 					Util.log("AttackState.waveFinished: win=" + win + ", unexpected tutorial level for pending attack");
 				}
@@ -173,8 +177,10 @@ package
 						toggleButtons(2);
 					}));
 			} else {
-				if (win) {
-					add(new TimedMessageBox(StringUtil.substitute(Util.assets[Assets.ATTACK_WIN], prize)));
+				if (win && castle.sessionAttackCounter >= 60 ) {
+					add(new TimedMessageBox(StringUtil.substitute(Util.assets[Assets.ATTACK_LOW_GOLD], prize, pickedUp)));
+				} else if (win) {
+					add(new TimedMessageBox(StringUtil.substitute(Util.assets[Assets.ATTACK_WIN], prize, pickedUp)));
 				} else {
 
 					add(new TimedMessageBox(StringUtil.substitute(Util.assets[Assets.ATTACK_LOSE], prize)));
@@ -185,7 +191,7 @@ package
 				} else if (Castle.tutorialLevel == Castle.TUTORIAL_ATTACK_FRIENDS) {
 					toggleButtons(4);
 				} else if (Castle.tutorialLevel == Castle.TUTORIAL_LEASE) {
-					toggleButtons(5);
+					toggleButtons(4);
 				} else {
 					Util.log("AttackState.waveFinished: unknown tutorial level " + Castle.tutorialLevel);
 				}
@@ -251,11 +257,14 @@ package
 				} else if (_placeOnLeft.length + _placeOnRight.length == 0  && units.length == 0) { // Check if peeps are still alive
 
 					// USER WINS
-
-					this.castle.addGold(this._waveGold);
+					
+					castle.sessionAttackCounter += 1;
+					trace("session counter at " + castle.sessionAttackCounter + " and " + ((100 - Math.min(80, castle.sessionAttackCounter)) / 100));
+					trace( _waveGold + " picked up " + sessionGold());
+					this.castle.addGold(sessionGold());
 					castle.attackSeed = Math.random();
 					_gameOver = true;
-					waveFinished(true, _waveGold);
+					waveFinished(true, _waveGold,sessionGold());
 					
 					Util.logging.userWinAttackRound(_attackTypeLogging, 
 						_towerLogging, 
@@ -280,6 +289,9 @@ package
 			
 		}
 		
+		private function sessionGold():int{
+			return  Math.ceil(_waveGold * (100 - Math.min(80, castle.sessionAttackCounter)) / 100);
+		}
 
 		
 		/**
